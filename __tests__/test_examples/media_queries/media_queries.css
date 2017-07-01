@@ -1,0 +1,34 @@
+@media (max-width: 600px) {
+  div.media-class {
+    color: black;
+  }
+
+  .alone, .unused-class {
+    color: black;
+  }
+
+  #id-in-media {
+    color: black;
+  }
+
+  body {
+    color: black;
+  }
+}
+
+@media (max-width: 960px){
+  .alone, .unused-class {
+    color: black;
+  }
+  *,
+  :before,
+  :after {
+    background: black;
+  }
+}
+
+@media (max-width: 66666px){
+  .unused-class, .unused-class2 {
+    color: black;
+  }
+}
