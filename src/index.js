@@ -24,7 +24,7 @@ import SELECTOR_STANDARD_TYPES from "./constants/selectorTypes"
 
 import DefaultExtracter from "./Extracters/DefaultExtracter"
 
-class PurifyCss {
+class Purgecss {
     options: Options
     selectors: Set<string>
 
@@ -54,7 +54,7 @@ class PurifyCss {
             throw new TypeError(ERROR_REJECTED_TYPE)
     }
 
-    purify() {
+    purge() {
         // Get selectors from content files
         let cssClasses = this.extractFileSelector(
             this.options.content,
@@ -203,4 +203,4 @@ class PurifyCss {
     }
 }
 
-export default PurifyCss
+export default Purgecss
