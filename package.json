@@ -1,0 +1,59 @@
+{
+  "name": "purgecss",
+  "version": "1.0.0",
+  "description": "Remove unused css selectors.",
+  "main": "./lib/purgecss.js",
+  "module": "./lib/purgecss.es.js",
+  "jsnext:main": "./lib/purgecss.es.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest '(.+.test.js)'",
+    "dev": "rollup -c rollup.config.js -w",
+    "build": "rollup -c rollup.config.js",
+    "flow": "flow",
+    "prettier": "prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "keywords": [
+    "optimization",
+    "unused",
+    "css",
+    "purge",
+    "uncss",
+    "purify"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "dependencies": {
+    "glob": "^7.1.2",
+    "postcss": "^6.0.4",
+    "postcss-selector-parser": "^2.2.3",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-flow": "^6.23.0",
+    "codacy-coverage": "^2.0.2",
+    "jest": "^20.0.4",
+    "regenerator-runtime": "^0.10.5",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-flow": "^1.1.1",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.0.0"
+  }
+}

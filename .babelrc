@@ -1,0 +1,35 @@
+{
+    "env": {
+        "test": {
+            "presets": [
+                "flow",
+                "env"
+            ],
+            "plugins": [
+                "transform-class-properties"
+            ]
+        },
+        "development": {
+            "presets": [
+                [
+                    "flow"
+                ],
+                [
+                    "env",
+                    {
+                        "targets": {
+                            "browsers": [
+                                "last 2 versions"
+                            ]
+                        },
+                        "modules": false
+                    }
+                ]
+            ],
+            "plugins": [
+                "external-helpers",
+                "transform-class-properties"
+            ]
+        }
+    }
+}
