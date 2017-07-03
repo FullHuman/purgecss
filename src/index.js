@@ -2,11 +2,14 @@
 import type { ExtractersObj, Options } from "./../flow/index.js"
 
 import fs from "fs"
+import path from "path"
 import glob from "glob"
 import defaultOptions from "./constants/defaultOptions"
 import postcss from "postcss"
 import selectorParser from "postcss-selector-parser"
 import {
+    CONFIG_FILENAME,
+    ERROR_CONFIG_FILE_LOADING,
     ERROR_MISSING_CONTENT,
     ERROR_MISSING_CSS,
     ERROR_EXTRACTER_FAILED,
@@ -28,10 +31,26 @@ class Purgecss {
     options: Options
     selectors: Set<string>
 
-    constructor(options: Options) {
+    constructor(options: Options | string) {
+        if (typeof options === "string" || typeof options === "undefined")
+            options = this.loadConfigFile(options)
         this.checkOptions(options)
         this.options = Object.assign(defaultOptions, options)
         this.selectors = new Set()
+    }
+
+    loadConfigFile(configFile?: string) {
+        const pathConfig = typeof configFile === "undefined"
+            ? CONFIG_FILENAME
+            : configFile
+        let options
+        try {
+            const t = path.resolve(process.cwd(), pathConfig)
+            options = require(t)
+        } catch (e) {
+            throw new Error(ERROR_CONFIG_FILE_LOADING + e.message)
+        }
+        return options
     }
 
     checkOptions(options: Options) {

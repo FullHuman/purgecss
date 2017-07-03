@@ -1,6 +1,8 @@
 export const IGNORE_ANNOTATION = "purifycss ignore"
+export const CONFIG_FILENAME = "purgecss.config.js"
 
 // Error Message
+export const ERROR_CONFIG_FILE_LOADING = "Error loading the config file"
 export const ERROR_MISSING_CONTENT = "No content provided."
 export const ERROR_MISSING_CSS = "No css provided."
 export const ERROR_EXTRACTER_FAILED =
