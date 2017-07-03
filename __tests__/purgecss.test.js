@@ -3,19 +3,19 @@ import Purgecss from "./../src/index"
 const root = "./__tests__/test_examples/"
 
 describe("initialize purgecss", () => {
-    it("throw an error without options", () => {
+    it("throw an error without options and config file", () => {
         expect(() => {
             new Purgecss()
-        }).toThrow()
+        }).toThrow(Error)
     })
 
-    it("throw an error without an object options", () => {
+    it("throw an error without an object options and config file", () => {
         expect(() => {
             new Purgecss(1)
         }).toThrow(TypeError)
         expect(() => {
             new Purgecss("hello")
-        }).toThrow(TypeError)
+        }).toThrow(Error)
         expect(() => {
             new Purgecss(false)
         }).toThrow(TypeError)
@@ -271,6 +271,12 @@ describe("initialize purgecss", () => {
                 rejected: () => {}
             }).toThrow()
         })
+    })
+
+    it("initialize without error with a config file specified", () => {
+        expect(() => {
+            new Purgecss("./__tests__/purgecss.config.js")
+        }).not.toThrow()
     })
 })
 
