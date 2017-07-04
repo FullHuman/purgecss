@@ -14,7 +14,7 @@
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
     "flow": "flow",
-    "prettier": "prettier"
+    "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.2",
     "jest": "^20.0.4",
+    "prettier": "^1.5.2",
     "regenerator-runtime": "^0.10.5",
     "rollup": "^0.43.0",
     "rollup-plugin-babel": "^2.7.1",
