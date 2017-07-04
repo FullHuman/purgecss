@@ -10,10 +10,11 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "jest '(.+.test.js)'",
+    "test": "jest (.+.test.js)",
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
     "flow": "flow",
+    "lint": "eslint -c .eslintrc src/",
     "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
@@ -41,11 +42,14 @@
     "yargs": "^8.0.2"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.5.2",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.2",
+    "eslint": "^4.1.1",
+    "eslint-plugin-flowtype": "^2.34.1",
     "jest": "^20.0.4",
     "prettier": "^1.5.2",
     "regenerator-runtime": "^0.10.5",
