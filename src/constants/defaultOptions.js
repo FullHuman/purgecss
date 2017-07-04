@@ -1,4 +1,4 @@
-import type { Options } from "./../../flow-typed/"
+import type { Options } from './../../flow-typed/'
 
 const defaultOptions: Options = {
     css: [],

@@ -1,4 +1,4 @@
 module.exports = {
-    content: ["index.html"],
-    css: ["style.css"]
+    content: ['index.html'],
+    css: ['style.css']
 }
