@@ -129,7 +129,6 @@ class Purgecss {
         root.walkRules(node => {
             const annotation = node.prev()
             if (this.isIgnoreAnnotation(annotation)) return
-            const nodeType = node.type
             node.selector = selectorParser(selectorsParsed => {
                 selectorsParsed.walk(selector => {
                     let selectorsInRule = []
