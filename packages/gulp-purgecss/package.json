@@ -1,0 +1,26 @@
+{
+  "name": "gulp-purgecss",
+  "version": "1.0.0",
+  "description": "Gulp plugin for purgecss",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/gulp-purgecss.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "purgecss",
+    "optimize",
+    "css",
+    "unused"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FullHuman/gulp-purgecss/issues"
+  },
+  "homepage": "https://github.com/FullHuman/gulp-purgecss#readme"
+}
