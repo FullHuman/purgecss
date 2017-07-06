@@ -17,6 +17,6 @@ export default {
         }
     ],
     plugins: [builtins(), resolve(), flow(), commonjs(), babel()],
-    external: ["postcss", "postcss-selector-parser"],
+    external: ["postcss", "postcss-selector-parser", "fs"],
     sourceMap: false
 }
