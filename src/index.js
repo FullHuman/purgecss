@@ -74,7 +74,6 @@ class Purgecss {
         // Get css selectors and remove unused ones
         let files = []
         for (let file of this.options.css) {
-            const cssContent = fs.readFileSync(file, 'utf8')
             files.push({
                 file,
                 css: this.getSelectorsCss(cssContent, cssClasses)
