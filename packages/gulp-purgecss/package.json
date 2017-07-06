@@ -4,7 +4,8 @@
   "description": "Gulp plugin for purgecss",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/FullHuman/gulp-purgecss/issues"
   },
-  "homepage": "https://github.com/FullHuman/gulp-purgecss#readme"
+  "homepage": "https://github.com/FullHuman/gulp-purgecss#readme",
+  "devDependencies": {
+    "prettier": "^1.5.2"
+  }
 }
