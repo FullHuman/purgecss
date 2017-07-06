@@ -1,0 +1,27 @@
+{
+    "env": {
+        "test": {
+            "presets": [
+                "env"
+            ]
+        },
+        "development": {
+            "presets": [
+                [
+                    "env",
+                    {
+                        "targets": {
+                            "browsers": [
+                                "last 2 versions"
+                            ]
+                        },
+                        "modules": false
+                    }
+                ]
+            ],
+            "plugins": [
+                "external-helpers"
+            ]
+        }
+    }
+}
