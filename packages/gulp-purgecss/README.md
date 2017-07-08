@@ -1,11 +1,11 @@
 # gulp-purgecss
 
-[![Build Status](https://img.shields.io/)](https://travis-ci.org/FullHuman/gulp-purgecss)
-[![Dependency Status](https://img.shields.io/david/)](https://david-dm.org/FullHuman/gulp-purgecss)
-[![devDependency Status](https://img.shields.io/david/)](https://david-dm.org/)
+[![Build Status](https://travis-ci.org/FullHuman/gulp-purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/gulp-purgecss)
+[![CircleCi](https://circleci.com/gh/FullHuman/gulp-purgecss/tree/master.svg?style=shield)]()
+[![David](https://img.shields.io/david/FullHuman/gulp-purgecss.svg)]()
+[![David](https://img.shields.io/david/dev/FullHuman/gulp-purgecss.svg)]()
 [![Coverage](https://img.shields.io/coveralls/)](https://cover)
 [![Climate](https://img.shields.io/codeclimate/github)](https://codeclimate.co)
-[![Downloads](https://img.shields.io/n)](https://travis-c)
 [![NPM Version](https://img.shields.io/n)](https://www.npm)
 
 > [gulp](http://gulpjs.com/) plugin to removed unused CSS, using [purgecss](https://github.com/FullHuman/purgecss)
@@ -19,6 +19,21 @@ This is just a simple [gulp](https://github.com/gulpjs/gulp) plugin, which means
 ```
 npm i -D gulp-purgecss
 npm install --save-dev gulp-purgecss
+```
+
+## Usage
+
+```js
+const gulp = require('gulp')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return gulp.src('src/**/*.css')
+        .pipe(purgecss({
+            content: ["src/**/*.html"]
+        }))
+        .pipe(gulp.dest('build/css'))
+})
 ```
 
 ## Versioning
