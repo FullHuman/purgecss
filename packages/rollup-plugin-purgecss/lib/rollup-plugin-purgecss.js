@@ -5,28 +5,59 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var rollupPluginutils = require('rollup-pluginutils');
 var Purgecss = _interopDefault(require('purgecss'));
 
-var pluginPurgecss = function pluginPurgecss() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var filter = rollupPluginutils.createFilter(options.include || ['**/*.css'], options.exclude || 'node_modules/**');
-
-    var purgecssOptions = Object.assign(options.options, {
-        css: options.include
-    });
-    var purgecss = new Purgecss({
-        content: options.content,
-        css: options.include
-    });
+const pluginPurgecss = function (options = {}) {
+    const filter = rollupPluginutils.createFilter(options.include || ['**/*.css'], options.exclude || 'node_modules/**');
+    const styles = [];
+    let dest = '';
 
     return {
-        transform: function transform(code, id) {
-            if (!filter(id)) return;
+        name: 'purgecss',
+        transform(code, id) {
+            if (!filter(id)) return null;
+
+            const purgecss = new Purgecss({
+                content: options.content,
+                css: [code],
+                stdin: true
+            });
+            let css = purgecss.purge()[0].css;
+            styles.push(css);
+
+            css = JSON.stringify(css);
+            if (options.insert) {
+                // do thing
+            } else if (!options.output) {
+                code = css;
+            } else {
+                code = `"";`;
+            }
 
             return {
-                code: ""
+                code: `export default ${code}`,
+                map: { mappings: '' }
             };
         },
-        ongenerate: function ongenerate(opts, result) {}
+        ongenerate(opts, result) {
+            if (!options.insert && (!styles.length || options.output === false)) {
+                return;
+            }
+            const css = styles.reduce((acc, value) => {
+                return acc + value;
+            }, '');
+            if (typeof options.output === "string") {
+                return fs.writeFileSync(options.output, css);
+            }
+            if (typeof options.output === "function") {
+                return options.output(css, styles);
+            }
+            if (!options.insert && dest) {
+                if (dest.endsWith('.js') || dest.endsWith('.ts')) {
+                    dest = dest.slice(0, -3);
+                }
+                dest = `${dest}.css`;
+                return fs.writeFileSync(dest, css);
+            }
+        }
     };
 };
 
