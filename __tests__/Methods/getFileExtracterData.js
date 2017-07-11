@@ -1,58 +1,58 @@
-export class PurgecssExtracterHtml {
+export class PurgecssExtractorHtml {
     static extract(content) {}
 }
 
-export class PurgecssExtracterJs {
+export class PurgecssExtractorJs {
     static extract(content) {}
 }
 
-export class PurgecssExtracterPug {
+export class PurgecssExtractorPug {
     static extract(content) {}
 }
 
-export class PurgecssExtracterEjs {
+export class PurgecssExtractorEjs {
     static extract(content) {}
 }
 
-export class PurgecssExtracterDefault {
+export class PurgecssExtractorDefault {
     static extract(content) {}
 }
 
-export class PurgecssExtracterFailure {
+export class PurgecssExtractorFailure {
     static extract() {
         return null
     }
 }
 
-export class PurgecssExtracterMissingMethods {
+export class PurgecssExtractorMissingMethods {
     static extrct() {}
 }
 
 export const TEST_1 = [
     {
-        extracter: PurgecssExtracterHtml,
+        extractor: PurgecssExtractorHtml,
         extensions: ['html']
     }
 ]
 
 export const TEST_1_FILENAME = 'hello.html'
-export const TEST_1_EXPECTED = PurgecssExtracterHtml
+export const TEST_1_EXPECTED = PurgecssExtractorHtml
 
 export const TEST_2 = [
     {
-        extracter: PurgecssExtracterHtml,
+        extractor: PurgecssExtractorHtml,
         extensions: ['html']
     },
     {
-        extracter: PurgecssExtracterEjs,
+        extractor: PurgecssExtractorEjs,
         extensions: ['ejs']
     },
     {
-        extracter: PurgecssExtracterJs,
+        extractor: PurgecssExtractorJs,
         extensions: ['js']
     },
     {
-        extracter: PurgecssExtracterPug,
+        extractor: PurgecssExtractorPug,
         extensions: ['pug', 'jade']
     }
 ]
@@ -62,27 +62,27 @@ export const TEST_4_FILENAME = 'hello.pug'
 export const TEST_5_FILENAME = 'hello.jade'
 export const TEST_6_FILENAME = 'hello.ejs'
 
-export const TEST_2_EXPECTED = PurgecssExtracterHtml
-export const TEST_3_EXPECTED = PurgecssExtracterJs
-export const TEST_4_EXPECTED = PurgecssExtracterPug
-export const TEST_5_EXPECTED = PurgecssExtracterPug
-export const TEST_6_EXPECTED = PurgecssExtracterEjs
+export const TEST_2_EXPECTED = PurgecssExtractorHtml
+export const TEST_3_EXPECTED = PurgecssExtractorJs
+export const TEST_4_EXPECTED = PurgecssExtractorPug
+export const TEST_5_EXPECTED = PurgecssExtractorPug
+export const TEST_6_EXPECTED = PurgecssExtractorEjs
 
 export const TEST_7 = [
     {
-        extracter: PurgecssExtracterFailure,
+        extractor: PurgecssExtractorFailure,
         extensions: ['html']
     },
     {
-        extracter: PurgecssExtracterMissingMethods,
+        extractor: PurgecssExtractorMissingMethods,
         extensions: ['js']
     },
     {
-        extracter: () => {},
+        extractor: () => {},
         extensions: ['pug', 'jade']
     },
     {
-        extracter: PurgecssExtracterEjs,
+        extractor: PurgecssExtractorEjs,
         extensions: ['ejs']
     }
 ]

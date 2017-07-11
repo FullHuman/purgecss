@@ -3,7 +3,7 @@
 export type Options = {
     content: Array<string>,
     css: Array<string>,
-    extracters?: Array<ExtractersObj>,
+    extractors?: Array<ExtractorsObj>,
     whitelist?: Array<string>,
     output?: string,
     stdout?: boolean,
@@ -12,7 +12,7 @@ export type Options = {
     legacy?: boolean
 }
 
-export type ExtractersObj = {
-    extracter: Object,
+export type ExtractorsObj = {
+    extractor: Object,
     extensions: Array<string>
 }

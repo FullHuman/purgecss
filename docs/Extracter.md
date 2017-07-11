@@ -1,25 +1,25 @@
-# Extracter
+# Extractor
 
-PurifyCss relies on extracters to get the list of selector used in a file.
+PurifyCss relies on extractors to get the list of selector used in a file.
 There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
 
-### Using an extracter
+### Using an extractor
 
-You can use an extracter by settings the extracters option in the purifycss config file.
+You can use an extractor by settings the extractors option in the purifycss config file.
 ```js
-import PurifyExtracterJs from "purifycss-extracter-js"
-import PurifyExtracterHtml from "purifycss-extracter-html"
+import PurifyExtractorJs from "purifycss-extractor-js"
+import PurifyExtractorHtml from "purifycss-extractor-html"
 
 const options = {
     content: [],// files to extract the selectors from
     css: [],// css
-    extracters: [
+    extractors: [
         {
-            extracter: PurifyExtracterJs,
+            extractor: PurifyExtractorJs,
             extensions: ["js"]
         },
         {
-            extracter: PurifyExtracterHtml,
+            extractor: PurifyExtractorHtml,
             extensions: ["html"]
         }
     ]
@@ -27,19 +27,19 @@ const options = {
 export default options
 ```
 
-### Default extracter
+### Default extractor
 
-PurifyCss provides a default extracter that is working with all types of files but can be limited and not fit exactly the type of files that you are using.  
-The default extracter considers every word of a file as a selector.
+PurifyCss provides a default extractor that is working with all types of files but can be limited and not fit exactly the type of files that you are using.  
+The default extractor considers every word of a file as a selector.
 
-### Create an extracter
+### Create an extractor
 
-An extracter is a simple class with one method. The method `extract` takes the content of a file as a string and return an array of selectors.
-By convention, the name of the npm package is `purifycss-extracter-[typefile]` (e.g. purifycss-extracter-pug). You can look at the list of extracter on npm by searching `purifycss-extracter-`.
+An extractor is a simple class with one method. The method `extract` takes the content of a file as a string and return an array of selectors.
+By convention, the name of the npm package is `purifycss-extractor-[typefile]` (e.g. purifycss-extractor-pug). You can look at the list of extractor on npm by searching `purifycss-extractor-`.
 
 ```js
 
-class PurifyExtracterJs {
+class PurifyExtractorJs {
     static extract(content) {
 
     }

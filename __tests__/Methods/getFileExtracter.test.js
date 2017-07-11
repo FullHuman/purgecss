@@ -1,13 +1,13 @@
 import Purgecss from './../../src/index'
 import {
-    PurifyCssExtracterDefault,
-    PurifyCssExtracterEjs,
-    PurifyCssExtracterHtml,
-    PurifyCssExtracterJs,
-    PurifyCssExtracterMissingMethods,
-    PurifyCssExtracterMissingParams,
-    PurifyCssExtracterPug
-} from './getFileExtracterData'
+    PurifyCssExtractorDefault,
+    PurifyCssExtractorEjs,
+    PurifyCssExtractorHtml,
+    PurifyCssExtractorJs,
+    PurifyCssExtractorMissingMethods,
+    PurifyCssExtractorMissingParams,
+    PurifyCssExtractorPug
+} from './getFileExtractorData'
 
 import {
     TEST_1,
@@ -25,68 +25,68 @@ import {
     TEST_6_FILENAME,
     TEST_6_EXPECTED,
     TEST_7
-} from './getFileExtracterData'
+} from './getFileExtractorData'
 
-describe('getFileExtracter', () => {
+describe('getFileExtractor', () => {
     it('should return the html extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_1_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_1_FILENAME, TEST_1)
+        const received = purgecss.getFileExtractor(TEST_1_FILENAME, TEST_1)
         expect(received).toEqual(expected)
     })
-    it('should return the html extracter', () => {
+    it('should return the html extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_2_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_2_FILENAME, TEST_2)
+        const received = purgecss.getFileExtractor(TEST_2_FILENAME, TEST_2)
         expect(received).toEqual(expected)
     })
-    it('should return the js extracter', () => {
+    it('should return the js extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_3_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_3_FILENAME, TEST_2)
+        const received = purgecss.getFileExtractor(TEST_3_FILENAME, TEST_2)
         expect(received).toEqual(expected)
     })
-    it('should return the pug extracter', () => {
+    it('should return the pug extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_4_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_4_FILENAME, TEST_2)
+        const received = purgecss.getFileExtractor(TEST_4_FILENAME, TEST_2)
         expect(received).toEqual(expected)
     })
-    it('should return the pug extracter', () => {
+    it('should return the pug extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_5_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_5_FILENAME, TEST_2)
+        const received = purgecss.getFileExtractor(TEST_5_FILENAME, TEST_2)
         expect(received).toEqual(expected)
     })
-    it('should return the ejs extracter', () => {
+    it('should return the ejs extractor', () => {
         const purgecss = new Purgecss({
             content: ['./test.html'],
             css: ['./test.css']
         })
         const expected = TEST_6_EXPECTED
-        const received = purgecss.getFileExtracter(TEST_6_FILENAME, TEST_2)
+        const received = purgecss.getFileExtractor(TEST_6_FILENAME, TEST_2)
         expect(received).toEqual(expected)
     })
     it('should throw an error for failing extractor', () => {
         const purgecss = new Purgecss({
             content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
             css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css'],
-            extracters: TEST_7
+            extractors: TEST_7
         })
         expect(() => {
             purgecss.purge()
@@ -97,7 +97,7 @@ describe('getFileExtracter', () => {
             const purgecss = new Purgecss({
                 content: ['./test.html'],
                 css: ['./test.css'],
-                extracters: TEST_7
+                extractors: TEST_7
             })
             purgecss.purge()
         }).toThrow()

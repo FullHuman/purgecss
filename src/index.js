@@ -1,5 +1,5 @@
 // @flow
-import type { ExtractersObj, Options } from './../flow/index.js'
+import type { ExtractorsObj, Options } from './../flow/index.js'
 
 import fs from 'fs'
 import path from 'path'
@@ -25,7 +25,7 @@ import {
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
-import DefaultExtracter from './Extracters/DefaultExtracter'
+import DefaultExtractor from './Extractors/DefaultExtractor'
 
 class Purgecss {
     options: Options
@@ -57,7 +57,7 @@ class Purgecss {
         if (!options.css || !options.css.length) throw new Error(ERROR_MISSING_CSS)
         if (options.output && typeof options.output !== 'string')
             throw new TypeError(ERROR_OUTPUT_TYPE)
-        if (options.extracters && !Array.isArray(options.extracters))
+        if (options.extractors && !Array.isArray(options.extractors))
             throw new TypeError(ERROR_EXTRACTERS_TYPE)
         if (options.whitelist && !Array.isArray(options.whitelist))
             throw new TypeError(ERROR_WHITELIST_TYPE)
@@ -70,7 +70,7 @@ class Purgecss {
 
     purge() {
         // Get selectors from content files
-        let cssClasses = this.extractFileSelector(this.options.content, this.options.extracters)
+        let cssClasses = this.extractFileSelector(this.options.content, this.options.extractors)
         // Get css selectors and remove unused ones
         let files = []
         for (let file of this.options.css) {
@@ -83,14 +83,14 @@ class Purgecss {
         return files
     }
 
-    extractFileSelector(files: Array<string>, extracters?: Array<ExtractersObj>): Set<string> {
+    extractFileSelector(files: Array<string>, extractors?: Array<ExtractorsObj>): Set<string> {
         let selectors = new Set()
         for (let globfile of files) {
             const filesnames = glob.sync(globfile)
             for (let file of filesnames) {
                 const content = fs.readFileSync(file, 'utf8')
-                const extracter = this.getFileExtracter(file, extracters)
-                selectors = new Set(...selectors, this.extractSelectors(content, extracter))
+                const extractor = this.getFileExtractor(file, extractors)
+                selectors = new Set(...selectors, this.extractSelectors(content, extractor))
             }
         }
 
@@ -98,21 +98,21 @@ class Purgecss {
     }
 
     /**
-     * Get the extracter corresponding to the extension file
+     * Get the extractor corresponding to the extension file
      * @param {string} filename Name of the file
-     * @param {array} extracters Array of extracters definition objects
+     * @param {array} extractors Array of extractors definition objects
      */
-    getFileExtracter(filename: string, extracters: Array<ExtractersObj> = []) {
-        if (!extracters.length) return DefaultExtracter
-        const extracterObj: any = extracters.find(extracter =>
-            extracter.extensions.find(ext => filename.endsWith(ext))
+    getFileExtractor(filename: string, extractors: Array<ExtractorsObj> = []) {
+        if (!extractors.length) return DefaultExtractor
+        const extractorObj: any = extractors.find(extractor =>
+            extractor.extensions.find(ext => filename.endsWith(ext))
         )
-        return extracterObj.extracter
+        return extractorObj.extractor
     }
 
-    extractSelectors(content: string, extracter: Object): Set<string> {
+    extractSelectors(content: string, extractor: Object): Set<string> {
         let selectors = new Set()
-        const arraySelector = extracter.extract(content)
+        const arraySelector = extractor.extract(content)
         if (arraySelector === null) {
             throw new Error(ERROR_EXTRACTER_FAILED)
         }

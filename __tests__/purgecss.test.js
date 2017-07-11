@@ -28,7 +28,7 @@ describe('initialize purgecss', () => {
         expect(() => {
             new Purgecss({
                 css: [],
-                extracters: []
+                extractors: []
             })
         }).toThrow()
         expect(() => {
@@ -61,7 +61,7 @@ describe('initialize purgecss', () => {
         expect(() => {
             new Purgecss({
                 content: [],
-                extracters: []
+                extractors: []
             })
         }).toThrow()
         expect(() => {
@@ -118,19 +118,19 @@ describe('initialize purgecss', () => {
         })
     })
 
-    it('throws an error with an incorrect extracter option', () => {
+    it('throws an error with an incorrect extractor option', () => {
         expect(() => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                extracters: {}
+                extractors: {}
             })
         }).toThrow()
         expect(() => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                extracters: 100
+                extractors: 100
             })
         }).toThrow()
         expect(() => {
@@ -144,7 +144,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                extracters: () => {}
+                extractors: () => {}
             }).toThrow()
         })
     })
