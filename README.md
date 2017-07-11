@@ -1,12 +1,14 @@
-# Purgecss  [![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss) [![CircleCi](https://circleci.com/gh/Ffloriel/purifycss/tree/v2.svg?style=shield)]() [![dependencies Status](https://david-dm.org/fullhuman/purgecss/status.svg)](https://david-dm.org/fullhuman/purgecss) [![devDependencies Status](https://david-dm.org/fullhuman/purgecss/dev-status.svg)](https://david-dm.org/fullhuman/purgecss?type=dev)
+# Purgecss  
+[![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss) [![CircleCi](https://circleci.com/gh/Ffloriel/purifycss/tree/v2.svg?style=shield)]() [![dependencies Status](https://david-dm.org/fullhuman/purgecss/status.svg)](https://david-dm.org/fullhuman/purgecss) [![devDependencies Status](https://david-dm.org/fullhuman/purgecss/dev-status.svg)](https://david-dm.org/fullhuman/purgecss?type=dev)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=FullHuman/purgecss&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Coverage)
 
 
 <p align="center">
 	<img src="./.assets/logo.png" height="200" width="200" alt="Purgecss logo"/>
 </p>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=FullHuman/purgecss&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Coverage)
+
 
 
 ### Getting Started
@@ -19,16 +21,32 @@
 
 ### Usage
 
+```js
+import Purgecss from "purgecss"
+import purgeHtml from "purgecss-from-html"
+const purgeCss = new Purgecss({
+    content: ["**/*.html"],
+    css: ["**/*.css"],
+    extractors: [
+        {
+            extractor: purgeHtml,
+            extensions: ["html"]
+        }
+    ]
+})
+const result = purgecss.purge()
+```
+
 #### Build Plugin
 
 <div align="center">
 	<a href="https://github.com/webpack/webpack">
     	<img width="200" heigth="200" src="https://webpack.js.org/assets/icon-square-big.svg">
   	</a>
-	<a href="http://gulpjs.com">
+	<a href="https://github.com/FullHuman/gulp-purgecss">
     	<img height="200" width="89" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
   	</a>
-  	<a href="#">
+  	<a href="https://github.com/FullHuman/rollup-plugin-purgecss">
   		<img height="200" width="200" src="https://rollupjs.org/logo.svg"/>
 	</a>
 </div>
