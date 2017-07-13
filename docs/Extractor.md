@@ -5,21 +5,21 @@ There are multiples types of files that can contains selectors such as html file
 
 ### Using an extractor
 
-You can use an extractor by settings the extractors option in the purifycss config file.
+You can use an extractor by settings the extractors option in the purgecss config file.
 ```js
-import PurifyExtractorJs from "purifycss-extractor-js"
-import PurifyExtractorHtml from "purifycss-extractor-html"
+import purgeJs from "purgecss-from-js"
+import purgeHtml from "purgecss-from-html"
 
 const options = {
     content: [],// files to extract the selectors from
     css: [],// css
     extractors: [
         {
-            extractor: PurifyExtractorJs,
+            extractor: purgeJs,
             extensions: ["js"]
         },
         {
-            extractor: PurifyExtractorHtml,
+            extractor: purgeHtml,
             extensions: ["html"]
         }
     ]
@@ -29,17 +29,17 @@ export default options
 
 ### Default extractor
 
-PurifyCss provides a default extractor that is working with all types of files but can be limited and not fit exactly the type of files that you are using.  
+Purgecss provides a default extractor that is working with all types of files but can be limited and not fit exactly the type of files that you are using.  
 The default extractor considers every word of a file as a selector.
 
 ### Create an extractor
 
 An extractor is a simple class with one method. The method `extract` takes the content of a file as a string and return an array of selectors.
-By convention, the name of the npm package is `purifycss-extractor-[typefile]` (e.g. purifycss-extractor-pug). You can look at the list of extractor on npm by searching `purifycss-extractor-`.
+By convention, the name of the npm package is `purgecss-from-[typefile]` (e.g. purgecss-from-pug). You can look at the list of extractor on npm by searching `purgecss-from`.
 
 ```js
 
-class PurifyExtractorJs {
+class PurgeFromJs {
     static extract(content) {
 
     }

@@ -1,5 +1,5 @@
 # Purgecss  
-[![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss) [![CircleCi](https://circleci.com/gh/Ffloriel/purifycss/tree/v2.svg?style=shield)]() [![dependencies Status](https://david-dm.org/fullhuman/purgecss/status.svg)](https://david-dm.org/fullhuman/purgecss) [![devDependencies Status](https://david-dm.org/fullhuman/purgecss/dev-status.svg)](https://david-dm.org/fullhuman/purgecss?type=dev)
+[![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss) [![CircleCi](https://circleci.com/gh/FullHuman/purgecss/tree/master.svg?style=shield)]() [![dependencies Status](https://david-dm.org/fullhuman/purgecss/status.svg)](https://david-dm.org/fullhuman/purgecss) [![devDependencies Status](https://david-dm.org/fullhuman/purgecss/dev-status.svg)](https://david-dm.org/fullhuman/purgecss?type=dev)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=FullHuman/purgecss&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Coverage)
 
@@ -9,15 +9,18 @@
 </p>
 
 
-
-
 ### Getting Started
 
 #### Installation
 
-`npm i --save-dev purgecss`
+```
+npm i --save-dev purgecss
+```
 
 ### Documentation
+
+- [API](./docs/API.md)
+- [Extractor](./docs/Extractor.md)
 
 ### Usage
 
@@ -51,6 +54,28 @@ const result = purgecss.purge()
 	</a>
 </div>
 
+##### Gulp
+
+```js
+const gulp = require('gulp')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return gulp.src('src/**/*.css')
+        .pipe(purgecss({
+            content: ["src/**/*.html"]
+        }))
+        .pipe(gulp.dest('build/css'))
+})
+```
+
+##### Webpack
+
+> In progress
+
+##### Rollup
+
+> In progress
 
 ## Contributing
 
