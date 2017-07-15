@@ -1,12 +1,12 @@
 import Purgecss from './../../src/index'
 import {
-    PurifyCssExtractorDefault,
-    PurifyCssExtractorEjs,
-    PurifyCssExtractorHtml,
-    PurifyCssExtractorJs,
-    PurifyCssExtractorMissingMethods,
-    PurifyCssExtractorMissingParams,
-    PurifyCssExtractorPug
+    PurgecssExtractorDefault,
+    PurgecssExtractorEjs,
+    PurgecssExtractorHtml,
+    PurgecssExtractorJs,
+    PurgecssExtractorMissingMethods,
+    PurgecssExtractorMissingParams,
+    PurgecssExtractorPug
 } from './getFileExtractorData'
 
 import {

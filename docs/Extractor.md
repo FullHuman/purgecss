@@ -1,6 +1,6 @@
 # Extractor
 
-PurifyCss relies on extractors to get the list of selector used in a file.
+Purgecss relies on extractors to get the list of selector used in a file.
 There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
 
 ### Using an extractor
