@@ -4,9 +4,8 @@
 [![CircleCi](https://circleci.com/gh/FullHuman/gulp-purgecss/tree/master.svg?style=shield)]()
 [![David](https://img.shields.io/david/FullHuman/gulp-purgecss.svg)]()
 [![David](https://img.shields.io/david/dev/FullHuman/gulp-purgecss.svg)]()
-[![Coverage](https://img.shields.io/coveralls/)](https://cover)
-[![Climate](https://img.shields.io/codeclimate/github)](https://codeclimate.co)
-[![NPM Version](https://img.shields.io/n)](https://www.npm)
+[![npm](https://img.shields.io/npm/v/gulp-purgecss.svg)]()
+
 
 > [gulp](http://gulpjs.com/) plugin to removed unused CSS, using [purgecss](https://github.com/FullHuman/purgecss)
 
