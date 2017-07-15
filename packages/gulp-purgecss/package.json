@@ -1,6 +1,6 @@
 {
   "name": "gulp-purgecss",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gulp plugin for purgecss",
   "main": "./lib/gulpPurgecss.js",
   "module": "./lib/gulpPurgecss.es.js",
@@ -32,7 +32,7 @@
     "babel-preset-env": "^1.6.0",
     "jest": "^20.0.4",
     "prettier": "^1.5.2",
-    "rollup": "^0.43.0",
+    "rollup": "^0.43.1",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
