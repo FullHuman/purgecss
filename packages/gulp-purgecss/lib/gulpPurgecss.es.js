@@ -14,10 +14,11 @@ var gulpPurgecss = function gulpPurgecss(options) {
         if (file.isBuffer()) {
             try {
                 var optionsGulp = Object.assign(options, {
-                    css: [file.contents.toString()]
+                    css: [file.contents.toString()],
+                    stdin: true
                 });
                 var result = new Purgecss(optionsGulp).purge()[0].css;
-                files.contents = new Buffer(result);
+                file.contents = new Buffer(result);
                 callback(null, file);
             } catch (e) {
                 this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message));
