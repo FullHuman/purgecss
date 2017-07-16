@@ -1,14 +1,16 @@
 {
   "name": "purgecss",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
   "jsnext:main": "./lib/purgecss.es.js",
   "directories": {
     "doc": "docs",
-    "lib": "lib"
+    "lib": "lib",
+    "test": "__tests__"
   },
+  "bin": "./bin/purgecss",
   "scripts": {
     "test": "jest .+.test.js",
     "dev": "rollup -c rollup.config.js -w",
@@ -29,7 +31,7 @@
     "uncss",
     "purify"
   ],
-  "author": "",
+  "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
@@ -50,11 +52,11 @@
     "codacy-coverage": "^2.0.2",
     "eslint": "^4.2.0",
     "eslint-plugin-flowtype": "^2.35.0",
-    "flow-bin": "^0.49.1",
+    "flow-bin": "^0.50.0",
     "jest": "^20.0.4",
-    "prettier": "^1.5.2",
+    "prettier": "^1.5.3",
     "regenerator-runtime": "^0.10.5",
-    "rollup": "^0.45.1",
+    "rollup": "^0.45.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-flow": "^1.1.1",
