@@ -21,7 +21,11 @@ test('should import *.css files', t => {
             })
         ]
     }).then(bundle => {
-        const result = bundle.generate().code
-        t.true(result.includes(squash(expectA)))
+        return bundle.generate()
+        .then(value => {
+            const result = value.code
+            t.true(result.includes(squash(expectA)))
+        })
+        
     })
 })
