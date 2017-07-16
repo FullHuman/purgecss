@@ -1,13 +1,18 @@
 {
   "name": "gulp-purgecss",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Gulp plugin for purgecss",
   "main": "./lib/gulpPurgecss.js",
   "module": "./lib/gulpPurgecss.es.js",
   "jsnext:main": "./lib/gulpPurgecss.es.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
   "scripts": {
     "test": "jest",
     "build": "rollup -c rollup.config.js",
+    "lint": "eslint -c .eslintrc src/",
     "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote index.js"
   },
   "repository": {
@@ -30,9 +35,10 @@
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.0",
+    "eslint": "^4.2.0",
     "jest": "^20.0.4",
-    "prettier": "^1.5.2",
-    "rollup": "^0.43.1",
+    "prettier": "^1.5.3",
+    "rollup": "^0.45.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
@@ -40,7 +46,7 @@
   },
   "dependencies": {
     "gulp-util": "^3.0.8",
-    "purgecss": "^0.1.0",
+    "purgecss": "^0.2.0",
     "through2": "^2.0.3"
   }
 }
