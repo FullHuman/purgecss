@@ -89,6 +89,21 @@ rollup({
 });
 ```
 
+#### CLI
+
+```
+purgecss --css <css> --content <content> [option]
+
+Options:
+  --con, --content  glob of content files                                [array]
+  -c, --config      configuration file                                  [string]
+  -o, --out         Filepath directory to write purified css files to   [string]
+  -w, --whitelist   List of classes that should not be removed
+                                                           [array] [default: []]
+  -h, --help        Show help                                          [boolean]
+  -v, --version     Show version number                                [boolean]
+```
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
