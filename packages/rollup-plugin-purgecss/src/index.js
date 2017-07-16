@@ -1,5 +1,6 @@
 import { createFilter } from 'rollup-pluginutils'
 import Purgecss from "purgecss"
+import fs from "fs"
 
 const pluginPurgecss = function( options = {} ) {
     const filter = createFilter( options.include || ['**/*.css'], options.exclude || 'node_modules/**')
@@ -33,7 +34,7 @@ const pluginPurgecss = function( options = {} ) {
                 map: { mappings: '' }
             }
         },
-        ongenerate(opts, result) {
+        ongenerate() {
             if (!options.insert && (!styles.length || options.output === false)) {
                 return
             }

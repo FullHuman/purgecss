@@ -19,6 +19,7 @@ export default {
     ],
     external: [
         "purgecss",
-        "rollup-pluginutils"
+        "rollup-pluginutils",
+        "fs"
     ]
 }

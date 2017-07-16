@@ -4,6 +4,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var rollupPluginutils = require('rollup-pluginutils');
 var Purgecss = _interopDefault(require('purgecss'));
+var fs = _interopDefault(require('fs'));
 
 const pluginPurgecss = function (options = {}) {
     const filter = rollupPluginutils.createFilter(options.include || ['**/*.css'], options.exclude || 'node_modules/**');
@@ -37,7 +38,7 @@ const pluginPurgecss = function (options = {}) {
                 map: { mappings: '' }
             };
         },
-        ongenerate(opts, result) {
+        ongenerate() {
             if (!options.insert && (!styles.length || options.output === false)) {
                 return;
             }
