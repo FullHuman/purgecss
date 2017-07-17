@@ -5,6 +5,7 @@
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
   "jsnext:main": "./lib/purgecss.es.js",
+  "types": "./lib/purgecss.d.ts",
   "directories": {
     "doc": "docs",
     "lib": "lib",
