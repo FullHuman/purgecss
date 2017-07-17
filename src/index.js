@@ -1,5 +1,5 @@
 // @flow
-import type { ExtractorsObj, Options } from './../flow/index.js'
+import { type ExtractorsObj, type Options } from './../flow/index.js'
 
 import fs from 'fs'
 import path from 'path'
@@ -29,17 +29,15 @@ import DefaultExtractor from './Extractors/DefaultExtractor'
 
 class Purgecss {
     options: Options
-    selectors: Set<string>
 
     constructor(options: Options | string) {
         if (typeof options === 'string' || typeof options === 'undefined')
             options = this.loadConfigFile(options)
         this.checkOptions(options)
         this.options = Object.assign(defaultOptions, options)
-        this.selectors = new Set()
     }
 
-    loadConfigFile(configFile?: string) {
+    loadConfigFile(configFile: string) {
         const pathConfig = typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
         let options
         try {
