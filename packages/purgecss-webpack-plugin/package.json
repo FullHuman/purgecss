@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "rollup -c rollup.config.js",
+    "dev": "rollup -c rollup.config.js -w",
     "test": "jest",
     "lint": "eslint -c .eslintrc src/"
   },
@@ -37,9 +38,12 @@
     "rollup": "^0.45.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.3.1",
+    "webpack": "^3.3.0"
   },
   "dependencies": {
-    "purgecss": "^0.2.0"
+    "purgecss": "^0.2.1",
+    "webpack-sources": "^1.0.1"
   }
 }
