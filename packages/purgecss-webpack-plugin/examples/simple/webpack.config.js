@@ -11,7 +11,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.join(__dirname, 'dist')
     },
     module: {
         rules: [
@@ -19,8 +19,8 @@ module.exports = {
                 test: /\.css$/,
                 // use: ['style-loader', 'css-loader']
                 use: ExtractTextPlugin.extract({
-                    fallbackLoader: 'style-loader',
-                    loader: 'css-loader?sourceMap'
+                    fallback: 'style-loader',
+                    use: 'css-loader?sourceMap'
                 })
             }
         ]
