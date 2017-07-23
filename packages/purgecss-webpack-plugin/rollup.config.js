@@ -15,5 +15,5 @@ export default {
         }
     ],
     plugins: [resolve(), commonjs(), babel()],
-    external: ['purgecss', 'webpack-sources']
+    external: ['purgecss', 'webpack-sources', 'fs', 'path']
 }
