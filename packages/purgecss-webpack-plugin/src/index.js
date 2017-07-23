@@ -25,22 +25,19 @@ export default class PurgecssPlugin {
                 : () => {}
 
             compilation.plugin('additional-assets', cb => {
-                // Go through chunks and purify as configured
+                // Go through chunks and purge as configured
                 compilation.chunks.forEach(
                     ({ name: chunkName, files, modules }) => {
-                        console.log('chunkForEach')
-                        const assetsToPurify = search
+                        const assetsToPurge = search
                             .assets(compilation.assets, ['.css'])
                             .filter(asset => files.indexOf(asset.name) >= 0)
 
                         output(() => [
-                            'Assets to purify:',
-                            assetsToPurify.map(({ name }) => name).join(', ')
+                            'Assets to purge:',
+                            assetsToPurge.map(({ name }) => name).join(', ')
                         ])
-                        console.log(assetsToPurify)
 
-                        assetsToPurify.forEach(({ name, asset }) => {
-                            console.log('assetsToPurify')
+                        assetsToPurge.forEach(({ name, asset }) => {
                             const filesToSearch = parse
                                 .entries(entryPaths, chunkName)
                                 .concat(
@@ -50,22 +47,20 @@ export default class PurgecssPlugin {
                                         file => file.resource
                                     )
                                 )
+                                .filter(v => !v.endsWith('.css'))
 
                             output(() => [
                                 'Files to search for used rules:',
                                 filesToSearch.join(', ')
                             ])
 
-                            // Compile through Purify and attach to output.
+                            // Compile through Purgecss and attach to output.
                             // This loses sourcemaps should there be any!
                             const purgecss = new Purgecss({
-                                content: [filesToSearch],
-                                css: [asset.source],
-                                stdin: true,
-                                info: this.options.verbose,
-                                minify: this.options.minimize
+                                content: filesToSearch,
+                                css: [asset.source()],
+                                stdin: true
                             })
-                            console.log(purgecss.purge())
                             compilation.assets[name] = new ConcatSource(
                                 purgecss.purge()[0].css
                             )
