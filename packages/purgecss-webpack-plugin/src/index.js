@@ -18,12 +18,6 @@ export default class PurgecssPlugin {
                     throw new Error(`Path ${p} does not exist.`)
             })
 
-            // Output debug information through a callback pattern
-            // to avoid unnecessary processing
-            const output = this.options.verbose
-                ? messageCb => console.info(...messageCb())
-                : () => {}
-
             compilation.plugin('additional-assets', cb => {
                 // Go through chunks and purge as configured
                 compilation.chunks.forEach(
@@ -31,11 +25,6 @@ export default class PurgecssPlugin {
                         const assetsToPurge = search
                             .assets(compilation.assets, ['.css'])
                             .filter(asset => files.indexOf(asset.name) >= 0)
-
-                        output(() => [
-                            'Assets to purge:',
-                            assetsToPurge.map(({ name }) => name).join(', ')
-                        ])
 
                         assetsToPurge.forEach(({ name, asset }) => {
                             const filesToSearch = parse
@@ -48,11 +37,6 @@ export default class PurgecssPlugin {
                                     )
                                 )
                                 .filter(v => !v.endsWith('.css'))
-
-                            output(() => [
-                                'Files to search for used rules:',
-                                filesToSearch.join(', ')
-                            ])
 
                             // Compile through Purgecss and attach to output.
                             // This loses sourcemaps should there be any!

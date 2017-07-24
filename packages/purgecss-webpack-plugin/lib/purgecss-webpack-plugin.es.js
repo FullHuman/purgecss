@@ -57,21 +57,13 @@ class PurgecssPlugin {
                 if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
             });
 
-            // Output debug information through a callback pattern
-            // to avoid unnecessary processing
-            const output = this.options.verbose ? messageCb => console.info(...messageCb()) : () => {};
-
             compilation.plugin('additional-assets', cb => {
                 // Go through chunks and purge as configured
                 compilation.chunks.forEach(({ name: chunkName, files: files$$1, modules }) => {
                     const assetsToPurge = assets(compilation.assets, ['.css']).filter(asset => files$$1.indexOf(asset.name) >= 0);
 
-                    output(() => ['Assets to purge:', assetsToPurge.map(({ name }) => name).join(', ')]);
-
                     assetsToPurge.forEach(({ name, asset }) => {
                         const filesToSearch = entries(entryPaths$$1, chunkName).concat(files(modules, this.options.moduleExtensions || [], file => file.resource)).filter(v => !v.endsWith('.css'));
-
-                        output(() => ['Files to search for used rules:', filesToSearch.join(', ')]);
 
                         // Compile through Purgecss and attach to output.
                         // This loses sourcemaps should there be any!
