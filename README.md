@@ -94,7 +94,43 @@ gulp.task('purgecss', () => {
 
 ##### Webpack
 
-> In progress
+
+```js
+const path = require('path')
+const glob = require('glob')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const PurgecssPlugin = require('../../')
+
+const PATHS = {
+    src: path.join(__dirname, 'src')
+}
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.join(__dirname, 'dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader?sourceMap'
+                })
+            }
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin('[name].css?[hash]'),
+        new PurgecssPlugin({
+            paths: glob.sync(`${PATHS.src}/*`),
+            styleExtensions: ['.css']
+        })
+    ]
+}
+```
 
 ##### Rollup
 
@@ -167,6 +203,15 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of cond
 ## Versioning
 
 Purgecss use [SemVer](http://semver.org/) for versioning. 
+
+## Acknowledgment
+
+Purgecss was originally thought as the v2 of purifycss. And because of it, it is greatly inspired by it.  
+The plugins such as purgecss-webpack-plugin are based on the purifycss plugin.   
+Below is the list of the purifycss repositories:  
+- [purifycss](https://github.com/purifycss/purifycss)
+- [gulp-purifycss](https://github.com/purifycss/gulp-purifycss)
+- [purifycss-webpack](https://github.com/webpack-contrib/purifycss-webpack)
 
 ## License
 
