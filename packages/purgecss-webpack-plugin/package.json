@@ -1,6 +1,6 @@
 {
     "name": "purgecss-webpack-plugin",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Purgecss plugin for webpack - Remove unused css",
     "main": "./lib/purgecss-webpack-plugin.js",
     "module": "./lib/purgecss-webpack-plugin.es.js",
@@ -19,7 +19,13 @@
         "type": "git",
         "url": "git+https://github.com/FullHuman/purgecss-webpack-plugin.git"
     },
-    "keywords": ["webpack-plugin", "purgecss", "remove", "unused", "css"],
+    "keywords": [
+        "webpack-plugin",
+        "purgecss",
+        "remove",
+        "unused",
+        "css"
+    ],
     "author": "Ffloriel",
     "license": "MIT",
     "bugs": {
@@ -37,7 +43,7 @@
         "webpack": "^3.3.0"
     },
     "dependencies": {
-        "purgecss": "^0.2.1",
+        "purgecss": "^0.3.1",
         "webpack-sources": "^1.0.1"
     }
 }
