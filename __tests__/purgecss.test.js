@@ -113,7 +113,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                output: () => {}
+                output: () => { }
             }).toThrow()
         })
     })
@@ -144,7 +144,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                extractors: () => {}
+                extractors: () => { }
             }).toThrow()
         })
     })
@@ -175,7 +175,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                whitelist: () => {}
+                whitelist: () => { }
             }).toThrow()
         })
     })
@@ -206,7 +206,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                stdout: () => {}
+                stdout: () => { }
             }).toThrow()
         })
     })
@@ -237,7 +237,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                info: () => {}
+                info: () => { }
             }).toThrow()
         })
     })
@@ -268,7 +268,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                rejected: () => {}
+                rejected: () => { }
             }).toThrow()
         })
     })
@@ -280,11 +280,12 @@ describe('initialize purgecss', () => {
     })
 })
 
-describe('purge methods with files', () => {
+describe('purge methods with files and legacy extractor', () => {
     it('purge correctly (legacy)', () => {
         const purgeCss = new Purgecss({
             content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
-            css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css']
+            css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css'],
+            legacy: true
         })
         const received = purgeCss.purge()[0].css
         expect(received.includes('.ui[class*="center aligned"].grid')).toBe(true)
@@ -652,3 +653,4 @@ describe('purge methods with files', () => {
         })
     })
 })
+
