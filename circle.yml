@@ -3,4 +3,5 @@ machine:
     version: 6.11.0
 dependencies:
   override:
+    - npm i npm
     - npm i
