@@ -10,3 +10,7 @@ a.link[href*="github.com"] {
 .ui[class*="center aligned"].grid {
   color: black;
 }
+
+.ui.grid {
+  color: green;
+}
