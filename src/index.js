@@ -26,6 +26,7 @@ import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
 import DefaultExtractor from './Extractors/DefaultExtractor'
+import LegacyExtractor from './Extractors/LegacyExtractor'
 
 class Purgecss {
     options: Options
@@ -37,6 +38,10 @@ class Purgecss {
         this.options = Object.assign(defaultOptions, options)
     }
 
+    /**
+     * 
+     * @param {string} configFile Path of the config file
+     */
     loadConfigFile(configFile: string) {
         const pathConfig =
             typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
@@ -121,7 +126,10 @@ class Purgecss {
      * @param {array} extractors Array of extractors definition objects
      */
     getFileExtractor(filename: string, extractors: Array<ExtractorsObj> = []) {
-        if (!extractors.length) return DefaultExtractor
+        if (!extractors.length) {
+            if (this.options.legacy === true) return LegacyExtractor
+            return DefaultExtractor
+        }
         const extractorObj: any = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
         )
@@ -179,6 +187,10 @@ class Purgecss {
         return root.toString()
     }
 
+    /**
+     * Check if the node is a css comment to ignore the selector rule
+     * @param {object} node Node of postcss abstract syntax tree 
+     */
     isIgnoreAnnotation(node: Object) {
         if (node && node.type === 'comment') {
             return node.text.includes(IGNORE_ANNOTATION)
@@ -205,6 +217,7 @@ class Purgecss {
         selectorsInRule: Array<string>
     ) {
         for (let selector of selectorsInRule) {
+            // legacy
             if (this.options.legacy) {
                 const sels = selector.split(/[^a-z]/g)
                 let keepSelector = false
@@ -214,14 +227,21 @@ class Purgecss {
                     keepSelector = true
                 }
                 if (keepSelector) return true
+                if (selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector)) return true
             }
-            if (
-                selectorsInContent.has(selector) ||
-                CSS_WHITELIST.includes(selector)
-            )
-                return true
+            // non legacy extractors
+            else {
+                // pseudo class
+                if (selector.startsWith(':')) continue
+                if (
+                    !(selectorsInContent.has(selector) ||
+                        CSS_WHITELIST.includes(selector))
+                ) {
+                    return false
+                }
+            }
         }
-        return false
+        return this.options.legacy ? false : true
     }
 }
 
