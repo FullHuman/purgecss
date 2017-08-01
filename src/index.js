@@ -39,7 +39,7 @@ class Purgecss {
     }
 
     /**
-     * 
+     * Load the configuration file from the path
      * @param {string} configFile Path of the config file
      */
     loadConfigFile(configFile: string) {
@@ -55,6 +55,10 @@ class Purgecss {
         return options
     }
 
+    /**
+     * Verify that the purgecss options provided are valid
+     * @param {object} options Purgecss options
+     */
     checkOptions(options: Options) {
         if (typeof options !== 'object') throw new TypeError(ERROR_OPTIONS_TYPE)
         if (!options.content || !options.content.length)
@@ -75,6 +79,9 @@ class Purgecss {
             throw new TypeError(ERROR_REJECTED_TYPE)
     }
 
+    /**
+     * Main function that purge the css file
+     */
     purge() {
         // Get selectors from content files
         let cssClasses = this.extractFileSelector(
@@ -95,6 +102,11 @@ class Purgecss {
         return files
     }
 
+    /**
+     * Extract the selectors present in the files using a purgecss extractor
+     * @param {array} files Array of files path or glob pattern 
+     * @param {array} extractors Array of extractors
+     */
     extractFileSelector(
         files: Array<string>,
         extractors?: Array<ExtractorsObj>
@@ -136,6 +148,11 @@ class Purgecss {
         return extractorObj.extractor
     }
 
+    /**
+     * Use the extract function of the extractor to get the list of selectors
+     * @param {string} content Content (e.g: html file)
+     * @param {object} extractor Purgecss extractor use to extract the selector
+     */
     extractSelectors(content: string, extractor: Object): Set<string> {
         let selectors = new Set()
         const arraySelector = extractor.extract(content)
@@ -150,6 +167,11 @@ class Purgecss {
         return selectors
     }
 
+    /**
+     * Use postcss to walk through the css ast and remove unused css
+     * @param {string} css css to remove selectors from
+     * @param {*} selectors selectors used in content files
+     */
     getSelectorsCss(css: string, selectors: Set<string>) {
         const root = postcss.parse(css)
         root.walkRules(node => {
@@ -198,6 +220,10 @@ class Purgecss {
         return false
     }
 
+    /**
+     * Check if the node correspond to an empty css rule
+     * @param {object} node Node of postcss abstract syntax tree
+     */
     isRuleEmpty(node: Object) {
         if (
             (node.type === 'decl' && !node.value) ||
@@ -212,6 +238,11 @@ class Purgecss {
         return false
     }
 
+    /**
+     * Determine if the selector should be kept, based on the selectors found in the files
+     * @param {Set} selectorsInContent Set of css selectors found in the content files
+     * @param {Array} selectorsInRule Array of selectors 
+     */
     shouldKeepSelector(
         selectorsInContent: Set<string>,
         selectorsInRule: Array<string>
