@@ -8,7 +8,7 @@ There are multiples types of files that can contains selectors such as html file
 You can use an extractor by settings the extractors option in the purgecss config file.
 ```js
 import purgeJs from "purgecss-from-js"
-import purgeHtml from "purgecss-from-html"
+import purgeHtml from "purge-from-html"
 
 const options = {
     content: [],// files to extract the selectors from

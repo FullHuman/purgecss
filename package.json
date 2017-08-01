@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
@@ -63,7 +63,9 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-watch": "^4.3.1"
+    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-watch": "^4.3.1",
+    "uglify-es": "^3.0.27"
   },
   "engines": {
     "npm": ">=5.2.0"
