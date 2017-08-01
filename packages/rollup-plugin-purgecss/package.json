@@ -1,6 +1,6 @@
 {
     "name": "rollup-plugin-purgecss",
-    "version": "0.3.0",
+    "version": "0.5.0",
     "description": "Rollup plugin for purgecss",
     "main": "lib/rollup-plugin-purgecss.js",
     "module": "./lib/rollup-plugin-purgecss.es.js",
@@ -44,7 +44,7 @@
         "rollup-plugin-node-resolve": "^3.0.0"
     },
     "dependencies": {
-        "purgecss": "^0.3.0",
+        "purgecss": "^0.5.0",
         "rollup-pluginutils": "^2.0.1"
     }
 }
