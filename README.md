@@ -49,7 +49,7 @@ npm i --save-dev purgecss
 
 ```js
 import Purgecss from "purgecss"
-import purgeHtml from "purgecss-from-html"
+import purgeHtml from "purge-from-html"
 const purgeCss = new Purgecss({
     content: ["**/*.html"],
     css: ["**/*.css"],
@@ -162,6 +162,68 @@ Options:
   -h, --help        Show help                                          [boolean]
   -v, --version     Show version number                                [boolean]
 ```
+
+
+### Extractor
+
+Purgecss can be adapted to suit your need. If you want to purify exclusively html file, you might want
+to consider the _purge-from-html_ extractor.  
+Purgecss relies on extractors to get the list of selector used in a file.
+There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
+
+#### Using an extractor
+
+You can use an extractor by settings the extractors option in the purgecss config file.
+```js
+import purgeJs from "purgecss-from-js"
+import purgeHtml from "purge-from-html"
+
+const options = {
+    content: [],// files to extract the selectors from
+    css: [],// css
+    extractors: [
+        {
+            extractor: purgeJs,
+            extensions: ["js"]
+        },
+        {
+            extractor: purgeHtml,
+            extensions: ["html"]
+        }
+    ]
+}
+export default options
+```
+
+#### Default extractor
+
+Purgecss provides a default extractor that is working with all types of files but can be limited and not fit exactly the type of files that you are using.  
+The default extractor considers every word of a file as a selector.
+The default extractor has a few limitations:
+- Do not consider special characters such as `@`. 
+
+#### Legacy extractor
+
+The legacy extractor reproduces the behavior of _purifycss_. You can use the Legacy extractor by setting the option `legacy: true`.
+The legacy extractor has a few limitations:
+- Do not extract uppercase selector
+- Do not extract numbers
+
+#### Create an extractor
+
+An extractor is a simple class with one method. The method `extract` takes the content of a file as a string and return an array of selectors.
+By convention, the name of the npm package is `purge-from-[typefile]` (e.g. purge-from-pug). You can look at the list of extractor on npm by searching `purge-from`.
+
+```js
+
+class PurgeFromJs {
+    static extract(content) {
+        // return array of css selectors
+    }
+}
+
+```
+
 
 ### Differences with
 
