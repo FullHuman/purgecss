@@ -24,14 +24,7 @@
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": [
-    "optimization",
-    "unused",
-    "css",
-    "purge",
-    "uncss",
-    "purify"
-  ],
+  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -51,15 +44,15 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.2",
-    "eslint": "^4.3.0",
+    "eslint": "^4.4.1",
     "eslint-plugin-flowtype": "^2.35.0",
-    "flow-bin": "^0.51.0",
+    "flow-bin": "^0.53.1",
     "jest": "^20.0.4",
     "prettier": "^1.5.3",
-    "regenerator-runtime": "^0.10.5",
-    "rollup": "^0.45.2",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-commonjs": "^8.0.2",
+    "regenerator-runtime": "^0.11.0",
+    "rollup": "^0.47.6",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.1.0",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.0",
@@ -68,6 +61,7 @@
     "uglify-es": "^3.0.27"
   },
   "engines": {
-    "npm": ">=5.2.0"
+    "npm": ">=5.2.0",
+    "node": ">=4.4.0"
   }
 }
