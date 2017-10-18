@@ -113,7 +113,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                output: () => { }
+                output: () => {}
             }).toThrow()
         })
     })
@@ -144,7 +144,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                extractors: () => { }
+                extractors: () => {}
             }).toThrow()
         })
     })
@@ -175,7 +175,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                whitelist: () => { }
+                whitelist: () => {}
             }).toThrow()
         })
     })
@@ -206,7 +206,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                stdout: () => { }
+                stdout: () => {}
             }).toThrow()
         })
     })
@@ -237,7 +237,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                info: () => { }
+                info: () => {}
             }).toThrow()
         })
     })
@@ -268,7 +268,7 @@ describe('initialize purgecss', () => {
             new Purgecss({
                 content: ['index.html'],
                 css: ['style.css'],
-                rejected: () => { }
+                rejected: () => {}
             }).toThrow()
         })
     })
@@ -653,4 +653,3 @@ describe('purge methods with files and legacy extractor', () => {
         })
     })
 })
-

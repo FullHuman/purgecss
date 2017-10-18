@@ -7,14 +7,14 @@ import uglify from "rollup-plugin-uglify"
 import { minify } from "uglify-es"
 
 export default {
-    entry: "src/index.js",
-    targets: [
+    input: "src/index.js",
+    output: [
         {
-            dest: "lib/purgecss.es.js",
+            file: "lib/purgecss.es.js",
             format: "es"
         },
         {
-            dest: "lib/purgecss.js",
+            file: "lib/purgecss.js",
             format: "cjs"
         }
     ],

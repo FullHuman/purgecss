@@ -1,8 +1,6 @@
 import Purgecss from './../src/index'
 const root = './__tests__/test_examples/'
 
-
-
 describe('purge methods with files and default extractor', () => {
     it('purge correctly with default extractor', () => {
         const purgeCss = new Purgecss({
@@ -325,5 +323,4 @@ describe('purge methods with files and default extractor', () => {
             expect(result.includes('parent2')).toBe(false)
         })
     })
-
 })

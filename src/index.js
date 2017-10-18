@@ -43,8 +43,7 @@ class Purgecss {
      * @param {string} configFile Path of the config file
      */
     loadConfigFile(configFile: string) {
-        const pathConfig =
-            typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
+        const pathConfig = typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
         let options
         try {
             const t = path.resolve(process.cwd(), pathConfig)
@@ -61,10 +60,8 @@ class Purgecss {
      */
     checkOptions(options: Options) {
         if (typeof options !== 'object') throw new TypeError(ERROR_OPTIONS_TYPE)
-        if (!options.content || !options.content.length)
-            throw new Error(ERROR_MISSING_CONTENT)
-        if (!options.css || !options.css.length)
-            throw new Error(ERROR_MISSING_CSS)
+        if (!options.content || !options.content.length) throw new Error(ERROR_MISSING_CONTENT)
+        if (!options.css || !options.css.length) throw new Error(ERROR_MISSING_CSS)
         if (options.output && typeof options.output !== 'string')
             throw new TypeError(ERROR_OUTPUT_TYPE)
         if (options.extractors && !Array.isArray(options.extractors))
@@ -73,8 +70,7 @@ class Purgecss {
             throw new TypeError(ERROR_WHITELIST_TYPE)
         if (options.stdout && typeof options.stdout !== 'boolean')
             throw new TypeError(ERROR_STDOUT_TYPE)
-        if (options.info && typeof options.info !== 'boolean')
-            throw new TypeError(ERROR_INFO_TYPE)
+        if (options.info && typeof options.info !== 'boolean') throw new TypeError(ERROR_INFO_TYPE)
         if (options.rejected && typeof options.rejected !== 'boolean')
             throw new TypeError(ERROR_REJECTED_TYPE)
     }
@@ -84,16 +80,11 @@ class Purgecss {
      */
     purge() {
         // Get selectors from content files
-        let cssClasses = this.extractFileSelector(
-            this.options.content,
-            this.options.extractors
-        )
+        let cssClasses = this.extractFileSelector(this.options.content, this.options.extractors)
         // Get css selectors and remove unused ones
         let files = []
         for (let file of this.options.css) {
-            const cssContent = this.options.stdin
-                ? file
-                : fs.readFileSync(file, 'utf8')
+            const cssContent = this.options.stdin ? file : fs.readFileSync(file, 'utf8')
             files.push({
                 file,
                 css: this.getSelectorsCss(cssContent, cssClasses)
@@ -107,10 +98,7 @@ class Purgecss {
      * @param {array} files Array of files path or glob pattern 
      * @param {array} extractors Array of extractors
      */
-    extractFileSelector(
-        files: Array<string>,
-        extractors?: Array<ExtractorsObj>
-    ): Set<string> {
+    extractFileSelector(files: Array<string>, extractors?: Array<ExtractorsObj>): Set<string> {
         let selectors = new Set()
         for (let globfile of files) {
             let filesnames = []
@@ -122,10 +110,7 @@ class Purgecss {
             for (let file of filesnames) {
                 const content = fs.readFileSync(file, 'utf8')
                 const extractor = this.getFileExtractor(file, extractors)
-                selectors = new Set(
-                    ...selectors,
-                    this.extractSelectors(content, extractor)
-                )
+                selectors = new Set(...selectors, this.extractSelectors(content, extractor))
             }
         }
 
@@ -190,10 +175,7 @@ class Purgecss {
                             }
                         }
 
-                        let keepSelector = this.shouldKeepSelector(
-                            selectors,
-                            selectorsInRule
-                        )
+                        let keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
                         if (!keepSelector) {
                             selector.remove()
                         }
@@ -227,11 +209,9 @@ class Purgecss {
     isRuleEmpty(node: Object) {
         if (
             (node.type === 'decl' && !node.value) ||
-            ((node.type === 'rule' && !node.selector) ||
-                (node.nodes && !node.nodes.length)) ||
+            ((node.type === 'rule' && !node.selector) || (node.nodes && !node.nodes.length)) ||
             (node.type === 'atrule' &&
-                ((!node.nodes && !node.params) ||
-                    (!node.params && !node.nodes.length)))
+                ((!node.nodes && !node.params) || (!node.params && !node.nodes.length)))
         ) {
             return true
         }
@@ -243,10 +223,7 @@ class Purgecss {
      * @param {Set} selectorsInContent Set of css selectors found in the content files
      * @param {Array} selectorsInRule Array of selectors 
      */
-    shouldKeepSelector(
-        selectorsInContent: Set<string>,
-        selectorsInRule: Array<string>
-    ) {
+    shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>) {
         for (let selector of selectorsInRule) {
             // legacy
             if (this.options.legacy) {
@@ -258,16 +235,13 @@ class Purgecss {
                     keepSelector = true
                 }
                 if (keepSelector) return true
-                if (selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector)) return true
-            }
-            // non legacy extractors
-            else {
+                if (selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector))
+                    return true
+            } else {
+                // non legacy extractors
                 // pseudo class
                 if (selector.startsWith(':')) continue
-                if (
-                    !(selectorsInContent.has(selector) ||
-                        CSS_WHITELIST.includes(selector))
-                ) {
+                if (!(selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector))) {
                     return false
                 }
             }
