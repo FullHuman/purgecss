@@ -24,7 +24,14 @@
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
+  "keywords": [
+    "optimization",
+    "unused",
+    "css",
+    "purge",
+    "uncss",
+    "purify"
+  ],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -33,32 +40,32 @@
   "homepage": "https://github.com/FullHuman/purgecss#readme",
   "dependencies": {
     "glob": "^7.1.2",
-    "postcss": "^6.0.4",
+    "postcss": "^6.0.13",
     "postcss-selector-parser": "^2.2.3",
-    "yargs": "^8.0.2"
+    "yargs": "^9.0.1"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
-    "codacy-coverage": "^2.0.2",
-    "eslint": "^4.4.1",
-    "eslint-plugin-flowtype": "^2.35.0",
-    "flow-bin": "^0.53.1",
-    "jest": "^20.0.4",
-    "prettier": "^1.5.3",
+    "codacy-coverage": "^2.0.3",
+    "eslint": "^4.9.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "flow-bin": "^0.57.3",
+    "jest": "^21.2.1",
+    "prettier": "^1.7.4",
     "regenerator-runtime": "^0.11.0",
-    "rollup": "^0.47.6",
+    "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.1.0",
+    "rollup-plugin-commonjs": "^8.2.3",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.0.27"
+    "uglify-es": "^3.1.3"
   },
   "engines": {
     "npm": ">=5.2.0",
