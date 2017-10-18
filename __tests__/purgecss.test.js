@@ -292,284 +292,188 @@ describe('purge methods with files and legacy extractor', () => {
     })
 
     describe('purge correctly (find intact classes)', () => {
-        it('finds .single', () => {
-            const purgeCss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}simple/simple.js`],
                 css: [`${root}simple/simple.css`],
                 legacy: true
-            })
-            const result = purgeCss.purge()[0].css
-            expect(result.includes('.single')).toBe(true)
+            }).purge()[0].css
+        })
+
+        it('finds .single', () => {
+            expect(purgecssResult.includes('.single')).toBe(true)
         })
 
         it('finds .double-class', () => {
-            const purgeCss = new Purgecss({
-                content: [`${root}simple/simple.js`],
-                css: [`${root}simple/simple.css`],
-                legacy: true
-            })
-            const result = purgeCss.purge()[0].css
-            expect(result.includes('.double-class')).toBe(true)
+            expect(purgecssResult.includes('.double-class')).toBe(true)
         })
 
         it('can find .triple-simple-class', () => {
-            const purgeCss = new Purgecss({
-                content: [`${root}simple/simple.js`],
-                css: [`${root}simple/simple.css`],
-                legacy: true
-            })
-            const result = purgeCss.purge()[0].css
-            expect(result.includes('.triple-simple-class')).toBe(true)
+            expect(purgecssResult.includes('.triple-simple-class')).toBe(true)
         })
     })
 
     describe('classes that are added together', () => {
-        it('can find .added-together', () => {
-            const purgeCss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}combined/combined.js`],
                 css: [`${root}combined/combined.css`],
                 legacy: true
-            })
-
-            const result = purgeCss.purge()[0].css
-            expect(result.includes('.added-together')).toBe(true)
+            }).purge()[0].css
+        })
+        it('can find .added-together', () => {
+            expect(purgecssResult.includes('.added-together')).toBe(true)
         })
 
         it('can find .array-joined', () => {
-            const purgeCss = new Purgecss({
-                content: [`${root}combined/combined.js`],
-                css: [`${root}combined/combined.css`],
-                legacy: true
-            })
-
-            const result = purgeCss.purge()[0].css
-            expect(result.includes('.array-joined')).toBe(true)
+            expect(purgecssResult.includes('.array-joined')).toBe(true)
         })
     })
 
     describe('filters out unused selectors', () => {
-        it('contains .used-class', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}remove_unused/remove_unused.js`],
                 css: [`${root}remove_unused/remove_unused.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.used-class')).toBe(true)
+            }).purge()[0].css
+        })
+        it('contains .used-class', () => {
+            expect(purgecssResult.includes('.used-class')).toBe(true)
         })
 
         it('removes .unused-class', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}remove_unused/remove_unused.js`],
-                css: [`${root}remove_unused/remove_unused.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.unused-class')).toBe(false)
+            expect(purgecssResult.includes('.unused-class')).toBe(false)
         })
 
         it('removes .another-one-not-found', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}remove_unused/remove_unused.js`],
-                css: [`${root}remove_unused/remove_unused.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.another-one-not-found')).toBe(false)
+            expect(purgecssResult.includes('.another-one-not-found')).toBe(false)
         })
     })
 
     describe('camelCase', () => {
-        it('finds testFoo', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}camel_case/camel_case.js`],
                 css: [`${root}camel_case/camel_case.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('testFoo')).toBe(true)
+            }).purge()[0].css
+        })
+        it('finds testFoo', () => {
+            expect(purgecssResult.includes('testFoo')).toBe(true)
         })
 
         it('finds camelCase', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}camel_case/camel_case.js`],
-                css: [`${root}camel_case/camel_case.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('camelCase')).toBe(true)
+            expect(purgecssResult.includes('camelCase')).toBe(true)
         })
     })
 
     describe('wildcard', () => {
-        it('finds universal selector', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}wildcard/wildcard.html`],
                 css: [`${root}wildcard/wildcard.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('*')).toBe(true)
+            }).purge()[0].css
+        })
+        it('finds universal selector', () => {
+            expect(purgecssResult.includes('*')).toBe(true)
         })
 
         it('finds :before', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}wildcard/wildcard.html`],
-                css: [`${root}wildcard/wildcard.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('before')).toBe(true)
+            expect(purgecssResult.includes('before')).toBe(true)
         })
 
         it('finds scrollbar', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}wildcard/wildcard.html`],
-                css: [`${root}wildcard/wildcard.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('scrollbar')).toBe(true)
+            expect(purgecssResult.includes('scrollbar')).toBe(true)
         })
 
         it('finds selection', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}wildcard/wildcard.html`],
-                css: [`${root}wildcard/wildcard.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('selection')).toBe(true)
+            expect(purgecssResult.includes('selection')).toBe(true)
         })
 
         it('finds vertical', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}wildcard/wildcard.html`],
-                css: [`${root}wildcard/wildcard.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('vertical')).toBe(true)
+            expect(purgecssResult.includes('vertical')).toBe(true)
         })
 
         it('finds :root', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}wildcard/wildcard.html`],
-                css: [`${root}wildcard/wildcard.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes(':root')).toBe(true)
+            expect(purgecssResult.includes(':root')).toBe(true)
         })
     })
 
     describe('media queries', () => {
-        it('finds .media-class', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}media_queries/media_queries.html`],
                 css: [`${root}media_queries/media_queries.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.media-class')).toBe(true)
+            }).purge()[0].css
+        })
+        it('finds .media-class', () => {
+            expect(purgecssResult.includes('.media-class')).toBe(true)
         })
 
         it('finds .alone', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}media_queries/media_queries.html`],
-                css: [`${root}media_queries/media_queries.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.alone')).toBe(true)
+            expect(purgecssResult.includes('.alone')).toBe(true)
         })
 
         it('finds #id-in-media', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}media_queries/media_queries.html`],
-                css: [`${root}media_queries/media_queries.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('#id-in-media')).toBe(true)
+            expect(purgecssResult.includes('#id-in-media')).toBe(true)
         })
 
         it('finds body', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}media_queries/media_queries.html`],
-                css: [`${root}media_queries/media_queries.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('body')).toBe(true)
+            expect(purgecssResult.includes('body')).toBe(true)
         })
 
         it('removes .unused-class', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}media_queries/media_queries.html`],
-                css: [`${root}media_queries/media_queries.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.unused-class')).toBe(false)
+            expect(purgecssResult.includes('.unused-class')).toBe(false)
         })
 
         it('removes the empty media query', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}media_queries/media_queries.html`],
-                css: [`${root}media_queries/media_queries.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('66666px')).toBe(false)
+            expect(purgecssResult.includes('66666px')).toBe(false)
         })
     })
 
     describe('special characters', () => {
-        it('finds @home', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}special_characters/special_characters.js`],
                 css: [`${root}special_characters/special_characters.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('@home')).toBe(true)
+            }).purge()[0].css
+        })
+        it('finds @home', () => {
+            expect(purgecssResult.includes('@home')).toBe(true)
         })
 
         it('finds +rounded', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}special_characters/special_characters.js`],
-                css: [`${root}special_characters/special_characters.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('+rounded')).toBe(true)
+            expect(purgecssResult.includes('+rounded')).toBe(true)
         })
 
         it('finds button', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}special_characters/special_characters.js`],
-                css: [`${root}special_characters/special_characters.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('button')).toBe(true)
+            expect(purgecssResult.includes('button')).toBe(true)
         })
     })
 
     describe('delimited', () => {
-        it('removes the extra comma', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}delimited/delimited.html`],
                 css: [`${root}delimited/delimited.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            var commaCount = result.split('').reduce((total, chr) => {
-                if (chr === ',') {
-                    return total + 1
-                }
-
+            }).purge()[0].css
+        })
+        it('removes the extra comma', () => {
+            var commaCount = purgecssResult.split('').reduce((total, chr) => {
+                if (chr === ',') return total + 1
                 return total
             }, 0)
 
@@ -577,55 +481,33 @@ describe('purge methods with files and legacy extractor', () => {
         })
 
         it('finds h1', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}delimited/delimited.html`],
-                css: [`${root}delimited/delimited.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('h1')).toBe(true)
+            expect(purgecssResult.includes('h1')).toBe(true)
         })
 
         it('finds p', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}delimited/delimited.html`],
-                css: [`${root}delimited/delimited.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('p')).toBe(true)
+            expect(purgecssResult.includes('p')).toBe(true)
         })
 
         it('removes .unused-class-name', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}delimited/delimited.html`],
-                css: [`${root}delimited/delimited.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('.unused-class-name')).toBe(false)
+            expect(purgecssResult.includes('.unused-class-name')).toBe(false)
         })
     })
 
     describe('pseudo classes', () => {
-        it('finds div:before', () => {
-            const purgecss = new Purgecss({
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
                 content: [`${root}pseudo_class/pseudo_class.js`],
                 css: [`${root}pseudo_class/pseudo_class.css`],
                 legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('div:before')).toBe(true)
+            }).purge()[0].css
+        })
+        it('finds div:before', () => {
+            expect(purgecssResult.includes('div:before')).toBe(true)
         })
 
         it('removes row:after', () => {
-            const purgecss = new Purgecss({
-                content: [`${root}pseudo_class/pseudo_class.js`],
-                css: [`${root}pseudo_class/pseudo_class.css`],
-                legacy: true
-            })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('row:after')).toBe(false)
+            expect(purgecssResult.includes('row:after')).toBe(false)
         })
     })
 
