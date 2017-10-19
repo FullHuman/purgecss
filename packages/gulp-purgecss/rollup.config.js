@@ -3,14 +3,14 @@ import commonjs from "rollup-plugin-commonjs"
 import resolve from "rollup-plugin-node-resolve"
 
 export default {
-    entry: "src/index.js",
-    targets: [
+    input: "src/index.js",
+    output: [
         {
-            dest: "lib/gulpPurgecss.es.js",
+            file: "lib/gulpPurgecss.es.js",
             format: "es"
         },
         {
-            dest: "lib/gulpPurgecss.js",
+            file: "lib/gulpPurgecss.js",
             format: "cjs"
         }
     ],
