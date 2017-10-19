@@ -168,9 +168,15 @@ class Purgecss {
                     if (selector.type === 'selector') {
                         for (let nodeSelector of selector.nodes) {
                             const { type, value } = nodeSelector
-                            if (SELECTOR_STANDARD_TYPES.includes(type)) {
+                            if (
+                                SELECTOR_STANDARD_TYPES.includes(type) &&
+                                typeof value !== 'undefined'
+                            ) {
                                 selectorsInRule.push(value)
-                            } else if (type === 'attribute') {
+                            } else if (
+                                type === 'attribute' &&
+                                typeof nodeSelector.raws.unquoted !== 'undefined'
+                            ) {
                                 selectorsInRule.push(nodeSelector.raws.unquoted)
                             }
                         }
