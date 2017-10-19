@@ -10,10 +10,10 @@
         "test": "__tests__"
     },
     "scripts": {
-        "test": "jest",
+        "test": "npx jest",
         "build": "rollup -c rollup.config.js",
         "lint": "eslint -c .eslintrc src/",
-        "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote index.js"
+        "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote src/index.js"
     },
     "repository": {
         "type": "git",
