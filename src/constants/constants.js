@@ -12,6 +12,8 @@ export const ERROR_OUTPUT_TYPE = 'Error Type option output: expected a string'
 export const ERROR_EXTRACTERS_TYPE = 'Error Type option extractors: expected an array'
 
 export const ERROR_WHITELIST_TYPE = 'Error Type option whitelist: expected an array'
+export const ERROR_WHITELIST_PATTERNS_TYPE =
+    'Error Type option whitelistPatterns: expected an array'
 
 export const ERROR_STDOUT_TYPE = 'Error Type option stdout: expected a boolean'
 export const ERROR_INFO_TYPE = 'Error Type option info: expected a boolean'

@@ -20,6 +20,7 @@ import {
     ERROR_STDOUT_TYPE,
     ERROR_INFO_TYPE,
     ERROR_REJECTED_TYPE,
+    ERROR_WHITELIST_PATTERNS_TYPE,
     IGNORE_ANNOTATION
 } from './constants/constants'
 import CSS_WHITELIST from './constants/cssWhitelist'
@@ -73,6 +74,8 @@ class Purgecss {
         if (options.info && typeof options.info !== 'boolean') throw new TypeError(ERROR_INFO_TYPE)
         if (options.rejected && typeof options.rejected !== 'boolean')
             throw new TypeError(ERROR_REJECTED_TYPE)
+        if (options.whitelistPatterns && !Array.isArray(options.whitelistPatterns))
+            throw new TypeError(ERROR_WHITELIST_PATTERNS_TYPE)
     }
 
     /**
@@ -241,18 +244,41 @@ class Purgecss {
                     keepSelector = true
                 }
                 if (keepSelector) return true
-                if (selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector))
+                if (
+                    selectorsInContent.has(selector) ||
+                    CSS_WHITELIST.includes(selector) ||
+                    this.isSelectorWhitelisted(selector)
+                )
                     return true
             } else {
                 // non legacy extractors
                 // pseudo class
                 if (selector.startsWith(':')) continue
-                if (!(selectorsInContent.has(selector) || CSS_WHITELIST.includes(selector))) {
+                if (
+                    !(
+                        selectorsInContent.has(selector) ||
+                        CSS_WHITELIST.includes(selector) ||
+                        this.isSelectorWhitelisted(selector)
+                    )
+                ) {
                     return false
                 }
             }
         }
         return this.options.legacy ? false : true
+    }
+
+    /**
+     * Check if the selector is whitelisted by the options whitelist or whitelistPatterns
+     * @param {string} selector css selector
+     */
+    isSelectorWhitelisted(selector: string): boolean {
+        return !!(
+            CSS_WHITELIST.includes(selector) ||
+            (this.options.whitelist && this.options.whitelist.some(v => v === selector)) ||
+            (this.options.whitelistPatterns &&
+                this.options.whitelistPatterns.some(v => v.test(selector)))
+        )
     }
 }
 

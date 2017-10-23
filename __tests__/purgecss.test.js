@@ -180,6 +180,37 @@ describe('initialize purgecss', () => {
         })
     })
 
+    it('throws an error with an incorrect whitelistPatterns option', () => {
+        expect(() => {
+            new Purgecss({
+                content: ['index.html'],
+                css: ['style.css'],
+                whitelistPatterns: {}
+            })
+        }).toThrow(TypeError)
+        expect(() => {
+            new Purgecss({
+                content: ['index.html'],
+                css: ['style.css'],
+                whitelistPatterns: 100
+            })
+        }).toThrow(TypeError)
+        expect(() => {
+            new Purgecss({
+                content: ['index.html'],
+                css: ['style.css'],
+                whitelistPatterns: 'hello'
+            }).toThrow(TypeError)
+        })
+        expect(() => {
+            new Purgecss({
+                content: ['index.html'],
+                css: ['style.css'],
+                whitelistPatterns: () => {}
+            }).toThrow(TypeError)
+        })
+    })
+
     it('throws an error with an incorrect stdout option', () => {
         expect(() => {
             new Purgecss({
