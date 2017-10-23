@@ -29,7 +29,7 @@ declare namespace Purgecss {
         css: Array<string>,
         extractors?: Array<ExtractorsObj>,
         whitelist?: Array<string>,
-        whitelistPatterns?: Array<string>,
+        whitelistPatterns?: Array<RegExp>,
         output?: string,
         stdout?: boolean,
         stdin?: boolean,

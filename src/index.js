@@ -275,9 +275,10 @@ class Purgecss {
     isSelectorWhitelisted(selector: string): boolean {
         return !!(
             CSS_WHITELIST.includes(selector) ||
-            (this.options.whitelist && this.options.whitelist.some(v => v === selector)) ||
+            (this.options.whitelist &&
+                this.options.whitelist.some((v: string) => v === selector)) ||
             (this.options.whitelistPatterns &&
-                this.options.whitelistPatterns.some(v => v.test(selector)))
+                this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
         )
     }
 }
