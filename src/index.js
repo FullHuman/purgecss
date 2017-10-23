@@ -187,7 +187,7 @@ class Purgecss {
                         }
                     }
                 })
-            }).process(node.selector).result
+            }).processSync(node.selector)
 
             const parent = node.parent
             // // Remove empty rules
