@@ -1,6 +1,6 @@
 {
     "name": "gulp-purgecss",
-    "version": "0.7.1",
+    "version": "0.8.0",
     "description": "Gulp plugin for purgecss",
     "main": "./lib/gulpPurgecss.js",
     "module": "./lib/gulpPurgecss.es.js",
@@ -47,7 +47,7 @@
     },
     "dependencies": {
         "gulp-util": "^3.0.8",
-        "purgecss": "^0.7.0",
+        "purgecss": "^0.8.0",
         "through2": "^2.0.3"
     }
 }
