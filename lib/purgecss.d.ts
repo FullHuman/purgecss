@@ -1,4 +1,4 @@
-// Type definitions for Purgecss 0.2.0
+// Type definitions for Purgecss 0.8.0
 // Project: Purgecss
 // Definitions by: Ffloriel https://github.com/Ffloriel
 
@@ -29,8 +29,10 @@ declare namespace Purgecss {
         css: Array<string>,
         extractors?: Array<ExtractorsObj>,
         whitelist?: Array<string>,
+        whitelistPatterns?: Array<string>,
         output?: string,
         stdout?: boolean,
+        stdin?: boolean,
         info?: boolean,
         rejected?: boolean,
         legacy?: boolean
@@ -46,8 +48,4 @@ declare namespace Purgecss {
         css: string
     }
 
-    export interface MyClassMethodOptions {
-        width?: number;
-        height?: number;
-    }
 }

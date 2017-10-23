@@ -5,8 +5,10 @@ export type Options = {
     css: Array<string>,
     extractors?: Array<ExtractorsObj>,
     whitelist?: Array<string>,
+    whitelistPatterns?: Array<string>,
     output?: string,
     stdout?: boolean,
+    stdin?:boolean,
     info?: boolean,
     rejected?: boolean,
     legacy?: boolean
