@@ -14,14 +14,14 @@ const squash = str => str.trim().replace(/\r/g, '')
 
 test('should import *.css files', t => {
     return rollup({
-        entry: '__tests__/fixtures/basic/index.js',
+        input: '__tests__/fixtures/basic/index.js',
         plugins: [
             purgecss({
                 content: ["__tests__/assets/test_a.html"]
             })
         ]
     }).then(bundle => {
-        return bundle.generate()
+        return bundle.generate({format: "cjs"})
         .then(value => {
             const result = value.code
             t.true(result.includes(squash(expectA)))

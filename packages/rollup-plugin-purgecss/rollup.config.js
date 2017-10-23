@@ -3,14 +3,14 @@ import commonjs from "rollup-plugin-commonjs"
 import resolve from "rollup-plugin-node-resolve"
 
 export default {
-    entry: "./src/index.js",
-    targets: [
+    input: "./src/index.js",
+    output: [
         {
-            dest: "./lib/rollup-plugin-purgecss.es.js",
+            file: "./lib/rollup-plugin-purgecss.es.js",
             format: "es"
         },
         {
-            dest: "./lib/rollup-plugin-purgecss.js",
+            file: "./lib/rollup-plugin-purgecss.js",
             format: "cjs"
         }
     ],
