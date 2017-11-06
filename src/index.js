@@ -113,7 +113,7 @@ class Purgecss {
             for (let file of filesnames) {
                 const content = fs.readFileSync(file, 'utf8')
                 const extractor = this.getFileExtractor(file, extractors)
-                selectors = new Set(...selectors, this.extractSelectors(content, extractor))
+                selectors = new Set([...selectors, ...this.extractSelectors(content, extractor)])
             }
         }
 
