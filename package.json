@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
@@ -18,20 +18,14 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier":
+      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": [
-    "optimization",
-    "unused",
-    "css",
-    "purge",
-    "uncss",
-    "purify"
-  ],
+  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
