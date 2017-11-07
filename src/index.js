@@ -1,5 +1,4 @@
 // @flow
-import { type ExtractorsObj, type Options } from './../flow/index.js'
 
 import fs from 'fs'
 import path from 'path'
@@ -98,7 +97,7 @@ class Purgecss {
 
     /**
      * Extract the selectors present in the files using a purgecss extractor
-     * @param {array} files Array of files path or glob pattern 
+     * @param {array} files Array of files path or glob pattern
      * @param {array} extractors Array of extractors
      */
     extractFileSelector(files: Array<string>, extractors?: Array<ExtractorsObj>): Set<string> {
@@ -202,7 +201,7 @@ class Purgecss {
 
     /**
      * Check if the node is a css comment to ignore the selector rule
-     * @param {object} node Node of postcss abstract syntax tree 
+     * @param {object} node Node of postcss abstract syntax tree
      */
     isIgnoreAnnotation(node: Object) {
         if (node && node.type === 'comment') {
@@ -230,7 +229,7 @@ class Purgecss {
     /**
      * Determine if the selector should be kept, based on the selectors found in the files
      * @param {Set} selectorsInContent Set of css selectors found in the content files
-     * @param {Array} selectorsInRule Array of selectors 
+     * @param {Array} selectorsInRule Array of selectors
      */
     shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>) {
         for (let selector of selectorsInRule) {
