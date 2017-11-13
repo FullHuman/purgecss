@@ -21,7 +21,6 @@ export default class PurgecssPlugin {
         // Go through chunks and purge as configured
         compilation.chunks.forEach(chunk => {
           const { name: chunkName, files } = chunk
-          const modules = chunk.mapModules(mod => mod)
           const assetsToPurge = search
             .assets(compilation.assets, ['.css'])
             .filter(asset => files.indexOf(asset.name) >= 0)
@@ -31,7 +30,7 @@ export default class PurgecssPlugin {
               .entries(entryPaths, chunkName)
               .concat(
                 search.files(
-                  modules,
+                  chunk,
                   this.options.moduleExtensions || [],
                   file => file.resource
                 )
