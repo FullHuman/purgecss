@@ -127,32 +127,27 @@ var entries = function entries(paths, chunkName) {
 };
 
 var assets = function assets() {
-    var assets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    var extensions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    return Object.keys(assets).map(function (name) {
-        return extensions.indexOf(path.extname(name.indexOf('?') >= 0 ? name.split('?').slice(0, -1).join('') : name)) >= 0 && { name: name, asset: assets[name] };
-    }).filter(function (a) {
-        return a;
-    });
+  var assets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var extensions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  return Object.keys(assets).map(function (name) {
+    return extensions.indexOf(path.extname(name.indexOf('?') >= 0 ? name.split('?').slice(0, -1).join('') : name)) >= 0 && { name: name, asset: assets[name] };
+  }).filter(function (a) {
+    return a;
+  });
 };
 
-var files = function files() {
-    var modules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var extensions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
-        return a;
-    };
-    return Object.keys(modules).map(function (name) {
-        var file = getter(modules[name]);
-
-        if (!file) {
-            return null;
-        }
-
-        return extensions.indexOf(path.extname(file)) >= 0 && file;
-    }).filter(function (a) {
-        return a;
-    });
+var files = function files(chunk) {
+  var extensions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
+    return a;
+  };
+  return chunk.mapModules(function (module) {
+    var file = getter(module);
+    if (!file) return null;
+    return extensions.indexOf(path.extname(file)) >= 0 && file;
+  }).filter(function (a) {
+    return a;
+  });
 };
 
 var PurgecssPlugin = function () {
@@ -180,9 +175,6 @@ var PurgecssPlugin = function () {
             var chunkName = chunk.name,
                 files$$1 = chunk.files;
 
-            var modules = chunk.mapModules(function (mod) {
-              return mod;
-            });
             var assetsToPurge = assets(compilation.assets, ['.css']).filter(function (asset) {
               return files$$1.indexOf(asset.name) >= 0;
             });
@@ -191,7 +183,7 @@ var PurgecssPlugin = function () {
               var name = _ref.name,
                   asset = _ref.asset;
 
-              var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(modules, _this.options.moduleExtensions || [], function (file) {
+              var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(chunk, _this.options.moduleExtensions || [], function (file) {
                 return file.resource;
               })).filter(function (v) {
                 return !v.endsWith('.css');
