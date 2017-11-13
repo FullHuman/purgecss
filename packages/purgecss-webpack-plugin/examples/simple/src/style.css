@@ -5,3 +5,7 @@
 .unused {
   color: blue;
 }
+
+.whitelisted {
+  color: green;
+}
