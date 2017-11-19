@@ -84,6 +84,7 @@ function component() {
   element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.join(['Hello', 'webpack'], ' ')
   element.classList.add('hello')
   element.classList.add('whitelisted')
+  element.classList.add('md:w-2/3')
   return element
 }
 

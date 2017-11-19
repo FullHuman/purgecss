@@ -5,3 +5,7 @@
 .whitelisted {
   color: green;
 }
+
+md\:w-2\/3 {
+  color: red;
+}

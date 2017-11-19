@@ -9,6 +9,7 @@ function component() {
   element.innerHTML = _.join(['Hello', 'webpack'], ' ')
   element.classList.add('hello')
   element.classList.add('whitelisted')
+  element.classList.add('md:w-2/3')
   return element
 }
 
