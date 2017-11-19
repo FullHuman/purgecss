@@ -569,6 +569,24 @@ describe('purge methods with files and legacy extractor', () => {
         })
     })
 
+    describe('nth-child', () => {
+        let purgecssResult
+        beforeAll(() => {
+              purgecssResult = new Purgecss({
+                    content: [`${root}nth_child/nth_child.html`],
+                    css: [`${root}nth_child/nth_child.css`],
+                    legacy: true
+              }).purge()[0].css
+        })
+        it('finds some-item:nth-child(2n)', () => {
+            expect(purgecssResult.includes('some-item:nth-child(2n)')).toBe(true)
+        })
+
+        it('finds some-item:nth-child(2n+1)', () => {
+            expect(purgecssResult.includes('some-item:nth-child(2n+1)')).toBe(true)
+        })
+  })
+
     describe('ignore comment', () => {
         it('ignore h1', () => {
             const purgecss = new Purgecss({
