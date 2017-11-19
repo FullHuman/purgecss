@@ -493,6 +493,33 @@ describe('purge methods with files and legacy extractor', () => {
         })
     })
 
+    describe('special characters, with custom Extractor', () => {
+        let purgecssResult
+        class CustomExtractor {
+            static extract(content) {
+                return content.match(/[A-z0-9-:\/]+/g)
+            }
+        }
+
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}special_characters/special_characters.js`],
+                css: [`${root}special_characters/special_characters.css`],
+                extractors: [
+                    {
+                        extractor: CustomExtractor,
+                        extensions: ['html', 'js']
+                    }
+                ],
+                legacy: false
+            }).purge()[0].css
+        })
+
+        it('finds tailwind class', () => {
+            expect(purgecssResult.includes('md\\:w-1\\/3')).toBe(true)
+        })
+    })
+
     describe('delimited', () => {
         let purgecssResult
         beforeAll(() => {
