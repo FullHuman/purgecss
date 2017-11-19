@@ -66,7 +66,7 @@ const result = purgecss.purge()
 #### Build Plugin
 
 <div align="center">
-	<a href="https://github.com/webpack/webpack">
+	<a href="https://github.com/FullHuman/purgecss-webpack-plugin">
     	<img width="200" heigth="200" src="https://webpack.js.org/assets/icon-square-big.svg">
   	</a>
 	<a href="https://github.com/FullHuman/gulp-purgecss">
