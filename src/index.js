@@ -252,12 +252,13 @@ class Purgecss {
             } else {
                 // non legacy extractors
                 // pseudo class
-                if (selector.startsWith(':')) continue
+                const unescapedSelector = selector.replace(/\\/g, '')
+                if (unescapedSelector.startsWith(':')) continue
                 if (
                     !(
-                        selectorsInContent.has(selector) ||
-                        CSS_WHITELIST.includes(selector) ||
-                        this.isSelectorWhitelisted(selector)
+                        selectorsInContent.has(unescapedSelector) ||
+                        CSS_WHITELIST.includes(unescapedSelector) ||
+                        this.isSelectorWhitelisted(unescapedSelector)
                     )
                 ) {
                     return false
