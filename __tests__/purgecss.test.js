@@ -534,7 +534,6 @@ describe('purge methods with files and legacy extractor', () => {
                 if (chr === ',') return total + 1
                 return total
             }, 0)
-
             expect(commaCount).toBe(1)
         })
 
@@ -568,7 +567,7 @@ describe('purge methods with files and legacy extractor', () => {
             expect(purgecssResult.includes('row:after')).toBe(false)
         })
     })
-
+  
     describe('nth-child', () => {
         let purgecssResult
         beforeAll(() => {
@@ -577,15 +576,46 @@ describe('purge methods with files and legacy extractor', () => {
                     css: [`${root}nth_child/nth_child.css`],
                     legacy: true
               }).purge()[0].css
+          })
+        it('finds some-item:nth-child(2n)', () => {
+            expect(purgecssResult.includes('some-item:nth-child(2n)')).toBe(true)
+        })
+        it('finds some-item:nth-child(2n+1)', () => {
+            expect(purgecssResult.includes('some-item:nth-child(2n+1)')).toBe(true)
+        })
+  })
+
+
+    describe('pseudo selectors', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}pseudo_selector/pseudo_selector.html`],
+                css: [`${root}pseudo_selector/pseudo_selector.css`],
+                legacy: false
+            }).purge()[0].css
+
         })
         it('finds some-item:nth-child(2n)', () => {
             expect(purgecssResult.includes('some-item:nth-child(2n)')).toBe(true)
         })
 
-        it('finds some-item:nth-child(2n+1)', () => {
-            expect(purgecssResult.includes('some-item:nth-child(2n+1)')).toBe(true)
+        it('finds some-item:nth-child(2n + 1)', () => {
+            expect(purgecssResult.includes('some-item:nth-child(2n + 1)')).toBe(true)
         })
-  })
+
+        it('removes unused:only-child()', () => {
+            expect(purgecssResult.includes('unused:only-child()')).toBe(false)
+        })
+
+        it('finds used:only-child()', () => {
+            expect(purgecssResult.includes('used:only-child()')).toBe(true)
+        })
+
+        it('finds odd-item:nth-child(odd)', () => {
+            expect(purgecssResult.includes('odd-item:nth-child(odd)')).toBe(true)
+        })
+    })
 
     describe('ignore comment', () => {
         it('ignore h1', () => {

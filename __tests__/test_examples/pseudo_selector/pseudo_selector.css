@@ -1,0 +1,19 @@
+.some-item:nth-child(2n + 1) {
+  color: green;
+}
+
+.some-item:nth-child(2n) {
+  font-size: 1rem;
+}
+
+.unused:only-child() {
+  color: red;
+}
+
+.used:only-child() {
+  color: blue;
+}
+
+.odd-item:nth-child(odd) {
+  color: grey;
+}
