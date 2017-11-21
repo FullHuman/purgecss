@@ -23,7 +23,7 @@
 ## What is purgecss?
 
 Purgecss is a tool inspired by Purifycss to remove unused css. Originally thought as the v2 of purifycss,
-purgecss has for goal to act in a similar way while correcting the known ploblems of purifycss. If you want
+purgecss has for goal to act in a similar way while correcting the known problems of purifycss. If you want
 to know more about the differences between purifycss and purgecss, go to the section [Differences with](#differences-with).  
 When you are building a website, chances are that you are using a css framework. Bootstrap, Materializecss, Foundation are
 some of the big css framework that you can include to your website, but you will only use a small set of the framework and
