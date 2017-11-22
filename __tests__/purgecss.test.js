@@ -638,4 +638,21 @@ describe('purge methods with files and legacy extractor', () => {
             expect(result.includes('font-face')).toBe(true)
         })
     })
+
+    describe(':not pseudo class', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}not/not.html`],
+                css: [`${root}not/not.css`]
+            }).purge()[0].css
+        })
+
+        it('finds foo-bar', () => {
+            expect(purgecssResult.includes('foo-bar')).toBe(true)
+        })
+        it('finds foo', () => {
+            expect(purgecssResult.includes('.foo')).toBe(true)
+        })
+    })
 })

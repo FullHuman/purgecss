@@ -168,6 +168,14 @@ class Purgecss {
                 selectorsParsed.walk(selector => {
                     let selectorsInRule = []
                     if (selector.type === 'selector') {
+                        // if inside :not pseudo class, ignore
+                        if (
+                            selector.parent &&
+                            selector.parent.value === ':not' &&
+                            selector.parent.type === 'pseudo'
+                        ) {
+                            return
+                        }
                         for (let nodeSelector of selector.nodes) {
                             const { type, value } = nodeSelector
                             if (
