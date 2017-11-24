@@ -145,9 +145,9 @@
       "path---purgecss-docs-use-with-rollup-html-72fbd6ec71bf9693b2ea.js.map"
     ],
     "app": [
-      "app-8ae1d645d8a7beca19af.js",
+      "app-dd5fd93c513e04982285.js",
       "build-js-styles.css",
-      "app-8ae1d645d8a7beca19af.js.map",
+      "app-dd5fd93c513e04982285.js.map",
       "build-js-styles.css.map"
     ],
     "path---redirect-to-codepen-tutorial-expanded-version": [
@@ -179,8 +179,8 @@
       "path---redirect-to-codepen-components-and-props-composing-components-4eae7ded71358382a1ed.js.map"
     ],
     "path---purgecss-docs-introduction-html": [
-      "path---purgecss-docs-introduction-html-19dc3ad579a1ce602b48.js",
-      "path---purgecss-docs-introduction-html-19dc3ad579a1ce602b48.js.map"
+      "path---purgecss-docs-introduction-html-1dd29f7959b64fd55146.js",
+      "path---purgecss-docs-introduction-html-1dd29f7959b64fd55146.js.map"
     ]
   }
 }
