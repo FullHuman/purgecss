@@ -1,0 +1,16 @@
+/html-jsx.html  http://magic.reactjs.net/htmltojsx.htm  301
+/tips/controlled-input-null-value.html  /docs/forms.html#controlled-input-null-value
+
+## Created with gatsby-plugin-netlify
+
+/index.html  /  302
+/contributing/how-to-contribute.html  /docs/how-to-contribute.html  302
+/tips/introduction.html  /docs/how-to-contribute.html  302
+/docs/  /docs/introduction.html  302
+/docs/index.html  /docs/introduction.html  302
+/docs/getting-started.html  /docs/introduction.html  302
+/docs/tutorial.html  /tutorial/tutorial.html  302
+/docs/why-react.html  /tutorial/tutorial.html  302
+/docs/tutorial-ja-JP.html  /tutorial/tutorial.html  302
+/docs/tutorial-ko-KR.html  /tutorial/tutorial.html  302
+/docs/tutorial-zh-CN.html  /tutorial/tutorial.html  302

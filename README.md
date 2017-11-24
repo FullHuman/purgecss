@@ -45,11 +45,6 @@ optimize css files.
 npm i --save-dev purgecss
 ```
 
-### Documentation
-
-* [API](./docs/API.md)
-* [Extractor](./docs/Extractor.md)
-
 ### Usage
 
 ```js
