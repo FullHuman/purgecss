@@ -82,17 +82,53 @@ class Purgecss {
      */
     purge() {
         // Get selectors from content files
-        let cssClasses = this.extractFileSelector(this.options.content, this.options.extractors)
+        const content = this.options.content
+
+        const cssFileClasses = this.extractFileSelector(content.filter(o => typeof o === 'string'), this.options.extractors)
+        const cssRawClasses = this.extractRawSelector(content.filter(o => typeof o === 'object'), this.options.extractors)
+
         // Get css selectors and remove unused ones
-        let files = []
-        for (let file of this.options.css) {
-            const cssContent = this.options.stdin ? file : fs.readFileSync(file, 'utf8')
-            files.push({
+        const sources = this.getCssContents(this.options.css, new Set([...cssFileClasses, ...cssRawClasses]))
+
+        return sources
+    }
+
+    getCssContents(cssOptions: Array<any>, cssClasses: Set<string>) {
+        const sources = []
+        cssOptions.forEach(option => {
+            let file = null
+            let cssContent = ''
+            if (typeof option === 'string') {
+                file = option
+                cssContent = this.options.stdin ? file : fs.readFileSync(file, 'utf8')
+            } else {
+                cssContent = option.raw
+            }
+
+            sources.push({
                 file,
                 css: this.getSelectorsCss(cssContent, cssClasses)
             })
-        }
-        return files
+        })
+
+        return sources
+    }
+
+    /**
+     * Extract the selectors present in the passed string using a purgecss extractor
+     * @param {array} content Array of content
+     * @param {array} extractors Array of extractors
+     */
+    extractRawSelector(content: Array<any>, extractors?: Array<ExtractorsObj>): Set<string> {
+        let selectors = new Set()
+
+        content.forEach(option => {
+            const content = option.raw
+            const extractor = this.getFileExtractor(`.${option.extension}`, extractors)
+            selectors = new Set([...selectors, ...this.extractSelectors(content, extractor)])
+        })
+
+        return selectors
     }
 
     /**
