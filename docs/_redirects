@@ -4,11 +4,9 @@
 ## Created with gatsby-plugin-netlify
 
 /index.html  /  302
-/contributing/how-to-contribute.html  /docs/how-to-contribute.html  302
-/tips/introduction.html  /docs/how-to-contribute.html  302
-/docs/  /docs/introduction.html  302
-/docs/index.html  /docs/introduction.html  302
-/docs/getting-started.html  /docs/introduction.html  302
+/purgecss/docs/  /purgecss/docs/introduction.html  302
+/docs/index.html  /purgecss/docs/introduction.html  302
+/docs/getting-started.html  /purgecss/docs/introduction.html  302
 /docs/tutorial.html  /tutorial/tutorial.html  302
 /docs/why-react.html  /tutorial/tutorial.html  302
 /docs/tutorial-ja-JP.html  /tutorial/tutorial.html  302

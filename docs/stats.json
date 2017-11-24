@@ -1,8 +1,8 @@
 {
   "assetsByChunkName": {
-    "path---docs-use-with-webpack-html": [
-      "path---docs-use-with-webpack-html-8449eb695a2aacae67cf.js",
-      "path---docs-use-with-webpack-html-8449eb695a2aacae67cf.js.map"
+    "path---purgecss-docs-javascript-api-html": [
+      "path---purgecss-docs-javascript-api-html-ec2645cd3fa382b6e464.js",
+      "path---purgecss-docs-javascript-api-html-ec2645cd3fa382b6e464.js.map"
     ],
     "path---tutorial-tutorial-html": [
       "path---tutorial-tutorial-html-0d4e5abe332fdf95968b.js",
@@ -11,14 +11,6 @@
     "path---redirect-to-codepen-components-and-props-extracting-components-continued": [
       "path---redirect-to-codepen-components-and-props-extracting-components-continued-c4df121c0851110fa4c4.js",
       "path---redirect-to-codepen-components-and-props-extracting-components-continued-c4df121c0851110fa4c4.js.map"
-    ],
-    "path---docs-use-with-rollup-html": [
-      "path---docs-use-with-rollup-html-5f444c277025d78742c2.js",
-      "path---docs-use-with-rollup-html-5f444c277025d78742c2.js.map"
-    ],
-    "path---docs-how-to-contribute-html": [
-      "path---docs-how-to-contribute-html-cb03f0eb2532ed28291f.js",
-      "path---docs-how-to-contribute-html-cb03f0eb2532ed28291f.js.map"
     ],
     "component---src-pages-index-js": [
       "component---src-pages-index-js-b0c3f7de05d57cc1e7f4.js",
@@ -44,37 +36,41 @@
       "component---src-templates-tutorial-js-8a90b60866eaad4d03a2.js",
       "component---src-templates-tutorial-js-8a90b60866eaad4d03a2.js.map"
     ],
-    "path---docs-introduction-html": [
-      "path---docs-introduction-html-a70cea1f8e2c37194ebb.js",
-      "path---docs-introduction-html-a70cea1f8e2c37194ebb.js.map"
-    ],
     "path---redirect-to-codepen-es-5-syntax-example": [
       "path---redirect-to-codepen-es-5-syntax-example-3cfedfb0eb1211d93033.js",
       "path---redirect-to-codepen-es-5-syntax-example-3cfedfb0eb1211d93033.js.map"
     ],
-    "path---docs-reference-purgecss-html": [
-      "path---docs-reference-purgecss-html-f4b9e2e53c03ba8f1456.js",
-      "path---docs-reference-purgecss-html-f4b9e2e53c03ba8f1456.js.map"
+    "path---purgecss-docs-comparison-html": [
+      "path---purgecss-docs-comparison-html-8ac21fca0f676102d528.js",
+      "path---purgecss-docs-comparison-html-8ac21fca0f676102d528.js.map"
+    ],
+    "path---purgecss-docs-extractors-html": [
+      "path---purgecss-docs-extractors-html-f6ce0646470421239663.js",
+      "path---purgecss-docs-extractors-html-f6ce0646470421239663.js.map"
     ],
     "path---redirect-to-codepen-hello-world": [
       "path---redirect-to-codepen-hello-world-6247e79de3fd3559d06f.js",
       "path---redirect-to-codepen-hello-world-6247e79de3fd3559d06f.js.map"
     ],
+    "path---purgecss-docs-whitelisting-html": [
+      "path---purgecss-docs-whitelisting-html-37d43028cf73036fb048.js",
+      "path---purgecss-docs-whitelisting-html-37d43028cf73036fb048.js.map"
+    ],
+    "path---purgecss-docs-cli-html": [
+      "path---purgecss-docs-cli-html-bdcbed8e97e4e49f4adf.js",
+      "path---purgecss-docs-cli-html-bdcbed8e97e4e49f4adf.js.map"
+    ],
     "path---redirect-to-codepen-introducing-jsx": [
       "path---redirect-to-codepen-introducing-jsx-9a4a8656bd6a17f09285.js",
       "path---redirect-to-codepen-introducing-jsx-9a4a8656bd6a17f09285.js.map"
-    ],
-    "path---docs-extractors-html": [
-      "path---docs-extractors-html-7cc2a1d3101a67854302.js",
-      "path---docs-extractors-html-7cc2a1d3101a67854302.js.map"
     ],
     "path---warnings-invalid-aria-prop-html": [
       "path---warnings-invalid-aria-prop-html-2758ec12e9f651f7de98.js",
       "path---warnings-invalid-aria-prop-html-2758ec12e9f651f7de98.js.map"
     ],
-    "path---docs-use-with-gulp-html": [
-      "path---docs-use-with-gulp-html-c1d068b75919d7c411df.js",
-      "path---docs-use-with-gulp-html-c1d068b75919d7c411df.js.map"
+    "path---purgecss-docs-how-to-contribute-html": [
+      "path---purgecss-docs-how-to-contribute-html-d51d323be5e1dbbf078e.js",
+      "path---purgecss-docs-how-to-contribute-html-d51d323be5e1dbbf078e.js.map"
     ],
     "path---warnings-dont-call-proptypes-html": [
       "path---warnings-dont-call-proptypes-html-3f75d378ad882fbd2c49.js",
@@ -100,6 +96,10 @@
       "path---index-a0e39f21c11f6a62c5ab.js",
       "path---index-a0e39f21c11f6a62c5ab.js.map"
     ],
+    "path---purgecss-docs-reference-purgecss-html": [
+      "path---purgecss-docs-reference-purgecss-html-f21454fcd709c40bf217.js",
+      "path---purgecss-docs-reference-purgecss-html-f21454fcd709c40bf217.js.map"
+    ],
     "component---src-pages-acknowledgements-html-js": [
       "component---src-pages-acknowledgements-html-js-9eb07c83f5240fd8d15e.js",
       "component---src-pages-acknowledgements-html-js-9eb07c83f5240fd8d15e.js.map"
@@ -116,10 +116,6 @@
       "component---src-pages-jsx-compiler-html-js-9093ed090cef2ad97ccb.js",
       "component---src-pages-jsx-compiler-html-js-9093ed090cef2ad97ccb.js.map"
     ],
-    "path---docs-cli-html": [
-      "path---docs-cli-html-19f88c6b7959fbf9f866.js",
-      "path---docs-cli-html-19f88c6b7959fbf9f866.js.map"
-    ],
     "commons": [
       "commons-03ac58a39e6937302422.js",
       "commons-03ac58a39e6937302422.js.map"
@@ -128,21 +124,13 @@
       "path---redirect-to-codepen-reconciliation-index-used-as-key-7d54c7188de3548d1f47.js",
       "path---redirect-to-codepen-reconciliation-index-used-as-key-7d54c7188de3548d1f47.js.map"
     ],
+    "path---purgecss-docs-use-with-webpack-html": [
+      "path---purgecss-docs-use-with-webpack-html-a86a7f70d7ee2c525ef4.js",
+      "path---purgecss-docs-use-with-webpack-html-a86a7f70d7ee2c525ef4.js.map"
+    ],
     "path---404-html": [
       "path---404-html-a0e39f21c11f6a62c5ab.js",
       "path---404-html-a0e39f21c11f6a62c5ab.js.map"
-    ],
-    "path---docs-comparison-html": [
-      "path---docs-comparison-html-968ae16a0633ad6bab49.js",
-      "path---docs-comparison-html-968ae16a0633ad6bab49.js.map"
-    ],
-    "path---docs-whitelisting-html": [
-      "path---docs-whitelisting-html-5184e2cf01e1f17ef676.js",
-      "path---docs-whitelisting-html-5184e2cf01e1f17ef676.js.map"
-    ],
-    "path---docs-javascript-api-html": [
-      "path---docs-javascript-api-html-ef18d0a2b8e1557c68e4.js",
-      "path---docs-javascript-api-html-ef18d0a2b8e1557c68e4.js.map"
     ],
     "path---warnings-legacy-factories-html": [
       "path---warnings-legacy-factories-html-77f711e56bd10b18cb61.js",
@@ -152,10 +140,14 @@
       "path---warnings-special-props-html-c84056fddb7d346aab62.js",
       "path---warnings-special-props-html-c84056fddb7d346aab62.js.map"
     ],
+    "path---purgecss-docs-use-with-rollup-html": [
+      "path---purgecss-docs-use-with-rollup-html-72fbd6ec71bf9693b2ea.js",
+      "path---purgecss-docs-use-with-rollup-html-72fbd6ec71bf9693b2ea.js.map"
+    ],
     "app": [
-      "app-ba0084caf8fa8c9ac1af.js",
+      "app-8ae1d645d8a7beca19af.js",
       "build-js-styles.css",
-      "app-ba0084caf8fa8c9ac1af.js.map",
+      "app-8ae1d645d8a7beca19af.js.map",
       "build-js-styles.css.map"
     ],
     "path---redirect-to-codepen-tutorial-expanded-version": [
@@ -165,6 +157,10 @@
     "component---src-templates-docs-js": [
       "component---src-templates-docs-js-fc7e8485cf8f088d093f.js",
       "component---src-templates-docs-js-fc7e8485cf8f088d093f.js.map"
+    ],
+    "path---purgecss-docs-use-with-gulp-html": [
+      "path---purgecss-docs-use-with-gulp-html-3c9342ecde1cf05ed92d.js",
+      "path---purgecss-docs-use-with-gulp-html-3c9342ecde1cf05ed92d.js.map"
     ],
     "path---404": [
       "path---404-a0e39f21c11f6a62c5ab.js",
@@ -181,6 +177,10 @@
     "path---redirect-to-codepen-components-and-props-composing-components": [
       "path---redirect-to-codepen-components-and-props-composing-components-4eae7ded71358382a1ed.js",
       "path---redirect-to-codepen-components-and-props-composing-components-4eae7ded71358382a1ed.js.map"
+    ],
+    "path---purgecss-docs-introduction-html": [
+      "path---purgecss-docs-introduction-html-19dc3ad579a1ce602b48.js",
+      "path---purgecss-docs-introduction-html-19dc3ad579a1ce602b48.js.map"
     ]
   }
 }
