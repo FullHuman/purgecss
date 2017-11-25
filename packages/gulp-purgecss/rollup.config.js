@@ -1,20 +1,20 @@
-import babel from "rollup-plugin-babel"
-import commonjs from "rollup-plugin-commonjs"
-import resolve from "rollup-plugin-node-resolve"
+import babel from 'rollup-plugin-babel'
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
 
 export default {
-    input: "src/index.js",
-    output: [
-        {
-            file: "lib/gulpPurgecss.es.js",
-            format: "es"
-        },
-        {
-            file: "lib/gulpPurgecss.js",
-            format: "cjs"
-        }
-    ],
-    plugins: [resolve(), commonjs(), babel()],
-    external: ["through2", "gulp-util", "purgecss"],
-    sourceMap: false
+  input: 'src/index.js',
+  output: [
+    {
+      file: 'lib/gulpPurgecss.es.js',
+      format: 'es'
+    },
+    {
+      file: 'lib/gulpPurgecss.js',
+      format: 'cjs'
+    }
+  ],
+  plugins: [resolve(), commonjs(), babel()],
+  external: ['through2', 'gulp-util', 'purgecss', 'glob'],
+  sourceMap: false
 }
