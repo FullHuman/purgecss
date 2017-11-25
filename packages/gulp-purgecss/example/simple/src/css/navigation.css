@@ -1,0 +1,16 @@
+.bg-blue {
+  background: blue;
+}
+
+.unused {
+  color: green;
+}
+
+.shouldberemoved {
+  width: 45px;
+  height: 60px;
+}
+
+.shouldberemoved p {
+  font-size: 2rem;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "example-gulp-purgecss",
+  "version": "1.0.0",
+  "description": "example gulp-purgecss",
+  "scripts": {
+    "build": "npx gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-purgecss": "^0.12.0"
+  }
+}
