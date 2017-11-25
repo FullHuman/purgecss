@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
@@ -9,7 +9,8 @@
   "directories": {
     "doc": "docs",
     "lib": "lib",
-    "test": "__tests__"
+    "test": "__tests__",
+    "example": "examples"
   },
   "bin": "./bin/purgecss",
   "scripts": {
@@ -57,7 +58,7 @@
     "jest": "^21.2.1",
     "prettier": "^1.8.0",
     "regenerator-runtime": "^0.11.0",
-    "rollup": "^0.51.7",
+    "rollup": "^0.52.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.3",
     "rollup-plugin-flow": "^1.1.1",
