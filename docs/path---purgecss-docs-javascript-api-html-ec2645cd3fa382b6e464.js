@@ -1,2 +1,0 @@
-webpackJsonp([4818417806924],{399:function(t,a){t.exports={data:{markdownRemark:{html:"",frontmatter:{title:"Javascript API",next:"use-with-webpack.html",prev:"cli.html"},fields:{path:"docs/javascript-api.md",slug:"purgecss/docs/javascript-api.html"}}},pathContext:{slug:"purgecss/docs/javascript-api.html"}}}});
-//# sourceMappingURL=path---purgecss-docs-javascript-api-html-ec2645cd3fa382b6e464.js.map

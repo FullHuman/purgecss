@@ -1,2 +1,0 @@
-webpackJsonp([0xbc2027a7466e],{397:function(t,a){t.exports={data:{markdownRemark:{html:"",frontmatter:{title:"Javascript API",next:"use-with-webpack.html",prev:"cli.html"},fields:{path:"docs/javascript-api.md",slug:"docs/javascript-api.html"}}},pathContext:{slug:"docs/javascript-api.html"}}}});
-//# sourceMappingURL=path---docs-javascript-api-html-ef18d0a2b8e1557c68e4.js.map

@@ -655,4 +655,31 @@ describe('purge methods with files and legacy extractor', () => {
             expect(purgecssResult.includes('.foo')).toBe(true)
         })
     })
+
+    describe('whitelist', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}whitelist/whitelist.html`],
+                css: [`${root}whitelist/whitelist.css`],
+                whitelist: ['random', 'h1', 'yep', 'button']
+            }).purge()[0].css
+        })
+
+        it('finds random class', () => {
+            expect(purgecssResult.includes('.random')).toBe(true)
+        })
+
+        it('finds h1', () => {
+            expect(purgecssResult.includes('h1')).toBe(true)
+        })
+
+        it('finds #yep', () => {
+            expect(purgecssResult.includes('#yep')).toBe(true)
+        })
+
+        it('finds button', () => {
+            expect(purgecssResult.includes('button')).toBe(true)
+        })
+    })
 })

@@ -7,7 +7,6 @@
   "jsnext:main": "./lib/purgecss.es.js",
   "types": "./lib/purgecss.d.ts",
   "directories": {
-    "doc": "docs",
     "lib": "lib",
     "test": "__tests__",
     "example": "examples"
@@ -19,26 +18,20 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier":
+      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": [
-    "optimization",
-    "unused",
-    "css",
-    "purge",
-    "uncss",
-    "purify"
-  ],
+  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
-  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "homepage": "https://www.purgecss.com",
   "dependencies": {
     "glob": "^7.1.2",
     "postcss": "^6.0.14",

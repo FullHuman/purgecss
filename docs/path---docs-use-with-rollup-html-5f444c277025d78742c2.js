@@ -1,2 +1,0 @@
-webpackJsonp([26989514981290],{400:function(t,l){t.exports={data:{markdownRemark:{html:"",frontmatter:{title:"With Rollup",next:"comparison.html",prev:"use-with-gulp.html"},fields:{path:"docs/use-with-rollup.md",slug:"docs/use-with-rollup.html"}}},pathContext:{slug:"docs/use-with-rollup.html"}}}});
-//# sourceMappingURL=path---docs-use-with-rollup-html-5f444c277025d78742c2.js.map
