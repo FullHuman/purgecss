@@ -330,14 +330,23 @@ describe('purge methods with raw content and default extractor', () => {
     it('remove .remove - content passed', () => {
         const purgecss = new Purgecss({
             content: [{
-                raw: '<span class="stay"></span>',
+                raw: '<span class="double-class"></span>',
                 extension: 'html'
             }],
             css: [{
-                raw: '.stay {display: inline}; .remove {display: block}'
+                raw: `
+                .single {
+                    color: black;
+                }
+
+                .double-class {
+                    color: black;
+                }
+                `
             }]
         })
         const result = purgecss.purge()[0].css
-        expect(result.includes('remove')).toBe(false)
+        expect(result.includes('single')).toBe(false)
+        expect(result.includes('double-class')).toBe(true)
     })
 })

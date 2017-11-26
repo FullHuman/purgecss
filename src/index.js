@@ -82,20 +82,26 @@ class Purgecss {
      */
     purge() {
         // Get selectors from content files
-        const content = this.options.content
+        const {content, extractors, css} = this.options
 
-        const cssFileClasses = this.extractFileSelector(content.filter(o => typeof o === 'string'), this.options.extractors)
-        const cssRawClasses = this.extractRawSelector(content.filter(o => typeof o === 'object'), this.options.extractors)
+        const cssFileSelectors = this.extractFileSelector(content.filter(o => typeof o === 'string'), extractors)
+        const cssRawSelectors = this.extractRawSelector(content.filter(o => typeof o === 'object'), extractors)
 
         // Get css selectors and remove unused ones
-        const sources = this.getCssContents(this.options.css, new Set([...cssFileClasses, ...cssRawClasses]))
+        const sources = this.getCssContents(css, new Set([...cssFileSelectors, ...cssRawSelectors]))
 
         return sources
     }
 
-    getCssContents(cssOptions: Array<any>, cssClasses: Set<string>) {
+    /**
+     * Get the content of the css files, or return the raw content
+     * @param {array} cssOptions  Array of css options, files and raw
+     * @param {Set} cssSelectors Set of all extracted css selectors
+     */
+    getCssContents(cssOptions: Array<any>, cssSelectors: Set<string>) {
         const sources = []
-        cssOptions.forEach(option => {
+
+        for (let option of cssOptions) {
             let file = null
             let cssContent = ''
             if (typeof option === 'string') {
@@ -107,9 +113,9 @@ class Purgecss {
 
             sources.push({
                 file,
-                css: this.getSelectorsCss(cssContent, cssClasses)
+                css: this.getSelectorsCss(cssContent, cssSelectors)
             })
-        })
+        }
 
         return sources
     }
@@ -122,11 +128,11 @@ class Purgecss {
     extractRawSelector(content: Array<any>, extractors?: Array<ExtractorsObj>): Set<string> {
         let selectors = new Set()
 
-        content.forEach(option => {
-            const content = option.raw
-            const extractor = this.getFileExtractor(`.${option.extension}`, extractors)
-            selectors = new Set([...selectors, ...this.extractSelectors(content, extractor)])
-        })
+        for (let option of content) {
+            const {raw, extension} = option
+            const extractor = this.getFileExtractor(`.${extension}`, extractors)
+            selectors = new Set([...selectors, ...this.extractSelectors(raw, extractor)])
+        }
 
         return selectors
     }
