@@ -42,7 +42,7 @@ class Purgecss {
      * Load the configuration file from the path
      * @param {string} configFile Path of the config file
      */
-    loadConfigFile(configFile: string) {
+    loadConfigFile(configFile: string): Options {
         const pathConfig = typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
         let options
         try {
@@ -80,23 +80,22 @@ class Purgecss {
     /**
      * Main function that purge the css file
      */
-    purge() {
+    purge(): Array<ResultPurge> {
         // Get selectors from content files
         const { content, extractors, css } = this.options
 
-        const cssFileSelectors = this.extractFileSelector(
-            content.filter(o => typeof o === 'string'),
-            extractors
-        )
-        const cssRawSelectors = this.extractRawSelector(
-            content.filter(o => typeof o === 'object'),
-            extractors
-        )
+        const fileFormatContents = ((content.filter(o => typeof o === 'string'): Array<any>): Array<
+            string
+        >)
+        const rawFormatContents = ((content.filter(o => typeof o === 'object'): Array<any>): Array<
+            RawContent
+        >)
+
+        const cssFileSelectors = this.extractFileSelector(fileFormatContents, extractors)
+        const cssRawSelectors = this.extractRawSelector(rawFormatContents, extractors)
 
         // Get css selectors and remove unused ones
-        const sources = this.getCssContents(css, new Set([...cssFileSelectors, ...cssRawSelectors]))
-
-        return sources
+        return this.getCssContents(css, new Set([...cssFileSelectors, ...cssRawSelectors]))
     }
 
     /**
@@ -104,7 +103,7 @@ class Purgecss {
      * @param {array} cssOptions  Array of css options, files and raw
      * @param {Set} cssSelectors Set of all extracted css selectors
      */
-    getCssContents(cssOptions: Array<any>, cssSelectors: Set<string>) {
+    getCssContents(cssOptions: Array<any>, cssSelectors: Set<string>): Array<ResultPurge> {
         const sources = []
 
         for (let option of cssOptions) {
@@ -131,15 +130,12 @@ class Purgecss {
      * @param {array} content Array of content
      * @param {array} extractors Array of extractors
      */
-    extractRawSelector(content: Array<any>, extractors?: Array<ExtractorsObj>): Set<string> {
+    extractRawSelector(content: Array<RawContent>, extractors?: Array<ExtractorsObj>): Set<string> {
         let selectors = new Set()
-
-        for (let option of content) {
-            const { raw, extension } = option
+        for (const { raw, extension } of content) {
             const extractor = this.getFileExtractor(`.${extension}`, extractors)
             selectors = new Set([...selectors, ...this.extractSelectors(raw, extractor)])
         }
-
         return selectors
     }
 
@@ -163,7 +159,6 @@ class Purgecss {
                 selectors = new Set([...selectors, ...this.extractSelectors(content, extractor)])
             }
         }
-
         return selectors
     }
 
@@ -207,7 +202,7 @@ class Purgecss {
      * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
-    getSelectorsCss(css: string, selectors: Set<string>) {
+    getSelectorsCss(css: string, selectors: Set<string>): string {
         const root = postcss.parse(css)
         root.walkRules(node => {
             const annotation = node.prev()
@@ -262,7 +257,7 @@ class Purgecss {
      * Check if the node is a css comment to ignore the selector rule
      * @param {object} node Node of postcss abstract syntax tree
      */
-    isIgnoreAnnotation(node: Object) {
+    isIgnoreAnnotation(node: Object): boolean {
         if (node && node.type === 'comment') {
             return node.text.includes(IGNORE_ANNOTATION)
         }
@@ -273,7 +268,7 @@ class Purgecss {
      * Check if the node correspond to an empty css rule
      * @param {object} node Node of postcss abstract syntax tree
      */
-    isRuleEmpty(node: Object) {
+    isRuleEmpty(node: Object): boolean {
         if (
             (node.type === 'decl' && !node.value) ||
             ((node.type === 'rule' && !node.selector) || (node.nodes && !node.nodes.length)) ||
@@ -290,7 +285,7 @@ class Purgecss {
      * @param {Set} selectorsInContent Set of css selectors found in the content files
      * @param {Array} selectorsInRule Array of selectors
      */
-    shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>) {
+    shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>): boolean {
         for (let selector of selectorsInRule) {
             // legacy
             if (this.options.legacy) {
