@@ -82,10 +82,16 @@ class Purgecss {
      */
     purge() {
         // Get selectors from content files
-        const {content, extractors, css} = this.options
+        const { content, extractors, css } = this.options
 
-        const cssFileSelectors = this.extractFileSelector(content.filter(o => typeof o === 'string'), extractors)
-        const cssRawSelectors = this.extractRawSelector(content.filter(o => typeof o === 'object'), extractors)
+        const cssFileSelectors = this.extractFileSelector(
+            content.filter(o => typeof o === 'string'),
+            extractors
+        )
+        const cssRawSelectors = this.extractRawSelector(
+            content.filter(o => typeof o === 'object'),
+            extractors
+        )
 
         // Get css selectors and remove unused ones
         const sources = this.getCssContents(css, new Set([...cssFileSelectors, ...cssRawSelectors]))
@@ -129,7 +135,7 @@ class Purgecss {
         let selectors = new Set()
 
         for (let option of content) {
-            const {raw, extension} = option
+            const { raw, extension } = option
             const extractor = this.getFileExtractor(`.${extension}`, extractors)
             selectors = new Set([...selectors, ...this.extractSelectors(raw, extractor)])
         }

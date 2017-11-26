@@ -323,18 +323,20 @@ describe('purge methods with files and default extractor', () => {
             expect(result.includes('parent2')).toBe(false)
         })
     })
-
 })
 
 describe('purge methods with raw content and default extractor', () => {
     it('remove .remove - content passed', () => {
         const purgecss = new Purgecss({
-            content: [{
-                raw: '<span class="double-class"></span>',
-                extension: 'html'
-            }],
-            css: [{
-                raw: `
+            content: [
+                {
+                    raw: '<span class="double-class"></span>',
+                    extension: 'html'
+                }
+            ],
+            css: [
+                {
+                    raw: `
                 .single {
                     color: black;
                 }
@@ -343,7 +345,8 @@ describe('purge methods with raw content and default extractor', () => {
                     color: black;
                 }
                 `
-            }]
+                }
+            ]
         })
         const result = purgecss.purge()[0].css
         expect(result.includes('single')).toBe(false)
