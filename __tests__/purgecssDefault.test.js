@@ -234,29 +234,27 @@ describe('purge methods with files and default extractor', () => {
 })
 
 describe('purge methods with raw content and default extractor', () => {
-    it('purge correctly (find intact classes) with default extractor', () => {
-        let purgecssResult
-        beforeAll(() => {
-            purgecssResult = new Purgecss({
-                content: [
-                    {
-                        raw: '<span class="double-class"></span>',
-                        extension: 'html'
-                    }
-                ],
-                css: [
-                    {
-                        raw: `.single {color: black;}
-                        .double-class {color: black;}`
-                    }
-                ]
-            }).purge()[0].css
-        })
-        it('remove .single', () => {
-            expect(result.includes('single')).toBe(false)
-        })
-        it('keep .double-class', () => {
-            expect(result.includes('double-class')).toBe(true)
-        })
+    let purgecssResult
+    beforeAll(() => {
+        purgecssResult = new Purgecss({
+            content: [
+                {
+                    raw: '<span class="double-class"></span>',
+                    extension: 'html'
+                }
+            ],
+            css: [
+                {
+                    raw: `.single {color: black;}
+                    .double-class {color: black;}`
+                }
+            ]
+        }).purge()[0].css
+    })
+    it('remove .single', () => {
+        expect(purgecssResult.includes('single')).toBe(false)
+    })
+    it('keep .double-class', () => {
+        expect(purgecssResult.includes('double-class')).toBe(true)
     })
 })
