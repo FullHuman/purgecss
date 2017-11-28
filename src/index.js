@@ -129,6 +129,10 @@ class Purgecss {
         return sources
     }
 
+    /**
+     * Removes all `@ keyframes` statements and repalces them with a placeholder
+     * @param {string} css css before it was purged
+     */
     cutKeyframes(css: string): object {
         // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
         const keyframesRegExp = /@[^@]*keyframes([^\{]+)\{(?:[^\{\}]*\{[^\}\{]*\})+[^\}]+\}/ig
@@ -157,6 +161,13 @@ class Purgecss {
         }
     }
 
+    /**
+     * Inserts used `@ keyframes` statements at placeholders
+     * and removes unused ones
+     * you must run cutKeyframes before this.
+     * @param {string} css css after it was purged
+     * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
+     */
     insertUsedKeyframes(css: string, keyframes: array): string {
         let cleanCss = css
         for (let kf in keyframes) {
