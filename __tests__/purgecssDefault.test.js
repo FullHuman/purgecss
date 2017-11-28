@@ -2,6 +2,7 @@ import Purgecss from './../src/index'
 const root = './__tests__/test_examples/'
 
 describe('purge methods with files and default extractor', () => {
+
     it('purge correctly with default extractor', () => {
         const purgeCss = new Purgecss({
             content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
@@ -229,6 +230,23 @@ describe('purge methods with files and default extractor', () => {
         })
         it('remove .parent2', () => {
             expect(purgecssResult.includes('parent2')).toBe(false)
+        })
+    })
+
+    // Keyframe tests
+    describe('purge unused keyframe animations', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}keyframes/index.html`],
+                css: [`${root}keyframes/index.css`]
+            }).purge()[0].css
+        })
+        it('remove `@keyframes flashAni`', () => {
+            expect(purgecssResult.includes('@keyframes flashAni')).toBe(false)
+        })
+        it('keep `@keyframes rotateAni`', () => {
+            expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
         })
     })
 })

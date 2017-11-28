@@ -116,13 +116,63 @@ class Purgecss {
                 cssContent = option.raw
             }
 
+            const {cleanCss, keyframes} = this.cutKeyframes(cssContent)
+            cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
+            cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+
             sources.push({
                 file,
-                css: this.getSelectorsCss(cssContent, cssSelectors)
+                css: cleanCss
             })
         }
 
         return sources
+    }
+
+    cutKeyframes(css: string): object {
+        // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
+        const keyframesRegExp = /@[^@]*keyframes([^\{]+)\{(?:[^\{\}]*\{[^\}\{]*\})+[^\}]+\}/ig
+        const keyframes = {}
+        let cleanCss = css
+
+        let match
+        do {
+            match = keyframesRegExp.exec(cleanCss)
+            if (match) {
+                const full = match[0]
+                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm,"") // removes whitespaces and linebreaks
+
+                keyframes[name] = full
+            }
+        } while (match)
+
+        // reaplce @keyframes with placeholders
+        for (let kf in keyframes) {
+            cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
+        }
+
+        return {
+            cleanCss,
+            keyframes
+        }
+    }
+
+    insertUsedKeyframes(css: string, keyframes: array): string {
+        let cleanCss = css
+        for (let kf in keyframes) {
+            const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
+            const placeholderRegExp = new RegExp(`.. keyframe "${kf}" ..`, 'g')
+
+            // insert used keyframes
+            if (kfRegExp.test(cleanCss) && placeholderRegExp.test(cleanCss)) {
+                cleanCss = cleanCss.replace(placeholderRegExp, keyframes[kf])
+            }
+        }
+
+        // remove unused keyframe placeholders
+        cleanCss = cleanCss.replace(/.. keyframe "\S+" ../g, '')
+
+        return cleanCss
     }
 
     /**
