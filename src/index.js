@@ -116,7 +116,7 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            const {cleanCss, keyframes} = this.cutKeyframes(cssContent)
+            let { cleanCss, keyframes } = this.cutKeyframes(cssContent)
             cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
             cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
 
@@ -135,7 +135,7 @@ class Purgecss {
      */
     cutKeyframes(css: string): object {
         // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
-        const keyframesRegExp = /@[^@]*keyframes([^\{]+)\{(?:[^\{\}]*\{[^\}\{]*\})+[^\}]+\}/ig
+        const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
         const keyframes = {}
         let cleanCss = css
 
@@ -144,7 +144,7 @@ class Purgecss {
             match = keyframesRegExp.exec(cleanCss)
             if (match) {
                 const full = match[0]
-                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm,"") // removes whitespaces and linebreaks
+                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // removes whitespaces and linebreaks
 
                 keyframes[name] = full
             }
