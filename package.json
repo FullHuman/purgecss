@@ -18,20 +18,14 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier":
+      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": [
-    "optimization",
-    "unused",
-    "css",
-    "purge",
-    "uncss",
-    "purify"
-  ],
+  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -45,19 +39,19 @@
     "yargs": "^10.0.3"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.0.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.3",
-    "eslint": "^4.12.0",
+    "eslint": "^4.12.1",
     "eslint-plugin-flowtype": "^2.39.1",
-    "flow-bin": "^0.59.0",
+    "flow-bin": "^0.60.1",
     "jest": "^21.2.1",
-    "prettier": "^1.8.2",
+    "prettier": "^1.9.1",
     "regenerator-runtime": "^0.11.0",
-    "rollup": "^0.52.0",
+    "rollup": "^0.52.1",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-flow": "^1.1.1",
@@ -65,7 +59,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.2.0"
+    "uglify-es": "^3.2.1"
   },
   "engines": {
     "npm": ">=5.2.0",

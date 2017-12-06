@@ -319,7 +319,7 @@ describe('purge methods with files and legacy extractor', () => {
             legacy: true
         })
         const received = purgeCss.purge()[0].css
-        expect(received.includes('.ui[class*="center aligned"].grid')).toBe(true)
+        expect(received.includes(".ui[class*='center aligned'].grid")).toBe(true)
     })
 
     describe('purge correctly (find intact classes)', () => {

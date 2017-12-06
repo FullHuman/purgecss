@@ -231,6 +231,28 @@ describe('purge methods with files and default extractor', () => {
             expect(purgecssResult.includes('parent2')).toBe(false)
         })
     })
+
+    describe('attributes selectors', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}attribute_selector/attribute_selector.html`],
+                css: [`${root}attribute_selector/attribute_selector.css`]
+            }).purge()[0].css
+        })
+
+        it('keeps flexgrid', () => {
+            expect(purgecssResult.includes('flexgrid {')).toBe(true)
+        })
+
+        it('keeps flexgrid[class*=', () => {
+            expect(purgecssResult.includes('flexgrid[class*=')).toBe(true)
+        })
+
+        it('removes a.link', () => {
+            expect(purgecssResult.includes('a.link')).toBe(false)
+        })
+    })
 })
 
 describe('purge methods with raw content and default extractor', () => {
