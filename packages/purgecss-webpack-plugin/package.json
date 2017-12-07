@@ -1,6 +1,6 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Purgecss plugin for webpack - Remove unused css",
   "main": "./lib/purgecss-webpack-plugin.js",
   "module": "./lib/purgecss-webpack-plugin.es.js",
@@ -19,7 +19,13 @@
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss-webpack-plugin.git"
   },
-  "keywords": ["webpack-plugin", "purgecss", "remove", "unused", "css"],
+  "keywords": [
+    "webpack-plugin",
+    "purgecss",
+    "remove",
+    "unused",
+    "css"
+  ],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -31,17 +37,17 @@
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.11.0",
+    "eslint": "^4.12.1",
     "jest": "^21.2.1",
-    "rollup": "^0.51.5",
+    "rollup": "^0.52.1",
     "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.2.4",
+    "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.3.1",
-    "webpack": "^3.8.1"
+    "webpack": "^3.10.0"
   },
   "dependencies": {
-    "purgecss": "^0.13.0",
-    "webpack-sources": "^1.0.1"
+    "purgecss": "^0.14.0",
+    "webpack-sources": "^1.1.0"
   }
 }
