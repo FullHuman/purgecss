@@ -16,4 +16,7 @@ jobs:
           command: npm run flow
       - run:
           name: test
-          command: npm test
+          command: npm test -- --coverage
+      - run:
+          name: coverage
+          command: cat ./coverage/lcov.info | node_modules/.bin/codacy-coverage -p .
