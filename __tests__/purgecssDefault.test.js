@@ -2,7 +2,7 @@ import Purgecss from './../src/index'
 const root = './__tests__/test_examples/'
 
 describe('purge methods with files and default extractor', () => {
-    it('purge correctly with default extractor', () => {
+    it('purges correctly with default extractor', () => {
         const purgeCss = new Purgecss({
             content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
             css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css']
@@ -11,7 +11,7 @@ describe('purge methods with files and default extractor', () => {
         expect(received.includes('.ui.grid')).toBe(true)
     })
 
-    describe('purge correctly (find intact classes) with default extractor', () => {
+    describe('purges correctly (find intact classes) with default extractor', () => {
         let purgecssResult
         beforeAll(() => {
             purgecssResult = new Purgecss({
@@ -189,7 +189,7 @@ describe('purge methods with files and default extractor', () => {
     })
 
     describe('ignore comment', () => {
-        it('ignore h1', () => {
+        it('ignores h1', () => {
             const purgecss = new Purgecss({
                 content: [`${root}ignore_comment/ignore_comment.html`],
                 css: [`${root}ignore_comment/ignore_comment.css`]
@@ -218,16 +218,16 @@ describe('purge methods with files and default extractor', () => {
                 css: [`${root}chaining_rules/index.css`]
             }).purge()[0].css
         })
-        it('keep parent1 selector', () => {
+        it('keeps parent1 selector', () => {
             expect(purgecssResult.includes('parent1')).toBe(true)
         })
-        it('remove parent3 selector', () => {
+        it('removes parent3 selector', () => {
             expect(purgecssResult.includes('parent3')).toBe(false)
         })
-        it('remove d33ef1 selector', () => {
+        it('removes d33ef1 selector', () => {
             expect(purgecssResult.includes('d33ef1')).toBe(false)
         })
-        it('remove .parent2', () => {
+        it('removes .parent2', () => {
             expect(purgecssResult.includes('parent2')).toBe(false)
         })
     })
@@ -264,10 +264,27 @@ describe('purge methods with files and default extractor', () => {
                 keyframes: true
             }).purge()[0].css
         })
-        it('remove `@keyframes flashAni`', () => {
+        it('removes `@keyframes flashAni`', () => {
             expect(purgecssResult.includes('@keyframes flashAni')).toBe(false)
         })
-        it('keep `@keyframes rotateAni`', () => {
+        it('keeps `@keyframes rotateAni`', () => {
+            expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
+        })
+    })
+
+    describe('do not purge keyframes if option set to false', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}keyframes/index.html`],
+                css: [`${root}keyframes/index.css`],
+                keyframes: false
+            }).purge()[0].css
+        })
+        it('keeps `@keyframes flashAni`', () => {
+            expect(purgecssResult.includes('@keyframes flashAni')).toBe(true)
+        })
+        it('keeps `@keyframes rotateAni`', () => {
             expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
         })
     })
@@ -291,10 +308,10 @@ describe('purge methods with raw content and default extractor', () => {
             ]
         }).purge()[0].css
     })
-    it('remove .single', () => {
+    it('removes .single', () => {
         expect(purgecssResult.includes('single')).toBe(false)
     })
-    it('keep .double-class', () => {
+    it('keeps .double-class', () => {
         expect(purgecssResult.includes('double-class')).toBe(true)
     })
 })
