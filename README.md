@@ -16,15 +16,14 @@
 
 ## What is purgecss?
 
-When you are building a website, chances are that you are using a css framework.
-Bootstrap, Materializecss, Foundation are some of the big css framework that you
-can include to your website, but you will only use a small set of the framework
-and a lot of unused css styles will be included.\
+When you are building a website, chances are that you are using a css framework
+like Bootstrap, Materializecss, Foundation, etc... But you will only use a small
+set of the framework and a lot of unused css styles will be included.
 
-This is where Purgecss comes into play. Purgecss takes your content and your css
-and matches the selectors used in your files with the one in your content files.
-It removes every unused selectors from your css files, resulting in smaller,
-optimize css files.
+This is where Purgecss comes into play. Purgecss analyzes your content and your
+css files. Then it matches the selectors used in your files with the one in your
+content files. It removes unused selectors from your css, resulting in smaller
+css files.
 
 ## Documentation
 
