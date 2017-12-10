@@ -133,7 +133,10 @@ class Purgecss {
      * Removes all `@ keyframes` statements and repalces them with a placeholder
      * @param {string} css css before it was purged
      */
-    cutKeyframes(css: string): object {
+    cutKeyframes(css: string): Object {
+        if (this.options.keyframes === false) {
+            return {cleanCss: css, keyframes: []}
+        }
         // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
         const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
         const keyframes = {}
@@ -168,7 +171,10 @@ class Purgecss {
      * @param {string} css css after it was purged
      * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
      */
-    insertUsedKeyframes(css: string, keyframes: array): string {
+    insertUsedKeyframes(css: string, keyframes: Object): string {
+        if (this.options.keyframes === false) {
+            return css
+        }
         let cleanCss = css
         for (let kf in keyframes) {
             const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')

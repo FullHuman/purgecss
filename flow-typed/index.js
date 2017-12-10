@@ -16,7 +16,8 @@ declare type Options = {
   stdin?: boolean,
   info?: boolean,
   rejected?: boolean,
-  legacy?: boolean
+  legacy?: boolean,
+  keyframes?: boolean
 }
 
 declare type ExtractorsObj = {

@@ -260,7 +260,8 @@ describe('purge methods with files and default extractor', () => {
         beforeAll(() => {
             purgecssResult = new Purgecss({
                 content: [`${root}keyframes/index.html`],
-                css: [`${root}keyframes/index.css`]
+                css: [`${root}keyframes/index.css`],
+                keyframes: true
             }).purge()[0].css
         })
         it('remove `@keyframes flashAni`', () => {
