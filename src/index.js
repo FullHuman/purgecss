@@ -287,11 +287,6 @@ class Purgecss {
                                 typeof value !== 'undefined'
                             ) {
                                 selectorsInRule.push(value)
-                            } else if (
-                                type === 'attribute' &&
-                                typeof nodeSelector.raws.unquoted !== 'undefined'
-                            ) {
-                                selectorsInRule.push(nodeSelector.raws.unquoted)
                             } else if (type === 'tag' && !/[+]|(even)|(odd)|^\d/.test(value)) {
                                 // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
                                 selectorsInRule.push(value)
