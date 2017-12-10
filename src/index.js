@@ -116,9 +116,12 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            let { cleanCss, keyframes } = this.cutKeyframes(cssContent)
+            let { cleanCss, keyframes } = this.options.keyframes
+                ? this.cutKeyframes(cssContent)
+                : { cleanCss: cssContent, keyframes: {} }
+
             cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
-            cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+            if (this.options.keyframes) cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
 
             sources.push({
                 file,
@@ -134,9 +137,6 @@ class Purgecss {
      * @param {string} css css before it was purged
      */
     cutKeyframes(css: string): Object {
-        if (this.options.keyframes === false) {
-            return {cleanCss: css, keyframes: []}
-        }
         // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
         const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
         const keyframes = {}
@@ -153,7 +153,7 @@ class Purgecss {
             }
         } while (match)
 
-        // reaplce @keyframes with placeholders
+        // replace @keyframes with placeholders
         for (let kf in keyframes) {
             cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
         }
@@ -172,9 +172,6 @@ class Purgecss {
      * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
      */
     insertUsedKeyframes(css: string, keyframes: Object): string {
-        if (this.options.keyframes === false) {
-            return css
-        }
         let cleanCss = css
         for (let kf in keyframes) {
             const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
@@ -293,13 +290,17 @@ class Purgecss {
                                 typeof value !== 'undefined'
                             ) {
                                 selectorsInRule.push(value)
-                            } else if (type === 'tag' && !/[+]|(even)|(odd)|^\d/.test(value)) {
+                            } else if (
+                                type === 'tag' &&
+                                !/[+]|(even)|(odd)|^from$|^to$|^\d/.test(value)
+                            ) {
                                 // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
                                 selectorsInRule.push(value)
                             }
                         }
 
                         let keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
+
                         if (!keepSelector) {
                             selector.remove()
                         }
