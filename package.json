@@ -18,14 +18,20 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier":
-      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
+  "keywords": [
+    "optimization",
+    "unused",
+    "css",
+    "purge",
+    "uncss",
+    "purify"
+  ],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -46,7 +52,13 @@
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.3",
     "eslint": "^4.12.1",
+    "eslint-config-standard": "^10.2.1",
     "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-html": "^4.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.60.1",
     "jest": "^21.2.1",
     "prettier": "^1.9.1",

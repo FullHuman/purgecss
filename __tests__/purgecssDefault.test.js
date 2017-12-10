@@ -253,11 +253,30 @@ describe('purge methods with files and default extractor', () => {
             expect(purgecssResult.includes('a.link')).toBe(false)
         })
     })
+
+    // Keyframe tests
+    describe('purge unused keyframe animations', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}keyframes/index.html`],
+                css: [`${root}keyframes/index.css`],
+                keyframes: true
+            }).purge()[0].css
+        })
+        it('remove `@keyframes flashAni`', () => {
+            expect(purgecssResult.includes('@keyframes flashAni')).toBe(false)
+        })
+        it('keep `@keyframes rotateAni`', () => {
+            expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
+        })
+    })
 })
 
 describe('purge methods with raw content and default extractor', () => {
-    it('remove .remove - content passed', () => {
-        const purgecss = new Purgecss({
+    let purgecssResult
+    beforeAll(() => {
+        purgecssResult = new Purgecss({
             content: [
                 {
                     raw: '<span class="double-class"></span>',
@@ -267,12 +286,15 @@ describe('purge methods with raw content and default extractor', () => {
             css: [
                 {
                     raw: `.single {color: black;}
-                .double-class {color: black;}`
+                    .double-class {color: black;}`
                 }
             ]
-        })
-        const result = purgecss.purge()[0].css
-        expect(result.includes('single')).toBe(false)
-        expect(result.includes('double-class')).toBe(true)
+        }).purge()[0].css
+    })
+    it('remove .single', () => {
+        expect(purgecssResult.includes('single')).toBe(false)
+    })
+    it('keep .double-class', () => {
+        expect(purgecssResult.includes('double-class')).toBe(true)
     })
 })

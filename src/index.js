@@ -116,13 +116,80 @@ class Purgecss {
                 cssContent = option.raw
             }
 
+            let { cleanCss, keyframes } = this.cutKeyframes(cssContent)
+            cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
+            cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+
             sources.push({
                 file,
-                css: this.getSelectorsCss(cssContent, cssSelectors)
+                css: cleanCss
             })
         }
 
         return sources
+    }
+
+    /**
+     * Removes all `@ keyframes` statements and repalces them with a placeholder
+     * @param {string} css css before it was purged
+     */
+    cutKeyframes(css: string): Object {
+        if (this.options.keyframes === false) {
+            return {cleanCss: css, keyframes: []}
+        }
+        // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
+        const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
+        const keyframes = {}
+        let cleanCss = css
+
+        let match
+        do {
+            match = keyframesRegExp.exec(cleanCss)
+            if (match) {
+                const full = match[0]
+                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // removes whitespaces and linebreaks
+
+                keyframes[name] = full
+            }
+        } while (match)
+
+        // reaplce @keyframes with placeholders
+        for (let kf in keyframes) {
+            cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
+        }
+
+        return {
+            cleanCss,
+            keyframes
+        }
+    }
+
+    /**
+     * Inserts used `@ keyframes` statements at placeholders
+     * and removes unused ones
+     * you must run cutKeyframes before this.
+     * @param {string} css css after it was purged
+     * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
+     */
+    insertUsedKeyframes(css: string, keyframes: Object): string {
+        if (this.options.keyframes === false) {
+            return css
+        }
+        let cleanCss = css
+        for (let kf in keyframes) {
+            const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
+            const placeholderRegExp = new RegExp(`.. keyframe "${kf}" ..`, 'g')
+
+            // insert used keyframes
+            if (kfRegExp.test(cleanCss) && placeholderRegExp.test(cleanCss)) {
+                cleanCss = cleanCss.replace(placeholderRegExp, keyframes[kf])
+            }
+        }
+
+        // remove unused keyframe placeholders
+        cleanCss = cleanCss.replace(/.. keyframe "\S+" ../g, '')
+
+        return cleanCss
     }
 
     /**

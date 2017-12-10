@@ -1,0 +1,27 @@
+@keyframes rotateAni {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.rotate {
+  animation-name: rotateAni;
+}
+
+@keyframes flashAni
+{
+  from, 50%, to {
+    opacity: 1;
+  }
+
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+.flash {
+  animation-name: flashAni;
+}
