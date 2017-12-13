@@ -9,7 +9,8 @@ const defaultOptions: Options = {
     stdout: false,
     info: false,
     rejected: false,
-    legacy: false
+    legacy: false,
+    keyframes: true
 }
 
 export default defaultOptions

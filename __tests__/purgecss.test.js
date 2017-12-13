@@ -319,7 +319,7 @@ describe('purge methods with files and legacy extractor', () => {
             legacy: true
         })
         const received = purgeCss.purge()[0].css
-        expect(received.includes('.ui[class*="center aligned"].grid')).toBe(true)
+        expect(received.includes(".ui[class*='center aligned'].grid")).toBe(true)
     })
 
     describe('purge correctly (find intact classes)', () => {
@@ -653,6 +653,50 @@ describe('purge methods with files and legacy extractor', () => {
             })
             const result = purgecss.purge()[0].css
             expect(result.includes('font-face')).toBe(true)
+        })
+    })
+
+    describe(':not pseudo class', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}not/not.html`],
+                css: [`${root}not/not.css`]
+            }).purge()[0].css
+        })
+
+        it('finds foo-bar', () => {
+            expect(purgecssResult.includes('foo-bar')).toBe(true)
+        })
+        it('finds foo', () => {
+            expect(purgecssResult.includes('.foo')).toBe(true)
+        })
+    })
+
+    describe('whitelist', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}whitelist/whitelist.html`],
+                css: [`${root}whitelist/whitelist.css`],
+                whitelist: ['random', 'h1', 'yep', 'button']
+            }).purge()[0].css
+        })
+
+        it('finds random class', () => {
+            expect(purgecssResult.includes('.random')).toBe(true)
+        })
+
+        it('finds h1', () => {
+            expect(purgecssResult.includes('h1')).toBe(true)
+        })
+
+        it('finds #yep', () => {
+            expect(purgecssResult.includes('#yep')).toBe(true)
+        })
+
+        it('finds button', () => {
+            expect(purgecssResult.includes('button')).toBe(true)
         })
     })
 })

@@ -1,16 +1,31 @@
-
-[class*="font-icon-"] {
+[class*='font-icon-'] {
   color: black;
 }
 
-a.link[href*="github.com"] {
+a.link[href*='github.com'] {
   color: black;
 }
 
-.ui[class*="center aligned"].grid {
+.ui[class*='center aligned'].grid {
   color: black;
 }
 
 .ui.grid {
   color: green;
+}
+
+.flexgrid {
+  color: blue;
+}
+
+.flexgrid > * {
+  color: green;
+}
+
+.flexgrid[class*='w-'] {
+  color: rebeccapurple;
+}
+
+.flexgrid > *[class*='w-'] {
+  color: grey;
 }

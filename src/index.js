@@ -42,7 +42,7 @@ class Purgecss {
      * Load the configuration file from the path
      * @param {string} configFile Path of the config file
      */
-    loadConfigFile(configFile: string) {
+    loadConfigFile(configFile: string): Options {
         const pathConfig = typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
         let options
         try {
@@ -80,19 +80,127 @@ class Purgecss {
     /**
      * Main function that purge the css file
      */
-    purge() {
+    purge(): Array<ResultPurge> {
         // Get selectors from content files
-        let cssClasses = this.extractFileSelector(this.options.content, this.options.extractors)
+        const { content, extractors, css } = this.options
+
+        const fileFormatContents = ((content.filter(o => typeof o === 'string'): Array<any>): Array<
+            string
+        >)
+        const rawFormatContents = ((content.filter(o => typeof o === 'object'): Array<any>): Array<
+            RawContent
+        >)
+
+        const cssFileSelectors = this.extractFileSelector(fileFormatContents, extractors)
+        const cssRawSelectors = this.extractRawSelector(rawFormatContents, extractors)
+
         // Get css selectors and remove unused ones
-        let files = []
-        for (let file of this.options.css) {
-            const cssContent = this.options.stdin ? file : fs.readFileSync(file, 'utf8')
-            files.push({
+        return this.getCssContents(css, new Set([...cssFileSelectors, ...cssRawSelectors]))
+    }
+
+    /**
+     * Get the content of the css files, or return the raw content
+     * @param {array} cssOptions  Array of css options, files and raw
+     * @param {Set} cssSelectors Set of all extracted css selectors
+     */
+    getCssContents(cssOptions: Array<any>, cssSelectors: Set<string>): Array<ResultPurge> {
+        const sources = []
+
+        for (let option of cssOptions) {
+            let file = null
+            let cssContent = ''
+            if (typeof option === 'string') {
+                file = option
+                cssContent = this.options.stdin ? file : fs.readFileSync(file, 'utf8')
+            } else {
+                cssContent = option.raw
+            }
+
+            let { cleanCss, keyframes } = this.options.keyframes
+                ? this.cutKeyframes(cssContent)
+                : { cleanCss: cssContent, keyframes: {} }
+
+            cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
+            if (this.options.keyframes) cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+
+            sources.push({
                 file,
-                css: this.getSelectorsCss(cssContent, cssClasses)
+                css: cleanCss
             })
         }
-        return files
+
+        return sources
+    }
+
+    /**
+     * Removes all `@ keyframes` statements and repalces them with a placeholder
+     * @param {string} css css before it was purged
+     */
+    cutKeyframes(css: string): Object {
+        // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
+        const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
+        const keyframes = {}
+        let cleanCss = css
+
+        let match
+        do {
+            match = keyframesRegExp.exec(cleanCss)
+            if (match) {
+                const full = match[0]
+                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // removes whitespaces and linebreaks
+
+                keyframes[name] = full
+            }
+        } while (match)
+
+        // replace @keyframes with placeholders
+        for (let kf in keyframes) {
+            cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
+        }
+
+        return {
+            cleanCss,
+            keyframes
+        }
+    }
+
+    /**
+     * Inserts used `@ keyframes` statements at placeholders
+     * and removes unused ones
+     * you must run cutKeyframes before this.
+     * @param {string} css css after it was purged
+     * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
+     */
+    insertUsedKeyframes(css: string, keyframes: Object): string {
+        let cleanCss = css
+        for (let kf in keyframes) {
+            const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
+            const placeholderRegExp = new RegExp(`.. keyframe "${kf}" ..`, 'g')
+
+            // insert used keyframes
+            if (kfRegExp.test(cleanCss) && placeholderRegExp.test(cleanCss)) {
+                cleanCss = cleanCss.replace(placeholderRegExp, keyframes[kf])
+            }
+        }
+
+        // remove unused keyframe placeholders
+        cleanCss = cleanCss.replace(/.. keyframe "\S+" ../g, '')
+
+        return cleanCss
+    }
+
+    /**
+     * Extract the selectors present in the passed string using a purgecss extractor
+     * @param {array} content Array of content
+     * @param {array} extractors Array of extractors
+     */
+    extractRawSelector(content: Array<RawContent>, extractors?: Array<ExtractorsObj>): Set<string> {
+        let selectors = new Set()
+        for (const { raw, extension } of content) {
+            const extractor = this.getFileExtractor(`.${extension}`, extractors)
+            selectors = new Set([...selectors, ...this.extractSelectors(raw, extractor)])
+        }
+        return selectors
     }
 
     /**
@@ -115,7 +223,6 @@ class Purgecss {
                 selectors = new Set([...selectors, ...this.extractSelectors(content, extractor)])
             }
         }
-
         return selectors
     }
 
@@ -159,7 +266,7 @@ class Purgecss {
      * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
-    getSelectorsCss(css: string, selectors: Set<string>) {
+    getSelectorsCss(css: string, selectors: Set<string>): string {
         const root = postcss.parse(css)
         root.walkRules(node => {
             const annotation = node.prev()
@@ -168,6 +275,14 @@ class Purgecss {
                 selectorsParsed.walk(selector => {
                     let selectorsInRule = []
                     if (selector.type === 'selector') {
+                        // if inside :not pseudo class, ignore
+                        if (
+                            selector.parent &&
+                            selector.parent.value === ':not' &&
+                            selector.parent.type === 'pseudo'
+                        ) {
+                            return
+                        }
                         for (let nodeSelector of selector.nodes) {
                             const { type, value } = nodeSelector
                             if (
@@ -176,17 +291,16 @@ class Purgecss {
                             ) {
                                 selectorsInRule.push(value)
                             } else if (
-                                type === 'attribute' &&
-                                typeof nodeSelector.raws.unquoted !== 'undefined'
+                                type === 'tag' &&
+                                !/[+]|(even)|(odd)|^from$|^to$|^\d/.test(value)
                             ) {
-                                selectorsInRule.push(nodeSelector.raws.unquoted)
-                            } else if (type === 'tag' && !/[+]|(even)|(odd)|^\d/.test(value)) {
                                 // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
                                 selectorsInRule.push(value)
                             }
                         }
 
                         let keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
+
                         if (!keepSelector) {
                             selector.remove()
                         }
@@ -206,7 +320,7 @@ class Purgecss {
      * Check if the node is a css comment to ignore the selector rule
      * @param {object} node Node of postcss abstract syntax tree
      */
-    isIgnoreAnnotation(node: Object) {
+    isIgnoreAnnotation(node: Object): boolean {
         if (node && node.type === 'comment') {
             return node.text.includes(IGNORE_ANNOTATION)
         }
@@ -217,7 +331,7 @@ class Purgecss {
      * Check if the node correspond to an empty css rule
      * @param {object} node Node of postcss abstract syntax tree
      */
-    isRuleEmpty(node: Object) {
+    isRuleEmpty(node: Object): boolean {
         if (
             (node.type === 'decl' && !node.value) ||
             ((node.type === 'rule' && !node.selector) || (node.nodes && !node.nodes.length)) ||
@@ -234,7 +348,7 @@ class Purgecss {
      * @param {Set} selectorsInContent Set of css selectors found in the content files
      * @param {Array} selectorsInRule Array of selectors
      */
-    shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>) {
+    shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>): boolean {
         for (let selector of selectorsInRule) {
             // legacy
             if (this.options.legacy) {
