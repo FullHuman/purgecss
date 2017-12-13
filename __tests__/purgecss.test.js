@@ -585,6 +585,23 @@ describe('purge methods with files and legacy extractor', () => {
         })
     })
 
+    describe('keyframes', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}keyframes/keyframes.html`],
+                css: [`${root}keyframes/keyframes.css`],
+                legacy: false
+            }).purge()[0].css
+        })
+        it('finds bounce', () => {
+          expect(purgecssResult.includes('bounce')).toBe(true)
+        })
+        it('removes flash', () => {
+          expect(purgecssResult.includes('@keyframes flash')).toBe(false)
+        })
+    })
+
     describe('pseudo selectors', () => {
         let purgecssResult
         beforeAll(() => {
