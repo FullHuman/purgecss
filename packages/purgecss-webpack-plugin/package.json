@@ -1,6 +1,6 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Purgecss plugin for webpack - Remove unused css",
   "main": "./lib/purgecss-webpack-plugin.js",
   "module": "./lib/purgecss-webpack-plugin.es.js",
@@ -37,7 +37,7 @@
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.12.1",
+    "eslint": "^4.13.1",
     "jest": "^21.2.1",
     "rollup": "^0.52.1",
     "rollup-plugin-babel": "^3.0.2",
@@ -47,7 +47,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "purgecss": "^0.14.0",
+    "purgecss": "^0.15.0",
     "webpack-sources": "^1.1.0"
   }
 }
