@@ -595,10 +595,10 @@ describe('purge methods with files and legacy extractor', () => {
             }).purge()[0].css
         })
         it('finds bounce', () => {
-          expect(purgecssResult.includes('bounce')).toBe(true)
+            expect(purgecssResult.includes('bounce')).toBe(true)
         })
         it('removes flash', () => {
-          expect(purgecssResult.includes('@keyframes flash')).toBe(false)
+            expect(purgecssResult.includes('@keyframes flash')).toBe(false)
         })
     })
 
