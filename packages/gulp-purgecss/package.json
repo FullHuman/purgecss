@@ -1,6 +1,6 @@
 {
   "name": "gulp-purgecss",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Gulp plugin for purgecss",
   "main": "./lib/gulpPurgecss.js",
   "module": "./lib/gulpPurgecss.es.js",
@@ -14,20 +14,14 @@
     "test": "npx jest",
     "build": "rollup -c rollup.config.js",
     "lint": "eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 2 --no-semi --single-quote src/index.js"
+    "prettier":
+      "npx prettier --write --print-width 100 --tab-width 2 --no-semi --single-quote src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/gulp-purgecss.git"
   },
-  "keywords": [
-    "gulpplugin",
-    "purgecss",
-    "optimize",
-    "remove",
-    "css",
-    "unused"
-  ],
+  "keywords": ["gulpplugin", "purgecss", "optimize", "remove", "css", "unused"],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -37,7 +31,7 @@
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.12.1",
+    "eslint": "^4.13.1",
     "jest": "^21.2.1",
     "prettier": "^1.9.1",
     "rollup": "^0.52.1",
@@ -49,7 +43,7 @@
   "dependencies": {
     "glob": "^7.1.2",
     "gulp-util": "^3.0.8",
-    "purgecss": "^0.14.0",
+    "purgecss": "^0.15.0",
     "through2": "^2.0.3"
   }
 }
