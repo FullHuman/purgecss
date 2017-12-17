@@ -1,20 +1,26 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "modules": false
-      }
-    ]
-  ],
-  "plugins": [
-    "external-helpers",
-    "syntax-object-rest-spread",
-    "transform-object-rest-spread"
-  ]
-
-  // {
-  //   "presets": ["es2015-rollup"],
-  //   "plugins": ["syntax-object-rest-spread", "transform-object-rest-spread"]
-  // }
+  "env": {
+    "test": {
+      "presets": ["env"],
+      "plugins": ["syntax-object-rest-spread", "transform-object-rest-spread"]
+    },
+    "development": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions"]
+            },
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": [
+        "external-helpers",
+        "syntax-object-rest-spread",
+        "transform-object-rest-spread"
+      ]
+    }
+  }
 }
