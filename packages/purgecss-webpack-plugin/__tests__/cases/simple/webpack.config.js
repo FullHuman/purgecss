@@ -15,16 +15,11 @@ const PATHS = {
 
 module.exports = {
   entry: './src/index.js',
-  // output: {
-  //   filename: 'bundle.js',
-  //   path: path.join(__dirname, 'dist')
-  // },
   module: {
     rules: [
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
           use: 'css-loader?sourceMap'
         })
       }
