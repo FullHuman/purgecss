@@ -18,7 +18,7 @@ npm i purgecss-webpack-plugin -D
 const path = require('path')
 const glob = require('glob')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const PurgecssPlugin = require('../../')
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const PATHS = {
     src: path.join(__dirname, 'src')
