@@ -5,6 +5,7 @@
 [![dependencies Status](https://david-dm.org/fullhuman/purgecss-webpack-plugin/status.svg)](https://david-dm.org/fullhuman/purgecss-webpack-plugin)
 [![devDependencies Status](https://david-dm.org/fullhuman/purgecss-webpack-plugin/dev-status.svg)](https://david-dm.org/fullhuman/purgecss-webpack-plugin?type=dev)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c23bd13d30104a7a89bed239166aaf69)](https://www.codacy.com/app/FullHuman/purgecss-webpack-plugin?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss-webpack-plugin&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/c23bd13d30104a7a89bed239166aaf69)](https://www.codacy.com/app/FullHuman/purgecss-webpack-plugin?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss-webpack-plugin&utm_campaign=Badge_Coverage)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![npm](https://img.shields.io/npm/v/purgecss-webpack-plugin.svg)](https://www.npmjs.com/package/purgecss-webpack-plugin)
 [![license](https://img.shields.io/github/license/fullhuman/purgecss-webpack-plugin.svg)]()
