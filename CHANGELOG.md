@@ -1,5 +1,10 @@
 # Changelog
 
+# v0.16.0 - 2017-12-18
+
+* `keyframes` option set to `false` by default, `keyframes: true` causing issue with bootstrap https://github.com/FullHuman/purgecss/issues/33
+* Update dependencies.
+
 # v0.14.0 - 2017-12-07
 
 * Merge PR https://github.com/FullHuman/purgecss/pull/29 by @jsnanigans: add
