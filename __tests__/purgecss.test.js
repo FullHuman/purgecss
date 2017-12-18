@@ -591,7 +591,8 @@ describe('purge methods with files and legacy extractor', () => {
             purgecssResult = new Purgecss({
                 content: [`${root}keyframes/keyframes.html`],
                 css: [`${root}keyframes/keyframes.css`],
-                legacy: false
+                legacy: false,
+                keyframes: true
             }).purge()[0].css
         })
         it('finds bounce', () => {
