@@ -170,13 +170,20 @@ var PurgecssPlugin = function () {
         });
 
         compilation.plugin('additional-assets', function (cb) {
+          var assetsFromCompilation = assets(compilation.assets, ['.css']);
           // Go through chunks and purge as configured
           compilation.chunks.forEach(function (chunk) {
             var chunkName = chunk.name,
                 files$$1 = chunk.files;
 
-            var assetsToPurge = assets(compilation.assets, ['.css']).filter(function (asset) {
-              return files$$1.indexOf(asset.name) >= 0;
+            var assetsToPurge = assetsFromCompilation.filter(function (asset) {
+              if (_this.options.only) {
+                return [].concat(_this.options.only).some(function (only) {
+                  return asset.name.indexOf(only) >= 0;
+                });
+              } else {
+                return files$$1.indexOf(asset.name) >= 0;
+              }
             });
 
             assetsToPurge.forEach(function (_ref) {

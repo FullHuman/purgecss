@@ -56,6 +56,16 @@ module.exports = {
 }
 ```
 
+you can also limit plugin to certain entrypoints via `only` param:
+
+```
+new PurgecssPlugin({
+  paths: glob.sync(`${PATHS.src}/*`),
+  styleExtensions: ['.css'],
+  only: ['bundle', 'vendor']
+})
+```
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
@@ -66,8 +76,8 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Acknowledgment
 
-Purgecss was originally thought as the v2 of purifycss. And because of it, it is greatly inspired by it.  
-The plugins such as purgecss-webpack-plugin are based on the purifycss plugin.  
+Purgecss was originally thought as the v2 of purifycss. And because of it, it is greatly inspired by it.
+The plugins such as purgecss-webpack-plugin are based on the purifycss plugin.
 Below is the list of the purifycss repositories:
 
 * [purifycss](https://github.com/purifycss/purifycss)

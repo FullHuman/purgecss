@@ -18,12 +18,21 @@ export default class PurgecssPlugin {
       })
 
       compilation.plugin('additional-assets', cb => {
+        const assetsFromCompilation = search.assets(compilation.assets, [
+          '.css'
+        ])
         // Go through chunks and purge as configured
         compilation.chunks.forEach(chunk => {
           const { name: chunkName, files } = chunk
-          const assetsToPurge = search
-            .assets(compilation.assets, ['.css'])
-            .filter(asset => files.indexOf(asset.name) >= 0)
+          const assetsToPurge = assetsFromCompilation.filter(asset => {
+            if (this.options.only) {
+              return []
+                .concat(this.options.only)
+                .some(only => asset.name.indexOf(only) >= 0)
+            } else {
+              return files.indexOf(asset.name) >= 0
+            }
+          })
 
           assetsToPurge.forEach(({ name, asset }) => {
             const filesToSearch = parse
