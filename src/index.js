@@ -135,18 +135,20 @@ class Purgecss {
      * @param {string} content purged css
      */
     removeUnusedKeyframes(css: string): string {
-        const usedAnimations = []
+        const usedAnimations = new Set()
         const root = postcss.parse(css)
 
         // list all used animations
         root.walkDecls(/animation/, decl => {
-            usedAnimations.push(...decl.value.split(' '))
+            for (const word of decl.value.split(' ')) {
+                usedAnimations.add(word)
+            }
         })
 
         root.walkAtRules(/(keyframes)$/, rule => {
-            const keyframeNotUsed = usedAnimations.indexOf(rule.params) === -1
+            const keyframeUsed = usedAnimations.has(rule.params)
 
-            if (keyframeNotUsed) {
+            if (!keyframeUsed) {
                 rule.remove()
             }
         })
