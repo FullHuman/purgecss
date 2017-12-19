@@ -116,16 +116,14 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            let { cleanCss, keyframes } = this.options.keyframes
-                ? this.cutKeyframes(cssContent)
-                : { cleanCss: cssContent, keyframes: {} }
-
-            cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
-            if (this.options.keyframes) cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+            cssContent = this.getSelectorsCss(cssContent, cssSelectors)
+            if (this.options.keyframes) {
+                cssContent = this.removeUnusedKeyframes(cssContent)
+            }
 
             sources.push({
                 file,
-                css: cleanCss
+                css: cssContent
             })
         }
 
@@ -133,60 +131,27 @@ class Purgecss {
     }
 
     /**
-     * Removes all `@ keyframes` statements and repalces them with a placeholder
-     * @param {string} css css before it was purged
+     * Remove Keyframes that are never used
+     * @param {string} content purged css
      */
-    cutKeyframes(css: string): Object {
-        // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
-        const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
-        const keyframes = {}
-        let cleanCss = css
+    removeUnusedKeyframes(css: string): string {
+        const usedAnimations = []
+        const root = postcss.parse(css)
 
-        let match
-        do {
-            match = keyframesRegExp.exec(cleanCss)
-            if (match) {
-                const full = match[0]
-                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // removes whitespaces and linebreaks
+        // list all used animations
+        root.walkDecls(/animation/, decl => {
+            usedAnimations.push(...decl.value.split(' '))
+        })
 
-                keyframes[name] = full
+        root.walkAtRules(/(keyframes)$/, rule => {
+            const keyframeNotUsed = usedAnimations.indexOf(rule.params) === -1
+
+            if (keyframeNotUsed) {
+                rule.remove()
             }
-        } while (match)
+        })
 
-        // replace @keyframes with placeholders
-        for (let kf in keyframes) {
-            cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
-        }
-
-        return {
-            cleanCss,
-            keyframes
-        }
-    }
-
-    /**
-     * Inserts used `@ keyframes` statements at placeholders
-     * and removes unused ones
-     * you must run cutKeyframes before this.
-     * @param {string} css css after it was purged
-     * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
-     */
-    insertUsedKeyframes(css: string, keyframes: Object): string {
-        let cleanCss = css
-        for (let kf in keyframes) {
-            const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
-            const placeholderRegExp = new RegExp(`.. keyframe "${kf}" ..`, 'g')
-
-            // insert used keyframes
-            if (kfRegExp.test(cleanCss) && placeholderRegExp.test(cleanCss)) {
-                cleanCss = cleanCss.replace(placeholderRegExp, keyframes[kf])
-            }
-        }
-
-        // remove unused keyframe placeholders
-        cleanCss = cleanCss.replace(/.. keyframe "\S+" ../g, '')
-
-        return cleanCss
+        return root.toString()
     }
 
     /**
