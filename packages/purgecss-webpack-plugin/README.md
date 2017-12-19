@@ -56,12 +56,17 @@ module.exports = {
 }
 ```
 
-you can also limit plugin to certain entrypoints via `only` param:
+### Options
 
-```
+The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also avaiable in the webpack plugin with the exception of css and content.
+
+* #### only
+
+You can specify entrypoints to the purgecss-webpack-plugin with the option only:
+
+```js
 new PurgecssPlugin({
   paths: glob.sync(`${PATHS.src}/*`),
-  styleExtensions: ['.css'],
   only: ['bundle', 'vendor']
 })
 ```
