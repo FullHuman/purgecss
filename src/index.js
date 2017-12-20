@@ -30,6 +30,7 @@ import LegacyExtractor from './Extractors/LegacyExtractor'
 
 class Purgecss {
     options: Options
+    root: Object
 
     constructor(options: Options | string) {
         if (typeof options === 'string' || typeof options === 'undefined')
@@ -116,17 +117,17 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            const root = postcss.parse(cssContent)
+            this.root = postcss.parse(cssContent)
 
             // purge selectors
-            this.getSelectorsCss(root, cssSelectors)
+            this.getSelectorsCss(cssSelectors)
 
             // purge keyframes
-            if (this.options.keyframes) this.removeUnusedKeyframes(root)
+            if (this.options.keyframes) this.removeUnusedKeyframes()
 
             sources.push({
                 file,
-                css: root.toString()
+                css: this.root.toString()
             })
         }
 
@@ -135,20 +136,19 @@ class Purgecss {
 
     /**
      * Remove Keyframes that are never used
-     * @param {string} content purged css
      */
-    removeUnusedKeyframes(root: Object) {
+    removeUnusedKeyframes() {
         const usedAnimations = new Set()
 
         // list all used animations
-        root.walkDecls(/animation/, decl => {
+        this.root.walkDecls(/animation/, decl => {
             for (const word of decl.value.split(' ')) {
                 usedAnimations.add(word)
             }
         })
 
         // remove unused keyframes
-        root.walkAtRules(/(keyframes)$/, rule => {
+        this.root.walkAtRules(/(keyframes)$/, rule => {
             const keyframeUsed = usedAnimations.has(rule.params)
 
             if (!keyframeUsed) {
@@ -234,8 +234,8 @@ class Purgecss {
      * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
-    getSelectorsCss(root: Object, selectors: Set<string>) {
-        root.walkRules(node => {
+    getSelectorsCss(selectors: Set<string>) {
+        this.root.walkRules(node => {
             const annotation = node.prev()
             if (this.isIgnoreAnnotation(annotation)) return
             node.selector = selectorParser(selectorsParsed => {
