@@ -231,7 +231,6 @@ class Purgecss {
 
     /**
      * Use postcss to walk through the css ast and remove unused css
-     * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
     getSelectorsCss(selectors: Set<string>) {
@@ -240,7 +239,7 @@ class Purgecss {
             if (this.isIgnoreAnnotation(annotation)) return
             node.selector = selectorParser(selectorsParsed => {
                 selectorsParsed.walk(selector => {
-                    let selectorsInRule = []
+                    const selectorsInRule = []
                     if (selector.type === 'selector') {
                         // if inside :not pseudo class, ignore
                         if (
@@ -250,8 +249,7 @@ class Purgecss {
                         ) {
                             return
                         }
-                        for (let nodeSelector of selector.nodes) {
-                            const { type, value } = nodeSelector
+                        for (const { type, value } of selector.nodes) {
                             if (
                                 SELECTOR_STANDARD_TYPES.includes(type) &&
                                 typeof value !== 'undefined'
@@ -276,7 +274,7 @@ class Purgecss {
             }).processSync(node.selector)
 
             const parent = node.parent
-            // // Remove empty rules
+            // Remove empty rules
             if (!node.selector) node.remove()
             if (this.isRuleEmpty(parent)) parent.remove()
         })
