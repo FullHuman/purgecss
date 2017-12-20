@@ -116,14 +116,17 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            cssContent = this.getSelectorsCss(cssContent, cssSelectors)
-            if (this.options.keyframes) {
-                cssContent = this.removeUnusedKeyframes(cssContent)
-            }
+            const root = postcss.parse(cssContent)
+
+            // purge selectors
+            this.getSelectorsCss(root, cssSelectors)
+
+            // purge keyframes
+            if (this.options.keyframes) this.removeUnusedKeyframes(root)
 
             sources.push({
                 file,
-                css: cssContent
+                css: root.toString()
             })
         }
 
@@ -134,9 +137,8 @@ class Purgecss {
      * Remove Keyframes that are never used
      * @param {string} content purged css
      */
-    removeUnusedKeyframes(css: string): string {
+    removeUnusedKeyframes(root: Object) {
         const usedAnimations = new Set()
-        const root = postcss.parse(css)
 
         // list all used animations
         root.walkDecls(/animation/, decl => {
@@ -145,6 +147,7 @@ class Purgecss {
             }
         })
 
+        // remove unused keyframes
         root.walkAtRules(/(keyframes)$/, rule => {
             const keyframeUsed = usedAnimations.has(rule.params)
 
@@ -152,8 +155,6 @@ class Purgecss {
                 rule.remove()
             }
         })
-
-        return root.toString()
     }
 
     /**
@@ -233,8 +234,7 @@ class Purgecss {
      * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
-    getSelectorsCss(css: string, selectors: Set<string>): string {
-        const root = postcss.parse(css)
+    getSelectorsCss(root: Object, selectors: Set<string>) {
         root.walkRules(node => {
             const annotation = node.prev()
             if (this.isIgnoreAnnotation(annotation)) return
@@ -280,7 +280,6 @@ class Purgecss {
             if (!node.selector) node.remove()
             if (this.isRuleEmpty(parent)) parent.remove()
         })
-        return root.toString()
     }
 
     /**
