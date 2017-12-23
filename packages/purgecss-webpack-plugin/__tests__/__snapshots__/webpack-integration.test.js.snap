@@ -14,3 +14,33 @@ md\\\\:w-2\\\\/3 {
 }
 "
 `;
+
+exports[`Webpack Integration Tests simple-with-exclusion 1`] = `
+".hello {
+  color: red;
+}
+
+.whitelisted {
+  color: green;
+}
+
+md\\\\:w-2\\\\/3 {
+  color: red;
+}
+"
+`;
+
+exports[`Webpack Integration Tests simple-with-exclusion 2`] = `
+".legacy-unused-class {
+  color: red;
+}
+
+.unused-too {
+  color: blue;
+}
+
+.hello {
+  color: red;
+}
+"
+`;
