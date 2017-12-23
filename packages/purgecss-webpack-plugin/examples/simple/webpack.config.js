@@ -1,7 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const PurgecssPlugin = require('../../')
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 class CustomExtractor {
   static extract(content) {
