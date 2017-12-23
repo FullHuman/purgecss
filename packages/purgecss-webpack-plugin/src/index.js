@@ -4,6 +4,8 @@ import { ConcatSource } from 'webpack-sources'
 import * as parse from './parse'
 import * as search from './search'
 
+const styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less']
+
 export default class PurgecssPlugin {
   constructor(options) {
     this.options = options
@@ -44,7 +46,12 @@ export default class PurgecssPlugin {
                   file => file.resource
                 )
               )
-              .filter(v => !v.endsWith('.css'))
+              .filter(v => {
+                for (let ext of styleExtensions) {
+                  if (v.endsWith(ext)) return false
+                }
+                return true
+              })
 
             // Compile through Purgecss and attach to output.
             // This loses sourcemaps should there be any!

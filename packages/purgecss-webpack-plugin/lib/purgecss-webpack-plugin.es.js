@@ -146,6 +146,8 @@ var files = function files(chunk) {
   });
 };
 
+var styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less'];
+
 var PurgecssPlugin = function () {
   function PurgecssPlugin(options) {
     classCallCheck(this, PurgecssPlugin);
@@ -189,7 +191,32 @@ var PurgecssPlugin = function () {
               var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(chunk, _this.options.moduleExtensions || [], function (file) {
                 return file.resource;
               })).filter(function (v) {
-                return !v.endsWith('.css');
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                  for (var _iterator = styleExtensions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var ext = _step.value;
+
+                    if (v.endsWith(ext)) return false;
+                  }
+                } catch (err) {
+                  _didIteratorError = true;
+                  _iteratorError = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                      _iterator.return();
+                    }
+                  } finally {
+                    if (_didIteratorError) {
+                      throw _iteratorError;
+                    }
+                  }
+                }
+
+                return true;
               });
 
               // Compile through Purgecss and attach to output.
