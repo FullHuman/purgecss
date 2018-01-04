@@ -1,5 +1,5 @@
 import through from 'through2'
-import gulpUtil from 'gulp-util'
+import PluginError from 'plugin-error'
 import Purgecss from 'purgecss'
 import glob from 'glob'
 
@@ -26,7 +26,7 @@ const gulpPurgecss = options => {
         file.contents = new Buffer(result)
         callback(null, file)
       } catch (e) {
-        this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message))
+        this.emit('error', new PluginError(PLUGIN_NAME, e.message))
       }
     }
     // stream
@@ -43,7 +43,7 @@ const gulpPurgecss = options => {
             file.contents = new Buffer(result)
             callback(null, file)
           } catch (e) {
-            this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message))
+            this.emit('error', new PluginError(PLUGIN_NAME, e.message))
           }
         })
     }
