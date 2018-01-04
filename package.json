@@ -11,6 +11,11 @@
     "test": "__tests__",
     "example": "examples"
   },
+  "files": [
+    "lib/",
+    "flow-typed/",
+    "bin/"
+  ],
   "bin": "./bin/purgecss",
   "scripts": {
     "test": "npx jest .+.test.js",
@@ -18,14 +23,20 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier":
-      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
+  "keywords": [
+    "optimization",
+    "unused",
+    "css",
+    "purge",
+    "uncss",
+    "purify"
+  ],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -34,38 +45,32 @@
   "homepage": "https://www.purgecss.com",
   "dependencies": {
     "glob": "^7.1.2",
-    "postcss": "^6.0.14",
+    "postcss": "^6.0.15",
     "postcss-selector-parser": "^3.1.1",
-    "yargs": "^10.0.3"
+    "yargs": "^10.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.3",
+    "babel-eslint": "^8.1.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.3",
-    "eslint": "^4.13.0",
-    "eslint-config-standard": "^10.2.1",
+    "eslint": "^4.14.0",
     "eslint-plugin-flowtype": "^2.40.1",
-    "eslint-plugin-html": "^4.0.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.61.0",
-    "jest": "^22.0.1",
-    "prettier": "^1.9.1",
+    "jest": "^22.0.4",
+    "prettier": "^1.9.2",
     "regenerator-runtime": "^0.11.1",
-    "rollup": "^0.52.1",
-    "rollup-plugin-babel": "^3.0.2",
+    "rollup": "^0.52.3",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.2.2"
+    "uglify-es": "^3.3.4"
   },
   "engines": {
     "npm": ">=5.2.0",
