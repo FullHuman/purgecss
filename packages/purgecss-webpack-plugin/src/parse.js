@@ -2,7 +2,7 @@ export const entryPaths = paths => {
     let ret = paths || []
 
     if (typeof ret === 'function') {
-        ret = ret();
+        ret = ret()
     }
 
     // Convert possible string to an array

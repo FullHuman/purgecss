@@ -6,6 +6,10 @@
   color: green;
 }
 
+.whitelistedPattern {
+  color: rebeccapurple;
+}
+
 md\:w-2\/3 {
   color: red;
 }
