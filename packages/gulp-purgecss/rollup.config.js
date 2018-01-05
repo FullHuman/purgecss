@@ -15,6 +15,5 @@ export default {
     }
   ],
   plugins: [resolve(), commonjs(), babel()],
-  external: ['through2', 'gulp-util', 'purgecss', 'glob'],
-  sourceMap: false
+  external: ['through2', 'plugin-error', 'purgecss', 'glob']
 }

@@ -3,7 +3,7 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var through = _interopDefault(require('through2'));
-var gulpUtil = _interopDefault(require('gulp-util'));
+var PluginError = _interopDefault(require('plugin-error'));
 var Purgecss = _interopDefault(require('purgecss'));
 var glob = _interopDefault(require('glob'));
 
@@ -43,7 +43,7 @@ var gulpPurgecss = function gulpPurgecss(options) {
         file.contents = new Buffer(result);
         callback(null, file);
       } catch (e) {
-        this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message));
+        this.emit('error', new PluginError(PLUGIN_NAME, e.message));
       }
     }
     // stream
@@ -58,7 +58,7 @@ var gulpPurgecss = function gulpPurgecss(options) {
           file.contents = new Buffer(_result);
           callback(null, file);
         } catch (e) {
-          _this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message));
+          _this.emit('error', new PluginError(PLUGIN_NAME, e.message));
         }
       });
     }

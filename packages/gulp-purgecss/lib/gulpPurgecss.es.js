@@ -1,5 +1,5 @@
 import through from 'through2';
-import gulpUtil from 'gulp-util';
+import PluginError from 'plugin-error';
 import Purgecss from 'purgecss';
 import glob from 'glob';
 
@@ -39,7 +39,7 @@ var gulpPurgecss = function gulpPurgecss(options) {
         file.contents = new Buffer(result);
         callback(null, file);
       } catch (e) {
-        this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message));
+        this.emit('error', new PluginError(PLUGIN_NAME, e.message));
       }
     }
     // stream
@@ -54,7 +54,7 @@ var gulpPurgecss = function gulpPurgecss(options) {
           file.contents = new Buffer(_result);
           callback(null, file);
         } catch (e) {
-          _this.emit('error', new gulpUtil.PluginError(PLUGIN_NAME, e.message));
+          _this.emit('error', new PluginError(PLUGIN_NAME, e.message));
         }
       });
     }
