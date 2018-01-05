@@ -55,12 +55,19 @@ export default class PurgecssPlugin {
 
             // Compile through Purgecss and attach to output.
             // This loses sourcemaps should there be any!
-            const purgecss = new Purgecss({
+            const options = {
               ...this.options,
               content: filesToSearch,
               css: [asset.source()],
               stdin: true
-            })
+            };
+            if (typeof options.whitelist === 'function') {
+              options.whitelist = options.whitelist();
+            }
+            if (typeof options.whitelistPatterns === 'function') {
+              options.whitelistPatterns = options.whitelistPatterns();
+            }
+            const purgecss = new Purgecss(options);
             compilation.assets[name] = new ConcatSource(purgecss.purge()[0].css)
           })
         })

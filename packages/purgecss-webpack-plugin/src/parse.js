@@ -1,9 +1,13 @@
 export const entryPaths = paths => {
-    const ret = paths || []
+    let ret = paths || []
+
+    if (typeof ret === 'function') {
+        ret = ret();
+    }
 
     // Convert possible string to an array
     if (typeof ret === 'string') {
-        return [ret]
+        ret = [ret]
     }
 
     return ret

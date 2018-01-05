@@ -77,6 +77,13 @@ new PurgecssPlugin({
 })
 ```
 
+If you want to regenerate the paths list on every compilation (e.g. with `--watch`), then you can also pass a function:
+```js
+new PurgecssPlugin({
+  paths: () => glob.sync(`${PATHS.src}/*`)
+})
+```
+
 * #### only
 
 You can specify entrypoints to the purgecss-webpack-plugin with the option only:
@@ -85,6 +92,27 @@ You can specify entrypoints to the purgecss-webpack-plugin with the option only:
 new PurgecssPlugin({
   paths: glob.sync(`${PATHS.src}/*`),
   only: ['bundle', 'vendor']
+})
+```
+
+* #### whitelist and whitelistPatterns
+
+Similar as for the `paths` option, you also can define functions for the these options:
+
+```js
+function collectWhitelist() {
+    // do something to collect the whitelist
+    return ['whitelisted'];
+}
+function collectWhitelistPatterns() {
+    // do something to collect the whitelist
+    return [/^whitelisted-/];
+}
+
+// In the webpack configuration
+new PurgecssPlugin({
+  whitelist: collectWhitelist,
+  whitelistPatterns: collectWhitelistPatterns
 })
 ```
 
