@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
@@ -11,7 +11,11 @@
     "test": "__tests__",
     "example": "examples"
   },
-  "files": ["lib/", "flow-typed/", "bin/"],
+  "files": [
+    "lib/",
+    "flow-typed/",
+    "bin/"
+  ],
   "bin": "./bin/purgecss",
   "scripts": {
     "test": "npx jest .+.test.js",
@@ -19,14 +23,21 @@
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
-    "prettier":
-      "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "keywords": ["optimization", "unused", "css", "purge", "uncss", "purify"],
+  "keywords": [
+    "optimization",
+    "remove",
+    "unused",
+    "css",
+    "purge",
+    "uncss",
+    "purify"
+  ],
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
@@ -46,13 +57,13 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.3",
-    "eslint": "^4.14.0",
-    "eslint-plugin-flowtype": "^2.40.1",
-    "flow-bin": "^0.61.0",
+    "eslint": "^4.15.0",
+    "eslint-plugin-flowtype": "^2.41.0",
+    "flow-bin": "^0.63.1",
     "jest": "^22.0.4",
     "prettier": "^1.9.2",
     "regenerator-runtime": "^0.11.1",
-    "rollup": "^0.52.3",
+    "rollup": "^0.53.3",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-flow": "^1.1.1",
