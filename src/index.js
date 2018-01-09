@@ -279,7 +279,10 @@ class Purgecss {
             const parent = node.parent
 
             // register atrules to purgecss
-            if (parent.type === 'atrule' && parent.name === 'keyframes') {
+            if (
+                parent.type === 'atrule' &&
+                (this.options.keyframes && parent.name === 'keyframes')
+            ) {
                 this.atRules.keyframes[parent.params] = parent
             }
 
