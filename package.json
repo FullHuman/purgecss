@@ -9,7 +9,8 @@
   "directories": {
     "lib": "lib",
     "test": "__tests__",
-    "example": "examples"
+    "example": "examples",
+    "doc": "docs"
   },
   "files": [
     "lib/",
