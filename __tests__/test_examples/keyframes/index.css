@@ -8,7 +8,7 @@
 }
 
 .rotate {
-  animation-name: rotateAni;
+  animation: rotateAni 200ms ease-out both;
 }
 
 @keyframes flashAni

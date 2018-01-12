@@ -30,6 +30,10 @@ import LegacyExtractor from './Extractors/LegacyExtractor'
 
 class Purgecss {
     options: Options
+    root: Object
+    atRules: Object = {
+        keyframes: {}
+    }
 
     constructor(options: Options | string) {
         if (typeof options === 'string' || typeof options === 'undefined')
@@ -116,16 +120,17 @@ class Purgecss {
                 cssContent = option.raw
             }
 
-            let { cleanCss, keyframes } = this.options.keyframes
-                ? this.cutKeyframes(cssContent)
-                : { cleanCss: cssContent, keyframes: {} }
+            this.root = postcss.parse(cssContent)
 
-            cleanCss = this.getSelectorsCss(cleanCss, cssSelectors)
-            if (this.options.keyframes) cleanCss = this.insertUsedKeyframes(cleanCss, keyframes)
+            // purge selectors
+            this.getSelectorsCss(cssSelectors)
+
+            // purge keyframes
+            if (this.options.keyframes) this.removeUnusedKeyframes()
 
             sources.push({
                 file,
-                css: cleanCss
+                css: this.root.toString()
             })
         }
 
@@ -133,60 +138,26 @@ class Purgecss {
     }
 
     /**
-     * Removes all `@ keyframes` statements and repalces them with a placeholder
-     * @param {string} css css before it was purged
+     * Remove Keyframes that are never used
      */
-    cutKeyframes(css: string): Object {
-        // regex copied from https://github.com/scottjehl/Respond/commit/653786df3a54e05ab1f167b7148e8b3ded1db97c
-        const keyframesRegExp = /@[^@]*keyframes([^{]+)\{(?:[^{}]*\{[^}{]*\})+[^}]+\}/gi
-        const keyframes = {}
-        let cleanCss = css
+    removeUnusedKeyframes() {
+        const usedAnimations = new Set()
 
-        let match
-        do {
-            match = keyframesRegExp.exec(cleanCss)
-            if (match) {
-                const full = match[0]
-                const name = match[1].replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') // removes whitespaces and linebreaks
-
-                keyframes[name] = full
+        // list all used animations
+        this.root.walkDecls(/animation/, decl => {
+            for (const word of decl.value.split(' ')) {
+                usedAnimations.add(word)
             }
-        } while (match)
+        })
 
-        // replace @keyframes with placeholders
-        for (let kf in keyframes) {
-            cleanCss = cleanCss.replace(keyframes[kf], `/* keyframe "${kf}" */`)
-        }
+        // remove unused keyframes
+        for (const nodeName in this.atRules.keyframes) {
+            const keyframeUsed = usedAnimations.has(nodeName)
 
-        return {
-            cleanCss,
-            keyframes
-        }
-    }
-
-    /**
-     * Inserts used `@ keyframes` statements at placeholders
-     * and removes unused ones
-     * you must run cutKeyframes before this.
-     * @param {string} css css after it was purged
-     * @param {array} keyframes the `keyframes` array that is returned from cutKeyframes
-     */
-    insertUsedKeyframes(css: string, keyframes: Object): string {
-        let cleanCss = css
-        for (let kf in keyframes) {
-            const kfRegExp = new RegExp(`animation.*(${kf})`, 'g')
-            const placeholderRegExp = new RegExp(`.. keyframe "${kf}" ..`, 'g')
-
-            // insert used keyframes
-            if (kfRegExp.test(cleanCss) && placeholderRegExp.test(cleanCss)) {
-                cleanCss = cleanCss.replace(placeholderRegExp, keyframes[kf])
+            if (!keyframeUsed) {
+                this.atRules.keyframes[nodeName].remove()
             }
         }
-
-        // remove unused keyframe placeholders
-        cleanCss = cleanCss.replace(/.. keyframe "\S+" ../g, '')
-
-        return cleanCss
     }
 
     /**
@@ -263,17 +234,15 @@ class Purgecss {
 
     /**
      * Use postcss to walk through the css ast and remove unused css
-     * @param {string} css css to remove selectors from
      * @param {*} selectors selectors used in content files
      */
-    getSelectorsCss(css: string, selectors: Set<string>): string {
-        const root = postcss.parse(css)
-        root.walkRules(node => {
+    getSelectorsCss(selectors: Set<string>) {
+        this.root.walkRules(node => {
             const annotation = node.prev()
             if (this.isIgnoreAnnotation(annotation)) return
             node.selector = selectorParser(selectorsParsed => {
                 selectorsParsed.walk(selector => {
-                    let selectorsInRule = []
+                    const selectorsInRule = []
                     if (selector.type === 'selector') {
                         // if inside :not pseudo class, ignore
                         if (
@@ -283,8 +252,7 @@ class Purgecss {
                         ) {
                             return
                         }
-                        for (let nodeSelector of selector.nodes) {
-                            const { type, value } = nodeSelector
+                        for (const { type, value } of selector.nodes) {
                             if (
                                 SELECTOR_STANDARD_TYPES.includes(type) &&
                                 typeof value !== 'undefined'
@@ -309,11 +277,19 @@ class Purgecss {
             }).processSync(node.selector)
 
             const parent = node.parent
-            // // Remove empty rules
+
+            // register atrules to purgecss
+            if (
+                parent.type === 'atrule' &&
+                (this.options.keyframes && parent.name === 'keyframes')
+            ) {
+                this.atRules.keyframes[parent.params] = parent
+            }
+
+            // Remove empty rules
             if (!node.selector) node.remove()
             if (this.isRuleEmpty(parent)) parent.remove()
         })
-        return root.toString()
     }
 
     /**
