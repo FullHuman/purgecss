@@ -1,5 +1,11 @@
 # Changelog
 
+# v0.18.0 - 2018-01-05
+
+* Change default extractor regex, fixing https://github.com/FullHuman/purgecss/issues/37
+* Update dependencies
+* Use files property in package.json: importing only necessary files.
+
 # v0.16.0 - 2017-12-18
 
 * `keyframes` option set to `false` by default, `keyframes: true` causing issue with bootstrap https://github.com/FullHuman/purgecss/issues/33
