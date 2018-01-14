@@ -1,5 +1,11 @@
 # Changelog
 
+# v.0.19.0 - 2018-01-14
+
+* https://github.com/FullHuman/purgecss/pull/34, fix https://github.com/FullHuman/purgecss/issues/33
+* Update dependencies
+* Modify Rollup configuration: remove commonjs plugin and add glob as external dependency
+
 # v0.18.0 - 2018-01-05
 
 * Change default extractor regex, fixing https://github.com/FullHuman/purgecss/issues/37
