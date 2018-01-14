@@ -47,12 +47,12 @@
   "homepage": "https://www.purgecss.com",
   "dependencies": {
     "glob": "^7.1.2",
-    "postcss": "^6.0.15",
+    "postcss": "^6.0.16",
     "postcss-selector-parser": "^3.1.1",
-    "yargs": "^10.1.0"
+    "yargs": "^10.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.1.2",
+    "babel-eslint": "^8.2.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
@@ -61,18 +61,17 @@
     "eslint": "^4.15.0",
     "eslint-plugin-flowtype": "^2.41.0",
     "flow-bin": "^0.63.1",
-    "jest": "^22.0.4",
-    "prettier": "^1.9.2",
+    "jest": "^22.0.6",
+    "prettier": "^1.10.2",
     "regenerator-runtime": "^0.11.1",
-    "rollup": "^0.53.3",
+    "rollup": "^0.54.0",
     "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.3.4"
+    "uglify-es": "^3.3.7"
   },
   "engines": {
     "npm": ">=5.2.0",
