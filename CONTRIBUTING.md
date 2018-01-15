@@ -8,6 +8,11 @@ Please read the text so that you understand how to conduct while contributing to
 
 Purgecss use [SemVer](http://semver.org/) for versioning.
 
+## Documentation
+
+The content of the documentation is in the [purgecss-docs](https://github.com/FullHuman/purgecss-docs)
+repository.
+
 ## Sending a Pull Request
 
 **Before submitting a pull request,** please make sure the following is done:
