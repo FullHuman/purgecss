@@ -18,7 +18,7 @@
   ],
   "bin": "./bin/purgecss",
   "scripts": {
-    "test": "npx jest .+.test.js",
+    "test": "npx jest __tests__/.+.test.js",
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
     "flow": "npx flow",
