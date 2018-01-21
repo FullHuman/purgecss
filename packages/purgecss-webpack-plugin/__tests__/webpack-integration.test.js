@@ -36,7 +36,7 @@ describe('Webpack Integration Tests', () => {
                 if (stats.hasErrors()) return done(new Error(stats.toString()))
                 const testFile = path.join(outputDirectory, 'test.js')
                 if (fs.existsSync(testFile)) {
-                    require(testFile)(suite)
+                    require(testFile)()
                 }
                 const expectedDirectory = path.join(testDirectory, 'expected')
                 fs.readdirSync(expectedDirectory).forEach(file => {
