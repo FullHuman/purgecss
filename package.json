@@ -48,7 +48,7 @@
     "glob": "^7.1.2",
     "postcss": "^6.0.16",
     "postcss-selector-parser": "^3.1.1",
-    "yargs": "^10.1.1"
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
@@ -57,20 +57,19 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "codacy-coverage": "^2.0.3",
-    "eslint": "^4.15.0",
-    "eslint-plugin-flowtype": "^2.41.0",
-    "flow-bin": "^0.63.1",
-    "jest": "^22.0.6",
+    "eslint": "^4.16.0",
+    "eslint-plugin-flowtype": "^2.41.1",
+    "flow-bin": "^0.64.0",
+    "jest": "^22.1.4",
     "prettier": "^1.10.2",
     "regenerator-runtime": "^0.11.1",
-    "rollup": "^0.54.0",
+    "rollup": "^0.55.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-plugin-uglify": "^2.0.1",
-    "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.3.7"
+    "rollup-plugin-uglify": "^3.0.0",
+    "rollup-watch": "^4.3.1"
   },
   "engines": {
     "npm": ">=5.2.0",

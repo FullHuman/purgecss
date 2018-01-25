@@ -3,7 +3,6 @@ import builtins from "rollup-plugin-node-builtins"
 import resolve from "rollup-plugin-node-resolve"
 import flow from "rollup-plugin-flow"
 import uglify from "rollup-plugin-uglify"
-import { minify } from "uglify-es"
 
 export default {
     input: "src/index.js",
@@ -17,6 +16,6 @@ export default {
             format: "cjs"
         }
     ],
-    plugins: [builtins(), resolve(), flow(), babel(), uglify({}, minify)],
+    plugins: [builtins(), resolve(), flow(), babel(), uglify()],
     external: ["postcss", "postcss-selector-parser", "fs", "glob"]
 }
