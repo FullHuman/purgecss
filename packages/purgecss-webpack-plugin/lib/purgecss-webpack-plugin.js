@@ -145,7 +145,7 @@ var files = function files(chunk) {
     var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
         return a;
     };
-    return chunk.mapModules(function (module) {
+    return chunk.modules.map(function (module) {
         var file = getter(module);
         if (!file) return null;
         return extensions.indexOf(path.extname(file)) >= 0 && file;
