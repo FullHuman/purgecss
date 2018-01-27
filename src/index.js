@@ -248,7 +248,7 @@ class Purgecss {
      * @param {*} selectors selectors used in content files
      */
     getSelectorsCss(selectors: Set<string>) {
-        this.root.walk((node, i) => {
+        this.root.walk((node) => {
             if (node.type === 'rule') {
                 return this.evaluateRule(node, selectors)
             }
