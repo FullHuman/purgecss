@@ -29,3 +29,8 @@ declare type ResultPurge = {
   file: ?string,
   css: string
 }
+
+declare type AtRules = {
+  keyframes: Array<string>,
+  fontface?: Array<string>
+}

@@ -31,8 +31,8 @@ import LegacyExtractor from './Extractors/LegacyExtractor'
 class Purgecss {
     options: Options
     root: Object
-    atRules: Object = {
-        keyframes: {}
+    atRules: AtRules = {
+        keyframes: []
     }
 
     constructor(options: Options | string) {
@@ -151,11 +151,12 @@ class Purgecss {
         })
 
         // remove unused keyframes
-        for (const nodeName in this.atRules.keyframes) {
+        for (const node of this.atRules.keyframes) {
+            const nodeName = node.params
             const keyframeUsed = usedAnimations.has(nodeName)
 
             if (!keyframeUsed) {
-                this.atRules.keyframes[nodeName].remove()
+                node.remove()
             }
         }
     }
@@ -281,9 +282,9 @@ class Purgecss {
             // register atrules to purgecss
             if (
                 parent.type === 'atrule' &&
-                (this.options.keyframes && parent.name === 'keyframes')
+                (this.options.keyframes && parent.name.endsWith('keyframes'))
             ) {
-                this.atRules.keyframes[parent.params] = parent
+                this.atRules.keyframes.push(parent)
             }
 
             // Remove empty rules
