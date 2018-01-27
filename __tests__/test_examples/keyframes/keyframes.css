@@ -21,3 +21,7 @@
         opacity: 0.5;
     }
 }
+
+.flash {
+    animation: flash
+}

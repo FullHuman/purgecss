@@ -10,7 +10,8 @@ const defaultOptions: Options = {
     info: false,
     rejected: false,
     legacy: false,
-    keyframes: false
+    keyframes: false,
+    font_face: false
 }
 
 export default defaultOptions

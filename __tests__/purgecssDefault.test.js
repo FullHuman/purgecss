@@ -288,6 +288,26 @@ describe('purge methods with files and default extractor', () => {
             expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
         })
     })
+
+    // Font Face
+    describe('purge unused font-face', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}font_face/font_face.html`],
+                css: [`${root}font_face/font_face.css`],
+                font_face: true
+            }).purge()[0].css
+        })
+        it("keep @font-face 'Cerebri Sans'", () => {
+            expect(purgecssResult.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`)).toBe(
+                true
+            )
+        })
+        it("remove @font-face 'OtherFont'", () => {
+            expect(purgecssResult.includes(`src: url('xxx')`)).toBe(false)
+        })
+    })
 })
 
 describe('purge methods with raw content and default extractor', () => {

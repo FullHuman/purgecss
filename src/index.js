@@ -32,8 +32,12 @@ class Purgecss {
     options: Options
     root: Object
     atRules: AtRules = {
-        keyframes: []
+        keyframes: [],
+        font_face: []
     }
+    usedAnimations: Set<string> = new Set()
+    usedFontFaces: Set<string> = new Set()
+    selectorsRemoved: Set<string> = new Set()
 
     constructor(options: Options | string) {
         if (typeof options === 'string' || typeof options === 'undefined')
@@ -128,6 +132,9 @@ class Purgecss {
             // purge keyframes
             if (this.options.keyframes) this.removeUnusedKeyframes()
 
+            // purge font_face
+            if (this.options.font_face) this.removeUnusedFontFaces()
+
             sources.push({
                 file,
                 css: this.root.toString()
@@ -138,24 +145,27 @@ class Purgecss {
     }
 
     /**
-     * Remove Keyframes that are never used
+     * Remove Keyframes that were never used
      */
     removeUnusedKeyframes() {
-        const usedAnimations = new Set()
-
-        // list all used animations
-        this.root.walkDecls(/animation/, decl => {
-            for (const word of decl.value.split(' ')) {
-                usedAnimations.add(word)
-            }
-        })
-
-        // remove unused keyframes
         for (const node of this.atRules.keyframes) {
             const nodeName = node.params
-            const keyframeUsed = usedAnimations.has(nodeName)
+            const used = this.usedAnimations.has(nodeName)
 
-            if (!keyframeUsed) {
+            if (!used) {
+                node.remove()
+            }
+        }
+    }
+
+    /**
+     * Remove Font-Faces that were never used
+     */
+    removeUnusedFontFaces() {
+        for (const { node, name } of this.atRules.font_face) {
+            const used = this.usedFontFaces.has(name)
+
+            if (!used) {
                 node.remove()
             }
         }
@@ -238,59 +248,108 @@ class Purgecss {
      * @param {*} selectors selectors used in content files
      */
     getSelectorsCss(selectors: Set<string>) {
-        this.root.walkRules(node => {
-            const annotation = node.prev()
-            if (this.isIgnoreAnnotation(annotation)) return
-            node.selector = selectorParser(selectorsParsed => {
-                selectorsParsed.walk(selector => {
-                    const selectorsInRule = []
-                    if (selector.type === 'selector') {
-                        // if inside :not pseudo class, ignore
+        this.root.walk((node, i) => {
+            if (node.type === 'rule') {
+                return this.evaluateRule(node, selectors)
+            }
+            if (node.type === 'atrule') {
+                return this.evaluateAtRule(node)
+            }
+        })
+    }
+
+    /**
+     * Evaluate css selector and decide if it should be removed or not
+     * @param {AST} node postcss ast node
+     * @param {Set} selectors selectors used in content files
+     */
+    evaluateRule(node: Object, selectors: Set<string>) {
+        const annotation = node.prev()
+        if (this.isIgnoreAnnotation(annotation)) return
+
+        let keepSelector = true
+        node.selector = selectorParser(selectorsParsed => {
+            selectorsParsed.walk(selector => {
+                const selectorsInRule = []
+                if (selector.type === 'selector') {
+                    // if inside :not pseudo class, ignore
+                    if (
+                        selector.parent &&
+                        selector.parent.value === ':not' &&
+                        selector.parent.type === 'pseudo'
+                    ) {
+                        return
+                    }
+                    for (const { type, value } of selector.nodes) {
                         if (
-                            selector.parent &&
-                            selector.parent.value === ':not' &&
-                            selector.parent.type === 'pseudo'
+                            SELECTOR_STANDARD_TYPES.includes(type) &&
+                            typeof value !== 'undefined'
                         ) {
-                            return
-                        }
-                        for (const { type, value } of selector.nodes) {
-                            if (
-                                SELECTOR_STANDARD_TYPES.includes(type) &&
-                                typeof value !== 'undefined'
-                            ) {
-                                selectorsInRule.push(value)
-                            } else if (
-                                type === 'tag' &&
-                                !/[+]|(even)|(odd)|^from$|^to$|^\d/.test(value)
-                            ) {
-                                // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
-                                selectorsInRule.push(value)
-                            }
-                        }
-
-                        let keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
-
-                        if (!keepSelector) {
-                            selector.remove()
+                            selectorsInRule.push(value)
+                        } else if (
+                            type === 'tag' &&
+                            !/[+]|(even)|(odd)|^from$|^to$|^\d/.test(value)
+                        ) {
+                            // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
+                            selectorsInRule.push(value)
                         }
                     }
-                })
-            }).processSync(node.selector)
 
-            const parent = node.parent
+                    keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
 
-            // register atrules to purgecss
-            if (
-                parent.type === 'atrule' &&
-                (this.options.keyframes && parent.name.endsWith('keyframes'))
-            ) {
-                this.atRules.keyframes.push(parent)
+                    if (!keepSelector) {
+                        selector.remove()
+                    }
+                }
+            })
+        }).processSync(node.selector)
+
+        // loop declarations
+        if (keepSelector) {
+            for (const { prop, value } of node.nodes) {
+                if (this.options.keyframes) {
+                    if (prop === 'animation' || prop === 'animation-name') {
+                        for (const word of value.split(' ')) {
+                            this.usedAnimations.add(word)
+                        }
+                    }
+                }
+                if (this.options.font_face) {
+                    if (prop === 'font-family') {
+                        this.usedFontFaces.add(value)
+                    }
+                }
             }
+        }
 
-            // Remove empty rules
-            if (!node.selector) node.remove()
-            if (this.isRuleEmpty(parent)) parent.remove()
-        })
+        const parent = node.parent
+
+        // Remove empty rules
+        if (!node.selector) node.remove()
+        if (this.isRuleEmpty(parent)) parent.remove()
+    }
+
+    /**
+     * Evaluate at-rule and register it for future reference
+     * @param {AST} node postcss ast node
+     */
+    evaluateAtRule(node: Object) {
+        if (this.options.keyframes && node.name.endsWith('keyframes')) {
+            this.atRules.keyframes.push(node)
+            return
+        }
+
+        if (this.options.font_face && node.name === 'font-face') {
+            for (const { prop, value } of node.nodes) {
+                if (prop === 'font-family') {
+                    this.atRules.font_face.push({
+                        name: value,
+                        node
+                    })
+                }
+            }
+            return
+        }
     }
 
     /**
