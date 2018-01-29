@@ -1,0 +1,41 @@
+{
+  "name": "grunt-purgecss",
+  "description": "Grunt plugin for purgecss",
+  "version": "0.19.0",
+  "homepage": "https://github.com/ffloriel/grunt-purgecss",
+  "author": {
+    "name": "Ffloriel",
+    "email": "florielfedry@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ffloriel/grunt-purgecss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ffloriel/grunt-purgecss/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/ffloriel/grunt-purgecss/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-nodeunit": "^1.0.0",
+    "grunt": "~1.0.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "purgecss": "^0.19.0"
+  }
+}
