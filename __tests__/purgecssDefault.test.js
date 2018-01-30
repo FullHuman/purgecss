@@ -296,7 +296,7 @@ describe('purge methods with files and default extractor', () => {
             purgecssResult = new Purgecss({
                 content: [`${root}font_face/font_face.html`],
                 css: [`${root}font_face/font_face.css`],
-                font_face: true
+                fontFace: true
             }).purge()[0].css
         })
         it("keep @font-face 'Cerebri Sans'", () => {

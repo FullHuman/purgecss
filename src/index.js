@@ -33,7 +33,7 @@ class Purgecss {
     root: Object
     atRules: AtRules = {
         keyframes: [],
-        font_face: []
+        fontFace: []
     }
     usedAnimations: Set<string> = new Set()
     usedFontFaces: Set<string> = new Set()
@@ -132,8 +132,8 @@ class Purgecss {
             // purge keyframes
             if (this.options.keyframes) this.removeUnusedKeyframes()
 
-            // purge font_face
-            if (this.options.font_face) this.removeUnusedFontFaces()
+            // purge font face
+            if (this.options.fontFace) this.removeUnusedFontFaces()
 
             sources.push({
                 file,
@@ -162,7 +162,7 @@ class Purgecss {
      * Remove Font-Faces that were never used
      */
     removeUnusedFontFaces() {
-        for (const { node, name } of this.atRules.font_face) {
+        for (const { node, name } of this.atRules.fontFace) {
             const used = this.usedFontFaces.has(name)
 
             if (!used) {
@@ -248,7 +248,7 @@ class Purgecss {
      * @param {*} selectors selectors used in content files
      */
     getSelectorsCss(selectors: Set<string>) {
-        this.root.walk((node) => {
+        this.root.walk(node => {
             if (node.type === 'rule') {
                 return this.evaluateRule(node, selectors)
             }
@@ -314,7 +314,7 @@ class Purgecss {
                         }
                     }
                 }
-                if (this.options.font_face) {
+                if (this.options.fontFace) {
                     if (prop === 'font-family') {
                         this.usedFontFaces.add(value)
                     }
@@ -339,10 +339,10 @@ class Purgecss {
             return
         }
 
-        if (this.options.font_face && node.name === 'font-face') {
+        if (this.options.fontFace && node.name === 'font-face') {
             for (const { prop, value } of node.nodes) {
                 if (prop === 'font-family') {
-                    this.atRules.font_face.push({
+                    this.atRules.fontFace.push({
                         name: value,
                         node
                     })

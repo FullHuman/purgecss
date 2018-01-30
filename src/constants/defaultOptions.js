@@ -11,7 +11,7 @@ const defaultOptions: Options = {
     rejected: false,
     legacy: false,
     keyframes: false,
-    font_face: false
+    fontFace: false
 }
 
 export default defaultOptions
