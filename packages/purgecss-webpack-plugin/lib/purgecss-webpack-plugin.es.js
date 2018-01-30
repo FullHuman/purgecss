@@ -1,7 +1,7 @@
+import path from 'path';
 import fs from 'fs';
 import Purgecss from 'purgecss';
 import { ConcatSource } from 'webpack-sources';
-import path from 'path';
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {

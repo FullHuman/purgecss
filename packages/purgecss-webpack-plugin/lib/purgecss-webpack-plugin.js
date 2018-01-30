@@ -2,10 +2,10 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var path = _interopDefault(require('path'));
 var fs = _interopDefault(require('fs'));
 var Purgecss = _interopDefault(require('purgecss'));
 var webpackSources = require('webpack-sources');
-var path = _interopDefault(require('path'));
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
