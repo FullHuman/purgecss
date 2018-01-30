@@ -17,7 +17,8 @@ declare type Options = {
   info?: boolean,
   rejected?: boolean,
   legacy?: boolean,
-  keyframes?: boolean
+  keyframes?: boolean,
+  fontFace?: boolean
 }
 
 declare type ExtractorsObj = {
@@ -28,4 +29,9 @@ declare type ExtractorsObj = {
 declare type ResultPurge = {
   file: ?string,
   css: string
+}
+
+declare type AtRules = {
+  keyframes: Array<Object>,
+  fontFace: Array<Object>
 }
