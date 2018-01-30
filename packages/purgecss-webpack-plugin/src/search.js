@@ -19,10 +19,12 @@ export const assets = (assets = [], extensions = []) =>
         .filter(a => a)
 
 export const files = (chunk, extensions = [], getter = a => a) =>
-    chunk.modules
-        .map(module => {
-            const file = getter(module)
-            if (!file) return null
-            return extensions.indexOf(path.extname(file)) >= 0 && file
-        })
-        .filter(a => a)
+    chunk.mapModules
+        ? chunk
+              .mapModules(module => {
+                  const file = getter(module)
+                  if (!file) return null
+                  return extensions.indexOf(path.extname(file)) >= 0 && file
+              })
+              .filter(a => a)
+        : []

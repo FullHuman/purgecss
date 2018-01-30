@@ -141,13 +141,13 @@ var files = function files(chunk) {
     var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
         return a;
     };
-    return chunk.modules.map(function (module) {
+    return chunk.mapModules ? chunk.mapModules(function (module) {
         var file = getter(module);
         if (!file) return null;
         return extensions.indexOf(path.extname(file)) >= 0 && file;
     }).filter(function (a) {
         return a;
-    });
+    }) : [];
 };
 
 var styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less'];
