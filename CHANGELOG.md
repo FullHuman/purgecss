@@ -1,5 +1,14 @@
 # Changelog
 
+# v0.20.0 - 2018-01-31
+
+* https://github.com/FullHuman/purgecss/pull/48, fix https://github.com/FullHuman/purgecss/issues/41
+* New option `fontFace` to remove unused font-face declaration
+* Remove unused vendor-prefixed keyframes rules
+* Update dependencies
+
+
+
 # v.0.19.0 - 2018-01-14
 
 * https://github.com/FullHuman/purgecss/pull/34, fix https://github.com/FullHuman/purgecss/issues/33

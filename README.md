@@ -63,7 +63,7 @@ With a custom extractor:
 
 ```js
 import Purgecss from 'purgecss'
-import purgeHtml from 'purge-from-html'
+import purgeHtml from 'purgecss-from-html'
 const purgeCss = new Purgecss({
   content: ['**/*.html'],
   css: ['**/*.css'],
