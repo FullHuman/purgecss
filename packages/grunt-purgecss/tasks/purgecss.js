@@ -1,16 +1,15 @@
 'use strict';
+var Purgecss = require('purgecss')
 
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('purgecss', 'The best Grunt plugin ever.', function() {
+  grunt.registerMultiTask('purgecss', 'Grunt plugin for purgecss', function() {
     // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+    var options = this.options({});
+
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
@@ -23,18 +22,16 @@ module.exports = function(grunt) {
         } else {
           return true;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      })
 
-      // Handle options.
-      src += options.punctuation;
-
-      // 
+      // purgecss
+      var purgecssResult = new Purgecss({
+        content: options.content,
+        css: f.src
+      }).purge()[0].css
 
       // Write the destination file.
-      grunt.file.write(f.dest, src);
+      grunt.file.write(f.dest, purgecssResult);
 
       // Print a success message.
       grunt.log.writeln('File "' + f.dest + '" created.');
