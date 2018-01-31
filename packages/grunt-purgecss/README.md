@@ -1,6 +1,6 @@
 # grunt-purgecss
 
-> The best Grunt plugin ever.
+> Grunt plugin for purgecss.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -35,7 +35,7 @@ grunt.initConfig({
 });
 ```
 
-### Options
+<!-- ### Options
 
 #### options.separator
 Type: `String`
@@ -47,7 +47,7 @@ A string value that is used to do something with whatever.
 Type: `String`
 Default value: `'.'`
 
-A string value that is used to do something else with whatever else.
+A string value that is used to do something else with whatever else. -->
 
 ### Usage Examples
 
