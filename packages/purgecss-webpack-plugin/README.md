@@ -50,7 +50,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('[name].css?[hash]'),
     new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/*`)
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
     })
   ]
 }
@@ -73,14 +73,14 @@ const PATHS = {
 
 // In the webpack configuration
 new PurgecssPlugin({
-  paths: glob.sync(`${PATHS.src}/*`)
+  paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
 })
 ```
 
 If you want to regenerate the paths list on every compilation (e.g. with `--watch`), then you can also pass a function:
 ```js
 new PurgecssPlugin({
-  paths: () => glob.sync(`${PATHS.src}/*`)
+  paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true })
 })
 ```
 
@@ -90,7 +90,7 @@ You can specify entrypoints to the purgecss-webpack-plugin with the option only:
 
 ```js
 new PurgecssPlugin({
-  paths: glob.sync(`${PATHS.src}/*`),
+  paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
   only: ['bundle', 'vendor']
 })
 ```
