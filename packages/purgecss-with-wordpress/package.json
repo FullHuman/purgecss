@@ -1,0 +1,26 @@
+{
+  "name": "purgecss-with-wordpress",
+  "version": "1.0.0",
+  "description": "purgecss with wordpress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss-with-wordpress.git"
+  },
+  "keywords": [
+    "purgecss",
+    "wordpress",
+    "remove",
+    "unused",
+    "css"
+  ],
+  "author": "Ffloriel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss-with-wordpress/issues"
+  },
+  "homepage": "https://github.com/FullHuman/purgecss-with-wordpress#readme"
+}
