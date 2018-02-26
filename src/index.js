@@ -446,24 +446,24 @@ class Purgecss {
     getWhitelistedSelector(selector: string): Object {
         if (this.options.whitelist) {
             for (const item of this.options.whitelist) {
-                const isString = (typeof item === 'string')
-                const pattern  = (isString) ? item : item.pattern
+                const isString = typeof item === 'string'
+                const pattern = isString ? item : item.pattern
 
                 // Assert the pattern match the given selector
                 if (pattern === selector) {
-                    return (isString) ? { pattern : pattern } : item
+                    return isString ? { pattern: pattern } : item
                 }
             }
         }
 
         if (this.options.whitelistPatterns) {
             for (const item of this.options.whitelistPatterns) {
-                const isRegExp = (item instanceof RegExp)
-                const pattern  = (isRegExp) ? item : item.pattern
+                const isRegExp = item instanceof RegExp
+                const pattern = isRegExp ? item : item.pattern
 
                 // Assert the pattern match the given selector
                 if (pattern.test(selector)) {
-                    return (isRegExp) ? { pattern : pattern } : item
+                    return isRegExp ? { pattern: pattern } : item
                 }
             }
         }
@@ -478,7 +478,7 @@ class Purgecss {
      */
     hasSelectorKeepChildren(selector: string): Object {
         const whitelist = this.getWhitelistedSelector(selector)
-        return (whitelist.hasOwnProperty('keepChildren')) ? whitelist.keepChildren : false
+        return whitelist.hasOwnProperty('keepChildren') ? whitelist.keepChildren : false
     }
 }
 

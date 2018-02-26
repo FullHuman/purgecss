@@ -357,23 +357,22 @@ describe('purge methods with raw content and default extractor with whitelisted 
                     .double-class {color: black;}`
                 }
             ],
-            whitelistPatterns : [
+            whitelistPatterns: [
                 {
-                    pattern : /^double-class$/,
-                    keepChildren : true
-                },
+                    pattern: /^double-class$/,
+                    keepChildren: true
+                }
             ]
         }).purge()[0].css
     })
 
-    it ('keeps double-class children', () => {
+    it('keeps double-class children', () => {
         expect(purgecssResult.includes('.double-class test')).toBe(true)
         expect(purgecssResult.includes('.double-class.red')).toBe(true)
         expect(purgecssResult.includes('.double-class > .first-class')).toBe(true)
     })
 
-    it ('removes double-class--black class because of $', () => {
+    it('removes double-class--black class because of $', () => {
         expect(purgecssResult.includes('.double-class--black')).toBe(false)
     })
 })
-
