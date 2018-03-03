@@ -15,7 +15,11 @@
 ## Install
 
 ```sh
+# webpack 3
 npm i purgecss-webpack-plugin -D
+
+# webpack 4
+npm i purgecss-webpack-plugin@next -D
 ```
 
 ## Usage
