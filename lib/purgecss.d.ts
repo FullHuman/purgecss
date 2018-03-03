@@ -47,6 +47,7 @@ declare namespace Purgecss {
     rejected?: boolean
     legacy?: boolean
     keyframes?: boolean
+    fontFace?: boolean
   }
 
   export interface ExtractorsObj {
