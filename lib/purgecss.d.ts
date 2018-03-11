@@ -16,8 +16,8 @@ declare class Purgecss {
     extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
   extractRawSelector(
-    content: Array<RawContent>,
-    extractors?: Array<ExtractorsObj>
+    content: Array<Purgecss.RawContent>,
+    extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
   getFileExtractor(
     filename: string,
