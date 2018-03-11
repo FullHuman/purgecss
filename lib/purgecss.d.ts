@@ -36,7 +36,7 @@ declare class Purgecss {
 declare namespace Purgecss {
   export interface Options {
     content: Array<string | RawContent>
-    css: Array<string>
+    css: Array<string | RawContent>
     extractors?: Array<ExtractorsObj>
     whitelist?: Array<string>
     whitelistPatterns?: Array<RegExp>
