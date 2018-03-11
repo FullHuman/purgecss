@@ -19,4 +19,7 @@ jobs:
           command: npm test -- --coverage
       - run:
           name: coverage
-          command: cat ./coverage/lcov.info | node_modules/.bin/codacy-coverage -p .
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              cat ./coverage/lcov.info | node_modules/.bin/codacy-coverage -p .
+            fi
