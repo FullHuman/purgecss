@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
@@ -59,7 +59,7 @@
     "codacy-coverage": "^2.1.0",
     "eslint": "^4.18.2",
     "eslint-plugin-flowtype": "^2.46.1",
-    "flow-bin": "^0.66.0",
+    "flow-bin": "^0.67.1",
     "jest": "^22.4.2",
     "prettier": "^1.11.1",
     "regenerator-runtime": "^0.11.1",
