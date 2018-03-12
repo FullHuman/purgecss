@@ -16,8 +16,8 @@ declare class Purgecss {
     extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
   extractRawSelector(
-    content: Array<RawContent>,
-    extractors?: Array<ExtractorsObj>
+    content: Array<Purgecss.RawContent>,
+    extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
   getFileExtractor(
     filename: string,
@@ -36,7 +36,7 @@ declare class Purgecss {
 declare namespace Purgecss {
   export interface Options {
     content: Array<string | RawContent>
-    css: Array<string>
+    css: Array<string | RawContent>
     extractors?: Array<ExtractorsObj>
     whitelist?: Array<string>
     whitelistPatterns?: Array<RegExp>
@@ -47,6 +47,7 @@ declare namespace Purgecss {
     rejected?: boolean
     legacy?: boolean
     keyframes?: boolean
+    fontFace?: boolean
   }
 
   export interface ExtractorsObj {
