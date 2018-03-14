@@ -701,3 +701,43 @@ describe('purge methods with files and legacy extractor', () => {
         })
     })
 })
+
+describe('whitelistPatternsChildren', () => {
+    let purgecssResult
+    beforeAll(() => {
+        purgecssResult = new Purgecss({
+            content: [`${root}whitelist_patterns_children/whitelist_patterns_children.html`],
+            css: [`${root}whitelist_patterns_children/whitelist_patterns_children.css`],
+            legacy: false,
+            whitelistPatternsChildren: [/^card$/]
+        }).purge()[0].css
+    })
+
+    it('finds card class', () => {
+        expect(purgecssResult.includes('.card')).toBe(true)
+    })
+
+    it('finds card--title', () => {
+        expect(purgecssResult.includes('.title')).toBe(false)
+    })
+
+    it('finds card--content', () => {
+        expect(purgecssResult.includes('.card .content')).toBe(true)
+    })
+
+    it('finds btn', () => {
+        expect(purgecssResult.includes('.btn')).toBe(true)
+    })
+
+    it('finds btn yellow', () => {
+        expect(purgecssResult.includes('.card .btn .yellow')).toBe(true)
+    })
+
+    it('finds btn red', () => {
+        expect(purgecssResult.includes('.btn .red')).toBe(false)
+    })
+
+    it('excludes btn--green', () => {
+        expect(purgecssResult.includes('.btn__green')).toBe(false)
+    })
+})
