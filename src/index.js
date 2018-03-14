@@ -406,21 +406,12 @@ class Purgecss {
                 // non legacy extractors
                 // pseudo class
                 const unescapedSelector = selector.replace(/\\/g, '')
-                const isWhitelisted = this.isSelectorWhitelisted(selector)
-
-                // As classes are read from left to right, we have to check the
-                // whitelist that passed the test and assert that children
-                // should be kept or not
-                if (isWhitelisted && this.hasSelectorKeepChildren(selector)) {
-                    return true
-                }
-
                 if (unescapedSelector.startsWith(':')) continue
                 if (
                     !(
                         selectorsInContent.has(unescapedSelector) ||
                         CSS_WHITELIST.includes(unescapedSelector) ||
-                        isWhitelisted
+                        this.isSelectorWhitelisted(unescapedSelector)
                     )
                 ) {
                     return false
@@ -435,50 +426,13 @@ class Purgecss {
      * @param {string} selector css selector
      */
     isSelectorWhitelisted(selector: string): boolean {
-        return this.getWhitelistedSelector(selector).hasOwnProperty('pattern')
-    }
-
-    /**
-     * Return whitelisted selector configuration
-     *
-     * @param {string} selector
-     */
-    getWhitelistedSelector(selector: string): Object {
-        if (this.options.whitelist) {
-            for (const item of this.options.whitelist) {
-                const isString = (typeof item === 'string')
-                const pattern  = (isString) ? item : item.pattern
-
-                // Assert the pattern match the given selector
-                if (pattern === selector) {
-                    return (isString) ? { pattern : pattern } : item
-                }
-            }
-        }
-
-        if (this.options.whitelistPatterns) {
-            for (const item of this.options.whitelistPatterns) {
-                const isRegExp = (item instanceof RegExp)
-                const pattern  = (isRegExp) ? item : item.pattern
-
-                // Assert the pattern match the given selector
-                if (pattern.test(selector)) {
-                    return (isRegExp) ? { pattern : pattern } : item
-                }
-            }
-        }
-
-        return {}
-    }
-
-    /**
-     * Return corresponding whitelisted pattern if exists
-     *
-     * @param {string} selector
-     */
-    hasSelectorKeepChildren(selector: string): Object {
-        const whitelist = this.getWhitelistedSelector(selector)
-        return (whitelist.hasOwnProperty('keepChildren')) ? whitelist.keepChildren : false
+        return !!(
+            CSS_WHITELIST.includes(selector) ||
+            (this.options.whitelist &&
+                this.options.whitelist.some((v: string) => v === selector)) ||
+            (this.options.whitelistPatterns &&
+                this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
+        )
     }
 }
 
