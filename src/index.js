@@ -287,7 +287,8 @@ class Purgecss {
                             const { type, value } = nodeSelector
                             if (
                                 SELECTOR_STANDARD_TYPES.includes(type) &&
-                                typeof value !== 'undefined'
+                                typeof value !== 'undefined' &&
+                                !/^\d/g.test(value)
                             ) {
                                 selectorsInRule.push(value)
                             } else if (

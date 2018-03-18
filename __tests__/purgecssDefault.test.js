@@ -288,6 +288,51 @@ describe('purge methods with files and default extractor', () => {
             expect(purgecssResult.includes('@keyframes rotateAni')).toBe(true)
         })
     })
+
+    describe('keep keyframe decimals', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [{
+                    raw: '<div class="xx"></div>',
+                    extension: 'html'
+                }],
+                css: [
+                    { raw: `
+                    @keyframes xxx {
+                        0% {opacity: 0;}
+                        99.9% {opacity: 1;}
+                      }
+                      .xx { animation: xxx 200ms linear both }
+                    ` }
+                ],
+                keyframes: false
+            }).purge()[0].css
+        })
+        it('keeps `99.9%`', () => {
+            expect(purgecssResult.includes('99.9%')).toBe(true)
+        })
+    })
+
+    // Font Face
+    describe('purge unused font-face', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}font_face/font_face.html`],
+                css: [`${root}font_face/font_face.css`],
+                fontFace: true
+            }).purge()[0].css
+        })
+        it("keep @font-face 'Cerebri Sans'", () => {
+            expect(purgecssResult.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`)).toBe(
+                true
+            )
+        })
+        it("remove @font-face 'OtherFont'", () => {
+            expect(purgecssResult.includes(`src: url('xxx')`)).toBe(false)
+        })
+    })
 })
 
 describe('purge methods with raw content and default extractor', () => {
