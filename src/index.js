@@ -288,7 +288,7 @@ class Purgecss {
                             if (
                                 SELECTOR_STANDARD_TYPES.includes(type) &&
                                 typeof value !== 'undefined' &&
-                                (type === 'class' && !/^\d/g.test(value))
+                                /^\d/g.test(value) === false
                             ) {
                                 selectorsInRule.push(value)
                             } else if (
