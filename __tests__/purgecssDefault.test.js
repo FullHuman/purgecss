@@ -293,18 +293,22 @@ describe('purge methods with files and default extractor', () => {
         let purgecssResult
         beforeAll(() => {
             purgecssResult = new Purgecss({
-                content: [{
-                    raw: '<div class="xx"></div>',
-                    extension: 'html'
-                }],
+                content: [
+                    {
+                        raw: '<div class="xx"></div>',
+                        extension: 'html'
+                    }
+                ],
                 css: [
-                    { raw: `
+                    {
+                        raw: `
                     @keyframes xxx {
                         0% {opacity: 0;}
                         99.9% {opacity: 1;}
                       }
                       .xx { animation: xxx 200ms linear both }
-                    ` }
+                    `
+                    }
                 ],
                 keyframes: false
             }).purge()[0].css
