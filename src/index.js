@@ -283,7 +283,8 @@ class Purgecss {
                     for (const { type, value } of selector.nodes) {
                         if (
                             SELECTOR_STANDARD_TYPES.includes(type) &&
-                            typeof value !== 'undefined'
+                            typeof value !== 'undefined' &&
+                            /^\d/g.test(value) === false
                         ) {
                             selectorsInRule.push(value)
                         } else if (

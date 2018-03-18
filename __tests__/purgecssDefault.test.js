@@ -308,6 +308,36 @@ describe('purge methods with files and default extractor', () => {
             expect(purgecssResult.includes(`src: url('xxx')`)).toBe(false)
         })
     })
+
+    describe('keep keyframe decimals', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [
+                    {
+                        raw: '<div class="xx"></div>',
+                        extension: 'html'
+                    }
+                ],
+                css: [
+                    {
+                        raw: `
+                    @keyframes xxx {
+                        0% {opacity: 0;}
+                        99.9% {opacity: 1;}
+                    }
+                    .xx { animation: xxx 200ms linear both }
+                    `
+                    }
+                ],
+                keyframes: false
+            }).purge()[0].css
+            // console.log(purgecssResult)
+        })
+        it('keeps `99.9%`', () => {
+            expect(purgecssResult.includes('99.9%')).toBe(true)
+        })
+    })
 })
 
 describe('purge methods with raw content and default extractor', () => {
