@@ -392,6 +392,11 @@ class Purgecss {
                 const sels = selector.split(/[^a-z]/g)
                 let keepSelector = false
                 for (let sel of sels) {
+                    if (this.isSelectorWhitelistedChildren(sel)) {
+                        keepSelector = true
+                        break
+                    }
+
                     if (!sel) continue
                     if (!selectorsInContent.has(sel)) break
                     keepSelector = true
@@ -407,7 +412,17 @@ class Purgecss {
                 // non legacy extractors
                 // pseudo class
                 const unescapedSelector = selector.replace(/\\/g, '')
-                if (unescapedSelector.startsWith(':')) continue
+
+                if (unescapedSelector.startsWith(':')) {
+                    continue
+                }
+
+                // If the selector is whitelisted with children keep, simply
+                // returns true to keep all children selectors
+                if (this.isSelectorWhitelistedChildren(unescapedSelector)) {
+                    return true
+                }
+
                 if (
                     !(
                         selectorsInContent.has(unescapedSelector) ||
@@ -433,6 +448,19 @@ class Purgecss {
                 this.options.whitelist.some((v: string) => v === selector)) ||
             (this.options.whitelistPatterns &&
                 this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
+        )
+    }
+
+    /**
+     * Check if the selector is whitelisted by the whitelistPatternsChildren
+     * options element
+     *
+     * @param {string} selector
+     */
+    isSelectorWhitelistedChildren(selector: string): boolean {
+        return !!(
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.some((v: RegExp) => v.test(selector))
         )
     }
 }
