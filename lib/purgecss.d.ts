@@ -40,6 +40,7 @@ declare namespace Purgecss {
     extractors?: Array<ExtractorsObj>
     whitelist?: Array<string>
     whitelistPatterns?: Array<RegExp>
+    whitelistPatternsChildren?: Array<RegExp>
     output?: string
     stdout?: boolean
     stdin?: boolean
