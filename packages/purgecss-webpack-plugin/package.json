@@ -1,6 +1,6 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "description": "Purgecss plugin for webpack - Remove unused css",
   "main": "./lib/purgecss-webpack-plugin.js",
   "module": "./lib/purgecss-webpack-plugin.es.js",
@@ -38,27 +38,27 @@
   },
   "homepage": "https://github.com/FullHuman/purgecss-webpack-plugin#readme",
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "babel-eslint": "^8.2.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "codacy-coverage": "^2.0.3",
-    "css-loader": "^0.28.8",
-    "eslint": "^4.18.2",
+    "codacy-coverage": "^2.1.1",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.0",
     "extract-text-webpack-plugin": "^3.0.2",
-    "jest": "^22.0.6",
-    "prettier": "^1.10.2",
-    "rollup": "^0.56.3",
+    "jest": "^22.4.2",
+    "prettier": "^1.11.1",
+    "rollup": "^0.57.1",
     "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-commonjs": "^8.3.0",
-    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-watch": "^4.3.1",
     "webpack": "^3.10.0"
   },
   "dependencies": {
     "eslint-plugin-html": "^4.0.2",
-    "purgecss": "^0.20.0",
+    "purgecss": "^0.21.0",
     "webpack-sources": "^1.1.0"
   }
 }
