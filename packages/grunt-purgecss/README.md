@@ -24,35 +24,23 @@ In your project's Gruntfile, add a section named `purgecss` to the data object p
 
 ```js
 grunt.initConfig({
-  purgecss: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-});
+    // Configuration to be run (and then tested).
+    purgecss: {
+      my_target: {
+        options: {
+          content: ['./src/**/*.html']
+        },
+        files: {
+          'dist/app.css': ['src/css/app.css']
+        }
+      }
+    }
+  });
 ```
-
-<!-- ### Options
-
-#### options.separator
-Type: `String`
-Default value: `',  '`
-
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else. -->
 
 ### Usage Examples
 
 #### Options
-<!-- In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.` -->
 
 ```js
 grunt.initConfig({
@@ -67,27 +55,3 @@ grunt.initConfig({
 });
 ```
 
-<!-- #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  purgecss: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      src: ['src/**/*.html'],
-      css: ['src/**/*.css'],
-      dest: 'dist/main.css'
-    },
-  },
-});
-``` -->
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_

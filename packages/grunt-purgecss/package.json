@@ -1,22 +1,36 @@
 {
   "name": "grunt-purgecss",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "description": "Grunt plugin for purgecss",
-  "main": "Gruntfile.js",
+  "main": "./lib/grunt-purgecss.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "purgecss": "^0.20.0"
+    "purgecss": "^0.21.0"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-nodeunit": "^1.0.0",
-    "grunt": "~1.0.1"
+    "babel-eslint": "^8.2.2",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.0",
+    "grunt": "~1.0.1",
+    "jest": "^22.4.2",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt && npx jest __tests__/.+.test.js",
+    "dev": "rollup -c rollup.config.js -w",
+    "build": "rollup -c rollup.config.js",
+    "flow": "npx flow",
+    "lint": "npx eslint -c .eslintrc src/",
+    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
