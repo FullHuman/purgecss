@@ -1,6 +1,6 @@
 {
   "name": "grunt-purgecss",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "description": "Grunt plugin for purgecss",
   "main": "./lib/grunt-purgecss.js",
   "directories": {
