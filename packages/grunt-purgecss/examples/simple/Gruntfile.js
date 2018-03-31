@@ -7,13 +7,13 @@ module.exports = grunt => {
       },
       my_target: {
         files: {
-          './app.purged.css': './src/app.css'
+          './dist/app.purged.css': './src/app.css'
         }
       }
     }
   })
 
-  grunt.loadTasks('./../../lib')
+  grunt.loadNpmTasks('grunt-purgecss')
   grunt.registerTask('default', ['purgecss']);
 
 }
