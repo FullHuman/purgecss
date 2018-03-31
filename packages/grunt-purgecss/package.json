@@ -28,7 +28,6 @@
     "test": "grunt && npx jest __tests__/.+.test.js",
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
-    "flow": "npx flow",
     "lint": "npx eslint -c .eslintrc src/",
     "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
