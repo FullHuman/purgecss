@@ -17,8 +17,6 @@ import {
     ERROR_EXTRACTERS_TYPE,
     ERROR_WHITELIST_TYPE,
     ERROR_STDOUT_TYPE,
-    ERROR_INFO_TYPE,
-    ERROR_REJECTED_TYPE,
     ERROR_WHITELIST_PATTERNS_TYPE,
     IGNORE_ANNOTATION
 } from './constants/constants'
@@ -77,9 +75,6 @@ class Purgecss {
             throw new TypeError(ERROR_WHITELIST_TYPE)
         if (options.stdout && typeof options.stdout !== 'boolean')
             throw new TypeError(ERROR_STDOUT_TYPE)
-        if (options.info && typeof options.info !== 'boolean') throw new TypeError(ERROR_INFO_TYPE)
-        if (options.rejected && typeof options.rejected !== 'boolean')
-            throw new TypeError(ERROR_REJECTED_TYPE)
         if (options.whitelistPatterns && !Array.isArray(options.whitelistPatterns))
             throw new TypeError(ERROR_WHITELIST_PATTERNS_TYPE)
     }

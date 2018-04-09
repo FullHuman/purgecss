@@ -242,68 +242,6 @@ describe('initialize purgecss', () => {
         })
     })
 
-    it('throws an error with an incorrect info option', () => {
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                info: {}
-            })
-        }).toThrow()
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                info: 100
-            })
-        }).toThrow()
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                info: 'hello'
-            }).toThrow()
-        })
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                info: () => {}
-            }).toThrow()
-        })
-    })
-
-    it('throws an error with an incorrect rejected option', () => {
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                rejected: {}
-            })
-        }).toThrow()
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                rejected: 100
-            })
-        }).toThrow()
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                rejected: 'hello'
-            }).toThrow()
-        })
-        expect(() => {
-            new Purgecss({
-                content: ['index.html'],
-                css: ['style.css'],
-                rejected: () => {}
-            }).toThrow()
-        })
-    })
-
     it('initialize without error with a config file specified', () => {
         expect(() => {
             new Purgecss('./__tests__/purgecss.config.js')

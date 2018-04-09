@@ -16,7 +16,3 @@ export const ERROR_WHITELIST_PATTERNS_TYPE =
     'Error Type option whitelistPatterns: expected an array'
 
 export const ERROR_STDOUT_TYPE = 'Error Type option stdout: expected a boolean'
-export const ERROR_INFO_TYPE = 'Error Type option info: expected a boolean'
-export const ERROR_REJECTED_TYPE = 'Error Type option rejected: expected a boolean'
-
-export const ERROR_LEGACY_TYPE = 'Error Type option legacy: expected a boolean'
