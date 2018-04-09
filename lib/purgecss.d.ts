@@ -44,9 +44,6 @@ declare namespace Purgecss {
     output?: string
     stdout?: boolean
     stdin?: boolean
-    info?: boolean
-    rejected?: boolean
-    legacy?: boolean
     keyframes?: boolean
     fontFace?: boolean
   }

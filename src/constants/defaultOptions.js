@@ -7,9 +7,6 @@ const defaultOptions: Options = {
     whitelist: [],
     output: undefined,
     stdout: false,
-    info: false,
-    rejected: false,
-    legacy: false,
     keyframes: false,
     fontFace: false
 }

@@ -26,7 +26,6 @@ import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
 import DefaultExtractor from './Extractors/DefaultExtractor'
-import LegacyExtractor from './Extractors/LegacyExtractor'
 
 class Purgecss {
     options: Options
@@ -214,10 +213,8 @@ class Purgecss {
      * @param {array} extractors Array of extractors definition objects
      */
     getFileExtractor(filename: string, extractors: Array<ExtractorsObj> = []) {
-        if (!extractors.length) {
-            if (this.options.legacy === true) return LegacyExtractor
-            return DefaultExtractor
-        }
+        if (!extractors.length) return DefaultExtractor
+
         const extractorObj: any = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
         )
@@ -387,54 +384,30 @@ class Purgecss {
      */
     shouldKeepSelector(selectorsInContent: Set<string>, selectorsInRule: Array<string>): boolean {
         for (let selector of selectorsInRule) {
-            // legacy
-            if (this.options.legacy) {
-                const sels = selector.split(/[^a-z]/g)
-                let keepSelector = false
-                for (let sel of sels) {
-                    if (this.isSelectorWhitelistedChildren(sel)) {
-                        keepSelector = true
-                        break
-                    }
+            // pseudo class
+            const unescapedSelector = selector.replace(/\\/g, '')
 
-                    if (!sel) continue
-                    if (!selectorsInContent.has(sel)) break
-                    keepSelector = true
-                }
-                if (keepSelector) return true
-                if (
-                    selectorsInContent.has(selector) ||
-                    CSS_WHITELIST.includes(selector) ||
-                    this.isSelectorWhitelisted(selector)
+            if (unescapedSelector.startsWith(':')) {
+                continue
+            }
+
+            // If the selector is whitelisted with children keep, simply
+            // returns true to keep all children selectors
+            if (this.isSelectorWhitelistedChildren(unescapedSelector)) {
+                return true
+            }
+
+            if (
+                !(
+                    selectorsInContent.has(unescapedSelector) ||
+                    CSS_WHITELIST.includes(unescapedSelector) ||
+                    this.isSelectorWhitelisted(unescapedSelector)
                 )
-                    return true
-            } else {
-                // non legacy extractors
-                // pseudo class
-                const unescapedSelector = selector.replace(/\\/g, '')
-
-                if (unescapedSelector.startsWith(':')) {
-                    continue
-                }
-
-                // If the selector is whitelisted with children keep, simply
-                // returns true to keep all children selectors
-                if (this.isSelectorWhitelistedChildren(unescapedSelector)) {
-                    return true
-                }
-
-                if (
-                    !(
-                        selectorsInContent.has(unescapedSelector) ||
-                        CSS_WHITELIST.includes(unescapedSelector) ||
-                        this.isSelectorWhitelisted(unescapedSelector)
-                    )
-                ) {
-                    return false
-                }
+            ) {
+                return false
             }
         }
-        return this.options.legacy ? false : true
+        return true
     }
 
     /**
