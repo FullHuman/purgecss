@@ -30,15 +30,21 @@ css files.
 You can find the purgecss documentation
 [on this website](https://www.purgecss.com).
 
-* [Configuration](https://www.purgecss.com/configuration.html)
-* [CLI](https://www.purgecss.com/cli.html)
-* [Javascript API](https://www.purgecss.com/javascript-api.html)
-* [Webpack plugin](https://www.purgecss.com/with-webpack.html)
-* [Gulp plugin](https://www.purgecss.com/with-gulp.html)
-* [Rollup plugin](https://www.purgecss.com/with-rollup.html)
-* [Whitelisting](https://www.purgecss.com/whitelisting.html)
-* [Extractors](https://www.purgecss.com/extractors.html)
-* [Comparison](https://www.purgecss.com/comparison.html)
+* [Configuration](https://www.purgecss.com/configuration)
+* [CLI](https://www.purgecss.com/cli)
+* [Javascript API](https://www.purgecss.com/javascript-api)
+* [Webpack plugin](https://www.purgecss.com/with-webpack)
+* [Gulp plugin](https://www.purgecss.com/with-gulp)
+* [Grunt plugin](https://www.purgecss.com/with-grunt)
+* [Rollup plugin](https://www.purgecss.com/with-rollup)
+* [Whitelisting](https://www.purgecss.com/whitelisting)
+* [Extractors](https://www.purgecss.com/extractors)
+* [Comparison](https://www.purgecss.com/comparison)
+* Guides
+  * [React](https://www.purgecss.com/guides/react)
+  * [Vue](https://www.purgecss.com/guides/vue)
+  * [Nuxt](https://www.purgecss.com/guides/nuxt)
+  * [Wordpress](https://www.purgecss.com/guides/wordpress)
 
 ## Getting Started
 
@@ -80,20 +86,24 @@ const result = purgecss.purge()
 ### Build Plugin
 
 <div align="center">
-	<a href="https://github.com/FullHuman/purgecss-webpack-plugin">
+	  <a href="https://github.com/FullHuman/purgecss-webpack-plugin">
     	<img width="200" heigth="200" src="https://webpack.js.org/assets/icon-square-big.svg">
   	</a>
-	<a href="https://github.com/FullHuman/gulp-purgecss">
+	  <a href="https://github.com/FullHuman/gulp-purgecss">
     	<img height="200" width="89" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
+  	</a>
+    <a href="https://github.com/FullHuman/grunt-purgecss">
+    	<img height="200" width="200" src="https://gruntjs.com/img/grunt-logo-no-wordmark.svg">
   	</a>
   	<a href="https://github.com/FullHuman/rollup-plugin-purgecss">
   		<img height="200" width="200" src="https://rollupjs.org/logo.svg"/>
-	</a>
+	  </a>
 </div>
 
-* [Webpack](https://www.purgecss.com/with-webpack.html)
-* [Gulp](https://www.purgecss.com/with-gulp.html)
-* [Rollup](https://www.purgecss.com/with-rollup.html)
+* [Webpack](https://www.purgecss.com/with-webpack)
+* [Gulp](https://www.purgecss.com/with-gulp)
+* [Grunt](https://www.purgecss.com/with-grunt)
+* [Rollup](https://www.purgecss.com/with-rollup)
 
 ## Contributing
 
