@@ -98,12 +98,16 @@ const result = purgecss.purge()
   	<a href="https://github.com/FullHuman/rollup-plugin-purgecss">
   		<img height="200" width="200" src="https://rollupjs.org/logo.svg"/>
 	  </a>
+  	<a href="https://github.com/FoundrySH/postcss-purgecss">
+  		<img height="200" width="200" src="http://postcss.org/_/web_modules/Hero/postcss.svg"/>
+	  </a>
 </div>
 
 * [Webpack](https://www.purgecss.com/with-webpack)
 * [Gulp](https://www.purgecss.com/with-gulp)
 * [Grunt](https://www.purgecss.com/with-grunt)
 * [Rollup](https://www.purgecss.com/with-rollup)
+* [PostCSS](https://www.purgecss.com/with-postcss)
 
 ## Contributing
 
