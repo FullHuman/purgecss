@@ -87,19 +87,19 @@ const result = purgecss.purge()
 
 <div align="center">
 	  <a href="https://github.com/FullHuman/purgecss-webpack-plugin">
-    	<img width="200" heigth="200" src="https://webpack.js.org/assets/icon-square-big.svg">
+    	<img width="150" heigth="150" src="https://webpack.js.org/assets/icon-square-big.svg">
   	</a>
 	  <a href="https://github.com/FullHuman/gulp-purgecss">
-    	<img height="200" width="89" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
+    	<img height="150" width="67" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
   	</a>
     <a href="https://github.com/FullHuman/grunt-purgecss">
-    	<img height="200" width="200" src="https://gruntjs.com/img/grunt-logo-no-wordmark.svg">
+    	<img height="150" width="150" src="https://gruntjs.com/img/grunt-logo-no-wordmark.svg">
   	</a>
   	<a href="https://github.com/FullHuman/rollup-plugin-purgecss">
-  		<img height="200" width="200" src="https://rollupjs.org/logo.svg"/>
+  		<img height="150" width="150" src="https://rollupjs.org/logo.svg"/>
 	  </a>
   	<a href="https://github.com/FoundrySH/postcss-purgecss">
-  		<img height="200" width="200" src="http://postcss.org/_/web_modules/Hero/postcss.svg"/>
+  		<img height="150" width="150" src="http://postcss.org/_/web_modules/Hero/postcss.svg"/>
 	  </a>
 </div>
 
