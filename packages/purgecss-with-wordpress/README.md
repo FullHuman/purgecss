@@ -25,7 +25,7 @@ import purgecssWordpress from 'purgecss-with-worpress'
 const purgeCss = new Purgecss({
   content: ['**/*.html'],
   css: ['**/*.css'],
-  whitelist: purgecssWorpress.whitelist,
+  whitelist: purgecssWordpress.whitelist,
   whitelistPatterns: purgecssWordpress.whitelistPatterns
 })
 const result = purgecss.purge()
