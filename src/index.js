@@ -129,10 +129,17 @@ class Purgecss {
             // purge font face
             if (this.options.fontFace) this.removeUnusedFontFaces()
 
-            sources.push({
+            const purgeResult = {
                 file,
                 css: this.root.toString()
-            })
+            }
+
+            if (this.options.rejected) {
+                purgeResult.rejected = this.selectorsRemoved.values();
+                this.selectorsRemoved.clear()
+            }
+
+            sources.push(purgeResult)
         }
 
         return sources
@@ -291,6 +298,7 @@ class Purgecss {
                     keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
 
                     if (!keepSelector) {
+                        if (this.options.rejected) this.selectorsRemoved.add(selector.value)
                         selector.remove()
                     }
                 }
