@@ -95,8 +95,8 @@ describe('getFileExtractor', () => {
     it('should throw an error for wrong extractor definition', () => {
         expect(() => {
             const purgecss = new Purgecss({
-                content: ['./test.html'],
-                css: ['./test.css'],
+                content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
+                css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css'],
                 extractors: TEST_7
             })
             purgecss.purge()
