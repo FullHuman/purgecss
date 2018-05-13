@@ -65,6 +65,16 @@ const purgeCss = new Purgecss({
 const result = purgecss.purge()
 ```
 
+With html and style content as string:
+```js
+import Purgecss from 'purgecss'
+const purgeCss = new Purgecss({
+  content: [ { raw: '<html><body> something</body></html>', extension: 'html' } ],
+  css: [ { raw: 'body { color: red; }' } ]
+})
+const result = purgecss.purge()
+```
+
 With a custom extractor:
 
 ```js
