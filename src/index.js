@@ -110,6 +110,7 @@ class Purgecss {
 
         for (let option of cssOptions) {
             let file = null
+            let rejected: ?Array<string> = null
             let cssContent = ''
             if (typeof option === 'string') {
                 file = option
@@ -131,13 +132,16 @@ class Purgecss {
 
             const purgeResult = {
                 file,
-                css: this.root.toString()
+                css: this.root.toString(),
+                rejected
             }
 
             if (this.options.rejected) {
-                purgeResult.rejected = this.selectorsRemoved.values();
+                rejected = Array.from(this.selectorsRemoved)
                 this.selectorsRemoved.clear()
             }
+
+            purgeResult.rejected = rejected
 
             sources.push(purgeResult)
         }
@@ -298,7 +302,7 @@ class Purgecss {
                     keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
 
                     if (!keepSelector) {
-                        if (this.options.rejected) this.selectorsRemoved.add(selector.value)
+                        if (this.options.rejected) this.selectorsRemoved.add(selector.toString())
                         selector.remove()
                     }
                 }
