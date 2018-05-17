@@ -62,11 +62,11 @@ module.exports = {
 
 ### Options
 
-The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also avaiable in the webpack plugin with the exception of css and content.
+The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also available in the webpack plugin with the exception of css and content.
 
 * #### paths
 
-With the webpack plugin, you can specified the content that should be analyized by purgecss with an array of filename. It can be html, pug, blade, ... files. You can use a module like `glob` or `glob-all` to easily get a list of files.
+With the webpack plugin, you can specified the content that should be analyzed by purgecss with an array of filename. It can be html, pug, blade, ... files. You can use a module like `glob` or `glob-all` to easily get a list of files.
 
 ```js
 const PurgecssPlugin = require('purgecss-webpack-plugin')
