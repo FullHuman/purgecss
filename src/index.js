@@ -108,6 +108,12 @@ class Purgecss {
     getCssContents(cssOptions: Array<any>, cssSelectors: Set<string>): Array<ResultPurge> {
         const sources = []
 
+        // resolve any globs and flatten again
+        cssOptions = cssOptions.map(option => {
+            return typeof option === 'string' ? glob.sync(option) : option
+        })
+        cssOptions = [].concat.apply([], cssOptions)
+
         for (let option of cssOptions) {
             let file = null
             let rejected: ?Array<string> = null
