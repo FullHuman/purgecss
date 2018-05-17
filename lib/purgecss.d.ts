@@ -46,6 +46,7 @@ declare namespace Purgecss {
     stdin?: boolean
     keyframes?: boolean
     fontFace?: boolean
+    rejected?: boolean
   }
 
   export interface ExtractorsObj {
@@ -56,6 +57,7 @@ declare namespace Purgecss {
   export interface FileResult {
     file: string | null
     css: string
+    rejected: Array<string> | null
   }
 
   export interface RawContent {

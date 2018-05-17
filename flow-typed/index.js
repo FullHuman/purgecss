@@ -16,7 +16,8 @@ declare type Options = {
   stdout?: boolean,
   stdin?: boolean,
   keyframes?: boolean,
-  fontFace?: boolean
+  fontFace?: boolean,
+  rejected?: boolean
 }
 
 declare type ExtractorsObj = {
@@ -26,7 +27,8 @@ declare type ExtractorsObj = {
 
 declare type ResultPurge = {
   file: ?string,
-  css: string
+  css: string,
+  rejected: ?Array<string>
 }
 
 declare type AtRules = {
