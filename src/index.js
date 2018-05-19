@@ -116,6 +116,7 @@ class Purgecss {
 
         for (let option of cssOptions) {
             let file = null
+            let rejected: ?Array<string> = null
             let cssContent = ''
             if (typeof option === 'string') {
                 file = option
@@ -135,10 +136,20 @@ class Purgecss {
             // purge font face
             if (this.options.fontFace) this.removeUnusedFontFaces()
 
-            sources.push({
+            const purgeResult = {
                 file,
-                css: this.root.toString()
-            })
+                css: this.root.toString(),
+                rejected
+            }
+
+            if (this.options.rejected) {
+                rejected = Array.from(this.selectorsRemoved)
+                this.selectorsRemoved.clear()
+            }
+
+            purgeResult.rejected = rejected
+
+            sources.push(purgeResult)
         }
 
         return sources
@@ -297,6 +308,7 @@ class Purgecss {
                     keepSelector = this.shouldKeepSelector(selectors, selectorsInRule)
 
                     if (!keepSelector) {
+                        if (this.options.rejected) this.selectorsRemoved.add(selector.toString())
                         selector.remove()
                     }
                 }

@@ -8,7 +8,8 @@ const defaultOptions: Options = {
     output: undefined,
     stdout: false,
     keyframes: false,
-    fontFace: false
+    fontFace: false,
+    rejected: false
 }
 
 export default defaultOptions
