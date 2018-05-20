@@ -199,6 +199,26 @@ describe('purge methods with files and default extractor', () => {
         })
     })
 
+    describe('ignore comment range', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}ignore_comment_range/index.html`],
+                css: [`${root}ignore_comment_range/index.css`]
+            }).purge()[0].css
+        })
+
+        it('ignores h1, h3, h5, h6', () => {
+            ['h1', 'h3', 'h5', 'h6'].forEach(selector => {
+                expect(purgecssResult.includes(selector)).toBe(true)
+            })
+        })
+
+        it('removes h4', () => {
+            expect(purgecssResult.includes('h4')).toBe(false)
+        })
+    })
+
     describe('font-face', () => {
         it('keeps font-face', () => {
             const purgecss = new Purgecss({
