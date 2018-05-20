@@ -1,4 +1,6 @@
-export const IGNORE_ANNOTATION = 'purgecss ignore'
+export const IGNORE_ANNOTATION_NEXT = 'purgecss ignore'
+export const IGNORE_ANNOTATION_START = 'purgecss start ignore'
+export const IGNORE_ANNOTATION_END = 'purgecss end ignore'
 export const CONFIG_FILENAME = 'purgecss.config.js'
 
 // Error Message

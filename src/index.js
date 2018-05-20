@@ -18,7 +18,9 @@ import {
     ERROR_WHITELIST_TYPE,
     ERROR_STDOUT_TYPE,
     ERROR_WHITELIST_PATTERNS_TYPE,
-    IGNORE_ANNOTATION
+    IGNORE_ANNOTATION_NEXT,
+    IGNORE_ANNOTATION_START,
+    IGNORE_ANNOTATION_END
 } from './constants/constants'
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
@@ -35,6 +37,7 @@ class Purgecss {
     usedAnimations: Set<string> = new Set()
     usedFontFaces: Set<string> = new Set()
     selectorsRemoved: Set<string> = new Set()
+    ignore: boolean = false
 
     constructor(options: Options | string) {
         if (typeof options === 'string' || typeof options === 'undefined')
@@ -274,7 +277,9 @@ class Purgecss {
      */
     evaluateRule(node: Object, selectors: Set<string>) {
         const annotation = node.prev()
-        if (this.isIgnoreAnnotation(annotation)) return
+        if (this.isIgnoreAnnotation(annotation, 'start')) this.ignore = true
+        else if (this.isIgnoreAnnotation(annotation, 'end')) this.ignore = false
+        if (this.isIgnoreAnnotation(annotation, 'next') || this.ignore === true) return
 
         let keepSelector = true
         node.selector = selectorParser(selectorsParsed => {
@@ -366,10 +371,18 @@ class Purgecss {
     /**
      * Check if the node is a css comment to ignore the selector rule
      * @param {object} node Node of postcss abstract syntax tree
+     * @param {string} type Type of css comment (next, start, end)
      */
-    isIgnoreAnnotation(node: Object): boolean {
+    isIgnoreAnnotation(node: Object, type: IgnoreType): boolean {
         if (node && node.type === 'comment') {
-            return node.text.includes(IGNORE_ANNOTATION)
+            switch (type) {
+                case 'next':
+                    return node.text.includes(IGNORE_ANNOTATION_NEXT)
+                case 'start':
+                    return node.text.includes(IGNORE_ANNOTATION_START)
+                case 'end':
+                    return node.text.includes(IGNORE_ANNOTATION_END)
+            }
         }
         return false
     }
