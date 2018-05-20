@@ -8,25 +8,36 @@ declare class Purgecss {
   options: Purgecss.Options
 
   constructor(options: Purgecss.Options | string)
+
   loadConfigFile(configFile: string): Purgecss.Options
+
   checkOptions(options: Purgecss.Options)
+
   purge(): Array<Purgecss.FileResult>
+
   extractFileSelector(
     files: Array<string>,
     extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
+
   extractRawSelector(
     content: Array<Purgecss.RawContent>,
     extractors?: Array<Purgecss.ExtractorsObj>
   ): Set<string>
+
   getFileExtractor(
     filename: string,
     extractors: Array<Purgecss.ExtractorsObj>
   ): Object
+
   extractorSelectors(content: string, extractor: Object): Set<string>
+
   getSelectorsCss(css: string, selectors: Set<string>): string
-  isIgnoreAnnotation(node: Object): boolean
+
+  isIgnoreAnnotation(node: Object, type: IgnoreType): boolean
+
   isRuleEmpty(node: Object): boolean
+  
   shouldKeepSelector(
     selectorsInContent: Set<string>,
     selectorsInRule: Array<string>
@@ -64,4 +75,6 @@ declare namespace Purgecss {
     raw: string
     extension: string
   }
+
+  export type IgnoreType = "next" | "start" | "end"
 }

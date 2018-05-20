@@ -35,3 +35,5 @@ declare type AtRules = {
   keyframes: Array<Object>,
   fontFace: Array<Object>
 }
+
+declare type IgnoreType = "next" | "start" | "end"
