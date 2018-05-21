@@ -46,9 +46,9 @@
   "homepage": "https://www.purgecss.com",
   "dependencies": {
     "glob": "^7.1.2",
-    "postcss": "^6.0.21",
-    "postcss-selector-parser": "^4.0.0",
-    "yargs": "^11.1.0"
+    "postcss": "^6.0.22",
+    "postcss-selector-parser": "^5.0.0-rc.3",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
@@ -60,7 +60,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "^2.46.3",
     "flow-bin": "^0.72.0",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "prettier": "^1.12.1",
     "regenerator-runtime": "^0.11.1",
     "rollup": "^0.59.1",
@@ -68,7 +68,6 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^3.0.0",
     "rollup-watch": "^4.3.1"
   },
   "engines": {
