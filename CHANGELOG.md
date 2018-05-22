@@ -1,5 +1,13 @@
 # Changelog
 
+# v1.0.0 - 2018-05-22
+
+* Merge https://github.com/FullHuman/purgecss/pull/81, fixing https://github.com/FullHuman/purgecss/issues/80
+* Change default extractor, does not return error for empty file anymore
+* Remove legacy option
+* Add rejected option https://github.com/FullHuman/purgecss/issues/55
+* Add range ignore comment (`purgecss start ignore` and `purgecss end ignore`) https://github.com/FullHuman/purgecss/issues/66
+
 # v0.20.0 - 2018-01-31
 
 * https://github.com/FullHuman/purgecss/pull/48, fix https://github.com/FullHuman/purgecss/issues/41
