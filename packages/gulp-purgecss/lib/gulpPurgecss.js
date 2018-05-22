@@ -36,7 +36,9 @@ var gulpPurgecss = function gulpPurgecss(options) {
       try {
         var optionsGulp = Object.assign(options, {
           content: getFiles(options.content),
-          css: [file.contents.toString()],
+          css: [{
+            raw: file.contents.toString()
+          }],
           stdin: true
         });
         var result = new Purgecss(optionsGulp).purge()[0].css;

@@ -19,7 +19,11 @@ const gulpPurgecss = options => {
       try {
         const optionsGulp = Object.assign(options, {
           content: getFiles(options.content),
-          css: [file.contents.toString()],
+          css: [
+            {
+              raw: file.contents.toString()
+            }
+          ],
           stdin: true
         })
         const result = new Purgecss(optionsGulp).purge()[0].css
