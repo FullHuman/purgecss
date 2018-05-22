@@ -209,7 +209,7 @@ describe('purge methods with files and default extractor', () => {
         })
 
         it('ignores h1, h3, h5, h6', () => {
-            ['h1', 'h3', 'h5', 'h6'].forEach(selector => {
+            ;['h1', 'h3', 'h5', 'h6'].forEach(selector => {
                 expect(purgecssResult.includes(selector)).toBe(true)
             })
         })
