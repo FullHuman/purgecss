@@ -14,16 +14,15 @@ const pluginPurgecss = function (options = {}) {
 
             const purgecss = new Purgecss({
                 content: options.content,
-                css: [code],
-                stdin: true
+                css: [{
+                    raw: code
+                }]
             });
             let css = purgecss.purge()[0].css;
             styles.push(css);
 
             css = JSON.stringify(css);
-            if (options.insert) {
-                // do thing
-            } else if (!options.output) {
+            if (options.insert) ; else if (!options.output) {
                 code = css;
             } else {
                 code = `"";`;

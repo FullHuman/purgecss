@@ -14,8 +14,9 @@ const pluginPurgecss = function( options = {} ) {
 
             const purgecss = new Purgecss({
                 content: options.content,
-                css: [code],
-                stdin: true
+                css: [{
+                    raw: code
+                }]
             })
             let css = purgecss.purge()[0].css
             styles.push(css)
