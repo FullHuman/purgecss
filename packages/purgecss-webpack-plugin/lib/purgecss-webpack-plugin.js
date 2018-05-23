@@ -105,16 +105,23 @@ var files = function files(chunk) {
     var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
         return a;
     };
-    return chunk.mapModules ? chunk.mapModules(function (module) {
+
+    var mods = [];
+
+    Array.from(chunk.modulesIterable || [], function (module) {
         var file = getter(module);
-        if (!file) return null;
-        return extensions.indexOf(path.extname(file)) >= 0 && file;
-    }).filter(function (a) {
+        if (file) {
+            mods.push(extensions.indexOf(path.extname(file)) >= 0 && file);
+        }
+    });
+
+    return mods.filter(function (a) {
         return a;
-    }) : [];
+    });
 };
 
 var styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less'];
+var pluginName = 'PurgeCSS';
 
 var PurgecssPlugin = function () {
     function PurgecssPlugin(options) {
@@ -128,16 +135,17 @@ var PurgecssPlugin = function () {
         value: function apply(compiler) {
             var _this = this;
 
-            compiler.plugin('this-compilation', function (compilation) {
+            compiler.hooks.compilation.tap(pluginName, function (compilation) {
                 var entryPaths$$1 = entryPaths(_this.options.paths);
 
                 flatten(entryPaths$$1).forEach(function (p) {
                     if (!fs.existsSync(p)) throw new Error('Path ' + p + ' does not exist.');
                 });
 
-                compilation.plugin('additional-assets', function (cb) {
+                compilation.hooks.additionalAssets.tap(pluginName, function () {
                     var assetsFromCompilation = assets(compilation.assets, ['.css']);
                     // Go through chunks and purge as configured
+
                     compilation.chunks.forEach(function (chunk) {
                         var chunkName = chunk.name,
                             files$$1 = chunk.files;
@@ -191,8 +199,9 @@ var PurgecssPlugin = function () {
                             // This loses sourcemaps should there be any!
                             var options = _extends({}, _this.options, {
                                 content: filesToSearch,
-                                css: [asset.source()],
-                                stdin: true
+                                css: [{
+                                    raw: asset.source()
+                                }]
                             });
                             if (typeof options.whitelist === 'function') {
                                 options.whitelist = options.whitelist();
@@ -205,7 +214,7 @@ var PurgecssPlugin = function () {
                         });
                     });
 
-                    cb();
+                    // cb()
                 });
             });
         }

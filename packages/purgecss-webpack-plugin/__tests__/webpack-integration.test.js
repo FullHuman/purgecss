@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import webpack from 'webpack'
-import ExtractPlugin from 'extract-text-webpack-plugin'
 
 const cases = process.env.CASES
     ? process.env.CASES.split(',')
@@ -20,11 +19,6 @@ describe('Webpack Integration Tests', () => {
             }
             options.context = testDirectory
             if (!options.module) options.module = {}
-            if (!options.module.loaders) {
-                options.module.loaders = [
-                    { test: /\.txt$/, loader: ExtractPlugin.extract('raw-loader') }
-                ]
-            }
             if (!options.output) options.output = { filename: '[name].js' }
             if (!options.output.path) options.output.path = outputDirectory
             if (process.env.CASES) {

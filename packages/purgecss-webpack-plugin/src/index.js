@@ -5,6 +5,7 @@ import * as parse from './parse'
 import * as search from './search'
 
 const styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less']
+const pluginName = 'PurgeCSS'
 
 export default class PurgecssPlugin {
     constructor(options) {
@@ -12,16 +13,17 @@ export default class PurgecssPlugin {
     }
 
     apply(compiler) {
-        compiler.plugin('this-compilation', compilation => {
+        compiler.hooks.compilation.tap(pluginName, compilation => {
             const entryPaths = parse.entryPaths(this.options.paths)
 
             parse.flatten(entryPaths).forEach(p => {
                 if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`)
             })
 
-            compilation.plugin('additional-assets', cb => {
+            compilation.hooks.additionalAssets.tap(pluginName, () => {
                 const assetsFromCompilation = search.assets(compilation.assets, ['.css'])
                 // Go through chunks and purge as configured
+
                 compilation.chunks.forEach(chunk => {
                     const { name: chunkName, files } = chunk
                     const assetsToPurge = assetsFromCompilation.filter(asset => {
@@ -56,8 +58,11 @@ export default class PurgecssPlugin {
                         const options = {
                             ...this.options,
                             content: filesToSearch,
-                            css: [asset.source()],
-                            stdin: true
+                            css: [
+                                {
+                                    raw: asset.source()
+                                }
+                            ]
                         }
                         if (typeof options.whitelist === 'function') {
                             options.whitelist = options.whitelist()
@@ -70,7 +75,7 @@ export default class PurgecssPlugin {
                     })
                 })
 
-                cb()
+                // cb()
             })
         })
     }

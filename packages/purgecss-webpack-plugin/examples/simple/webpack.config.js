@@ -1,6 +1,6 @@
 const path = require('path')
 const glob = require('glob')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 class CustomExtractor {
@@ -19,19 +19,33 @@ module.exports = {
     filename: 'bundle.js',
     path: path.join(__dirname, 'dist')
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?sourceMap'
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader"
+        ]
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('[name].css?[hash]'),
+    new MiniCssExtractPlugin({
+      filename: "[name].css"
+    }),
     new PurgecssPlugin({
       paths: glob.sync(`${PATHS.src}/*`),
       styleExtensions: ['.css'],

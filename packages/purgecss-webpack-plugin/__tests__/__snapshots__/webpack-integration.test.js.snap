@@ -16,6 +16,7 @@ exports[`Webpack Integration Tests path-and-whitelist-functions 1`] = `
 md\\\\:w-2\\\\/3 {
   color: red;
 }
+
 "
 `;
 
@@ -31,12 +32,17 @@ exports[`Webpack Integration Tests simple 1`] = `
 md\\\\:w-2\\\\/3 {
   color: red;
 }
+
 "
 `;
 
 exports[`Webpack Integration Tests simple-with-exclusion 1`] = `
 ".hello {
   color: red;
+}
+
+.unused {
+  color: blue;
 }
 
 .whitelisted {
@@ -46,11 +52,8 @@ exports[`Webpack Integration Tests simple-with-exclusion 1`] = `
 md\\\\:w-2\\\\/3 {
   color: red;
 }
-"
-`;
 
-exports[`Webpack Integration Tests simple-with-exclusion 2`] = `
-".legacy-unused-class {
+.legacy-unused-class {
   color: red;
 }
 
@@ -61,5 +64,6 @@ exports[`Webpack Integration Tests simple-with-exclusion 2`] = `
 .hello {
   color: red;
 }
+
 "
 `;

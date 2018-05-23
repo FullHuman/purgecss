@@ -39,7 +39,7 @@ describe('Search files', () => {
     })
 
     it('returns matches based on extension', () => {
-        chunk.modules = ['foobar.txt', 'barbar.css']
+        chunk.modulesIterable = ['foobar.txt', 'barbar.css']
         const extensions = ['.txt']
         const matches = ['foobar.txt']
 
@@ -47,7 +47,7 @@ describe('Search files', () => {
     })
 
     it('does not fail with missing modules', () => {
-        chunk.modules = ['foobar.txt', '', 'barbar.css']
+        chunk.modulesIterable = ['foobar.txt', '', 'barbar.css']
         const extensions = ['.txt']
         const matches = ['foobar.txt']
 
@@ -55,7 +55,7 @@ describe('Search files', () => {
     })
 
     it('returns matches based on extension with a customized getter', () => {
-        chunk.modules = [
+        chunk.modulesIterable = [
             {
                 resource: 'foobar.txt'
             },
@@ -70,7 +70,7 @@ describe('Search files', () => {
     })
 
     it('does not fail with missing modules when a getter fails', () => {
-        chunk.modules = [
+        chunk.modulesIterable = [
             {
                 resource: 'foobar.txt'
             },

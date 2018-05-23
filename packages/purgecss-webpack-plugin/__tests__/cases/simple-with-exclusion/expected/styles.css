@@ -1,0 +1,28 @@
+.hello {
+  color: red;
+}
+
+.unused {
+  color: blue;
+}
+
+.whitelisted {
+  color: green;
+}
+
+md\:w-2\/3 {
+  color: red;
+}
+
+.legacy-unused-class {
+  color: red;
+}
+
+.unused-too {
+  color: blue;
+}
+
+.hello {
+  color: red;
+}
+
