@@ -7,7 +7,7 @@ module.exports = grunt => {
       },
       my_target: {
         files: {
-          './dist/app.purged.css': './src/app.css'
+          './dist/app.purged.css': ['./src/app.css']
         }
       }
     }

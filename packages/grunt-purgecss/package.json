@@ -1,28 +1,27 @@
 {
   "name": "grunt-purgecss",
-  "version": "0.21.2",
+  "version": "1.0.0",
   "description": "Grunt plugin for purgecss",
   "main": "./lib/grunt-purgecss.js",
   "directories": {
-    "test": "test"
+    "test": "__tests__"
   },
   "dependencies": {
-    "purgecss": "^0.21.0"
+    "purgecss": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.0",
-    "grunt": "~1.0.1",
-    "jest": "^22.4.2",
-    "rollup": "^0.57.1",
+    "grunt": "~1.0.3",
+    "jest": "^23.1.0",
+    "rollup": "^0.59.4",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.3.0"
   },
   "scripts": {
     "test": "grunt && npx jest __tests__/.+.test.js",
