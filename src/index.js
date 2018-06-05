@@ -267,6 +267,10 @@ class Purgecss {
             if (node.type === 'atrule') {
                 return this.evaluateAtRule(node)
             }
+            if (node.type === 'comment') {
+                if (this.isIgnoreAnnotation(node, 'start')) this.ignore = true
+                else if (this.isIgnoreAnnotation(node, 'end')) this.ignore = false
+            }
         })
     }
 
@@ -277,8 +281,6 @@ class Purgecss {
      */
     evaluateRule(node: Object, selectors: Set<string>) {
         const annotation = node.prev()
-        if (this.isIgnoreAnnotation(annotation, 'start')) this.ignore = true
-        else if (this.isIgnoreAnnotation(annotation, 'end')) this.ignore = false
         if (this.isIgnoreAnnotation(annotation, 'next') || this.ignore === true) return
 
         let keepSelector = true

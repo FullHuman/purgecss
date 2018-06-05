@@ -13,6 +13,9 @@ h4 {
 }
 
 /* purgecss start ignore */
+
+/* do not purge */
+
 h5 {
   color: pink;
 }

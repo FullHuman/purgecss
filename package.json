@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Remove unused css selectors.",
   "main": "./lib/purgecss.js",
   "module": "./lib/purgecss.es.js",
