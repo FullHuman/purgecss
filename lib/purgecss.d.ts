@@ -1,6 +1,7 @@
-// Type definitions for Purgecss 0.14.0
+// Type definitions for Purgecss 1.0
 // Project: Purgecss
 // Definitions by: Ffloriel https://github.com/Ffloriel
+//                 JounQin https://github.com/JounQin
 
 export = Purgecss
 
@@ -11,7 +12,7 @@ declare class Purgecss {
 
   loadConfigFile(configFile: string): Purgecss.Options
 
-  checkOptions(options: Purgecss.Options)
+  checkOptions(options: Purgecss.Options): void
 
   purge(): Array<Purgecss.FileResult>
 
@@ -34,14 +35,14 @@ declare class Purgecss {
 
   getSelectorsCss(css: string, selectors: Set<string>): string
 
-  isIgnoreAnnotation(node: Object, type: IgnoreType): boolean
+  isIgnoreAnnotation(node: Object, type: Purgecss.IgnoreType): boolean
 
   isRuleEmpty(node: Object): boolean
-  
+
   shouldKeepSelector(
     selectorsInContent: Set<string>,
     selectorsInRule: Array<string>
-  )
+  ) :boolean
 }
 
 declare namespace Purgecss {
