@@ -1,5 +1,5 @@
 {
-  "name": "simple-example-purgecss-webpack",
+  "name": "simple-example-purgecss-webpack-postcss-scss",
   "version": "1.0.0",
   "description": "Example of purgecss webpack plugin with postcss loader and scss",
   "main": "index.js",

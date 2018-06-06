@@ -1,5 +1,5 @@
 {
-  "name": "simple-example-purgecss-webpack",
+  "name": "simple-example-purgecss-webpack-with-exxtraction",
   "version": "1.0.0",
   "description": "Simple example of purgecss  webpack plugin",
   "main": "index.js",
