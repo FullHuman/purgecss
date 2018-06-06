@@ -18,15 +18,23 @@ export const assets = (assets = [], extensions = []) =>
         })
         .filter(a => a)
 
-export const files = (chunk, extensions = [], getter = a => a) => {
+export const files = (chunk, extensions = [], getter = a => a, webpackVersion = 3) => {
     const mods = []
 
-    Array.from(chunk.modulesIterable || [], module => {
-        const file = getter(module)
-        if (file) {
-            mods.push(extensions.indexOf(path.extname(file)) >= 0 && file)
-        }
-    })
+    if (webpackVersion === 4) {
+        Array.from(chunk.modulesIterable || [], module => {
+            const file = getter(module)
+            if (file) {
+                mods.push(extensions.indexOf(path.extname(file)) >= 0 && file)
+            }
+        })
+    } else if (chunk.mapModules) {
+        chunk.mapModules(module => {
+            const file = getter(module)
+            if (!file) return null
+            return extensions.indexOf(path.extname(file)) >= 0 && file
+        })
+    }
 
     return mods.filter(a => a)
 }
