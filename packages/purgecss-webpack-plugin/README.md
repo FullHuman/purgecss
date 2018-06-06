@@ -13,12 +13,8 @@
 [Webpack](https://github.com/webpack/webpack) plugin to remove unused css.
 
 ## Install
-
 ```sh
 npm i purgecss-webpack-plugin -D
-
-# or webpack 3
-npm i purgecss-webpack-plugin@0.23.0 -D
 ```
 
 ## Usage
@@ -28,7 +24,7 @@ npm i purgecss-webpack-plugin@0.23.0 -D
 ```js
 const path = require('path')
 const glob = require('glob')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const PATHS = {
@@ -69,7 +65,7 @@ module.exports = {
       filename: "[name].css"
     }),
     new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/*`,  { nodir: true })
+      paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true })
     })
   ]
 }
