@@ -20,8 +20,7 @@ export default class PurgecssPlugin {
             compiler.hooks.compilation.tap(pluginName, compilation => {
                 this.initializePlugin(compilation)
             })
-        }
-        else {
+        } else {
             compiler.plugin('this-compilation', compilation => {
                 this.initializePlugin(compilation)
             })
@@ -39,8 +38,7 @@ export default class PurgecssPlugin {
             compilation.hooks.additionalAssets.tap(pluginName, () => {
                 this.runPluginHook(compilation, entryPaths)
             })
-        }
-        else {
+        } else {
             compilation.plugin('additional-assets', callback => {
                 this.runPluginHook(compilation, entryPaths, callback)
             })
@@ -55,9 +53,7 @@ export default class PurgecssPlugin {
             const { name: chunkName, files } = chunk
             const assetsToPurge = assetsFromCompilation.filter(asset => {
                 if (this.options.only) {
-                    return []
-                        .concat(this.options.only)
-                        .some(only => asset.name.indexOf(only) >= 0)
+                    return [].concat(this.options.only).some(only => asset.name.indexOf(only) >= 0)
                 } else {
                     return files.indexOf(asset.name) >= 0
                 }
