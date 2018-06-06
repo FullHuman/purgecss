@@ -105,20 +105,31 @@ var files = function files(chunk) {
     var getter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (a) {
         return a;
     };
+    var webpackVersion = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 3;
 
     var mods = [];
 
-    Array.from(chunk.modulesIterable || [], function (module) {
-        var file = getter(module);
-        if (file) {
-            mods.push(extensions.indexOf(path.extname(file)) >= 0 && file);
-        }
-    });
+    if (webpackVersion === 4) {
+        Array.from(chunk.modulesIterable || [], function (module) {
+            var file = getter(module);
+            if (file) {
+                mods.push(extensions.indexOf(path.extname(file)) >= 0 && file);
+            }
+        });
+    } else if (chunk.mapModules) {
+        chunk.mapModules(function (module) {
+            var file = getter(module);
+            if (!file) return null;
+            return extensions.indexOf(path.extname(file)) >= 0 && file;
+        });
+    }
 
     return mods.filter(function (a) {
         return a;
     });
 };
+
+var webpackVersion = 4;
 
 var styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less'];
 var pluginName = 'PurgeCSS';
@@ -135,88 +146,120 @@ var PurgecssPlugin = function () {
         value: function apply(compiler) {
             var _this = this;
 
-            compiler.hooks.compilation.tap(pluginName, function (compilation) {
-                var entryPaths$$1 = entryPaths(_this.options.paths);
+            if (typeof compiler.hooks === 'undefined') {
+                webpackVersion = 3;
+            }
 
-                flatten(entryPaths$$1).forEach(function (p) {
-                    if (!fs.existsSync(p)) throw new Error('Path ' + p + ' does not exist.');
+            if (webpackVersion === 4) {
+                compiler.hooks.compilation.tap(pluginName, function (compilation) {
+                    _this.initializePlugin(compilation);
+                });
+            } else {
+                compiler.plugin('this-compilation', function (compilation) {
+                    _this.initializePlugin(compilation);
+                });
+            }
+        }
+    }, {
+        key: 'initializePlugin',
+        value: function initializePlugin(compilation) {
+            var _this2 = this;
+
+            var entryPaths$$1 = entryPaths(this.options.paths);
+
+            flatten(entryPaths$$1).forEach(function (p) {
+                if (!fs.existsSync(p)) throw new Error('Path ' + p + ' does not exist.');
+            });
+
+            if (webpackVersion === 4) {
+                compilation.hooks.additionalAssets.tap(pluginName, function () {
+                    _this2.runPluginHook(compilation, entryPaths$$1);
+                });
+            } else {
+                compilation.plugin('additional-assets', function (callback) {
+                    _this2.runPluginHook(compilation, entryPaths$$1, callback);
+                });
+            }
+        }
+    }, {
+        key: 'runPluginHook',
+        value: function runPluginHook(compilation, entryPaths$$1) {
+            var _this3 = this;
+
+            var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {};
+
+            var assetsFromCompilation = assets(compilation.assets, ['.css']);
+            // Go through chunks and purge as configured
+
+            compilation.chunks.forEach(function (chunk) {
+                var chunkName = chunk.name,
+                    files$$1 = chunk.files;
+
+                var assetsToPurge = assetsFromCompilation.filter(function (asset) {
+                    if (_this3.options.only) {
+                        return [].concat(_this3.options.only).some(function (only) {
+                            return asset.name.indexOf(only) >= 0;
+                        });
+                    } else {
+                        return files$$1.indexOf(asset.name) >= 0;
+                    }
                 });
 
-                compilation.hooks.additionalAssets.tap(pluginName, function () {
-                    var assetsFromCompilation = assets(compilation.assets, ['.css']);
-                    // Go through chunks and purge as configured
+                assetsToPurge.forEach(function (_ref) {
+                    var name = _ref.name,
+                        asset = _ref.asset;
 
-                    compilation.chunks.forEach(function (chunk) {
-                        var chunkName = chunk.name,
-                            files$$1 = chunk.files;
+                    var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(chunk, _this3.options.moduleExtensions || [], function (file) {
+                        return file.resource;
+                    }, webpackVersion)).filter(function (v) {
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
 
-                        var assetsToPurge = assetsFromCompilation.filter(function (asset) {
-                            if (_this.options.only) {
-                                return [].concat(_this.options.only).some(function (only) {
-                                    return asset.name.indexOf(only) >= 0;
-                                });
-                            } else {
-                                return files$$1.indexOf(asset.name) >= 0;
+                        try {
+                            for (var _iterator = styleExtensions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                var ext = _step.value;
+
+                                if (v.endsWith(ext)) return false;
                             }
-                        });
-
-                        assetsToPurge.forEach(function (_ref) {
-                            var name = _ref.name,
-                                asset = _ref.asset;
-
-                            var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(chunk, _this.options.moduleExtensions || [], function (file) {
-                                return file.resource;
-                            })).filter(function (v) {
-                                var _iteratorNormalCompletion = true;
-                                var _didIteratorError = false;
-                                var _iteratorError = undefined;
-
-                                try {
-                                    for (var _iterator = styleExtensions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                                        var ext = _step.value;
-
-                                        if (v.endsWith(ext)) return false;
-                                    }
-                                } catch (err) {
-                                    _didIteratorError = true;
-                                    _iteratorError = err;
-                                } finally {
-                                    try {
-                                        if (!_iteratorNormalCompletion && _iterator.return) {
-                                            _iterator.return();
-                                        }
-                                    } finally {
-                                        if (_didIteratorError) {
-                                            throw _iteratorError;
-                                        }
-                                    }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
                                 }
-
-                                return true;
-                            });
-
-                            // Compile through Purgecss and attach to output.
-                            // This loses sourcemaps should there be any!
-                            var options = _extends({}, _this.options, {
-                                content: filesToSearch,
-                                css: [{
-                                    raw: asset.source()
-                                }]
-                            });
-                            if (typeof options.whitelist === 'function') {
-                                options.whitelist = options.whitelist();
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
                             }
-                            if (typeof options.whitelistPatterns === 'function') {
-                                options.whitelistPatterns = options.whitelistPatterns();
-                            }
-                            var purgecss = new Purgecss(options);
-                            compilation.assets[name] = new webpackSources.ConcatSource(purgecss.purge()[0].css);
-                        });
+                        }
+
+                        return true;
                     });
 
-                    // cb()
+                    // Compile through Purgecss and attach to output.
+                    // This loses sourcemaps should there be any!
+                    var options = _extends({}, _this3.options, {
+                        content: filesToSearch,
+                        css: [{
+                            raw: asset.source()
+                        }]
+                    });
+                    if (typeof options.whitelist === 'function') {
+                        options.whitelist = options.whitelist();
+                    }
+                    if (typeof options.whitelistPatterns === 'function') {
+                        options.whitelistPatterns = options.whitelistPatterns();
+                    }
+                    var purgecss = new Purgecss(options);
+                    compilation.assets[name] = new webpackSources.ConcatSource(purgecss.purge()[0].css);
                 });
             });
+
+            callback();
         }
     }]);
     return PurgecssPlugin;
