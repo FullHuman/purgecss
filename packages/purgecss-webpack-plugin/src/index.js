@@ -3,9 +3,8 @@ import Purgecss from 'purgecss'
 import { ConcatSource } from 'webpack-sources'
 import * as parse from './parse'
 import * as search from './search'
-import webpack from 'webpack'
 
-const webpackVersion = parseInt(webpack.version || 3)
+let webpackVersion = 4
 
 const styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less']
 const pluginName = 'PurgeCSS'
@@ -16,6 +15,10 @@ export default class PurgecssPlugin {
     }
 
     apply(compiler) {
+        if (typeof compiler.hooks === 'undefined') {
+            webpackVersion = 3
+        }
+
         if (webpackVersion === 4) {
             compiler.hooks.compilation.tap(pluginName, compilation => {
                 this.initializePlugin(compilation)
