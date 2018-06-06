@@ -1,6 +1,6 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Purgecss plugin for webpack - Remove unused css",
   "main": "./lib/purgecss-webpack-plugin.js",
   "module": "./lib/purgecss-webpack-plugin.es.js",
