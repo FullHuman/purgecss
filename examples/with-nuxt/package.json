@@ -15,15 +15,15 @@
   "dependencies": {
     "glob-all": "^3.1.0",
     "nuxt": "^1.0.0",
-    "purgecss": "^0.20.0",
-    "purgecss-webpack-plugin": "^0.20.1",
+    "purgecss": "^1.0.1",
+    "purgecss-webpack-plugin": "^1.2.0",
     "tachyons": "^4.9.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
+    "babel-eslint": "^8.2.5",
+    "eslint": "^5.0.1",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.0.0"
   }
 }
