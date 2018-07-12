@@ -8,7 +8,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Coverage)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![npm](https://img.shields.io/npm/v/purgecss.svg)](https://www.npmjs.com/package/purgecss)
-[![license](https://img.shields.io/github/license/fullhuman/purgecss.svg)]()
+[![license](https://img.shields.io/github/license/fullhuman/purgecss.svg)]() [![Greenkeeper badge](https://badges.greenkeeper.io/FullHuman/purgecss.svg)](https://greenkeeper.io/)
 
 <p align="center">
 	<img src="./.assets/logo.png" height="200" width="200" alt="Purgecss logo"/>
