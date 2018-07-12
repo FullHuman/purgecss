@@ -2,9 +2,6 @@
   "groups": {
     "default": {
       "packages": [
-        "examples/with-nuxt/package.json",
-        "examples/with-react/package.json",
-        "examples/with-vue/package.json",
         "package.json"
       ]
     }
