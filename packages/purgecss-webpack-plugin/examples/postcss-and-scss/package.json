@@ -17,10 +17,10 @@
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.9",
     "postcss-scss": "^1.0.2",
-    "purgecss-webpack-plugin": "^0.16.0",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.1",
+    "purgecss-webpack-plugin": "^1.2.0",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.21.0",
     "sugarss": "^1.0.1",
-    "webpack": "^3.10.0"
+    "webpack": "^4.14.0"
   }
 }
