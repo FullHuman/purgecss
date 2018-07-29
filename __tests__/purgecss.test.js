@@ -368,6 +368,18 @@ describe('pseudo selectors', () => {
         expect(purgecssResult.includes('some-item:nth-child(2n + 1)')).toBe(true)
     })
 
+    it('finds some-item:nth-of-type(n+3)', () => {
+        expect(purgecssResult.includes('some-item:nth-of-type(n+3)')).toBe(true)
+    })
+
+    it('finds some-item:nth-of-type(-1n+6)', () => {
+        expect(purgecssResult.includes('some-item:nth-of-type(-1n+6)')).toBe(true)
+    })
+
+    it('finds some-item:nth-of-type(-n+6)', () => {
+        expect(purgecssResult.includes('some-item:nth-of-type(-n+6)')).toBe(true)
+    })
+
     it('removes unused:only-child()', () => {
         expect(purgecssResult.includes('unused:only-child()')).toBe(false)
     })

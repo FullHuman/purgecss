@@ -305,7 +305,7 @@ class Purgecss {
                             selectorsInRule.push(value)
                         } else if (
                             type === 'tag' &&
-                            !/[+]|(even)|(odd)|^from$|^to$|^\d/.test(value)
+                            !/[+]|n|-|(even)|(odd)|^from$|^to$|^\d/.test(value)
                         ) {
                             // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
                             selectorsInRule.push(value)
