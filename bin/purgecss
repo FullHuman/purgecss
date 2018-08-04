@@ -53,11 +53,8 @@ if ((typeof argv.config === "undefined") && (typeof argv.css === "undefined" || 
     yargsBin.showHelp("log")
     return
 }
-if (argv.config) {
-    purgecss = new Purgecss(argv.config)
-} else {
-    purgecss = new Purgecss(options)
-}
+
+purgecss = new Purgecss(argv.config ? Object.assign(options, {config: argv.config}) : options)
 
 if (argv.out) {
     var result = purgecss.purge()
