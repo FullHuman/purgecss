@@ -63,7 +63,7 @@
     "jest": "^23.4.2",
     "prettier": "^1.14.0",
     "regenerator-runtime": "^0.12.0",
-    "rollup": "^0.63.4",
+    "rollup": "^0.64.0",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
