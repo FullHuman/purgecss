@@ -39,9 +39,14 @@ class Purgecss {
     selectorsRemoved: Set<string> = new Set()
     ignore: boolean = false
 
-    constructor(options: Options | string) {
-        if (typeof options === 'string' || typeof options === 'undefined')
-            options = this.loadConfigFile(options)
+    constructor(options: Options | string, config: string) {
+        if (typeof options === 'string' || typeof options === 'undefined') {
+            options = this.loadConfigFile(config)
+        } else {
+            if (config)
+                options = Object.assign(options, this.loadConfigFile(config))
+        }
+
         this.checkOptions(options)
         this.options = Object.assign(defaultOptions, options)
     }
