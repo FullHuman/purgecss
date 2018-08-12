@@ -54,7 +54,7 @@ if ((typeof argv.config === "undefined") && (typeof argv.css === "undefined" || 
     return
 }
 
-purgecss = new Purgecss(argv.config ? Object.assign(options, {config: argv.config}) : options)
+purgecss = new Purgecss(options, argv.config || null)
 
 if (argv.out) {
     var result = purgecss.purge()
