@@ -62,16 +62,24 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].css"
+      filename: "[name].css",
     }),
     new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true })
-    })
+      paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+    }),
   ]
 }
-
-
 ```
+### Multiple paths
+If you need multiple paths use the npm package `glob-all` instead of `glob`, then you can use this syntax:
+```javascript
+new PurgecssPlugin({
+  paths: glob.sync([
+    // ...
+  ])
+}),
+```
+to filter out directories see the glob-all documentation [here](https://www.npmjs.com/package/glob-all#filtering-out-directories).
 
 ### Webpack 3 (with extract-text-webpack-plugin)
 ```js
