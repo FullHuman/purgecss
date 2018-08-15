@@ -3,7 +3,7 @@
 
 ## Created with create-react-app
 
-This example shows how to set up Purgecss with vue-webpack template.\
+This example shows how to set up Purgecss with create-react-app.\
 Once you initialized your project with `npx create-react-app app`, install the webpack plugin
 for purgecss:
 
