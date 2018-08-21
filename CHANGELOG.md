@@ -1,5 +1,10 @@
 # Changelog
 
+# v1.1.0 - 2018-08-21
+
+* fix issue #92 where value between rounded brackets for nth-child and nth-of-type pseudo-class gets purged if it starts with 'n' or '-n'
+* Update dependencies, including PostCSS 7
+
 # v1.0.0 - 2018-05-22
 
 * Merge https://github.com/FullHuman/purgecss/pull/81, fixing https://github.com/FullHuman/purgecss/issues/80
