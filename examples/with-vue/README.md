@@ -1,39 +1,38 @@
-# with-vue-webpack
+# with Vue CLI 3
 
 > A Vue.js project
 
 ## Created with vue-cli
 
-This example shows how to set up Purgecss with vue-webpack template.\
-Once you initialized your project with `vue init webpack`, install the webpack plugin
-for purgecss:
+This example shows how to set up Purgecss with a newly create Vue CLI 3 app.
+Once you initialized your project with `vue create app-name`, install the webpack plugin for purgecss and path:
 
 ```
-npm i --save-dev glob-all purgecss-webpack-plugin
+npm i --save-dev glob-all purgecss-webpack-plugin path
 ```
 
-You need to modify the file `webpack.prod.conf.js` by adding the following code:
+Based on the options you chose, you project may or may not have a vue.config.js file in the root directory.
+If it doesn't exist, create it with the following content:
 
-line 13
-
-```js
-// import Purgecss webpack plugin and glob-all
-const PurgecssPlugin = require('purgecss-webpack-plugin')
-const glob = require('glob-all')
 ```
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
+const path = require('path');
 
-line 58
-
-```js
-    // Remove unused CSS using purgecss. See https://github.com/FullHuman/purgecss
-    // for more information about purgecss.
-    new PurgecssPlugin({
-      paths: glob.sync([
-        path.join(__dirname, './../src/index.html'),
-        path.join(__dirname, './../**/*.vue'),
-        path.join(__dirname, './../src/**/*.js')
-      ])
-    }),
+module.exports = {
+  configureWebpack: {
+    // Merged into the final Webpack config
+    plugins: [
+      new PurgecssPlugin({
+        paths: glob.sync([
+          path.join(__dirname, './src/index.html'),
+          path.join(__dirname, './**/*.vue'),
+          path.join(__dirname, './src/**/*.js')
+        ])
+      })
+    ]
+  }
+}
 ```
 
 ## Results
