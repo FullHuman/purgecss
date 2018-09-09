@@ -3,21 +3,31 @@ import PluginError from 'plugin-error';
 import Purgecss from 'purgecss';
 import glob from 'glob';
 
-var toConsumableArray = function (arr) {
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
 
     return arr2;
-  } else {
-    return Array.from(arr);
   }
-};
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
 
 var PLUGIN_NAME = 'gulp-purgecss';
 
 var getFiles = function getFiles(contentArray) {
   return contentArray.reduce(function (acc, content) {
-    return [].concat(toConsumableArray(acc), toConsumableArray(glob.sync(content)));
+    return _toConsumableArray(acc).concat(_toConsumableArray(glob.sync(content)));
   }, []);
 };
 
@@ -26,8 +36,8 @@ var gulpPurgecss = function gulpPurgecss(options) {
     var _this = this;
 
     // empty
-    if (file.isNull()) return callback(null, file);
-    // buffer
+    if (file.isNull()) return callback(null, file); // buffer
+
     if (file.isBuffer()) {
       try {
         var optionsGulp = Object.assign(options, {
@@ -43,15 +53,19 @@ var gulpPurgecss = function gulpPurgecss(options) {
       } catch (e) {
         this.emit('error', new PluginError(PLUGIN_NAME, e.message));
       }
-    }
-    // stream
+    } // stream
+
+
     if (file.isStream()) {
       var css = '';
       file.on('readable', function (buffer) {
         css += buffer.read().toString();
       }).on('end', function () {
         try {
-          var _optionsGulp = Object.assign(options, { css: [css] });
+          var _optionsGulp = Object.assign(options, {
+            css: [css]
+          });
+
           var _result = new Purgecss(_optionsGulp).purge()[0].css;
           file.contents = new Buffer(_result);
           callback(null, file);

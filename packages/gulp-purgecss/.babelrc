@@ -2,13 +2,13 @@
     "env": {
         "test": {
             "presets": [
-                "env"
+                "@babel/preset-env"
             ]
         },
         "development": {
             "presets": [
                 [
-                    "env",
+                    "@babel/preset-env",
                     {
                         "targets": {
                             "browsers": [
@@ -18,9 +18,6 @@
                         "modules": false
                     }
                 ]
-            ],
-            "plugins": [
-                "external-helpers"
             ]
         }
     }
