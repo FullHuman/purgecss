@@ -1,13 +1,13 @@
 {
   "env": {
     "test": {
-      "presets": ["env"],
-      "plugins": ["syntax-object-rest-spread", "transform-object-rest-spread"]
+      "presets": ["@babel/preset-env"],
+      "plugins": ["@babel/plugin-syntax-object-rest-spread", "@babel/plugin-proposal-object-rest-spread"]
     },
     "development": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": ["last 2 versions"]
@@ -17,9 +17,8 @@
         ]
       ],
       "plugins": [
-        "external-helpers",
-        "syntax-object-rest-spread",
-        "transform-object-rest-spread"
+        "@babel/plugin-syntax-object-rest-spread",
+        "@babel/plugin-proposal-object-rest-spread"
       ]
     }
   }
