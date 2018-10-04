@@ -65,7 +65,6 @@
     "webpack-sources": "^1.2.0"
   },
   "peerDependencies": {
-    "webpack": "^4 || ^3",
-    "webpack-cli": "^3"
+    "webpack": "^4 || ^3"
   }
 }
