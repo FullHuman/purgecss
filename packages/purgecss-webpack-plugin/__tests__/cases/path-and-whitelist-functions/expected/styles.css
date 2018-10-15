@@ -10,6 +10,10 @@
   color: rebeccapurple;
 }
 
+.whitelistedPatternChildren > p a {
+  color: orange;
+}
+
 md\:w-2\/3 {
   color: red;
 }

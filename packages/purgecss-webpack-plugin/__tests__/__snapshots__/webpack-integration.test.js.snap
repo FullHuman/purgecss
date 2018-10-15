@@ -13,6 +13,10 @@ exports[`Webpack Integration Tests path-and-whitelist-functions 1`] = `
   color: rebeccapurple;
 }
 
+.whitelistedPatternChildren > p a {
+  color: orange;
+}
+
 md\\\\:w-2\\\\/3 {
   color: red;
 }

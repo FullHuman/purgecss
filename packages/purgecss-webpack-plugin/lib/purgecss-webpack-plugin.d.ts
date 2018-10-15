@@ -11,6 +11,7 @@ interface _Options extends Partial<PurgecssOptions> {
   content?: never
   whitelist?: any
   whitelistPatterns?: any
+  whitelistPatternsChildren?: any
 }
 
 declare namespace PurgecssWebpackPlugin {
@@ -18,7 +19,8 @@ declare namespace PurgecssWebpackPlugin {
     paths: string[] | (() => string[])
     only?: string[]
     whitelist?: string[] | (() => string[])
-    whitelistPatterns?: RegExp[] | (() => RegExp[])
+    whitelistPatterns?: RegExp[] | (() => RegExp[]),
+    whitelistPatternsChildren?: RegExp[] | (() => RegExp[]),
   }
 }
 

@@ -254,6 +254,10 @@ function () {
             options.whitelistPatterns = options.whitelistPatterns();
           }
 
+          if (typeof options.whitelistPatternsChildren === 'function') {
+            options.whitelistPatternsChildren = options.whitelistPatternsChildren();
+          }
+
           var purgecss = new Purgecss(options);
           compilation.assets[name] = new ConcatSource(purgecss.purge()[0].css);
         });
