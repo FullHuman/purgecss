@@ -62,7 +62,7 @@ const purgeCss = new Purgecss({
   content: ['**/*.html'],
   css: ['**/*.css']
 })
-const result = purgecss.purge()
+const result = purgeCss.purge()
 ```
 
 With a custom extractor:
@@ -80,7 +80,7 @@ const purgeCss = new Purgecss({
     }
   ]
 })
-const result = purgecss.purge()
+const result = purgeCss.purge()
 ```
 
 ### Build Plugin
