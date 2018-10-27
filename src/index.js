@@ -250,8 +250,6 @@ class Purgecss {
         arraySelector.forEach(selector => {
             selectors.add(selector)
         })
-        // Remove empty string
-        selectors.delete('')
         return selectors
     }
 
