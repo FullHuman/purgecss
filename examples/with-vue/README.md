@@ -11,10 +11,10 @@ Once you initialized your project with `vue create app-name`, install the webpac
 npm i --save-dev glob-all purgecss-webpack-plugin path
 ```
 
-Based on the options you chose, you project may or may not have a vue.config.js file in the root directory.
+Based on the options you choose, you project may or may not have a `vue.config.js` file in the root directory.
 If it doesn't exist, create it with the following content:
 
-```
+```js
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const glob = require('glob-all');
 const path = require('path');
