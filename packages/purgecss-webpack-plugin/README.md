@@ -184,6 +184,10 @@ new PurgecssPlugin({
 })
 ```
 
+* #### rejected
+
+If `true` all removed selectors are added to the [Stats Data](https://webpack.js.org/api/stats/) as `purged`.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.

@@ -8,6 +8,7 @@ let webpackVersion = 4
 
 const styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less']
 const pluginName = 'PurgeCSS'
+const purgedStats = {}
 
 export default class PurgecssPlugin {
     constructor(options) {
@@ -23,10 +24,23 @@ export default class PurgecssPlugin {
             compiler.hooks.compilation.tap(pluginName, compilation => {
                 this.initializePlugin(compilation)
             })
+            compiler.hooks.done.tapAsync(pluginName, (stats, cb) => {
+                this.addStats(stats);
+                cb();
+            })
         } else {
             compiler.plugin('this-compilation', compilation => {
                 this.initializePlugin(compilation)
             })
+            compiler.plugin('done', stats => {
+                this.addStats(stats)
+            })
+        }
+    }
+
+    addStats(stats) {
+        if (this.options.rejected) {
+            stats.purged = purgedStats
         }
     }
 
@@ -100,8 +114,15 @@ export default class PurgecssPlugin {
                 if (typeof options.whitelistPatternsChildren === 'function') {
                     options.whitelistPatternsChildren = options.whitelistPatternsChildren()
                 }
+
                 const purgecss = new Purgecss(options)
-                compilation.assets[name] = new ConcatSource(purgecss.purge()[0].css)
+                const purged = purgecss.purge()[0];
+
+                if (purged.rejected) {
+                    purgedStats[name] = purged.rejected;
+                }
+
+                compilation.assets[name] = new ConcatSource(purged.css)
             })
         })
 

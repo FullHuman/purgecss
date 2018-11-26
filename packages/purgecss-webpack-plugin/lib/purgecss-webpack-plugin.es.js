@@ -155,6 +155,7 @@ var files = function files(chunk) {
 var webpackVersion = 4;
 var styleExtensions = ['.css', '.scss', '.styl', '.sass', '.less'];
 var pluginName = 'PurgeCSS';
+var purgedStats = {};
 
 var PurgecssPlugin =
 /*#__PURE__*/
@@ -178,10 +179,25 @@ function () {
         compiler.hooks.compilation.tap(pluginName, function (compilation) {
           _this.initializePlugin(compilation);
         });
+        compiler.hooks.done.tapAsync(pluginName, function (stats, cb) {
+          _this.addStats(stats);
+
+          cb();
+        });
       } else {
         compiler.plugin('this-compilation', function (compilation) {
           _this.initializePlugin(compilation);
         });
+        compiler.plugin('done', function (stats) {
+          _this.addStats(stats);
+        });
+      }
+    }
+  }, {
+    key: "addStats",
+    value: function addStats(stats) {
+      if (this.options.rejected) {
+        stats.purged = purgedStats;
       }
     }
   }, {
@@ -259,7 +275,13 @@ function () {
           }
 
           var purgecss = new Purgecss(options);
-          compilation.assets[name] = new ConcatSource(purgecss.purge()[0].css);
+          var purged = purgecss.purge()[0];
+
+          if (purged.rejected) {
+            purgedStats[name] = purged.rejected;
+          }
+
+          compilation.assets[name] = new ConcatSource(purged.css);
         });
       });
       callback();
