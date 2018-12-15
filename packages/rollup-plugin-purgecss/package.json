@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/FullHuman/rollup-plugin-purgecss#readme",
   "devDependencies": {
-    "ava": "^0.25.0",
+    "ava": "^1.0.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.0.1",
