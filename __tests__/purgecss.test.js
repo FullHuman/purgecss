@@ -350,6 +350,10 @@ describe('keyframes', () => {
     it('removes flash', () => {
         expect(purgecssResult.includes('@keyframes flash')).toBe(false)
     })
+    it('keeps keyframes from animations with multiple keyframes', () => {
+        expect(purgecssResult.includes('@keyframes scale')).toBe(true)
+        expect(purgecssResult.includes('@keyframes spin')).toBe(true)
+    })
 })
 
 describe('pseudo selectors', () => {

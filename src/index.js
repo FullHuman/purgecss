@@ -327,7 +327,7 @@ class Purgecss {
             for (const { prop, value } of node.nodes) {
                 if (this.options.keyframes) {
                     if (prop === 'animation' || prop === 'animation-name') {
-                        for (const word of value.split(' ')) {
+                        for (const word of value.split(/[\s,]+/)) {
                             this.usedAnimations.add(word)
                         }
                     }
