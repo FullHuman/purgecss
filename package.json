@@ -47,7 +47,7 @@
   "dependencies": {
     "glob": "^7.1.2",
     "postcss": "^7.0.0",
-    "postcss-selector-parser": "^5.0.0-rc.3",
+    "postcss-selector-parser": "^6.0.0",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
