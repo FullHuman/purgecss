@@ -68,5 +68,5 @@ if (argv.out) {
         })
     }
 } else {
-    console.log(purgecss.purge())
+    console.log(JSON.stringify(purgecss.purge()))
 }
