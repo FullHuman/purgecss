@@ -319,6 +319,26 @@ describe('special characters, with custom Extractor', () => {
     })
 })
 
+describe('special characters, with custom Extractor as a function', () => {
+    let purgecssResult
+    beforeAll(() => {
+        purgecssResult = new Purgecss({
+            content: [`${root}special_characters/special_characters.js`],
+            css: [`${root}special_characters/special_characters.css`],
+            extractors: [
+                {
+                    extractor: content => content.match(/[A-z0-9-:/]+/g),
+                    extensions: ['html', 'js']
+                }
+            ]
+        }).purge()[0].css
+    })
+
+    it('finds tailwind class', () => {
+        expect(purgecssResult.includes('md\\:w-1\\/3')).toBe(true)
+    })
+})
+
 describe('nth-child', () => {
     let purgecssResult
     beforeAll(() => {

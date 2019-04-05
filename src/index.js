@@ -241,9 +241,12 @@ class Purgecss {
      * @param {string} content Content (e.g: html file)
      * @param {object} extractor Purgecss extractor use to extract the selector
      */
-    extractSelectors(content: string, extractor: Object): Set<string> {
+    extractSelectors(content: string, extractor: Object | Function): Set<string> {
         let selectors = new Set()
-        const arraySelector = extractor.extract(content)
+
+        const arraySelector = typeof extractor.extract === 'undefined'
+            ? extractor(content)
+            : extractor.extract(content)
         if (arraySelector === null) {
             throw new Error(ERROR_EXTRACTER_FAILED)
         }
