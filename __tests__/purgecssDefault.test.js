@@ -274,6 +274,20 @@ describe('purge methods with files and default extractor', () => {
         })
     })
 
+    describe('tables', () => {
+        let purgecssResult
+        beforeAll(() => {
+            purgecssResult = new Purgecss({
+                content: [`${root}tables/tables.html`],
+                css: [`${root}tables/tables.css`]
+            }).purge()[0].css
+        })
+
+        it('keeps css', () => {
+            expect(purgecssResult.includes('white-space')).toBe(true)
+        })
+    })
+
     // Keyframe tests
     describe('purge unused keyframe animations', () => {
         let purgecssResult
