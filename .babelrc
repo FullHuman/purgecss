@@ -2,20 +2,20 @@
     "env": {
         "test": {
             "presets": [
-                "flow",
-                "env"
+                "@babel/preset-flow",
+                "@babel/preset-env"
             ],
             "plugins": [
-                "transform-class-properties"
+                "@babel/plugin-proposal-class-properties"
             ]
         },
         "development": {
             "presets": [
                 [
-                    "flow"
+                    "@babel/preset-flow"
                 ],
                 [
-                    "env",
+                    "@babel/preset-env",
                     {
                         "targets": {
                             "browsers": [
@@ -27,8 +27,7 @@
                 ]
             ],
             "plugins": [
-                "external-helpers",
-                "transform-class-properties"
+                "@babel/plugin-proposal-class-properties"
             ]
         }
     }
