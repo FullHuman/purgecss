@@ -230,9 +230,9 @@ class Purgecss {
     getFileExtractor(filename: string, extractors: Array<ExtractorsObj> = []) {
         if (!extractors.length) return DefaultExtractor
 
-        const extractorObj: any = extractors.find(extractor =>
+        const extractorObj = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
-        )
+        ) || DefaultExtractor
         return extractorObj.extractor
     }
 
