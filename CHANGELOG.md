@@ -1,5 +1,13 @@
 # Changelog
 
+# v1.2.0 - 2019-04-05
+
+* fix issue https://github.com/FullHuman/purgecss/issues/148, so the default extract is used for any file type that is not specified
+* Merged https://github.com/FullHuman/purgecss/pull/167, fixing issue #166
+* Merged https://github.com/FullHuman/purgecss/pull/176, fixing invalid json output by the CLI
+* Update dependencies
+* Update dev dependencies, including babel 7
+
 # v1.1.0 - 2018-08-21
 
 * fix issue #92 where value between rounded brackets for nth-child and nth-of-type pseudo-class gets purged if it starts with 'n' or '-n'
