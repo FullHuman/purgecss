@@ -495,6 +495,7 @@ describe('rejected', () => {
         }).purge()[0]
         expect(purgecssResult.rejected).toEqual([
             '.parent1 p',
+            '.parent1 h1',
             '.parent1.d22222ef',
             '.parent1.d222222222222222222ef',
             '.parent.def1',
