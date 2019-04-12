@@ -11,6 +11,21 @@ describe('purge methods with files and default extractor', () => {
         expect(received.includes('.ui.grid')).toBe(true)
     })
 
+    it('uses default extractor if no other extractor matches', () => {
+        const purgeCss = new Purgecss({
+            content: ['./__tests__/test_examples/attribute_selector/attribute_selector.html'],
+            css: ['./__tests__/test_examples/attribute_selector/attribute_selector.css'],
+            extractors: [
+                {
+                    extractor: undefined,
+                    extensions: ['never_heard_of_please_use_default']
+                }
+            ]
+        })
+        const received = purgeCss.purge()[0].css
+        expect(received.includes('.ui.grid')).toBe(true)
+    })
+
     describe('purges correctly (find intact classes) with default extractor', () => {
         let purgecssResult
         beforeAll(() => {
