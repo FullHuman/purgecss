@@ -232,7 +232,7 @@ class Purgecss {
 
         const extractorObj = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
-        ) || DefaultExtractor
+        ) || { extractor: DefaultExtractor }
         return extractorObj.extractor
     }
 
