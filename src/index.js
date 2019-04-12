@@ -43,7 +43,7 @@ class Purgecss {
         if (typeof options === 'string' || typeof options === 'undefined')
             options = this.loadConfigFile(options)
         this.checkOptions(options)
-        this.options = Object.assign(defaultOptions, options)
+        this.options = Object.assign({}, defaultOptions, options)
     }
 
     /**
