@@ -1,8 +1,11 @@
 // @flow
 
+import DefaultExtractor from '../Extractors/DefaultExtractor'
+
 const defaultOptions: Options = {
     css: [],
     content: [],
+    defaultExtractor: DefaultExtractor,
     extractors: [],
     whitelist: [],
     output: undefined,
