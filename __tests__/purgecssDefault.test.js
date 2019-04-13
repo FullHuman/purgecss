@@ -287,6 +287,10 @@ describe('purge methods with files and default extractor', () => {
         it('removes a.link', () => {
             expect(purgecssResult.includes('a.link')).toBe(false)
         })
+
+        it('conserves empty attributes', () => {
+            expect(purgecssResult.includes('input[value=""]')).toBe(true);
+        })
     })
 
     describe('tables', () => {

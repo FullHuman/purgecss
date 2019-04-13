@@ -29,3 +29,7 @@ a.link[href*='github.com'] {
 .flexgrid > *[class*='w-'] {
   color: grey;
 }
+
+input[value=""] {
+  color: red;
+}
