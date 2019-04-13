@@ -43,7 +43,7 @@ class Purgecss {
         if (typeof options === 'string' || typeof options === 'undefined')
             options = this.loadConfigFile(options)
         this.checkOptions(options)
-        this.options = Object.assign(defaultOptions, options)
+        this.options = Object.assign({}, defaultOptions, options)
     }
 
     /**
@@ -232,7 +232,7 @@ class Purgecss {
 
         const extractorObj = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
-        ) || DefaultExtractor
+        ) || { extractor: DefaultExtractor }
         return extractorObj.extractor
     }
 
