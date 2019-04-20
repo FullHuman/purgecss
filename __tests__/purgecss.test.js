@@ -366,7 +366,7 @@ describe('special characters, overriding the default Extractor with a function',
         purgecssResult = new Purgecss({
             content: [`${root}special_characters/special_characters.js`],
             css: [`${root}special_characters/special_characters.css`],
-            defaultExtractor: content => content.match(/[A-z0-9-:/]+/g),
+            defaultExtractor: content => content.match(/[A-z0-9-:/]+/g)
         }).purge()[0].css
     })
 

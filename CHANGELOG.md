@@ -1,5 +1,10 @@
 # Changelog
 
+# v1.3.0 - 2019-04-20
+
+* Merged https://github.com/FullHuman/purgecss/pull/183, adding `defaultExtractor` option
+* remove ignore comment once purged, issue https://github.com/FullHuman/purgecss/issues/121
+
 # v1.2.0 - 2019-04-05
 
 * fix issue https://github.com/FullHuman/purgecss/issues/148, so the default extract is used for any file type that is not specified

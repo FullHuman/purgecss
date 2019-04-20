@@ -217,7 +217,6 @@ describe('purge methods with files and default extractor', () => {
         })
 
         it('removes the comment', () => {
-            console.log(purgecssResult)
             expect(purgecssResult.includes('/* purgecss ignore */')).toBe(false)
         })
     })
@@ -242,7 +241,6 @@ describe('purge methods with files and default extractor', () => {
         })
 
         it('removes the comments', () => {
-            console.log(purgecssResult)
             expect(purgecssResult.includes('/* purgecss start ignore */')).toBe(false)
             expect(purgecssResult.includes('/* purgecss end ignore */')).toBe(false)
         })
@@ -399,7 +397,6 @@ describe('purge methods with files and default extractor', () => {
                 ],
                 keyframes: false
             }).purge()[0].css
-            // console.log(purgecssResult)
         })
         it('keeps `99.9%`', () => {
             expect(purgecssResult.includes('99.9%')).toBe(true)
