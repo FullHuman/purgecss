@@ -25,8 +25,6 @@ import {
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
-import DefaultExtractor from './Extractors/DefaultExtractor'
-
 class Purgecss {
     options: Options
     root: Object
@@ -228,11 +226,11 @@ class Purgecss {
      * @param {array} extractors Array of extractors definition objects
      */
     getFileExtractor(filename: string, extractors: Array<ExtractorsObj> = []) {
-        if (!extractors.length) return DefaultExtractor
+        if (!extractors.length) return this.options.defaultExtractor
 
         const extractorObj = extractors.find(extractor =>
             extractor.extensions.find(ext => filename.endsWith(ext))
-        ) || { extractor: DefaultExtractor }
+        ) || { extractor: this.options.defaultExtractor }
         return extractorObj.extractor
     }
 

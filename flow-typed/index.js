@@ -8,6 +8,7 @@ type RawContent = {
 declare type Options = {
   content: Array<string | RawContent>,
   css: Array<string | RawContent>,
+  defaultExtractor?: Object,
   extractors?: Array<ExtractorsObj>,
   whitelist?: Array<string>,
   whitelistPatterns?: Array<RegExp>,
