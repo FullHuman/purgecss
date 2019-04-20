@@ -89,12 +89,12 @@ class Purgecss {
         // Get selectors from content files
         const { content, extractors, css } = this.options
 
-        const fileFormatContents = ((content.filter(o => typeof o === 'string'): Array<any>): Array<
-            string
-        >)
-        const rawFormatContents = ((content.filter(o => typeof o === 'object'): Array<any>): Array<
-            RawContent
-        >)
+        const fileFormatContents = ((content.filter(
+            o => typeof o === 'string'
+        ): Array<any>): Array<string>)
+        const rawFormatContents = ((content.filter(
+            o => typeof o === 'object'
+        ): Array<any>): Array<RawContent>)
 
         const cssFileSelectors = this.extractFileSelector(fileFormatContents, extractors)
         const cssRawSelectors = this.extractRawSelector(rawFormatContents, extractors)
@@ -244,9 +244,10 @@ class Purgecss {
     extractSelectors(content: string, extractor: Object | Function): Set<string> {
         let selectors = new Set()
 
-        const arraySelector = typeof extractor.extract === 'undefined'
-            ? extractor(content)
-            : extractor.extract(content)
+        const arraySelector =
+            typeof extractor.extract === 'undefined'
+                ? extractor(content)
+                : extractor.extract(content)
         if (arraySelector === null) {
             throw new Error(ERROR_EXTRACTER_FAILED)
         }
@@ -271,8 +272,15 @@ class Purgecss {
                 return this.evaluateAtRule(node)
             }
             if (node.type === 'comment') {
-                if (this.isIgnoreAnnotation(node, 'start')) this.ignore = true
-                else if (this.isIgnoreAnnotation(node, 'end')) this.ignore = false
+                if (this.isIgnoreAnnotation(node, 'start')) {
+                    this.ignore = true
+                    // remove ignore annotation
+                    node.remove()
+                } else if (this.isIgnoreAnnotation(node, 'end')) {
+                    this.ignore = false
+                    // remove ignore annotation
+                    node.remove()
+                }
             }
         })
     }
@@ -284,7 +292,15 @@ class Purgecss {
      */
     evaluateRule(node: Object, selectors: Set<string>) {
         const annotation = node.prev()
-        if (this.isIgnoreAnnotation(annotation, 'next') || this.ignore === true) return
+        if (this.ignore) return
+        if (
+            typeof annotation !== 'undefined' &&
+            annotation.type === 'comment' &&
+            this.isIgnoreAnnotation(annotation, 'next')
+        ) {
+            annotation.remove()
+            return
+        }
 
         let keepSelector = true
         node.selector = selectorParser(selectorsParsed => {

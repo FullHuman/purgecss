@@ -204,13 +204,21 @@ describe('purge methods with files and default extractor', () => {
     })
 
     describe('ignore comment', () => {
-        it('ignores h1', () => {
+        let purgecssResult
+        beforeAll(() => {
             const purgecss = new Purgecss({
                 content: [`${root}ignore_comment/ignore_comment.html`],
                 css: [`${root}ignore_comment/ignore_comment.css`]
             })
-            const result = purgecss.purge()[0].css
-            expect(result.includes('h1')).toBe(true)
+            purgecssResult = purgecss.purge()[0].css
+        })
+        it('ignores h1', () => {
+            expect(purgecssResult.includes('h1')).toBe(true)
+        })
+
+        it('removes the comment', () => {
+            console.log(purgecssResult)
+            expect(purgecssResult.includes('/* purgecss ignore */')).toBe(false)
         })
     })
 
@@ -231,6 +239,12 @@ describe('purge methods with files and default extractor', () => {
 
         it('removes h4', () => {
             expect(purgecssResult.includes('h4')).toBe(false)
+        })
+
+        it('removes the comments', () => {
+            console.log(purgecssResult)
+            expect(purgecssResult.includes('/* purgecss start ignore */')).toBe(false)
+            expect(purgecssResult.includes('/* purgecss end ignore */')).toBe(false)
         })
     })
 
@@ -289,7 +303,7 @@ describe('purge methods with files and default extractor', () => {
         })
 
         it('conserves empty attributes', () => {
-            expect(purgecssResult.includes('input[value=""]')).toBe(true);
+            expect(purgecssResult.includes('input[value=""]')).toBe(true)
         })
     })
 
