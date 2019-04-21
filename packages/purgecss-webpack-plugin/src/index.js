@@ -25,8 +25,8 @@ export default class PurgecssPlugin {
                 this.initializePlugin(compilation)
             })
             compiler.hooks.done.tapAsync(pluginName, (stats, cb) => {
-                this.addStats(stats);
-                cb();
+                this.addStats(stats)
+                cb()
             })
         } else {
             compiler.plugin('this-compilation', compilation => {
@@ -116,10 +116,10 @@ export default class PurgecssPlugin {
                 }
 
                 const purgecss = new Purgecss(options)
-                const purged = purgecss.purge()[0];
+                const purged = purgecss.purge()[0]
 
                 if (purged.rejected) {
-                    purgedStats[name] = purged.rejected;
+                    purgedStats[name] = purged.rejected
                 }
 
                 compilation.assets[name] = new ConcatSource(purged.css)

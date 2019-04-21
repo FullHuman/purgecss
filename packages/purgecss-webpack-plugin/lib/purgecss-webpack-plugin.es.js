@@ -95,7 +95,7 @@ var entryPaths = function entryPaths(paths) {
 };
 var flatten = function flatten(paths) {
   return Array.isArray(paths) ? paths : Object.keys(paths).reduce(function (acc, val) {
-    return _toConsumableArray(acc).concat(_toConsumableArray(paths[val]));
+    return [].concat(_toConsumableArray(acc), _toConsumableArray(paths[val]));
   }, []);
 };
 var entries = function entries(paths, chunkName) {
@@ -205,24 +205,24 @@ function () {
     value: function initializePlugin(compilation) {
       var _this2 = this;
 
-      var entryPaths$$1 = entryPaths(this.options.paths);
-      flatten(entryPaths$$1).forEach(function (p) {
+      var entryPaths$1 = entryPaths(this.options.paths);
+      flatten(entryPaths$1).forEach(function (p) {
         if (!fs.existsSync(p)) throw new Error("Path ".concat(p, " does not exist."));
       });
 
       if (webpackVersion === 4) {
         compilation.hooks.additionalAssets.tap(pluginName, function () {
-          _this2.runPluginHook(compilation, entryPaths$$1);
+          _this2.runPluginHook(compilation, entryPaths$1);
         });
       } else {
         compilation.plugin('additional-assets', function (callback) {
-          _this2.runPluginHook(compilation, entryPaths$$1, callback);
+          _this2.runPluginHook(compilation, entryPaths$1, callback);
         });
       }
     }
   }, {
     key: "runPluginHook",
-    value: function runPluginHook(compilation, entryPaths$$1) {
+    value: function runPluginHook(compilation, entryPaths) {
       var _this3 = this;
 
       var callback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {};
@@ -230,24 +230,24 @@ function () {
 
       compilation.chunks.forEach(function (chunk) {
         var chunkName = chunk.name,
-            files$$1 = chunk.files;
+            files$1 = chunk.files;
         var assetsToPurge = assetsFromCompilation.filter(function (asset) {
           if (_this3.options.only) {
             return [].concat(_this3.options.only).some(function (only) {
               return asset.name.indexOf(only) >= 0;
             });
           } else {
-            return files$$1.indexOf(asset.name) >= 0;
+            return files$1.indexOf(asset.name) >= 0;
           }
         });
         assetsToPurge.forEach(function (_ref) {
           var name = _ref.name,
               asset = _ref.asset;
-          var filesToSearch = entries(entryPaths$$1, chunkName).concat(files(chunk, _this3.options.moduleExtensions || [], function (file) {
+          var filesToSearch = entries(entryPaths, chunkName).concat(files(chunk, _this3.options.moduleExtensions || [], function (file) {
             return file.resource;
           }, webpackVersion)).filter(function (v) {
-            for (var _i = 0; _i < styleExtensions.length; _i++) {
-              var ext = styleExtensions[_i];
+            for (var _i = 0, _styleExtensions = styleExtensions; _i < _styleExtensions.length; _i++) {
+              var ext = _styleExtensions[_i];
               if (v.endsWith(ext)) return false;
             }
 
