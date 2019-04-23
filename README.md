@@ -123,7 +123,7 @@ Below is the list of the purifycss repositories:
 
 * [purifycss](https://github.com/purifycss/purifycss)
 * [gulp-purifycss](https://github.com/purifycss/gulp-purifycss)
-* [purifycss-webpack](https://github.com/webpack-contrib/purifycss-webpack)
+* [purifycss-webpack](https://github.com/FullHuman/purgecss-webpack-plugin)
 
 ## License
 
