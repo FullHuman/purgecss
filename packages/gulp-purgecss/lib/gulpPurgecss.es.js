@@ -27,7 +27,7 @@ var PLUGIN_NAME = 'gulp-purgecss';
 
 var getFiles = function getFiles(contentArray) {
   return contentArray.reduce(function (acc, content) {
-    return _toConsumableArray(acc).concat(_toConsumableArray(glob.sync(content)));
+    return [].concat(_toConsumableArray(acc), _toConsumableArray(glob.sync(content)));
   }, []);
 };
 
@@ -47,7 +47,8 @@ var gulpPurgecss = function gulpPurgecss(options) {
           }],
           stdin: true
         });
-        var result = new Purgecss(optionsGulp).purge()[0].css;
+        var purge = new Purgecss(optionsGulp).purge()[0];
+        var result = optionsGulp.rejected ? purge.rejected.join(' {}\n') + ' {}' : purge.css;
         file.contents = new Buffer(result);
         callback(null, file);
       } catch (e) {
@@ -66,7 +67,10 @@ var gulpPurgecss = function gulpPurgecss(options) {
             css: [css]
           });
 
-          var _result = new Purgecss(_optionsGulp).purge()[0].css;
+          var _purge = new Purgecss(_optionsGulp).purge()[0];
+
+          var _result = _optionsGulp.rejected ? _purge.rejected.join(' {}\n') + ' {}' : _purge.css;
+
           file.contents = new Buffer(_result);
           callback(null, file);
         } catch (e) {

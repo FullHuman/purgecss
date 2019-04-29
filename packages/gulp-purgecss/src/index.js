@@ -26,7 +26,8 @@ const gulpPurgecss = options => {
           ],
           stdin: true
         })
-        const result = new Purgecss(optionsGulp).purge()[0].css
+        const purge = new Purgecss(optionsGulp).purge()[0]
+        const result = optionsGulp.rejected ? purge.rejected.join(' {}\n') + ' {}' : purge.css
         file.contents = new Buffer(result)
         callback(null, file)
       } catch (e) {
@@ -43,7 +44,8 @@ const gulpPurgecss = options => {
         .on('end', () => {
           try {
             const optionsGulp = Object.assign(options, { css: [css] })
-            const result = new Purgecss(optionsGulp).purge()[0].css
+            const purge = new Purgecss(optionsGulp).purge()[0]
+            const result = optionsGulp.rejected ? purge.rejected.join(' {}\n') + ' {}' : purge.css
             file.contents = new Buffer(result)
             callback(null, file)
           } catch (e) {
