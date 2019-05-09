@@ -300,6 +300,10 @@ class Purgecss {
             return
         }
 
+        if (node.parent && node.parent.type === 'atrule' && node.parent.name === 'keyframes') {
+            return
+        }
+
         let keepSelector = true
         node.selector = selectorParser(selectorsParsed => {
             selectorsParsed.walk(selector => {
@@ -316,8 +320,7 @@ class Purgecss {
                     for (const { type, value } of selector.nodes) {
                         if (
                             SELECTOR_STANDARD_TYPES.includes(type) &&
-                            typeof value !== 'undefined' &&
-                            /^\d/g.test(value) === false
+                            typeof value !== 'undefined'
                         ) {
                             selectorsInRule.push(value)
                         } else if (

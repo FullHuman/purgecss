@@ -317,6 +317,10 @@ describe('special characters, with custom Extractor', () => {
     it('finds tailwind class', () => {
         expect(purgecssResult.includes('md\\:w-1\\/3')).toBe(true)
     })
+
+    it('discards unused class beginning with number', () => {
+        expect(purgecssResult.includes('\\32 -panel')).toBe(false)
+    })
 })
 
 describe('special characters, with custom Extractor as a function', () => {
