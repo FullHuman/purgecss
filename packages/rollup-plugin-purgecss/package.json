@@ -35,7 +35,7 @@
     "ava": "^1.0.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
-    "eslint": "^5.0.1",
+    "eslint": "^6.0.0",
     "jest": "^23.2.0",
     "rollup": "^0.65.1",
     "rollup-plugin-babel": "^3.0.4",
