@@ -33,7 +33,7 @@ const pluginPurgecss = function (options = {}) {
                 map: { mappings: '' }
             };
         },
-        ongenerate() {
+        generateBundle() {
             if (!options.insert && (!styles.length || options.output === false)) {
                 return;
             }
