@@ -184,6 +184,14 @@ class Purgecss {
     }
 
     /**
+     * Strips quotes at the end and at the end of a string
+     * @param {string} value the string to be stripped
+     */
+    stripQuotes(value: string) {
+        return value.replace(/(^["'])|(["']$)/g, '')
+    }
+
+    /**
      * Extract the selectors present in the passed string using a purgecss extractor
      * @param {array} content Array of content
      * @param {array} extractors Array of extractors
@@ -354,7 +362,10 @@ class Purgecss {
                 }
                 if (this.options.fontFace) {
                     if (prop === 'font-family') {
-                        this.usedFontFaces.add(value)
+                        for (const fontName of value.split(',')) {
+                            const cleanedFontFace = this.stripQuotes(fontName.trim())
+                            this.usedFontFaces.add(cleanedFontFace)
+                        }
                     }
                 }
             }
@@ -381,7 +392,7 @@ class Purgecss {
             for (const { prop, value } of node.nodes) {
                 if (prop === 'font-family') {
                     this.atRules.fontFace.push({
-                        name: value,
+                        name: this.stripQuotes(value),
                         node
                     })
                 }

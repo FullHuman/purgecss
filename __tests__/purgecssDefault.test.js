@@ -364,6 +364,9 @@ describe('purge methods with files and default extractor', () => {
                 fontFace: true
             }).purge()[0].css
         })
+        it("keep @font-face 'Cerebri Bold'", () => {
+            expect(purgecssResult.includes(`src: url('../fonts/CerebriSans-Bold.eot?')`)).toBe(true)
+        })
         it("keep @font-face 'Cerebri Sans'", () => {
             expect(purgecssResult.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`)).toBe(
                 true
