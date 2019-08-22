@@ -61,7 +61,7 @@
     "codacy-coverage": "^3.4.0",
     "eslint": "^6.1.0",
     "eslint-plugin-flowtype": "^4.2.0",
-    "flow-bin": "^0.105.2",
+    "flow-bin": "^0.106.0",
     "jest": "^24.7.0",
     "prettier": "^1.17.0",
     "regenerator-runtime": "^0.13.0",
