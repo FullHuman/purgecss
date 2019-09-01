@@ -6,6 +6,13 @@
 }
 
 @font-face {
+    font-family: 'Cerebri Bold';
+    font-weight: 400;
+    font-style: normal;
+    src: url('../fonts/CerebriSans-Bold.eot?') format('eot'), url('../fonts/CerebriSans-Bold.otf') format('opentype'), url('../fonts/CerebriSans-Bold.svg#Cerebri_Sans') format('svg'), url('../fonts/CerebriSans-Bold.ttf') format('truetype'), url('../fonts/CerebriSans-Bold.woff') format('woff');
+}
+
+@font-face {
     font-family: 'OtherFont';
     font-weight: 400;
     font-style: normal;
@@ -16,7 +23,12 @@
     color: black;
 }
 
-used {
+.used {
     color: red;
     font-family: 'Cerebri Sans';
+}
+
+.used2 {
+  color: blue;
+  font-family: Cerebri Bold, serif;
 }
