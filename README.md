@@ -1,4 +1,4 @@
-# Purgecss
+# PurgeCSS
 
 [![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss)
 [![CircleCi](https://circleci.com/gh/FullHuman/purgecss/tree/master.svg?style=shield)]()
@@ -11,23 +11,23 @@
 [![license](https://img.shields.io/github/license/fullhuman/purgecss.svg)]() [![Greenkeeper badge](https://badges.greenkeeper.io/FullHuman/purgecss.svg)](https://greenkeeper.io/)
 
 <p align="center">
-	<img src="./.assets/logo.png" height="200" width="200" alt="Purgecss logo"/>
+	<img src="./.assets/logo.png" height="200" width="200" alt="PurgeCSS logo"/>
 </p>
 
-## What is purgecss?
+## What is PurgeCSS?
 
 When you are building a website, chances are that you are using a css framework
 like Bootstrap, Materializecss, Foundation, etc... But you will only use a small
 set of the framework and a lot of unused css styles will be included.
 
-This is where Purgecss comes into play. Purgecss analyzes your content and your
+This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your
 css files. Then it matches the selectors used in your files with the one in your
 content files. It removes unused selectors from your css, resulting in smaller
 css files.
 
 ## Documentation
 
-You can find the purgecss documentation
+You can find the PurgeCSS documentation
 [on this website](https://www.purgecss.com).
 
 * [Configuration](https://www.purgecss.com/configuration)
@@ -112,11 +112,11 @@ conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-Purgecss use [SemVer](http://semver.org/) for versioning.
+PurgeCSS use [SemVer](http://semver.org/) for versioning.
 
 ## Acknowledgment
 
-Purgecss was originally thought as the v2 of purifycss. And because of it, it is
+PurgeCSS was originally thought as the v2 of purifycss. And because of it, it is
 greatly inspired by it.\
 Some of the plugins such as purgecss-webpack-plugin are based on the purifycss plugin.\
 Below is the list of the purifycss repositories:

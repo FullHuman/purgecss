@@ -1,5 +1,11 @@
 # Changelog
 
+# v1.4.0 - 2019-09-01
+
+* Merged https://github.com/FullHuman/purgecss/commit/bc9f3b5b9d670832f0d1cca7bc7facfb253fb60b, ensure classes beginning with numbers are properly purged
+* Merged https://github.com/FullHuman/purgecss/pull/214, fix font-face processing
+* update dependencies
+
 # v1.3.0 - 2019-04-20
 
 * Merged https://github.com/FullHuman/purgecss/pull/183, adding `defaultExtractor` option
