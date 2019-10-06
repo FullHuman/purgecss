@@ -212,12 +212,14 @@ describe('purge methods with files and default extractor', () => {
             })
             purgecssResult = purgecss.purge()[0].css
         })
-        it('ignores h1', () => {
+        it('ignores h1 h2', () => {
             expect(purgecssResult.includes('h1')).toBe(true)
+            expect(purgecssResult.includes('h3')).toBe(true)
         })
 
         it('removes the comment', () => {
             expect(purgecssResult.includes('/* purgecss ignore */')).toBe(false)
+            expect(purgecssResult.includes('/* purgecss ignore current */')).toBe(false)
         })
     })
 

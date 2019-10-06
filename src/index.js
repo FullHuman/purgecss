@@ -20,7 +20,7 @@ import {
     ERROR_WHITELIST_PATTERNS_TYPE,
     IGNORE_ANNOTATION_NEXT,
     IGNORE_ANNOTATION_START,
-    IGNORE_ANNOTATION_END
+    IGNORE_ANNOTATION_END, IGNORE_ANNOTATION_CURRENT
 } from './constants/constants'
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
@@ -312,6 +312,10 @@ class Purgecss {
             return
         }
 
+        if (this.hasIgnoreAnnotation(node)) {
+            return
+        }
+
         let keepSelector = true
         node.selector = selectorParser(selectorsParsed => {
             selectorsParsed.walk(selector => {
@@ -418,6 +422,21 @@ class Purgecss {
             }
         }
         return false
+    }
+
+    /**
+     * Check if the node has a css comment to ignore current selector rule
+     * @param {object} rule Node of postcss abstract syntax tree
+     */
+    hasIgnoreAnnotation(rule: Object): boolean {
+        let found = false;
+        rule.walkComments(node => {
+            if (node && node.type === 'comment' && node.text.includes(IGNORE_ANNOTATION_CURRENT)) {
+                found = true
+                node.remove()
+            }
+        })
+        return found
     }
 
     /**

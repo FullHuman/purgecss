@@ -3,3 +3,8 @@ h1 {
     color: blue;
     
 }
+
+h3 {
+    /* purgecss ignore current */
+    color: red;
+}
