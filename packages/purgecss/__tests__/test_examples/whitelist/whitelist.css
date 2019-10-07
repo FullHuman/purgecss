@@ -1,0 +1,23 @@
+h1 {
+  color: blue;
+}
+
+.random {
+  color: green;
+}
+
+#yep {
+  color: red;
+}
+
+button {
+  color: rebeccapurple;
+}
+
+.nav-blue {
+  background-color: blue;
+}
+
+.nav-red {
+  background-color: red;
+}

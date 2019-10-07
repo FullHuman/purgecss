@@ -1,0 +1,29 @@
+{
+  "name": "purgecss-from-twig",
+  "version": "2.0.0",
+  "description": "> TODO: description",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "license": "ISC",
+  "main": "lib/purgecss-from-twig.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "dependencies": {
+    "twing": "^3.0.1"
+  }
+}

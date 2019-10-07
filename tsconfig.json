@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": false,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": false,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "jsx": "react",
+    "lib": ["esnext", "dom"],
+    "types": ["jest", "@types/node"],
+    "rootDir": ".",
+    "paths": {
+      "*" : ["types/*"],
+      "@fullhuman/cli": ["packages/cli/src"],
+      "@fullhuman/purgecss": ["packages/purgecss/src"],
+      "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
+      "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"]
+    }
+  },
+  "include": [
+    "packages/*/src",
+    "packages/*/__tests__"
+  ]
+}
