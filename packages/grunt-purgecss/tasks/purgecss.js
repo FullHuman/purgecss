@@ -22,13 +22,11 @@ module.exports = function(grunt) {
         } else {
           return true;
         }
-      })
+      });
+      options.css = src;
 
       // purgecss
-      var purgecssResult = new Purgecss({
-        content: options.content,
-        css: src
-      }).purge()[0].css
+      var purgecssResult = new Purgecss(options).purge()[0].css;
 
       // Write the destination file.
       grunt.file.write(f.dest, purgecssResult);
