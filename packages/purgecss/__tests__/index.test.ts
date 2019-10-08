@@ -2,19 +2,20 @@ import purgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
-describe('purgecss with config file', () => {
-
-  it('initialize without error with a config file specified', () => {
+describe("purgecss with config file", () => {
+  it("initialize without error with a config file specified", () => {
     expect(async () => {
-        await purgeCSS('./packages/purgecss/__tests__/purgecss.config.js')
-    }).not.toThrow()
-  })
+      await purgeCSS("./packages/purgecss/__tests__/purgecss.config.js");
+    }).not.toThrow();
+  });
 
-  it('throws an error if config file is not found', async() => {
-    expect.assertions(1)
-    await expect(purgeCSS('./packages/purgecss/__tests__/purgecss_wrong_path.config.js')).rejects.toThrow()
-  })
-})
+  it("throws an error if config file is not found", async () => {
+    expect.assertions(1);
+    await expect(
+      purgeCSS("./packages/purgecss/__tests__/purgecss_wrong_path.config.js")
+    ).rejects.toThrow();
+  });
+});
 
 describe("filters out unused selectors", () => {
   let purgedCSS: string;

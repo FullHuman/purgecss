@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "declarationDir": ".",
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": false,

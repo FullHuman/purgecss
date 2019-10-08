@@ -1,0 +1,30 @@
+{
+  "name": "postcss-purgecss",
+  "version": "2.0.0",
+  "description": "> TODO: description",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "license": "ISC",
+  "main": "lib/postcss-purgecss.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "dependencies": {
+    "postcss": "^7.0.18",
+    "purgecss": "^2.0.0"
+  }
+}

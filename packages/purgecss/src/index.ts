@@ -31,7 +31,7 @@ import { CSS_WHITELIST } from "./internal-whitelist";
 import { SELECTOR_STANDARD_TYPES } from "./selector-types";
 
 let ignore = false;
-let options: Options;
+export let options: Options;
 const atRules: AtRules = {
   fontFace: [],
   keyframes: []
@@ -39,13 +39,13 @@ const atRules: AtRules = {
 
 const usedAnimations: Set<string> = new Set();
 const usedFontFaces: Set<string> = new Set();
-const selectorsRemoved: Set<string> = new Set();
+export const selectorsRemoved: Set<string> = new Set();
 
 /**
  * Load the configuration file from the path
  * @param configFile Path of the config file
  */
-async function setOptions(
+export async function setOptions(
   configFile: string = CONFIG_FILENAME
 ): Promise<Options> {
   let options: Options;
@@ -59,6 +59,10 @@ async function setOptions(
     ...defaultOptions,
     ...options
   };
+}
+
+export function setPurgeCSSOptions(purgeCSSOptions: Options): void {
+  options = purgeCSSOptions;
 }
 
 /**
@@ -116,7 +120,7 @@ function extractSelectors(
  * @param files Array of files path or glob pattern
  * @param extractors Array of extractors
  */
-async function extractSelectorsFromFiles(
+export async function extractSelectorsFromFiles(
   files: string[],
   extractors: Extractors[]
 ): Promise<Set<string>> {
@@ -144,7 +148,7 @@ async function extractSelectorsFromFiles(
  * @param content Array of content
  * @param extractors Array of extractors
  */
-function extractSelectorsFromString(
+export function extractSelectorsFromString(
   content: RawContent[],
   extractors: Extractors[]
 ): Set<string> {
@@ -436,7 +440,7 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
   return found;
 }
 
-function removeUnusedFontFaces(): void {
+export function removeUnusedFontFaces(): void {
   for (const { name, node } of atRules.fontFace) {
     if (!usedFontFaces.has(name)) {
       node.remove();
@@ -444,7 +448,7 @@ function removeUnusedFontFaces(): void {
   }
 }
 
-function removeUnusedKeyframes(): void {
+export function removeUnusedKeyframes(): void {
   for (const node of atRules.keyframes) {
     if (!usedAnimations.has(node.params)) {
       node.remove();
@@ -498,7 +502,7 @@ function stripQuotes(str: string) {
  * @param root root node of the postcss AST
  * @param selectors selectors used in content files
  */
-function walkThroughCSS(root: postcss.Root, selectors: Set<string>) {
+export function walkThroughCSS(root: postcss.Root, selectors: Set<string>) {
   root.walk(node => {
     if (node.type === "rule") {
       return evaluateRule(node, selectors);
