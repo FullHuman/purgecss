@@ -1,6 +1,6 @@
 {
   "name": "postcss-purgecss",
-  "version": "2.0.0",
+  "version": "2.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "postcss": "^7.0.18",
-    "purgecss": "^2.0.0"
+    "purgecss": "^2.0.1-alpha.0"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
