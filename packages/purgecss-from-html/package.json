@@ -30,5 +30,6 @@
   "devDependencies": {
     "@types/parse5": "^5.0.2",
     "@types/parse5-htmlparser2-tree-adapter": "^5.0.1"
-  }
+  },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }

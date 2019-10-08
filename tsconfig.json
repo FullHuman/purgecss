@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": ".",
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": false,
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": false,
     "noUnusedLocals": true,

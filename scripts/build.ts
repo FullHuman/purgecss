@@ -1,48 +1,53 @@
 const path = require('path')
 const rollup = require('rollup')
 const { terser } = require('rollup-plugin-terser')
-const typescript = require('rollup-plugin-typescript2')
+const typescript = require('@wessberg/rollup-plugin-ts')
 
 const packagesDirectory = path.resolve(__dirname, './../packages')
 
 const packages = [
-  'postcss-purgecss',
-  'purgecss',
-  'purgecss-from-html',
-  'purgecss-from-pug'
+  {
+    name: 'postcss-purgecss',
+    external: ['postcss', 'purgecss']
+  },
+  {
+    name: 'purgecss',
+    external: ['postcss', 'postcss-selector-parser', 'glob', 'path', 'fs']
+  },
+  {
+    name: 'purgecss-from-html',
+    external: ['parse5', 'parse5-htmlparser2-tree-adapter']
+  },
+  {
+    name: 'purgecss-from-pug',
+    external: ['pug-lexer']
+  }
 ]
 
 async function build() {
-  const bundle = await rollup.rollup({
-    input: path.resolve(packagesDirectory, `./${packages[1]}/src/index.ts`),
-    plugins: [
-      typescript({
-      tsconfigOverride: {
-        compilerOptions: {
-          declaration: true,
-          declarationMap: true
-        },
-        exclude: ['**/__tests__'],
-        // declarationDir: path.resolve(packagesDirectory, packages[1], `./lib/`),
-        useTsconfigDeclarationDir: true
-      }
-      }),
-      terser()
-    ]
-  })
-
-  await bundle.write({
-    file: path.resolve(packagesDirectory, packages[1], `./lib/${packages[1]}.es.js`),
-    format: 'es'
-  })
-  await bundle.write({
-    file: path.resolve(packagesDirectory, packages[1], `./lib/${packages[1]}.esm.js`),
-    format: 'esm'
-  })
-  await bundle.write({
-    file: path.resolve(packagesDirectory, packages[1], `./lib/${packages[1]}.js`),
-    format: 'cjs'
-  })
+  for (const package of packages) {
+    const bundle = await rollup.rollup({
+      input: path.resolve(packagesDirectory, `./${package.name}/src/index.ts`),
+      plugins: [
+        typescript({}),
+        terser()
+      ],
+      external: package.external
+    })
+    
+    await bundle.write({
+      file: path.resolve(packagesDirectory, package.name, `./lib/${package.name}.esm.js`),
+      format: 'esm'
+    })
+    await bundle.write({
+      file: path.resolve(packagesDirectory, package.name, `./lib/${package.name}.js`),
+      format: 'cjs'
+    })
+  }
 }
 
-build()
+try {
+  build()
+} catch(e) {
+  console.error(e)
+}

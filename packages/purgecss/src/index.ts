@@ -7,6 +7,7 @@ import { promises as asyncFs } from "fs";
 import path from "path";
 
 import { defaultOptions } from "./options";
+export { defaultOptions } from "./options";
 
 import {
   Options,
@@ -19,6 +20,7 @@ import {
   RawCSS,
   UserDefinedOptions
 } from "./types";
+
 import {
   CONFIG_FILENAME,
   ERROR_CONFIG_FILE_LOADING,
@@ -31,7 +33,7 @@ import { CSS_WHITELIST } from "./internal-whitelist";
 import { SELECTOR_STANDARD_TYPES } from "./selector-types";
 
 let ignore = false;
-export let options: Options;
+let options: Options;
 const atRules: AtRules = {
   fontFace: [],
   keyframes: []
@@ -234,6 +236,10 @@ async function getPurgedCSS(
   return sources;
 }
 
+/**
+ * Get all the selectors in a css rule
+ * @param selector css selector
+ */
 function getSelectorsInRule(selector: selectorParser.Selector): Set<string> {
   const selectorsInRule: Set<string> = new Set();
   // if inside :not pseudo class, ignore
@@ -398,6 +404,10 @@ function isRuleEmpty(node: postcss.Container): boolean {
   return false;
 }
 
+/**
+ * Check if the selector is whitelisted by the option whitelist or whitelistPatterns
+ * @param selector css selector
+ */
 function isSelectorWhitelisted(selector: string): boolean {
   return (
     CSS_WHITELIST.includes(selector) ||
@@ -440,6 +450,9 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
   return found;
 }
 
+/**
+ * Remove unused font-faces
+ */
 export function removeUnusedFontFaces(): void {
   for (const { name, node } of atRules.fontFace) {
     if (!usedFontFaces.has(name)) {
@@ -448,6 +461,9 @@ export function removeUnusedFontFaces(): void {
   }
 }
 
+/**
+ * Remove unused keyframes
+ */
 export function removeUnusedKeyframes(): void {
   for (const node of atRules.keyframes) {
     if (!usedAnimations.has(node.params)) {

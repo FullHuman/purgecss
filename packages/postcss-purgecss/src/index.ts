@@ -1,15 +1,19 @@
 import postcss from "postcss";
 import {
   walkThroughCSS,
+  defaultOptions,
   extractSelectorsFromFiles,
   extractSelectorsFromString,
   setPurgeCSSOptions,
   removeUnusedFontFaces,
   removeUnusedKeyframes,
   selectorsRemoved
-} from "purgecss/src/index";
-import { RawContent, UserDefinedOptions } from "purgecss/src/types";
-import { defaultOptions } from "purgecss/src/options";
+} from "purgecss";
+
+import {
+  RawContent,
+  UserDefinedOptions
+} from './types'
 
 type PurgeCSSPostCSSOptions = Omit<UserDefinedOptions, "css">;
 
