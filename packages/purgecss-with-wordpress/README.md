@@ -33,7 +33,7 @@ const result = purgecss.purge()
 
 If you have additional classes you want to include in either of the `whitelist` or `whitelistPatterns`, you can include them using the spread operator:
 
-```
+```js
 whitelist: [
   ...purgecssWordpress.whitelist,
   'red',
