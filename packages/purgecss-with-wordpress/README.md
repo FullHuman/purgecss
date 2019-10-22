@@ -31,6 +31,21 @@ const purgeCss = new Purgecss({
 const result = purgecss.purge()
 ```
 
+If you have additional classes you want to include in either of the `whitelist` or `whitelistPatterns`, you can include them using the spread operator:
+
+```
+whitelist: [
+  ...purgecssWordpress.whitelist,
+  'red',
+  'blue',
+],
+whitelistPatterns: [
+  ...purgecssWordpress.whitelistPatterns,
+  /^red/,
+  /blue$/,
+]
+```
+
 ## Versioning
 
 Purgecss-with-wordpress use [SemVer](http://semver.org/) for versioning.
