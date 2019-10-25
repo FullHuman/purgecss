@@ -52,7 +52,7 @@ class Purgecss {
         const pathConfig = typeof configFile === 'undefined' ? CONFIG_FILENAME : configFile
         let options
         try {
-            const t = path.resolve(process.cwd(), pathConfig).replace(/\\/g, '/')
+            const t = path.join(process.cwd(), pathConfig)
             options = require(t)
         } catch (e) {
             throw new Error(ERROR_CONFIG_FILE_LOADING + e.message)
