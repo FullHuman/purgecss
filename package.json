@@ -6,7 +6,7 @@
     "@types/node": "^12.7.11",
     "@wessberg/rollup-plugin-ts": "^1.1.65",
     "jest": "^24.9.0",
-    "lerna": "^3.14.1",
+    "lerna": "^3.18.0",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
     "rollup": "^1.23.1",

@@ -18,7 +18,8 @@ import {
   IgnoreType,
   AtRules,
   RawCSS,
-  UserDefinedOptions
+  UserDefinedOptions,
+  ExtractorResult
 } from "./types";
 
 import {
@@ -30,7 +31,6 @@ import {
   IGNORE_ANNOTATION_CURRENT
 } from "./constants";
 import { CSS_WHITELIST } from "./internal-whitelist";
-import { SELECTOR_STANDARD_TYPES } from "./selector-types";
 
 let ignore = false;
 let options: Options;
@@ -63,6 +63,10 @@ export async function setOptions(
   };
 }
 
+/**
+ * Set the PurgeCSS options
+ * @param purgeCSSOptions PurgeCSS options
+ */
 export function setPurgeCSSOptions(purgeCSSOptions: Options): void {
   options = purgeCSSOptions;
 }
@@ -99,7 +103,10 @@ async function purge(
     extractors
   );
 
-  return getPurgedCSS(css, new Set([...cssFileSelectors, ...cssRawSelectors]));
+  return getPurgedCSS(
+    css,
+    mergeExtractorSelectors(cssFileSelectors, cssRawSelectors)
+  );
 }
 
 /**
@@ -110,10 +117,8 @@ async function purge(
 function extractSelectors(
   content: string,
   extractor: ExtractorFunction
-): Set<string> {
-  const selectors = new Set(extractor(content));
-  // Remove empty string
-  selectors.delete("");
+): ExtractorResult {
+  const selectors = extractor(content);
   return selectors;
 }
 
@@ -125,8 +130,18 @@ function extractSelectors(
 export async function extractSelectorsFromFiles(
   files: string[],
   extractors: Extractors[]
-): Promise<Set<string>> {
-  let selectors: Set<string> = new Set();
+): Promise<ExtractorResult> {
+  let selectors: ExtractorResult = {
+    attributes: {
+      names: new Set(),
+      values: new Set()
+    },
+    classes: new Set(),
+    ids: new Set(),
+    tags: new Set(),
+    undetermined: new Set()
+  };
+
   for (const globfile of files) {
     let filesNames: string[] = [];
     try {
@@ -139,7 +154,7 @@ export async function extractSelectorsFromFiles(
       const content = await asyncFs.readFile(file, "utf-8");
       const extractor = getFileExtractor(file, extractors);
       const extractedSelectors = extractSelectors(content, extractor);
-      selectors = new Set([...selectors, ...extractedSelectors]);
+      selectors = mergeExtractorSelectors(selectors, extractedSelectors);
     }
   }
   return selectors;
@@ -153,12 +168,22 @@ export async function extractSelectorsFromFiles(
 export function extractSelectorsFromString(
   content: RawContent[],
   extractors: Extractors[]
-): Set<string> {
-  let selectors: Set<string> = new Set();
+): ExtractorResult {
+  let selectors: ExtractorResult = {
+    attributes: {
+      names: new Set(),
+      values: new Set()
+    },
+    classes: new Set(),
+    ids: new Set(),
+    tags: new Set(),
+    undetermined: new Set()
+  };
+
   for (const { raw, extension } of content) {
     const extractor = getFileExtractor(`.${extension}`, extractors);
     const extractedSelectors = extractSelectors(raw, extractor);
-    selectors = new Set([...selectors, ...extractedSelectors]);
+    selectors = mergeExtractorSelectors(selectors, extractedSelectors);
   }
   return selectors;
 }
@@ -188,7 +213,7 @@ function getFileExtractor(
  */
 async function getPurgedCSS(
   cssOptions: Array<string | RawCSS>,
-  selectors: Set<string>
+  selectors: ExtractorResult
 ): Promise<ResultPurge[]> {
   const sources = [];
 
@@ -237,39 +262,6 @@ async function getPurgedCSS(
 }
 
 /**
- * Get all the selectors in a css rule
- * @param selector css selector
- */
-function getSelectorsInRule(selector: selectorParser.Selector): Set<string> {
-  const selectorsInRule: Set<string> = new Set();
-  // if inside :not pseudo class, ignore
-  if (
-    selector.parent &&
-    selector.parent.value === ":not" &&
-    selector.parent.type === "pseudo"
-  ) {
-    return selectorsInRule;
-  }
-
-  for (const { type, value } of selector.nodes) {
-    if (
-      SELECTOR_STANDARD_TYPES.includes(type) &&
-      typeof value !== "undefined"
-    ) {
-      selectorsInRule.add(value);
-    } else if (
-      type === "tag" &&
-      typeof value !== "undefined" &&
-      !/[+]|n|-|(even)|(odd)|^from$|^to$|^\d/.test(value)
-    ) {
-      // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
-      selectorsInRule.add(value);
-    }
-  }
-  return selectorsInRule;
-}
-
-/**
  * Evaluate at-rule and register it for future reference
  * @param node node of postcss AST
  */
@@ -299,10 +291,15 @@ function evaluateAtRule(node: postcss.AtRule): void {
  */
 async function evaluateRule(
   node: postcss.Node,
-  selectors: Set<string>
+  selectors: ExtractorResult
 ): Promise<void> {
+  // exit if is in ignoring state activated by an ignore comment
+  if (ignore) {
+    return;
+  }
+
+  // exit if the previous anotation is a ignore next line comment
   const annotation = node.prev();
-  if (ignore) return;
   if (
     annotation &&
     annotation.type === "comment" &&
@@ -312,6 +309,7 @@ async function evaluateRule(
     return;
   }
 
+  // exit if it is inside a keyframes
   if (
     node.parent &&
     node.parent.type === "atrule" &&
@@ -320,11 +318,15 @@ async function evaluateRule(
     return;
   }
 
-  if (node.type === "rule" && hasIgnoreAnnotation(node)) {
+  // exit if it is not a rule
+  if (node.type !== "rule") {
     return;
   }
 
-  if (node.type !== "rule") return;
+  // exit if it has an ignore rule comment inside
+  if (hasIgnoreAnnotation(node)) {
+    return;
+  }
 
   let keepSelector = true;
   node.selector = selectorParser(selectorsParsed => {
@@ -332,8 +334,8 @@ async function evaluateRule(
       if (selector.type !== "selector") {
         return;
       }
-      const selectorsInRule = getSelectorsInRule(selector);
-      keepSelector = shouldKeepSelector(selectors, selectorsInRule);
+
+      keepSelector = shouldKeepSelector(selector, selectors);
 
       if (!keepSelector) {
         if (options.rejected) selectorsRemoved.add(selector.toString());
@@ -451,6 +453,39 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
 }
 
 /**
+ * Merge two extractor selectors
+ * @param extractorSelectorsA extractor selectors A
+ * @param extractorSelectorsB extractor selectors B
+ */
+export function mergeExtractorSelectors(
+  extractorSelectorsA: ExtractorResult,
+  extractorSelectorsB: ExtractorResult
+): ExtractorResult {
+  return {
+    attributes: {
+      names: new Set([
+        ...extractorSelectorsA.attributes.names,
+        ...extractorSelectorsB.attributes.names
+      ]),
+      values: new Set([
+        ...extractorSelectorsA.attributes.values,
+        ...extractorSelectorsB.attributes.values
+      ])
+    },
+    classes: new Set([
+      ...extractorSelectorsA.classes,
+      ...extractorSelectorsB.classes
+    ]),
+    ids: new Set([...extractorSelectorsA.ids, ...extractorSelectorsB.ids]),
+    tags: new Set([...extractorSelectorsA.tags, ...extractorSelectorsB.tags]),
+    undetermined: new Set([
+      ...extractorSelectorsA.undetermined,
+      ...extractorSelectorsB.undetermined
+    ])
+  };
+}
+
+/**
  * Remove unused font-faces
  */
 export function removeUnusedFontFaces(): void {
@@ -475,34 +510,62 @@ export function removeUnusedKeyframes(): void {
 /**
  * Determine if the selector should be kept, based on the selectors found in the files
  * @param selectorsInContent set of css selectors found in the content files or string
- * @param selectorsInRule selectors in the css rule
+ * @param selectorsFromExtractor selectors in the css rule
  */
 function shouldKeepSelector(
-  selectorsInContent: Set<string>,
-  selectorsInRule: Set<string>
+  selector: selectorParser.Selector,
+  selectorsFromExtractor: ExtractorResult
 ): boolean {
-  for (const selector of selectorsInRule) {
-    // pseudo class
-    const unescapedSelector = selector.replace(/\\/g, "");
-    if (unescapedSelector.startsWith(":")) continue;
+  // ignore the selector if it is inside a :not pseudo class.
+  if (isInPseudoClassNot(selector)) return true;
 
+  let isPresent = false;
+  for (const nodeSelector of selector.nodes) {
     // if the selector is whitelisted with children
     // returns true to keep all children selectors
-    if (isSelectorWhitelistedChildren(unescapedSelector)) {
+    if (
+      nodeSelector.value &&
+      isSelectorWhitelistedChildren(nodeSelector.value)
+    ) {
       return true;
     }
 
+    // The selector is found in the internal and user-defined whitelist
     if (
-      !(
-        selectorsInContent.has(unescapedSelector) ||
-        CSS_WHITELIST.includes(unescapedSelector) ||
-        isSelectorWhitelisted(unescapedSelector)
-      )
+      nodeSelector.value &&
+      (CSS_WHITELIST.includes(nodeSelector.value) ||
+        isSelectorWhitelisted(nodeSelector.value))
     ) {
-      return false;
+      isPresent = true;
+      continue;
     }
+
+    switch (nodeSelector.type) {
+      case "attribute":
+        // `value` is a dynamic attribute, highly used in input element
+        // the choice is to always leave `value` as it can change based on the user
+        isPresent =
+          nodeSelector.attribute === "value"
+            ? true
+            : isAttributeFound(nodeSelector, selectorsFromExtractor);
+        break;
+      case "class":
+        isPresent = isClassFound(nodeSelector, selectorsFromExtractor);
+        break;
+      case "id":
+        isPresent = isIdentifierFound(nodeSelector, selectorsFromExtractor);
+        break;
+      case "tag":
+        isPresent = isTagFound(nodeSelector, selectorsFromExtractor);
+        break;
+      default:
+        break;
+    }
+    // selector is not in whitelist children or in whitelist
+    // and it has not been found  as an attribute/class/identifier/tag
+    if (!isPresent) return false;
   }
-  return true;
+  return isPresent;
 }
 
 /**
@@ -518,7 +581,7 @@ function stripQuotes(str: string) {
  * @param root root node of the postcss AST
  * @param selectors selectors used in content files
  */
-export function walkThroughCSS(root: postcss.Root, selectors: Set<string>) {
+export function walkThroughCSS(root: postcss.Root, selectors: ExtractorResult) {
   root.walk(node => {
     if (node.type === "rule") {
       return evaluateRule(node, selectors);
@@ -538,6 +601,123 @@ export function walkThroughCSS(root: postcss.Root, selectors: Set<string>) {
       }
     }
   });
+}
+
+/**
+ * Returns true if the attribute is found in the extractor selectors
+ * @param attributeNode node of type `attribute`
+ * @param selectors extractor selectors
+ */
+function isAttributeFound(
+  attributeNode: selectorParser.Attribute,
+  selectors: ExtractorResult
+): boolean {
+  if (
+    !selectors.attributes.names.has(attributeNode.attribute) &&
+    !selectors.undetermined.has(attributeNode.attribute)
+  ) {
+    return false;
+  }
+
+  switch (attributeNode.operator) {
+    case "$=":
+      return (
+        Array.from(selectors.attributes.values).some(str =>
+          str.endsWith(attributeNode.value!)
+        ) ||
+        Array.from(selectors.undetermined).some(str =>
+          str.endsWith(attributeNode.value!)
+        )
+      );
+    case "~=":
+    case "*=":
+      return (
+        Array.from(selectors.attributes.values).some(str =>
+          str.includes(attributeNode.value!)
+        ) ||
+        Array.from(selectors.undetermined).some(str =>
+          str.includes(attributeNode.value!)
+        )
+      );
+    case "=":
+      return (
+        Array.from(selectors.attributes.values).some(
+          str => str === attributeNode.value
+        ) ||
+        Array.from(selectors.undetermined).some(
+          str => str === attributeNode.value!
+        )
+      );
+    case "|=":
+    case "^=":
+      return (
+        Array.from(selectors.attributes.values).some(str =>
+          str.startsWith(attributeNode.value!)
+        ) ||
+        Array.from(selectors.undetermined).some(str =>
+          str.startsWith(attributeNode.value!)
+        )
+      );
+    default:
+      return true;
+  }
+}
+
+/**
+ * Returns true if the class is found in the extractor selectors
+ * @param classNode node of type `class`
+ * @param selectors extractor selectors
+ */
+function isClassFound(
+  classNode: selectorParser.ClassName,
+  selectors: ExtractorResult
+): boolean {
+  return (
+    selectors.classes.has(classNode.value) ||
+    selectors.undetermined.has(classNode.value)
+  );
+}
+
+/**
+ * Returns true if the identifier is found in the extractor selectors
+ * @param identifierNode node of type `identifier`
+ * @param selectors extractor selectors
+ */
+function isIdentifierFound(
+  identifierNode: selectorParser.Identifier,
+  selectors: ExtractorResult
+): boolean {
+  return (
+    selectors.ids.has(identifierNode.value) ||
+    selectors.undetermined.has(identifierNode.value)
+  );
+}
+
+/**
+ * Returns true if the tag is found in the extractor selectors
+ * @param tagNode node of type `tag`
+ * @param selectors extractor selectors
+ */
+function isTagFound(
+  tagNode: selectorParser.Tag,
+  selectors: ExtractorResult
+): boolean {
+  return (
+    selectors.tags.has(tagNode.value) ||
+    selectors.undetermined.has(tagNode.value)
+  );
+}
+
+/**
+ * Returns true if the selector is inside a :not pseudo class
+ * @param selector selector
+ */
+function isInPseudoClassNot(selector: selectorParser.Node) {
+  return (
+    selector.parent &&
+    selector.parent.type === "pseudo" &&
+    selector.parent.value === ":not"
+  );
 }
 
 export default purge;

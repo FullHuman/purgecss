@@ -1,6 +1,6 @@
 {
-  "name": "purgecss",
-  "version": "2.0.1-alpha.0",
+  "name": "@fullhuman/purgecss",
+  "version": "2.0.0",
   "description": "Remove unused css selectors",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://purgecss.com",

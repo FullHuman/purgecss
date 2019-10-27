@@ -1,6 +1,6 @@
 {
   "name": "purgecss-from-blade",
-  "version": "2.0.1-alpha.0",
+  "version": "2.0.0",
   "description": "> TODO: description",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "dependencies": {
+    "@tarik02/bladejs-compiler": "^2.1.0"
   }
 }

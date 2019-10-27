@@ -31,6 +31,7 @@ const getSelectorsInNodes = (
         break;
       case "root":
         selectors.push(...getSelectorsInNodes(element));
+        break;
       default:
         break;
     }

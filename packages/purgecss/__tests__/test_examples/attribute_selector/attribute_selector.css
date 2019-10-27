@@ -1,35 +1,75 @@
-[class*='font-icon-'] {
-  color: black;
+/* CSS [attribute] Selector */
+input[checked] {
+  color: red;
 }
 
-a.link[href*='github.com'] {
-  color: black;
+a[invented] {
+  color: red;
 }
 
-.ui[class*='center aligned'].grid {
-  color: black;
+a[target] {
+  color:red;
 }
 
-.ui.grid {
-  color: green;
+/* CSS [attribute="value"] Selector */
+a[target="_blank"] {
+  background-color: yellow;
 }
 
-.flexgrid {
-  color: blue;
-}
-
-.flexgrid > * {
-  color: green;
-}
-
-.flexgrid[class*='w-'] {
-  color: rebeccapurple;
-}
-
-.flexgrid > *[class*='w-'] {
-  color: grey;
+a[target="no_blank"] {
+  background-color: yellow;
 }
 
 input[value=""] {
-  color: red;
+  background-color: yellow;
+}
+
+/* CSS [attribute~="value"] Selector */
+input[title~="flower"] {
+  border: 5px solid yellow;
+}
+
+input[title~="grass"] {
+  border: 5px solid yellow;
+}
+
+/* CSS [attribute|="value"] Selector */
+html[lang|="en"] {
+  background: yellow;
+}
+
+html[lang|="fr"] {
+  background: yellow;
+}
+
+/* CSS [attribute^="value"] Selector */
+a[href^="http"] {
+  color: green;
+}
+
+a[href^="ssl"] {
+  color: green;
+}
+
+/* CSS [attribute$="value"] Selector */
+a[href$="pdf"] {
+  color: blue;
+}
+
+a[href$="jpg"] {
+  color: blue;
+}
+
+a[href$="http"] {
+  color: blue;
+}
+
+/* CSS [attribute*="value"] Selector */
+
+a[title~="thin"] {
+  border: 5px solid yellow;
+}
+
+a[title~="fat"] {
+  border: 5px solid yellow;
 }

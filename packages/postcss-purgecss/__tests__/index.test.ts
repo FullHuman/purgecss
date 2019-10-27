@@ -1,7 +1,7 @@
 const fs = require("fs");
 const postcss = require("postcss");
 
-import purgeCSSPlugin from "./../src/";
+import purgeCSSPlugin from "../src";
 
 describe("Purgecss postcss plugin", () => {
   const files = ["simple", "font-keyframes"];

@@ -10,10 +10,7 @@ import {
   selectorsRemoved
 } from "purgecss";
 
-import {
-  RawContent,
-  UserDefinedOptions
-} from './types'
+import { RawContent, UserDefinedOptions } from "./types";
 
 type PurgeCSSPostCSSOptions = Omit<UserDefinedOptions, "css">;
 

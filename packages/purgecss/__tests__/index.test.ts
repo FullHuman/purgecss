@@ -1,4 +1,5 @@
 import purgeCSS from "./../src/index";
+import { ExtractorResult } from "../src/types";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
@@ -41,8 +42,19 @@ describe("filters out unused selectors", () => {
 
 describe("special characters, with custom Extractor", () => {
   let purgedCSS: string = "";
-  const CustomExtractor = (content: string) =>
-    content.match(/[A-z0-9-:/]+/g) || [];
+  const CustomExtractor = (content: string): ExtractorResult => {
+    const selectors = content.match(/[A-z0-9-:/]+/g) || [];
+    return {
+      attributes: {
+        names: new Set(),
+        values: new Set()
+      },
+      classes: new Set(),
+      ids: new Set(),
+      tags: new Set(),
+      undetermined: new Set(selectors)
+    };
+  };
 
   beforeAll(async () => {
     const resultsPurge = await purgeCSS({
@@ -64,26 +76,5 @@ describe("special characters, with custom Extractor", () => {
 
   it("discards unused class beginning with number", () => {
     expect(purgedCSS.includes("\\32 -panel")).toBe(false);
-  });
-});
-
-describe("special characters, with custom Extractor as a function", () => {
-  let purgedCSS: string = "";
-  beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
-      content: [`${root}special_characters/special_characters.js`],
-      css: [`${root}special_characters/special_characters.css`],
-      extractors: [
-        {
-          extractor: content => content.match(/[A-z0-9-:/]+/g) || [],
-          extensions: ["html", "js"]
-        }
-      ]
-    });
-    purgedCSS = resultsPurge[0].css;
-  });
-
-  it("finds tailwind class", () => {
-    expect(purgedCSS.includes("md\\:w-1\\/3")).toBe(true);
   });
 });
