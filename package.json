@@ -18,12 +18,12 @@
   ],
   "bin": "./bin/purgecss",
   "scripts": {
-    "test": "npx jest __tests__/.+.test.js",
+    "test": "jest __tests__/.+.test.js",
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
-    "flow": "npx flow",
-    "lint": "npx eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
+    "flow": "flow",
+    "lint": "eslint -c .eslintrc src/",
+    "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -59,7 +59,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "codacy-coverage": "^3.4.0",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-plugin-flowtype": "^4.3.0",
     "flow-bin": "^0.110.0",
     "jest": "^24.9.0",
