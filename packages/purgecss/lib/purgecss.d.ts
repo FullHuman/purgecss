@@ -6,7 +6,17 @@ interface RawContent {
 interface RawCSS {
   raw: string;
 }
-declare type ExtractorFunction = (content: string) => string[];
+interface ExtractorResult {
+  attributes: {
+    names: Set<string>;
+    values: Set<string>;
+  };
+  classes: Set<string>;
+  ids: Set<string>;
+  tags: Set<string>;
+  undetermined: Set<string>;
+}
+declare type ExtractorFunction = (content: string) => ExtractorResult;
 interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
@@ -55,6 +65,10 @@ export declare const selectorsRemoved: Set<string>;
  * @param configFile Path of the config file
  */
 export declare function setOptions(configFile?: string): Promise<Options>;
+/**
+ * Set the PurgeCSS options
+ * @param purgeCSSOptions PurgeCSS options
+ */
 export declare function setPurgeCSSOptions(purgeCSSOptions: Options): void;
 /**
  * Remove unused css
@@ -71,7 +85,7 @@ declare function purge(
 export declare function extractSelectorsFromFiles(
   files: string[],
   extractors: Extractors[]
-): Promise<Set<string>>;
+): Promise<ExtractorResult>;
 /**
  * Extract the selectors present in the passed string using a PurgeCSS extractor
  * @param content Array of content
@@ -80,7 +94,16 @@ export declare function extractSelectorsFromFiles(
 export declare function extractSelectorsFromString(
   content: RawContent[],
   extractors: Extractors[]
-): Set<string>;
+): ExtractorResult;
+/**
+ * Merge two extractor selectors
+ * @param extractorSelectorsA extractor selectors A
+ * @param extractorSelectorsB extractor selectors B
+ */
+export declare function mergeExtractorSelectors(
+  extractorSelectorsA: ExtractorResult,
+  extractorSelectorsB: ExtractorResult
+): ExtractorResult;
 /**
  * Remove unused font-faces
  */
@@ -96,7 +119,7 @@ export declare function removeUnusedKeyframes(): void;
  */
 export declare function walkThroughCSS(
   root: postcss_$0.Root,
-  selectors: Set<string>
+  selectors: ExtractorResult
 ): void;
 export default purge;
 export { defaultOptions };
