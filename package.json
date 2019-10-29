@@ -59,7 +59,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "codacy-coverage": "^3.4.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.5.1",
     "eslint-plugin-flowtype": "^4.3.0",
     "flow-bin": "^0.110.0",
     "jest": "^24.9.0",
