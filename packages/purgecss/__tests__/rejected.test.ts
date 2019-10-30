@@ -1,10 +1,10 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("rejected", () => {
   it("does not return the rejected selectors if rejected set to false", async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}simple/simple.js`],
       css: [`${root}simple/simple.css`]
     });
@@ -12,7 +12,7 @@ describe("rejected", () => {
   });
 
   it("returns an empty array if no selectors are rejected", async () => {
-    let purgecssResult = await purgeCSS({
+    let purgecssResult = await new PurgeCSS().purge({
       content: [`${root}simple/simple.js`],
       css: [`${root}simple/simple.css`],
       rejected: true
@@ -21,7 +21,7 @@ describe("rejected", () => {
   });
 
   it("returns the list of rejected selectors", async () => {
-    let purgecssResult = await purgeCSS({
+    let purgecssResult = await new PurgeCSS().purge({
       content: [`${root}remove_unused/remove_unused.js`],
       css: [`${root}remove_unused/remove_unused.css`],
       rejected: true
@@ -33,7 +33,7 @@ describe("rejected", () => {
   });
 
   it("returns the list of rejected selectors with chaining rules", async () => {
-    let purgecssResult = await purgeCSS({
+    let purgecssResult = await new PurgeCSS().purge({
       content: [`${root}chaining_rules/index.html`],
       css: [`${root}chaining_rules/index.css`],
       rejected: true

@@ -1,14 +1,5 @@
 import postcss from "postcss";
-import {
-  walkThroughCSS,
-  defaultOptions,
-  extractSelectorsFromFiles,
-  extractSelectorsFromString,
-  setPurgeCSSOptions,
-  removeUnusedFontFaces,
-  removeUnusedKeyframes,
-  selectorsRemoved
-} from "purgecss";
+import PurgeCSS, { defaultOptions, mergeExtractorSelectors} from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 
@@ -18,12 +9,12 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
   opts: PurgeCSSPostCSSOptions
 ) {
   return async function(root, result) {
+    const purgeCSS = new PurgeCSS()
     const options = {
       ...defaultOptions,
       ...opts
     };
-
-    setPurgeCSSOptions(options);
+    purgeCSS.options = options
 
     const { content, extractors } = options;
 
@@ -34,33 +25,33 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
       o => typeof o === "object"
     ) as RawContent[];
 
-    const cssFileSelectors = await extractSelectorsFromFiles(
+    const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
       fileFormatContents,
       extractors
     );
-    const cssRawSelectors = extractSelectorsFromString(
+    const cssRawSelectors = purgeCSS.extractSelectorsFromString(
       rawFormatContents,
       extractors
     );
 
-    const selectors = new Set([...cssFileSelectors, ...cssRawSelectors]);
+    const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
 
     //purge unused selectors
-    walkThroughCSS(root, selectors);
+    purgeCSS.walkThroughCSS(root, selectors);
 
-    if (options.fontFace) removeUnusedFontFaces();
-    if (options.keyframes) removeUnusedKeyframes();
+    if (purgeCSS.options.fontFace) purgeCSS.removeUnusedFontFaces();
+    if (purgeCSS.options.keyframes) purgeCSS.removeUnusedKeyframes();
 
-    if (options.rejected && selectorsRemoved.size > 0) {
+    if (purgeCSS.options.rejected && purgeCSS.selectorsRemoved.size > 0) {
       result.messages.push({
         type: "purgecss",
         plugin: "postcss-purgecss",
-        text: `purging ${selectorsRemoved.size} selectors:
-        ${Array.from(selectorsRemoved)
+        text: `purging ${purgeCSS.selectorsRemoved.size} selectors:
+        ${Array.from(purgeCSS.selectorsRemoved)
           .map(selector => selector.trim())
           .join("\n  ")}`
       });
-      selectorsRemoved.clear();
+      purgeCSS.selectorsRemoved.clear();
     }
   };
 });

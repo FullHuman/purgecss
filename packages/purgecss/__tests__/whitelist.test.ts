@@ -1,11 +1,11 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("whitelist", () => {
   let purgedCSS: string = "";
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}whitelist/whitelist.html`],
       css: [`${root}whitelist/whitelist.css`],
       whitelist: ["random", "h1", "yep", "button"],
@@ -42,7 +42,7 @@ describe("whitelist", () => {
 describe("whitelistPatternsChildren", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [
         `${root}whitelist_patterns_children/whitelist_patterns_children.html`
       ],

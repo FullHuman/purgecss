@@ -1,4 +1,4 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
@@ -6,7 +6,7 @@ describe("attributes", () => {
   let purgedCSS: string;
 
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}attribute_selector/attribute_selector.html`],
       css: [`${root}attribute_selector/attribute_selector.css`]
     });
@@ -40,7 +40,6 @@ describe("attributes", () => {
   });
 
   it("handles [attribute|=value]", () => {
-    console.log(purgedCSS);
     // keep used css
     expect(purgedCSS.includes('html[lang|="en"]')).toBe(true);
     // remove unused css

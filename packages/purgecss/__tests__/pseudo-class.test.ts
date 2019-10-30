@@ -1,11 +1,11 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe(":not pseudo class", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}not/not.html`],
       css: [`${root}not/not.css`]
     });

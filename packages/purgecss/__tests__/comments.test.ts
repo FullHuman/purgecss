@@ -1,11 +1,11 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("ignore comment", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}ignore_comment/ignore_comment.html`],
       css: [`${root}ignore_comment/ignore_comment.css`]
     });
@@ -25,7 +25,7 @@ describe("ignore comment", () => {
 describe("ignore comment range", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}ignore_comment_range/index.html`],
       css: [`${root}ignore_comment_range/index.css`]
     });

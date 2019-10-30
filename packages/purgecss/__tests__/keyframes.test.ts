@@ -1,11 +1,11 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("keyframes", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/keyframes.html`],
       css: [`${root}keyframes/keyframes.css`],
       keyframes: true
@@ -27,7 +27,7 @@ describe("keyframes", () => {
 describe("purge unused keyframe animations", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/index.html`],
       css: [`${root}keyframes/index.css`],
       keyframes: true
@@ -45,7 +45,7 @@ describe("purge unused keyframe animations", () => {
 describe("do not purge keyframes if option set to false", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/index.html`],
       css: [`${root}keyframes/index.css`],
       keyframes: false
@@ -63,7 +63,7 @@ describe("do not purge keyframes if option set to false", () => {
 describe("keep keyframe decimals", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [
         {
           raw: '<div class="xx"></div>',

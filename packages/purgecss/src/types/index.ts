@@ -18,16 +18,18 @@ export interface RawCSS {
   raw: string;
 }
 
-export interface ExtractorResult {
+export interface ExtractorResultDetailed {
   attributes: {
-    names: Set<string>;
-    values: Set<string>;
+    names: string[];
+    values: string[];
   };
-  classes: Set<string>;
-  ids: Set<string>;
-  tags: Set<string>;
-  undetermined: Set<string>;
+  classes: string[];
+  ids: string[];
+  tags: string[];
+  undetermined: string[];
 }
+
+export type ExtractorResult = ExtractorResultDetailed | string[]
 
 export type ExtractorFunction = (content: string) => ExtractorResult;
 

@@ -1,4 +1,4 @@
-import purgeCSS from "./../src/index";
+import PurgeCSS from "./../src/index";
 import { ExtractorResult } from "../src/types";
 
 const root = "./packages/purgecss/__tests__/test_examples/";
@@ -6,14 +6,14 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 describe("purgecss with config file", () => {
   it("initialize without error with a config file specified", () => {
     expect(async () => {
-      await purgeCSS("./packages/purgecss/__tests__/purgecss.config.js");
+      await new PurgeCSS().purge("./packages/purgecss/__tests__/purgecss.config.js");
     }).not.toThrow();
   });
 
   it("throws an error if config file is not found", async () => {
     expect.assertions(1);
     await expect(
-      purgeCSS("./packages/purgecss/__tests__/purgecss_wrong_path.config.js")
+      new PurgeCSS().purge("./packages/purgecss/__tests__/purgecss_wrong_path.config.js")
     ).rejects.toThrow();
   });
 });
@@ -21,7 +21,7 @@ describe("purgecss with config file", () => {
 describe("filters out unused selectors", () => {
   let purgedCSS: string;
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}remove_unused/remove_unused.js`],
       css: [`${root}remove_unused/remove_unused.css`]
     });
@@ -57,7 +57,7 @@ describe("special characters, with custom Extractor", () => {
   };
 
   beforeAll(async () => {
-    const resultsPurge = await purgeCSS({
+    const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}special_characters/special_characters.js`],
       css: [`${root}special_characters/special_characters.css`],
       extractors: [

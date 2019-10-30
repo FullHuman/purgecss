@@ -6,10 +6,10 @@ const typescript = require('@wessberg/rollup-plugin-ts')
 const packagesDirectory = path.resolve(__dirname, './../packages')
 
 const packages = [
-  // {
-  //   name: 'postcss-purgecss',
-  //   external: ['postcss', 'purgecss']
-  // },
+  {
+    name: 'postcss-purgecss',
+    external: ['postcss', 'purgecss']
+  },
   {
     name: 'purgecss',
     external: ['postcss', 'postcss-selector-parser', 'glob', 'path', 'fs']
@@ -22,10 +22,10 @@ const packages = [
     name: 'purgecss-from-html',
     external: ['parse5', 'parse5-htmlparser2-tree-adapter']
   },
-  // {
-  //   name: 'purgecss-from-pug',
-  //   external: ['pug-lexer']
-  // }
+  {
+    name: 'purgecss-from-pug',
+    external: ['pug-lexer']
+  }
 ]
 
 async function build() {
@@ -50,8 +50,10 @@ async function build() {
   }
 }
 
-try {
-  build()
-} catch(e) {
-  console.error(e)
-}
+(async() => {
+  try {
+    await build()
+  } catch(e) {
+    console.error(e)
+  }
+})()
