@@ -25,6 +25,10 @@ const packages = [
   {
     name: 'purgecss-from-pug',
     external: ['pug-lexer']
+  },
+  {
+    name: 'purgecss-webpack-plugin',
+    external: ['fs', 'purgecss', 'webpack', 'webpack-sources']
   }
 ]
 

@@ -1,5 +1,5 @@
 {
-  "name": "@fullhuman/purgecss",
+  "name": "purgecss",
   "version": "2.0.0",
   "description": "Remove unused css selectors",
   "author": "Ffloriel <florielfedry@gmail.com>",
@@ -39,18 +39,15 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "glob": "^7.1.4",
+    "commander": "^4.0.0",
+    "glob": "^7.0.0",
     "postcss": "^7.0.18",
-    "postcss-selector-parser": "^6.0.2",
-    "yargs": "^14.0.0"
+    "postcss-selector-parser": "^6.0.2"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }

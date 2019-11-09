@@ -22,7 +22,6 @@
     "rootDir": ".",
     "paths": {
       "*" : ["types/*"],
-      "@fullhuman/cli": ["packages/cli/src"],
       "@fullhuman/purgecss": ["packages/purgecss/src"],
       "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
       "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"]

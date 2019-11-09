@@ -29,7 +29,7 @@ export interface ExtractorResultDetailed {
   undetermined: string[];
 }
 
-export type ExtractorResult = ExtractorResultDetailed | string[]
+export type ExtractorResult = ExtractorResultDetailed | string[];
 
 export type ExtractorFunction = (content: string) => ExtractorResult;
 

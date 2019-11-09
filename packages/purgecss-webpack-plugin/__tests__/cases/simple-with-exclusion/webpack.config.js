@@ -3,11 +3,7 @@ const glob = require('glob')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('../../../src/').default
 
-class CustomExtractor {
-    static extract(content) {
-        return content.match(/[A-z0-9-:/]+/g)
-    }
-}
+const customExtractor = (content) => content.match(/[A-z0-9-:/]+/g) || []
 
 const PATHS = {
     src: path.join(__dirname, 'src')
@@ -50,7 +46,7 @@ module.exports = {
             only: ['bundle'],
             extractors: [
                 {
-                    extractor: CustomExtractor,
+                    extractor: customExtractor,
                     extensions: ['html', 'js']
                 }
             ]

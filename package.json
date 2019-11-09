@@ -8,13 +8,13 @@
     "jest": "^24.9.0",
     "lerna": "^3.18.0",
     "lint-staged": "^9.4.2",
-    "prettier": "^1.18.2",
-    "rollup": "^1.23.1",
+    "prettier": "^1.19.0",
+    "rollup": "^1.26.4",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.2",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "build": "ts-node scripts/build.ts",

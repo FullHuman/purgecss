@@ -1,11 +1,7 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var fs = require('fs');
-var Purgecss = _interopDefault(require('purgecss'));
-var webpackSources = require('webpack-sources');
-var path = _interopDefault(require('path'));
+import { existsSync } from 'fs';
+import Purgecss from 'purgecss';
+import { ConcatSource } from 'webpack-sources';
+import path from 'path';
 
 /**
  * Get the filename without ?hash
@@ -102,7 +98,7 @@ class PurgeCSSPlugin {
             ? this.options.paths()
             : this.options.paths;
         entryPaths.forEach(p => {
-            if (!fs.existsSync(p))
+            if (!existsSync(p))
                 throw new Error(`Path ${p} does not exist.`);
         });
         compilation.hooks.additionalAssets.tapAsync(pluginName, (ctx, callback) => {
@@ -159,10 +155,10 @@ class PurgeCSSPlugin {
                     this.purgedStats[name] = purged.rejected;
                 }
                 console.log('yo', name);
-                compilation.assets[name] = new webpackSources.ConcatSource(purged.css);
+                compilation.assets[name] = new ConcatSource(purged.css);
             }
         }
     }
 }
 
-module.exports = PurgeCSSPlugin;
+export default PurgeCSSPlugin;

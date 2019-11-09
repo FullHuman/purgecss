@@ -62,16 +62,18 @@ function extractSelectors(
   extractor: ExtractorFunction
 ): ExtractorResultDetailed {
   const selectors = extractor(content);
-  return Array.isArray(selectors) ? {
-    attributes: {
-      names: [],
-      values: []
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: selectors
-  } : selectors
+  return Array.isArray(selectors)
+    ? {
+        attributes: {
+          names: [],
+          values: []
+        },
+        classes: [],
+        ids: [],
+        tags: [],
+        undetermined: selectors
+      }
+    : selectors;
 }
 
 /**
@@ -146,10 +148,7 @@ export function mergeExtractorSelectors(
         ...extractorSelectorsB.attributes.values
       ]
     },
-    classes: [
-      ...extractorSelectorsA.classes,
-      ...extractorSelectorsB.classes
-    ],
+    classes: [...extractorSelectorsA.classes, ...extractorSelectorsB.classes],
     ids: [...extractorSelectorsA.ids, ...extractorSelectorsB.ids],
     tags: [...extractorSelectorsA.tags, ...extractorSelectorsB.tags],
     undetermined: [
@@ -189,9 +188,7 @@ function isAttributeFound(
         selectors.attributes.values.some(str =>
           str.endsWith(attributeNode.value!)
         ) ||
-        Array.from(selectors.undetermined).some(str =>
-          str.endsWith(attributeNode.value!)
-        )
+        selectors.undetermined.some(str => str.endsWith(attributeNode.value!))
       );
     case "~=":
     case "*=":
@@ -199,18 +196,12 @@ function isAttributeFound(
         selectors.attributes.values.some(str =>
           str.includes(attributeNode.value!)
         ) ||
-        selectors.undetermined.some(str =>
-          str.includes(attributeNode.value!)
-        )
+        selectors.undetermined.some(str => str.includes(attributeNode.value!))
       );
     case "=":
       return (
-        selectors.attributes.values.some(
-          str => str === attributeNode.value
-        ) ||
-        selectors.undetermined.some(
-          str => str === attributeNode.value!
-        )
+        selectors.attributes.values.some(str => str === attributeNode.value) ||
+        selectors.undetermined.some(str => str === attributeNode.value!)
       );
     case "|=":
     case "^=":
@@ -218,9 +209,7 @@ function isAttributeFound(
         selectors.attributes.values.some(str =>
           str.startsWith(attributeNode.value!)
         ) ||
-        selectors.undetermined.some(str =>
-          str.startsWith(attributeNode.value!)
-        )
+        selectors.undetermined.some(str => str.startsWith(attributeNode.value!))
       );
     default:
       return true;
@@ -290,13 +279,13 @@ class PurgeCSS {
     fontFace: [],
     keyframes: []
   };
-  
+
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
 
   public options: Options;
-  
+
   /**
    * Get the extractor corresponding to the extension file
    * @param filename Name of the file
@@ -337,6 +326,7 @@ class PurgeCSS {
 
     for (const globfile of files) {
       let filesNames: string[] = [];
+
       try {
         await asyncFs.access(globfile, fs.constants.F_OK);
         filesNames.push(globfile);
@@ -556,10 +546,8 @@ class PurgeCSS {
   private isSelectorWhitelisted(selector: string): boolean {
     return (
       CSS_WHITELIST.includes(selector) ||
-      (this.options.whitelist &&
-        this.options.whitelist.some((v: string) => v === selector)) ||
-      (this.options.whitelistPatterns &&
-        this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
+      this.options.whitelist?.some((v: string) => v === selector) ||
+      this.options.whitelistPatterns?.some((v: RegExp) => v.test(selector))
     );
   }
 
@@ -568,11 +556,8 @@ class PurgeCSS {
    * @param selector selector
    */
   private isSelectorWhitelistedChildren(selector: string): boolean {
-    return (
-      this.options.whitelistPatternsChildren &&
-      this.options.whitelistPatternsChildren.some((pattern: RegExp) =>
-        pattern.test(selector)
-      )
+    return this.options.whitelistPatternsChildren?.some((pattern: RegExp) =>
+      pattern.test(selector)
     );
   }
 
@@ -702,7 +687,10 @@ class PurgeCSS {
    * @param root root node of the postcss AST
    * @param selectors selectors used in content files
    */
-  public walkThroughCSS(root: postcss.Root, selectors: ExtractorResultDetailed) {
+  public walkThroughCSS(
+    root: postcss.Root,
+    selectors: ExtractorResultDetailed
+  ) {
     root.walk(node => {
       if (node.type === "rule") {
         return this.evaluateRule(node, selectors);

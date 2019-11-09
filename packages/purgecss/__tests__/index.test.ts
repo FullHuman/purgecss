@@ -6,14 +6,18 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 describe("purgecss with config file", () => {
   it("initialize without error with a config file specified", () => {
     expect(async () => {
-      await new PurgeCSS().purge("./packages/purgecss/__tests__/purgecss.config.js");
+      await new PurgeCSS().purge(
+        "./packages/purgecss/__tests__/purgecss.config.js"
+      );
     }).not.toThrow();
   });
 
   it("throws an error if config file is not found", async () => {
     expect.assertions(1);
     await expect(
-      new PurgeCSS().purge("./packages/purgecss/__tests__/purgecss_wrong_path.config.js")
+      new PurgeCSS().purge(
+        "./packages/purgecss/__tests__/purgecss_wrong_path.config.js"
+      )
     ).rejects.toThrow();
   });
 });
@@ -42,19 +46,8 @@ describe("filters out unused selectors", () => {
 
 describe("special characters, with custom Extractor", () => {
   let purgedCSS: string = "";
-  const CustomExtractor = (content: string): ExtractorResult => {
-    const selectors = content.match(/[A-z0-9-:/]+/g) || [];
-    return {
-      attributes: {
-        names: new Set(),
-        values: new Set()
-      },
-      classes: new Set(),
-      ids: new Set(),
-      tags: new Set(),
-      undetermined: new Set(selectors)
-    };
-  };
+  const CustomExtractor = (content: string): ExtractorResult =>
+    content.match(/[A-z0-9-:/]+/g) || [];
 
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({

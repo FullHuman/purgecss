@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/postcss-purgecss.js",
   "module": "lib/postcss-purgecss.esm.js",
   "types": "lib/postcss-purgecss.d.ts",
@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "postcss": "^7.0.18",
-    "purgecss": "file:../purgecss"
+    "purgecss": "^2.0.0"
   }
 }

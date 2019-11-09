@@ -1,5 +1,5 @@
 import postcss from "postcss";
-import PurgeCSS, { defaultOptions, mergeExtractorSelectors} from "purgecss";
+import PurgeCSS, { defaultOptions, mergeExtractorSelectors } from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 
@@ -9,12 +9,12 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
   opts: PurgeCSSPostCSSOptions
 ) {
   return async function(root, result) {
-    const purgeCSS = new PurgeCSS()
+    const purgeCSS = new PurgeCSS();
     const options = {
       ...defaultOptions,
       ...opts
     };
-    purgeCSS.options = options
+    purgeCSS.options = options;
 
     const { content, extractors } = options;
 
@@ -34,7 +34,10 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
       extractors
     );
 
-    const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
+    const selectors = mergeExtractorSelectors(
+      cssFileSelectors,
+      cssRawSelectors
+    );
 
     //purge unused selectors
     purgeCSS.walkThroughCSS(root, selectors);

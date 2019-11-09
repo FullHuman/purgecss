@@ -1,6 +1,49 @@
 #!/usr/bin/env node
+const program = require('commander');
+const fs = require('fs');
+const { default: PurgeCSS, defaultOptions, setOptions } = require('../lib/purgecss')
 
-'use strict';
+program
+  .option('-con, --content', 'glob of content files')
+  .option('-css, --css', 'glob of css files')
+  .option('-c, --config', 'path to the configuration file')
+  .option('-o, --output', 'file path directory to write purged css files to')
+  .option('-w, --whitelist', 'list of classes that should not be removed');
 
-// eslint-disable-next-line no-unused-expressions
-require('../lib/cli')().parse(process.argv.slice(2));
+program.parse(process.argv);
+
+// config file is not specified or the content and css are not,
+// PurgeCSS will not run
+if (!program.config || !(program.content && program.css)) {
+  program.help();
+}
+
+(async() => {
+  // if the config file is present, use it
+  // other options specified will override
+  let options;
+  if (program.config) {
+    options = await setOptions(program.config);
+  }
+
+  program.content && options.content = program.content;
+  program.css && options.css = program.css;
+  program.whitelist && options.whitelist = program.whitelist;
+
+  const purged = await new PurgeCSS().purge(options);
+  // output results in specified directory
+  if (program.output) {
+    for (const purgedResult of purged) {
+      const fileName = purgedResult.file.split("/").pop();
+      try {
+        fs.promises.writeFile(`${program.output}/${fileName}`, purgedResult.css);
+      } catch(err) {
+        console.error(err.message);
+      }
+    }
+  } else {
+    console.log(JSON.stringify(purged));
+  }
+
+})()
+
