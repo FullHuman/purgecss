@@ -5,6 +5,7 @@
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.11",
     "@wessberg/rollup-plugin-ts": "^1.1.65",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
     "lerna": "^3.18.0",
     "lint-staged": "^9.4.2",
@@ -21,9 +22,11 @@
     "prettier": "prettier --write --parser typescript 'packages/**/*.ts'",
     "test": "jest"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged",
-    "commit-msg": "node scripts/verify-commit.js"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "ts-node scripts/verify-commit.ts"
+    }
   },
   "lint-staged": {
     "*.js": [
