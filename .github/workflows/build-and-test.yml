@@ -19,9 +19,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: lerna bootstrap, npm run build and test
+    - name: npm install, lerna bootstrap, run build and test
       run: |
-        lerna bootstrap
+        npm i
+        npx lerna bootstrap
         npm run build --if-present
         npm test
       env:
