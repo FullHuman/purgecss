@@ -4,12 +4,13 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe(":not pseudo class", () => {
   let purgedCSS: string;
-  beforeAll(async () => {
+  beforeAll(async done => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}not/not.html`],
       css: [`${root}not/not.css`]
     });
     purgedCSS = resultsPurge[0].css;
+    done();
   });
 
   it("finds foo-bar", () => {
