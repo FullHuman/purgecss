@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "ts-node scripts/build.ts",
-    "prettier": "prettier --write --parser typescript 'packages/**/*.ts'",
+    "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "jest"
   },
   "husky": {

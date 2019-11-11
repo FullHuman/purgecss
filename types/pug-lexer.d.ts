@@ -6,7 +6,14 @@ declare module "pug-lexer" {
     plugins: string;
   }
 
-   type TokenType = 'tag' | 'attribute' | 'eos' | 'text' | 'newline' | 'class' | 'id';
+  type TokenType =
+    | "tag"
+    | "attribute"
+    | "eos"
+    | "text"
+    | "newline"
+    | "class"
+    | "id";
 
   interface Attribute {
     escaped: boolean;
@@ -23,6 +30,6 @@ declare module "pug-lexer" {
     selfClosing: boolean;
   }
 
-  function lex(str: string, options?: LexerOptions): Token[]
-  export = lex
+  function lex(str: string, options?: LexerOptions): Token[];
+  export = lex;
 }

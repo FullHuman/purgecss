@@ -1,13 +1,10 @@
-// Invoked on the commit-msg git hook by yorkie.
+import fs from "fs";
 
-const msgPath = process.env.HUSKY_GIT_PARAMS;
-const msg = require("fs")
-  .readFileSync(msgPath, "utf-8")
-  .trim();
+const message = fs.readFileSync(process.env.HUSKY_GIT_PARAMS!, "utf-8").trim();
 
 const commitRE = /^(revert: )?(feat|fix|docs|dx|style|refactor|perf|test|workflow|build|ci|chore|types|wip)(\(.+\))?: .{1,50}/;
 
-if (!commitRE.test(msg)) {
+if (!commitRE.test(message)) {
   console.log();
   console.error(`invalid commit message format.`);
   process.exit(1);
