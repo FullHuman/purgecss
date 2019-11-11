@@ -1,8 +1,9 @@
 name: Build / Test
 
-on: push
-  branches:
-    - next
+on:
+  push:
+    branches:
+      - next
 
 jobs:
   build:
