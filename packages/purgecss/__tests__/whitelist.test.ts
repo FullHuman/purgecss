@@ -4,7 +4,7 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("whitelist", () => {
   let purgedCSS: string = "";
-  beforeAll(async done => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}whitelist/whitelist.html`],
       css: [`${root}whitelist/whitelist.css`],
@@ -12,7 +12,6 @@ describe("whitelist", () => {
       whitelistPatterns: [/nav-/]
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
 
   it("finds random class", () => {

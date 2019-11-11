@@ -4,13 +4,12 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("media queries", () => {
   let purgecssResult: string;
-  beforeAll(async done => {
+  beforeAll(async () => {
     const purgecss = await new PurgeCSS().purge({
       content: [`${root}media_queries/media_queries.html`],
       css: [`${root}media_queries/media_queries.css`]
     });
     purgecssResult = purgecss[0].css;
-    done();
   });
   it("finds .media-class", () => {
     expect(purgecssResult.includes(".media-class")).toBe(true);
