@@ -1,0 +1,28 @@
+name: Build / Test
+
+on: push
+  branches:
+    - next
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: lerna bootstrap, npm run build and test
+      run: |
+        lerna bootstrap
+        npm run build --if-present
+        npm test
+      env:
+        CI: true
+
