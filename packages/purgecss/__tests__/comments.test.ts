@@ -4,12 +4,13 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("ignore comment", () => {
   let purgedCSS: string;
-  beforeAll(async () => {
+  beforeAll(async done => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}ignore_comment/ignore_comment.html`],
       css: [`${root}ignore_comment/ignore_comment.css`]
     });
     purgedCSS = resultsPurge[0].css;
+    done();
   });
   it("ignores h1 h2", () => {
     expect(purgedCSS.includes("h1")).toBe(true);
