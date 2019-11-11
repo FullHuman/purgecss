@@ -379,7 +379,8 @@ class PurgeCSS {
     );
   }
 }
-(exports.default = PurgeCSS),
+(exports.PurgeCSS = PurgeCSS),
+  (exports.default = PurgeCSS),
   (exports.defaultOptions = defaultOptions),
   (exports.mergeExtractorSelectors = mergeExtractorSelectors),
   (exports.setOptions = setOptions);

@@ -719,4 +719,5 @@ class PurgeCSS {
   }
 }
 
+export { PurgeCSS };
 export default PurgeCSS;

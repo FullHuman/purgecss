@@ -118,7 +118,7 @@ function F(e, t) {
 function b(e, t) {
   return t.tags.includes(e.value) || t.undetermined.includes(e.value);
 }
-export default class {
+class S {
   constructor() {
     (this.ignore = !1),
       (this.atRules = { fontFace: [], keyframes: [] }),
@@ -343,4 +343,10 @@ export default class {
     );
   }
 }
-export { o as defaultOptions, g as mergeExtractorSelectors, h as setOptions };
+export default S;
+export {
+  S as PurgeCSS,
+  o as defaultOptions,
+  g as mergeExtractorSelectors,
+  h as setOptions
+};
