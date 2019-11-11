@@ -546,8 +546,10 @@ class PurgeCSS {
   private isSelectorWhitelisted(selector: string): boolean {
     return (
       CSS_WHITELIST.includes(selector) ||
-      this.options.whitelist?.some((v: string) => v === selector) ||
-      this.options.whitelistPatterns?.some((v: RegExp) => v.test(selector))
+      (this.options.whitelist &&
+        this.options.whitelist.some((v: string) => v === selector)) ||
+      (this.options.whitelistPatterns &&
+        this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
     );
   }
 
@@ -556,8 +558,11 @@ class PurgeCSS {
    * @param selector selector
    */
   private isSelectorWhitelistedChildren(selector: string): boolean {
-    return this.options.whitelistPatternsChildren?.some((pattern: RegExp) =>
-      pattern.test(selector)
+    return (
+      this.options.whitelistPatternsChildren &&
+      this.options.whitelistPatternsChildren.some((pattern: RegExp) =>
+        pattern.test(selector)
+      )
     );
   }
 
@@ -658,6 +663,7 @@ class PurgeCSS {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
+          // idem for `checked`, `selected`
           isPresent =
             nodeSelector.attribute === "value"
               ? true

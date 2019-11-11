@@ -1,168 +1,114 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var fs = require('fs');
-var Purgecss = _interopDefault(require('purgecss'));
-var webpackSources = require('webpack-sources');
-var path = _interopDefault(require('path'));
-
-/**
- * Get the filename without ?hash
- * @param fileName file name
- */
-function getFormattedFilename(fileName) {
-    if (fileName.includes("?")) {
-        return fileName
-            .split("?")
-            .slice(0, -1)
-            .join("");
-    }
-    return fileName;
+"use strict";
+function _interopDefault(t) {
+  return t && "object" == typeof t && "default" in t ? t.default : t;
 }
-/**
- * Returns true if the filename is of types of one of the specified extensions
- * @param filename file name
- * @param extensions extensions
- */
-function isFileOfTypes(filename, extensions) {
-    const extension = path.extname(getFormattedFilename(filename));
-    return extensions.includes(extension);
+var fs = require("fs"),
+  purgecss = require("purgecss"),
+  webpackSources = require("webpack-sources"),
+  path = _interopDefault(require("path"));
+function getFormattedFilename(t) {
+  return t.includes("?")
+    ? t
+        .split("?")
+        .slice(0, -1)
+        .join("")
+    : t;
 }
-/**
- * Get the assets that are of one of the specified extensions
- * @param assets assets
- * @param extensions extensions
- */
-function getAssets(assets, extensions) {
-    const purgeAssets = [];
-    if (!assets)
-        return purgeAssets;
-    for (const [name, asset] of Object.entries(assets)) {
-        if (isFileOfTypes(name, extensions)) {
-            purgeAssets.push({
-                name,
-                asset: asset
-            });
-        }
-    }
-    return purgeAssets;
+function isFileOfTypes(t, e) {
+  const s = path.extname(getFormattedFilename(t));
+  return e.includes(s);
 }
-function files(chunk, extensions) {
-    const mods = [];
-    for (const module of Array.from(chunk.modulesIterable || [])) {
-        const file = module.resource;
-        if (file && extensions.includes(path.extname(file)))
-            mods.push(file);
-    }
-    return mods;
+function getAssets(t = {}, e) {
+  const s = [];
+  for (const [i, n] of Object.entries(t))
+    isFileOfTypes(i, e) && s.push({ name: i, asset: n });
+  return s;
 }
-
-const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
-const pluginName = "PurgeCSS";
+function files(t, e, s = t => t.resource, i) {
+  const n = [];
+  for (const i of Array.from(t.modulesIterable || [])) {
+    const t = s(i);
+    t && e.includes(path.extname(t)) && n.push(t);
+  }
+  return n;
+}
+const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"],
+  pluginName = "PurgeCSS";
 class PurgeCSSPlugin {
-    constructor(options) {
-        this.options = options;
+  constructor(t) {
+    this.options = t;
+  }
+  apply(t) {
+    t.hooks.compilation.tap(pluginName, t => {
+      this.initializePlugin(t);
+    }),
+      t.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
+  }
+  async onHooksCompilation(t) {
+    this.initializePlugin(t);
+  }
+  onHooksDone(t, e) {
+    t.hasErrors()
+      ? this.options.verbose &&
+        console.warn("purge-webpack-plugin: pausing due to webpack errors")
+      : this.options.rejected && (t.purged = this.purgedStats);
+  }
+  getAssetsToPurge(t, e) {
+    return t.filter(t =>
+      this.options.only
+        ? this.options.only.some(e => t && t.name.includes(e))
+        : t && e.includes(t.name)
+    );
+  }
+  initializePlugin(t) {
+    const e =
+      "function" == typeof this.options.paths
+        ? this.options.paths()
+        : this.options.paths;
+    e.forEach(t => {
+      if (!fs.existsSync(t)) throw new Error(`Path ${t} does not exist.`);
+    }),
+      t.hooks.additionalAssets.tapPromise(pluginName, () =>
+        this.runPluginHook(t, e)
+      );
+  }
+  async runPluginHook(t, e) {
+    const s = getAssets(t.assets, [".css"]);
+    for (const i of t.chunks) {
+      const { files: n } = i,
+        o = this.getAssetsToPurge(s, n);
+      for (const { name: s, asset: n } of o) {
+        const o = e
+            .concat(
+              files(i, this.options.moduleExtensions || [], t => t.resource)
+            )
+            .filter(t => !styleExtensions.some(e => t.endsWith(e))),
+          r = { ...this.options, content: o, css: [{ raw: n.source() }] };
+        "function" == typeof r.whitelist && (r.whitelist = r.whitelist()),
+          "function" == typeof r.whitelistPatterns &&
+            (r.whitelistPatterns = r.whitelistPatterns()),
+          "function" == typeof r.whitelistPatternsChildren &&
+            (r.whitelistPatternsChildren = r.whitelistPatternsChildren());
+        const a = (
+          await new purgecss.PurgeCSS().purge({
+            content: r.content,
+            css: r.css,
+            defaultExtractor: r.defaultExtractor,
+            extractors: r.extractors,
+            fontFace: r.fontFace,
+            keyframes: r.keyframes,
+            output: r.output,
+            rejected: r.rejected,
+            variables: r.variables,
+            whitelist: r.whitelist,
+            whitelistPatterns: r.whitelistPatterns,
+            whitelistPatternsChildren: r.whitelistPatternsChildren
+          })
+        )[0];
+        a.rejected && (this.purgedStats[s] = a.rejected),
+          (t.assets[s] = new webpackSources.ConcatSource(a.css));
+      }
     }
-    apply(compiler) {
-        compiler.hooks.compilation.tap(pluginName, (compilation) => {
-            this.initializePlugin(compilation);
-        });
-        compiler.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
-    }
-    async onHooksCompilation(compilation) {
-        this.initializePlugin(compilation);
-    }
-    async onHooksDone(stats, callback) {
-        if (stats.hasErrors()) {
-            if (this.options.verbose) {
-                console.warn("purge-webpack-plugin: pausing due to webpack errors");
-            }
-            return;
-        }
-        if (this.options.rejected) {
-            // @ts-ignore
-            stats["purged"] = this.purgedStats;
-        }
-    }
-    getAssetsToPurge(assetsFromCompilation, files) {
-        return assetsFromCompilation.filter(asset => {
-            if (this.options.only) {
-                return this.options.only.some(only => {
-                    return asset && asset.name.includes(only);
-                });
-            }
-            else {
-                return asset && files.includes(asset.name);
-            }
-        });
-    }
-    initializePlugin(compilation) {
-        const entryPaths = typeof this.options.paths === "function"
-            ? this.options.paths()
-            : this.options.paths;
-        entryPaths.forEach(p => {
-            if (!fs.existsSync(p))
-                throw new Error(`Path ${p} does not exist.`);
-        });
-        compilation.hooks.additionalAssets.tapAsync(pluginName, (ctx, callback) => {
-            this.runPluginHook(compilation, entryPaths).then(callback).catch(callback);
-        });
-    }
-    async runPluginHook(compilation, entryPaths) {
-        const assetsFromCompilation = getAssets(compilation.assets, [
-            ".css"
-        ]);
-        for (const chunk of compilation.chunks) {
-            const { files: files$1 } = chunk;
-            const assetsToPurge = this.getAssetsToPurge(assetsFromCompilation, files$1);
-            for (const { name, asset } of assetsToPurge) {
-                const filesToSearch = entryPaths
-                    .concat(files(chunk, this.options.moduleExtensions || []))
-                    .filter(v => styleExtensions.some(ext => v.endsWith(ext)));
-                // Compile through Purgecss and attach to output.
-                // This loses sourcemaps should there be any!
-                const options = {
-                    ...this.options,
-                    content: filesToSearch,
-                    css: [
-                        {
-                            raw: asset.source()
-                        }
-                    ]
-                };
-                if (typeof options.whitelist === "function") {
-                    options.whitelist = options.whitelist();
-                }
-                if (typeof options.whitelistPatterns === "function") {
-                    options.whitelistPatterns = options.whitelistPatterns();
-                }
-                if (typeof options.whitelistPatternsChildren === "function") {
-                    options.whitelistPatternsChildren = options.whitelistPatternsChildren();
-                }
-                const purgecss = await new Purgecss().purge({
-                    content: options.content,
-                    css: options.css,
-                    defaultExtractor: options.defaultExtractor,
-                    extractors: options.extractors,
-                    fontFace: options.fontFace,
-                    keyframes: options.keyframes,
-                    output: options.output,
-                    rejected: options.rejected,
-                    variables: options.variables,
-                    whitelist: options.whitelist,
-                    whitelistPatterns: options.whitelistPatterns,
-                    whitelistPatternsChildren: options.whitelistPatternsChildren
-                });
-                const purged = purgecss[0];
-                if (purged.rejected) {
-                    this.purgedStats[name] = purged.rejected;
-                }
-                console.log('yo', name);
-                compilation.assets[name] = new webpackSources.ConcatSource(purged.css);
-            }
-        }
-    }
+  }
 }
-
 module.exports = PurgeCSSPlugin;

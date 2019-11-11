@@ -1,4 +1,5 @@
-import * as postcss_$0 from "postcss";
+import postcss from "postcss";
+import * as postcss from "postcss";
 interface RawContent {
   extension: string;
   raw: string;
@@ -64,13 +65,13 @@ declare const defaultOptions: Options;
  * Load the configuration file from the path
  * @param configFile Path of the config file
  */
-export declare function setOptions(configFile?: string): Promise<Options>;
+declare function setOptions(configFile?: string): Promise<Options>;
 /**
  * Merge two extractor selectors
  * @param extractorSelectorsA extractor selectors A
  * @param extractorSelectorsB extractor selectors B
  */
-export declare function mergeExtractorSelectors(
+declare function mergeExtractorSelectors(
   extractorSelectorsA: ExtractorResultDetailed,
   extractorSelectorsB: ExtractorResultDetailed
 ): ExtractorResultDetailed;
@@ -161,10 +162,6 @@ declare class PurgeCSS {
    * @param root root node of the postcss AST
    * @param selectors selectors used in content files
    */
-  walkThroughCSS(
-    root: postcss_$0.Root,
-    selectors: ExtractorResultDetailed
-  ): void;
+  walkThroughCSS(root: postcss.Root, selectors: ExtractorResultDetailed): void;
 }
-export default PurgeCSS;
-export { defaultOptions };
+export { defaultOptions, setOptions, mergeExtractorSelectors, PurgeCSS };

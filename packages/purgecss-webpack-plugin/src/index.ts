@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import Purgecss from "purgecss";
+import { PurgeCSS } from "purgecss";
 import { ConcatSource } from "webpack-sources";
 import * as search from "./search";
 import { UserDefinedOptions, PurgedStats, PurgeAsset } from "./types";
@@ -42,8 +42,6 @@ export default class PurgeCSSPlugin {
       // @ts-ignore
       stats["purged"] = this.purgedStats;
     }
-
-    // callback()
   }
 
   getAssetsToPurge(assetsFromCompilation: PurgeAsset[], files: string[]) {
@@ -116,7 +114,7 @@ export default class PurgeCSSPlugin {
           options.whitelistPatternsChildren = options.whitelistPatternsChildren();
         }
 
-        const purgecss = await new Purgecss().purge({
+        const purgecss = await new PurgeCSS().purge({
           content: options.content,
           css: options.css,
           defaultExtractor: options.defaultExtractor,

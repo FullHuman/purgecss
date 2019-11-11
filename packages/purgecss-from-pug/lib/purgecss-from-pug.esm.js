@@ -1,22 +1,17 @@
-import lex from 'pug-lexer';
-
-const purgeFromPug = (content) => {
-    const tokens = lex(content);
-    const selectors = [];
-    for (const token of tokens) {
-        switch (token.type) {
-            case "tag":
-            case "id":
-            case "class":
-                selectors.push(token.val);
-                break;
-            case "attribute":
-                if (token.name === "class" || token.name === "id") {
-                    selectors.push(token.mustEscape ? token.val.replace(/"/g, "") : token.val);
-                }
-        }
+import a from "pug-lexer";
+export default e => {
+  const s = a(e),
+    t = [];
+  for (const a of s)
+    switch (a.type) {
+      case "tag":
+      case "id":
+      case "class":
+        t.push(a.val);
+        break;
+      case "attribute":
+        ("class" !== a.name && "id" !== a.name) ||
+          t.push(a.mustEscape ? a.val.replace(/"/g, "") : a.val);
     }
-    return selectors;
+  return t;
 };
-
-export default purgeFromPug;

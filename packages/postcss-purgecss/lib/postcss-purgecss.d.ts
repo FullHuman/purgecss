@@ -43,4 +43,4 @@ declare const purgeCSSPlugin: postcss.Plugin<Pick<
   | "whitelistPatterns"
   | "whitelistPatternsChildren"
 >>;
-export default purgeCSSPlugin;
+export { purgeCSSPlugin };

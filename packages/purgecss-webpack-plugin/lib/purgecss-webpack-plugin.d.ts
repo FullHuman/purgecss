@@ -35,15 +35,14 @@ interface PurgeAsset {
   };
   name: string;
 }
-declare function files(chunk: any, extensions: string[]): any[];
 declare type Compilation = compilationType.Compilation;
-export default class PurgeCSSPlugin {
+declare class PurgeCSSPlugin {
   options: UserDefinedOptions;
   purgedStats: PurgedStats;
   constructor(options: UserDefinedOptions);
   apply(compiler: Compiler): void;
   onHooksCompilation(compilation: Compilation): Promise<void>;
-  onHooksDone(stats: Stats, callback: () => void): Promise<void>;
+  onHooksDone(stats: Stats, callback: () => void): void;
   getAssetsToPurge(
     assetsFromCompilation: PurgeAsset[],
     files: string[]
@@ -51,3 +50,4 @@ export default class PurgeCSSPlugin {
   initializePlugin(compilation: Compilation): void;
   runPluginHook(compilation: Compilation, entryPaths: string[]): Promise<void>;
 }
+export { PurgeCSSPlugin };

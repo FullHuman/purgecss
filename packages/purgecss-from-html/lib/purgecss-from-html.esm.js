@@ -1,39 +1,29 @@
-import parse5 from 'parse5';
-import * as htmlparser2 from 'parse5-htmlparser2-tree-adapter';
-
-const getSelectorsInElement = (element) => {
-    const selectors = [];
-    const tagName = element.name;
-    // add class names
-    if (element.attribs.class) {
-        selectors.push(...element.attribs.class.split(" "));
+import t from "parse5";
+import * as r from "parse5-htmlparser2-tree-adapter";
+const s = t => {
+    const r = [],
+      s = t.name;
+    return (
+      t.attribs.class && r.push(...t.attribs.class.split(" ")),
+      t.attribs.id && r.push(...t.attribs.id.split(" ")),
+      [...e(t), ...r, s]
+    );
+  },
+  e = t => {
+    const r = [];
+    for (const a of t.children) {
+      const t = a;
+      switch (t.type) {
+        case "tag":
+          r.push(...s(t));
+          break;
+        case "root":
+          r.push(...e(t));
+      }
     }
-    // add ids
-    if (element.attribs.id) {
-        selectors.push(...element.attribs.id.split(" "));
-    }
-    return [...getSelectorsInNodes(element), ...selectors, tagName];
+    return r;
+  };
+export default s => {
+  const a = t.parse(s, { treeAdapter: r });
+  return e(a);
 };
-const getSelectorsInNodes = (node) => {
-    const selectors = [];
-    for (const childNode of node.children) {
-        const element = childNode;
-        switch (element.type) {
-            case "tag":
-                selectors.push(...getSelectorsInElement(element));
-                break;
-            case "root":
-                selectors.push(...getSelectorsInNodes(element));
-                break;
-        }
-    }
-    return selectors;
-};
-const purgecssFromHtml = (content) => {
-    const tree = parse5.parse(content, {
-        treeAdapter: htmlparser2
-    });
-    return getSelectorsInNodes(tree);
-};
-
-export default purgecssFromHtml;
