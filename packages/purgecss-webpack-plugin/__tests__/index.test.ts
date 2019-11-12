@@ -14,6 +14,11 @@ function runWebpack(options: Configuration) {
 }
 
 describe("Webpack integration", () => {
+  const cwd = process.cwd();
+  afterAll(() => {
+    process.chdir(cwd);
+  });
+
   const cases: string[] = [
     "path-and-whitelist-functions",
     "simple",
