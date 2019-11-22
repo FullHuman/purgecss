@@ -392,6 +392,9 @@ describe('nth-child', () => {
     })
     it('finds some-item:nth-child(2n+1)', () => {
         expect(purgecssResult.includes('some-item:nth-child(2n+1)')).toBe(true)
+	})
+	it('removes canvas (contains "n")', () => {
+        expect(purgecssResult.includes('canvas')).toBe(false)
     })
 })
 
