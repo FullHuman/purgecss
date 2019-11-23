@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "comparisons",
   "version": "0.1.0",
   "description": "PurgeCSS versions comparisons",

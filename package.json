@@ -1,6 +1,15 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "postcss-purgecss",
+    "purgecss",
+    "purgecss-from-blade",
+    "purgecss-from-html",
+    "purgecss-from-pug",
+    "purgecss-from-twig",
+    "purgecss-webpack-plugin"
+  ],
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.11",
@@ -15,10 +24,13 @@
     "rollup-plugin-terser": "^5.1.2",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "vuepress": "^1.2.0"
   },
   "scripts": {
     "build": "ts-node scripts/build.ts",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "jest"
   },
@@ -34,7 +46,7 @@
       "git add"
     ],
     "*.ts": [
-      "npm run prettier",
+      "yarn prettier",
       "git add"
     ]
   }
