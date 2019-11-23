@@ -26,10 +26,6 @@ export default class PurgeCSSPlugin {
     compiler.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
   }
 
-  async onHooksCompilation(compilation: Compilation) {
-    this.initializePlugin(compilation);
-  }
-
   onHooksDone(stats: Stats, callback: () => void) {
     if (stats.hasErrors()) {
       if (this.options.verbose) {
