@@ -1,3 +1,12 @@
+---
+title: Configuration | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: Details about the configuration of PurgeCSS and options available.
+  - name: keywords
+    content: PurgeCSS configuration file options
+---
 
 # Configuration
 

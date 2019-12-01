@@ -7,23 +7,37 @@ module.exports = {
     docsBranch: "master",
     editLinks: true,
     editLinkText: "Help us improve this page!",
+    evergreen: true,
+    plugins: [
+      [
+        "@vuepress/google-analytics",
+        {
+          ga: "UA-117085901-1"
+        }
+      ]
+    ],
     sidebar: {
       "/": [
         {
           title: "PurgeCSS",
           collapsable: false,
-          children: ["", "configuration", "whitelisting"]
+          children: [
+            "",
+            ["configuration", "Configuration"],
+            ["CLI", "Command Line Interface"],
+            ["whitelisting", "Whitelisting"],
+            ["extractors", "Extractors"]
+          ]
         },
         {
           title: "Plugins",
           collapsable: false,
           children: [
             ["plugins/postcss", "PostCSS"],
-            ["plugins/webpack", "Webpack"]
-            // ['plugins/gulp', 'Gulp'],
-            // ['plugins/gatsby', 'Gatsby'],
-            // ['plugins/nuxt', 'Nuxt'],
-            // ['plugins/next', 'Next'],
+            ["plugins/webpack", "Webpack"],
+            ["plugins/gulp", "Gulp"],
+            ["plugins/grunt", "Grunt"],
+            ["plugins/gatsby", "Gatsby"]
           ]
         },
         {

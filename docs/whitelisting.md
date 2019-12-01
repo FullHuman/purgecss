@@ -1,3 +1,13 @@
+---
+title: Whitelisting | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can whitelist selectors.
+  - name: keywords
+    content: PurgeCSS remove unused CSS optimization web
+---
+
 # Whitelisting
 
 You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the PurgeCSS options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, or directly in your CSS with a special comment.

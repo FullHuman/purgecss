@@ -3,14 +3,15 @@ title: Webpack | PurgeCSS
 lang: en-US
 meta:
   - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project.
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with webpack with a plugin.
   - name: keywords
     content: PurgeCSS webpack remove unused CSS optimization web
 ---
 
 # Webpack
 
-## Install
+## Installation
+
 ```sh
 npm i purgecss-webpack-plugin -D
 ```

@@ -1,3 +1,13 @@
+---
+title: Nuxt.js | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: PurgeCSS can be used with Nixt.js with the plugin nuxt-purgecss or with the PostCSS plugin.
+  - name: keywords
+    content: PurgeCSS Nuxt.js Nuxt plugin postCSS nuxt-purgecss
+---
+
 # Nuxt.js
 
 > Nuxt.js presets all the configuration needed to make your development of a Vue.js application enjoyable. Nuxt.js can produce Universal, Single Page and Static Generated Applications.

@@ -1,3 +1,13 @@
+---
+title: Next.js | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: PurgeCSS can be used with Next.js with the plugin next-purgecss.
+  - name: keywords
+    content: PurgeCSS Next.js Next plugin next-purgecss
+---
+
 # Next.js
 
 > Next.js is a React framework for production grade applications that scale. The world's leading companies use Next.js to build server-rendered applications, static websites, and more.
