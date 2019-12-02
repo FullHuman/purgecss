@@ -1,3 +1,13 @@
+---
+title: React | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: PurgeCSS can be used with React.js by using craco, a postbuild script or ejecting create-react-app.
+  - name: keywords
+    content: PurgeCSS react.js react craco postbuild create-react-app eject
+---
+
 # React
 
 > React is a JavaScript library for building user interfaces. Create React App is a comfortable environment for learning React, and is the best way to start building a new single-page application in React.

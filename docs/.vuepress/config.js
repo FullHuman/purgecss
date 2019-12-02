@@ -22,9 +22,10 @@ module.exports = {
           title: "PurgeCSS",
           collapsable: false,
           children: [
-            "",
+            ["", "About PurgeCSS"],
             ["configuration", "Configuration"],
             ["CLI", "Command Line Interface"],
+            ["api", "Programmatic API"],
             ["whitelisting", "Whitelisting"],
             ["extractors", "Extractors"]
           ]
@@ -44,9 +45,11 @@ module.exports = {
           title: "Guides",
           collapsable: false,
           children: [
+            ["guides/vue", "Vue"],
             ["guides/react", "React"],
             ["guides/next", "Next.js"],
             ["guides/nuxt", "Nuxt.js"],
+            ["guides/razzle", "Razzle"],
             ["guides/wordpress", "WordPress"]
           ]
         },

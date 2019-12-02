@@ -3,7 +3,7 @@ title: Nuxt.js | PurgeCSS
 lang: en-US
 meta:
   - name: description
-    content: PurgeCSS can be used with Nixt.js with the plugin nuxt-purgecss or with the PostCSS plugin.
+    content: PurgeCSS can be used with Nuxt.js with the plugin nuxt-purgecss or with the PostCSS plugin.
   - name: keywords
     content: PurgeCSS Nuxt.js Nuxt plugin postCSS nuxt-purgecss
 ---

@@ -1,7 +1,6 @@
 <template>
   <ParentLayout>
-    <div>Yooooooooooooo</div>
-    <template v-slot:sidebar-top>
+    <template #sidebar-top>
       <CarbonAds/>
     </template>
   </ParentLayout>
@@ -10,6 +9,7 @@
 <script>
 import ParentLayout from '@parent-theme/layouts/Layout.vue'
 import CarbonAds from '@theme/components/CarbonAds.vue'
+
 export default {
   components: {
     ParentLayout,

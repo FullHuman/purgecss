@@ -28,7 +28,7 @@ You can then use PurgeCSS with the config file:
 ```js
 const purgecss = await new PurgeCSS().purge()
 // or use the path to the file as the only parameter
-const purgecss = new PurgeCSS.purge('./purgecss.config.js')
+const purgecss = await new PurgeCSS().purge('./purgecss.config.js')
 ```
 
 ## Options
