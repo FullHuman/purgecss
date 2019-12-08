@@ -26,7 +26,7 @@ import {
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
-const IS_NTH = /^:nth-/;
+const IS_NTH = /^:nth-/
 
 class Purgecss {
     options: Options
@@ -319,7 +319,7 @@ class Purgecss {
             return
         }
 
-		let keepSelector = true
+        let keepSelector = true
 
         node.selector = selectorParser(selectorsParsed => {
             selectorsParsed.walk(selector => {
@@ -334,19 +334,21 @@ class Purgecss {
                         return
                     }
                     for (const { type, value } of selector.nodes) {
-
                         if (
                             SELECTOR_STANDARD_TYPES.includes(type) &&
                             typeof value !== 'undefined'
                         ) {
                             selectorsInRule.push(value)
                         } else if (
-							type === 'tag' &&
-							!( // skip everything inside :nth-* pseudo selectors
-								selector.parent &&
-								selector.parent.type === 'pseudo' &&
-								IS_NTH.test(selector.parent.value)
-							)
+                            type === 'tag' &&
+                            !(
+                                // skip everything inside :nth-* pseudo selectors
+                                (
+                                    selector.parent &&
+                                    selector.parent.type === 'pseudo' &&
+                                    IS_NTH.test(selector.parent.value)
+                                )
+                            )
                         ) {
                             selectorsInRule.push(value)
                         }
@@ -454,7 +456,7 @@ class Purgecss {
     isRuleEmpty(node: Object): boolean {
         if (
             (node.type === 'decl' && !node.value) ||
-            ((node.type === 'rule' && !node.selector) || (node.nodes && !node.nodes.length)) ||
+            (node.type === 'rule' && !node.selector) || (node.nodes && !node.nodes.length) ||
             (node.type === 'atrule' &&
                 ((!node.nodes && !node.params) || (!node.params && !node.nodes.length)))
         ) {
