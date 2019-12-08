@@ -26,6 +26,8 @@ import {
 import CSS_WHITELIST from './constants/cssWhitelist'
 import SELECTOR_STANDARD_TYPES from './constants/selectorTypes'
 
+const IS_NTH = /^:nth-/;
+
 class Purgecss {
     options: Options
     root: Object
@@ -317,7 +319,8 @@ class Purgecss {
             return
         }
 
-        let keepSelector = true
+		let keepSelector = true
+
         node.selector = selectorParser(selectorsParsed => {
             selectorsParsed.walk(selector => {
                 const selectorsInRule = []
@@ -331,16 +334,20 @@ class Purgecss {
                         return
                     }
                     for (const { type, value } of selector.nodes) {
+
                         if (
                             SELECTOR_STANDARD_TYPES.includes(type) &&
                             typeof value !== 'undefined'
                         ) {
                             selectorsInRule.push(value)
                         } else if (
-                            type === 'tag' &&
-                            !/[+]|n|-|(even)|(odd)|^from$|^to$|^\d/.test(value)
+							type === 'tag' &&
+							!( // skip everything inside :nth-* pseudo selectors
+								selector.parent &&
+								selector.parent.type === 'pseudo' &&
+								IS_NTH.test(selector.parent.value)
+							)
                         ) {
-                            // test if we do not have a pseudo class parameter (e.g. 2n in :nth-child(2n))
                             selectorsInRule.push(value)
                         }
                     }
