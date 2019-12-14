@@ -74,5 +74,8 @@
   "engines": {
     "npm": ">=5.2.0",
     "node": ">=4.4.0"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/Ffloriel"
   }
 }
