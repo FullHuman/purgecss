@@ -4,11 +4,12 @@ const fs = require('fs');
 const { default: PurgeCSS, defaultOptions, setOptions } = require('../lib/purgecss')
 
 program
+  .usage('--css <css> --content <content> [options]')
   .option('-con, --content', 'glob of content files')
   .option('-css, --css', 'glob of css files')
   .option('-c, --config', 'path to the configuration file')
   .option('-o, --output', 'file path directory to write purged css files to')
-  .option('-w, --whitelist', 'list of classes that should not be removed');
+  .option('-w, --whitelist', 'list of classes that should not be removed', []);
 
 program.parse(process.argv);
 
@@ -26,9 +27,9 @@ if (!program.config || !(program.content && program.css)) {
     options = await setOptions(program.config);
   }
 
-  program.content && options.content = program.content;
-  program.css && options.css = program.css;
-  program.whitelist && options.whitelist = program.whitelist;
+  if (program.content) options.content = program.content;
+  if (program.css) options.css = program.css;
+  if (program.whitelist) options.whitelist = program.whitelist;
 
   const purged = await new PurgeCSS().purge(options);
   // output results in specified directory
