@@ -53,7 +53,15 @@ module.exports = {
             ["guides/wordpress", "WordPress"]
           ]
         },
-        ["comparison", "Comparison"]
+        ["comparison", "Comparison"],
+        {
+          title: "Common Questions",
+          collapsable: false,
+          children: [
+            // ["node_modules", "How to use with node modules"],
+            ["css_modules", "How to use with CSS modules"]
+          ]
+        }
       ]
     }
   }
