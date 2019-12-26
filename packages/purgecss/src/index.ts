@@ -31,6 +31,7 @@ import {
   IGNORE_ANNOTATION_CURRENT
 } from "./constants";
 import { CSS_WHITELIST } from "./internal-whitelist";
+import VariablesStructure from "./variables-structure";
 
 /**
  * Load the configuration file from the path
@@ -283,8 +284,57 @@ class PurgeCSS {
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
+  private variablesStructure: VariablesStructure = new VariablesStructure();
 
   public options: Options;
+
+  private collectDeclarationsData(declaration: postcss.Declaration) {
+    const { prop, value } = declaration;
+
+    // collect css properties data
+    if (this.options.variables || true) {
+      const usedVariablesMatchesInDeclaration = [
+        ...value.matchAll(/var\((.+?)[\,)]/g)
+      ];
+      if (prop.startsWith("--")) {
+        this.variablesStructure.addVariable(declaration);
+
+        if (usedVariablesMatchesInDeclaration.length > 0) {
+          this.variablesStructure.addVariableUsage(
+            declaration,
+            usedVariablesMatchesInDeclaration
+          );
+        }
+      } else {
+        if (usedVariablesMatchesInDeclaration.length > 0) {
+          this.variablesStructure.addVariableUsageInProperties(
+            usedVariablesMatchesInDeclaration
+          );
+        }
+      }
+    }
+
+    // collect keyframes data
+    if (this.options.keyframes) {
+      if (prop === "animation" || prop === "animation-name") {
+        for (const word of value.split(/[\s,]+/)) {
+          this.usedAnimations.add(word);
+        }
+        return;
+      }
+    }
+
+    // collect font faces data
+    if (this.options.fontFace) {
+      if (prop === "font-family") {
+        for (const fontName of value.split(",")) {
+          const cleanedFontFace = stripQuotes(fontName.trim());
+          this.usedFontFaces.add(cleanedFontFace);
+        }
+      }
+      return;
+    }
+  }
 
   /**
    * Get the extractor corresponding to the extension file
@@ -459,22 +509,7 @@ class PurgeCSS {
     if (keepSelector && typeof node.nodes !== "undefined") {
       for (const childNode of node.nodes) {
         if (childNode.type !== "decl") continue;
-        const { prop, value } = childNode;
-        if (this.options.keyframes) {
-          if (prop === "animation" || prop === "animation-name") {
-            for (const word of value.split(/[\s,]+/)) {
-              this.usedAnimations.add(word);
-            }
-          }
-        }
-        if (this.options.fontFace) {
-          if (prop === "font-family") {
-            for (const fontName of value.split(",")) {
-              const cleanedFontFace = stripQuotes(fontName.trim());
-              this.usedFontFaces.add(cleanedFontFace);
-            }
-          }
-        }
+        this.collectDeclarationsData(childNode);
       }
     }
 
@@ -519,6 +554,7 @@ class PurgeCSS {
 
       if (this.options.fontFace) this.removeUnusedFontFaces();
       if (this.options.keyframes) this.removeUnusedKeyframes();
+      if (this.options.variables) this.removeUnusedCSSVariables();
 
       const result: ResultPurge = {
         css: root.toString(),
@@ -602,6 +638,13 @@ class PurgeCSS {
       css,
       mergeExtractorSelectors(cssFileSelectors, cssRawSelectors)
     );
+  }
+
+  /**
+   * Remove unused CSS variables
+   */
+  public removeUnusedCSSVariables(): void {
+    this.variablesStructure.removeUnused();
   }
 
   /**
