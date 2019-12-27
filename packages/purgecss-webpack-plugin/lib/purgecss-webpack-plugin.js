@@ -36,16 +36,13 @@ const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"],
   pluginName = "PurgeCSS";
 class PurgeCSSPlugin {
   constructor(t) {
-    this.options = t;
+    (this.purgedStats = {}), (this.options = t);
   }
   apply(t) {
     t.hooks.compilation.tap(pluginName, t => {
       this.initializePlugin(t);
     }),
       t.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
-  }
-  async onHooksCompilation(t) {
-    this.initializePlugin(t);
   }
   onHooksDone(t, e) {
     t.hasErrors()

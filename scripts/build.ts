@@ -12,7 +12,14 @@ const packages = [
   },
   {
     name: "purgecss",
-    external: ["postcss", "postcss-selector-parser", "glob", "path", "fs"]
+    external: [
+      "postcss",
+      "postcss-selector-parser",
+      "glob",
+      "path",
+      "fs",
+      "util"
+    ]
   },
   // {
   //   name: 'purgecss-from-blade',
@@ -33,28 +40,24 @@ const packages = [
 ];
 
 async function build() {
-  for (const package of packages) {
+  for (const pkg of packages) {
     const bundle = await rollup.rollup({
-      input: path.resolve(packagesDirectory, `./${package.name}/src/index.ts`),
+      input: path.resolve(packagesDirectory, `./${pkg.name}/src/index.ts`),
       plugins: [typescript({}), terser()],
-      external: package.external
+      external: pkg.external
     });
 
     await bundle.write({
       file: path.resolve(
         packagesDirectory,
-        package.name,
-        `./lib/${package.name}.esm.js`
+        pkg.name,
+        `./lib/${pkg.name}.esm.js`
       ),
       format: "esm"
     });
 
     await bundle.write({
-      file: path.resolve(
-        packagesDirectory,
-        package.name,
-        `./lib/${package.name}.js`
-      ),
+      file: path.resolve(packagesDirectory, pkg.name, `./lib/${pkg.name}.js`),
       format: "cjs"
     });
   }

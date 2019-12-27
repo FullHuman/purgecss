@@ -26,16 +26,13 @@ const r = [".css", ".scss", ".styl", ".sass", ".less"],
   a = "PurgeCSS";
 export default class {
   constructor(t) {
-    this.options = t;
+    (this.purgedStats = {}), (this.options = t);
   }
   apply(t) {
     t.hooks.compilation.tap(a, t => {
       this.initializePlugin(t);
     }),
       t.hooks.done.tap(a, this.onHooksDone.bind(this));
-  }
-  async onHooksCompilation(t) {
-    this.initializePlugin(t);
   }
   onHooksDone(t, s) {
     t.hasErrors()

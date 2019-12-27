@@ -1,2 +1,2 @@
 declare const purgeFromPug: (content: string) => string[];
-export { purgeFromPug };
+export { purgeFromPug as default };

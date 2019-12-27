@@ -30,6 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: !0 });
 var postcss = require("postcss"),
   selectorParser = _interopDefault(require("postcss-selector-parser")),
   fs = require("fs"),
+  util = require("util"),
   glob = _interopDefault(require("glob")),
   path = _interopDefault(require("path"));
 const defaultOptions = {
@@ -37,12 +38,12 @@ const defaultOptions = {
     content: [],
     defaultExtractor: e => e.match(/[A-Za-z0-9_-]+/g) || [],
     extractors: [],
-    fontFace: !1,
-    keyframes: !1,
+    fontFace: !0,
+    keyframes: !0,
     rejected: !1,
     stdin: !1,
     stdout: !1,
-    variables: !1,
+    variables: !0,
     whitelist: [],
     whitelistPatterns: [],
     whitelistPatternsChildren: []
@@ -61,6 +62,58 @@ const defaultOptions = {
     "::before",
     "::after"
   ];
+class VariableNode {
+  constructor(e) {
+    (this.nodes = []), (this.isUsed = !1), (this.value = e);
+  }
+}
+class VariablesStructure {
+  constructor() {
+    (this.nodes = new Map()), (this.usedVariables = new Set());
+  }
+  getVariableNode(e) {
+    return this.nodes.get(e);
+  }
+  addVariable(e) {
+    const { prop: t } = e;
+    if (!this.nodes.has(t)) {
+      const s = new VariableNode(e);
+      this.nodes.set(t, s);
+    }
+  }
+  addVariableUsage(e, t) {
+    const { prop: s } = e,
+      r = this.nodes.get(s);
+    for (const e of t) {
+      const t = e[1];
+      if (this.nodes.has(t)) {
+        const e = this.nodes.get(t);
+        r.nodes.push(e);
+      }
+    }
+  }
+  addVariableUsageInProperties(e) {
+    for (const t of e) {
+      const e = t[1];
+      this.usedVariables.add(e);
+    }
+  }
+  setAsUsed(e) {
+    const t = [this.nodes.get(e)];
+    for (; 0 !== t.length; ) {
+      const e = t.pop();
+      e.isUsed || ((e.isUsed = !0), t.push(...e.nodes));
+    }
+  }
+  removeUnused() {
+    for (const e of this.usedVariables) this.setAsUsed(e);
+    for (const [, e] of this.nodes) e.isUsed || e.value.remove();
+  }
+}
+const asyncFs = {
+  access: util.promisify(fs.access),
+  readFile: util.promisify(fs.readFile)
+};
 async function setOptions(e = CONFIG_FILENAME) {
   let t;
   try {
@@ -175,13 +228,54 @@ function isTagFound(e, t) {
 function isInPseudoClassNot(e) {
   return e.parent && "pseudo" === e.parent.type && ":not" === e.parent.value;
 }
+function matchAll(e, t) {
+  const s = [];
+  return (
+    e.replace(t, function() {
+      const t = Array.prototype.slice.call(arguments, 0, -2);
+      return (
+        (t.input = arguments[arguments.length - 1]),
+        (t.index = arguments[arguments.length - 2]),
+        s.push(t),
+        e
+      );
+    }),
+    s
+  );
+}
 class PurgeCSS {
   constructor() {
     (this.ignore = !1),
       (this.atRules = { fontFace: [], keyframes: [] }),
       (this.usedAnimations = new Set()),
       (this.usedFontFaces = new Set()),
-      (this.selectorsRemoved = new Set());
+      (this.selectorsRemoved = new Set()),
+      (this.variablesStructure = new VariablesStructure()),
+      (this.options = defaultOptions);
+  }
+  collectDeclarationsData(e) {
+    const { prop: t, value: s } = e;
+    this.options.variables;
+    {
+      const r = matchAll(s, /var\((.+?)[\,)]/g);
+      t.startsWith("--")
+        ? (this.variablesStructure.addVariable(e),
+          r.length > 0 && this.variablesStructure.addVariableUsage(e, r))
+        : r.length > 0 &&
+          this.variablesStructure.addVariableUsageInProperties(r);
+    }
+    if (
+      !this.options.keyframes ||
+      ("animation" !== t && "animation-name" !== t)
+    )
+      if (this.options.fontFace) {
+        if ("font-family" === t)
+          for (const e of s.split(",")) {
+            const t = stripQuotes(e.trim());
+            this.usedFontFaces.add(t);
+          }
+      } else;
+    else for (const e of s.split(/[\s,]+/)) this.usedAnimations.add(e);
   }
   getFileExtractor(e, t) {
     const s = t.find(t => t.extensions.find(t => e.endsWith(t)));
@@ -198,7 +292,7 @@ class PurgeCSS {
     for (const r of e) {
       let e = [];
       try {
-        await fs.promises.access(r, fs.constants.F_OK), e.push(r);
+        await asyncFs.access(r, fs.constants.F_OK), e.push(r);
       } catch (t) {
         e = glob.sync(r);
       }
@@ -206,7 +300,7 @@ class PurgeCSS {
         s = mergeExtractorSelectors(
           s,
           extractSelectors(
-            await fs.promises.readFile(r, "utf-8"),
+            await asyncFs.readFile(r, "utf-8"),
             this.getFileExtractor(r, t)
           )
         );
@@ -260,20 +354,8 @@ class PurgeCSS {
       }).processSync(e.selector)),
       r && void 0 !== e.nodes)
     )
-      for (const t of e.nodes) {
-        if ("decl" !== t.type) continue;
-        const { prop: e, value: s } = t;
-        if (
-          this.options.keyframes &&
-          ("animation" === e || "animation-name" === e)
-        )
-          for (const e of s.split(/[\s,]+/)) this.usedAnimations.add(e);
-        if (this.options.fontFace && "font-family" === e)
-          for (const e of s.split(",")) {
-            const t = stripQuotes(e.trim());
-            this.usedFontFaces.add(t);
-          }
-      }
+      for (const t of e.nodes)
+        "decl" === t.type && this.collectDeclarationsData(t);
     const n = e.parent;
     e.selector || e.remove(), isRuleEmpty(n) && n.remove();
   }
@@ -287,12 +369,13 @@ class PurgeCSS {
           "string" == typeof e
             ? this.options.stdin
               ? e
-              : await fs.promises.readFile(e, "utf-8")
+              : await asyncFs.readFile(e, "utf-8")
             : e.raw,
         n = postcss.parse(r);
       this.walkThroughCSS(n, t),
         this.options.fontFace && this.removeUnusedFontFaces(),
-        this.options.keyframes && this.removeUnusedKeyframes();
+        this.options.keyframes && this.removeUnusedKeyframes(),
+        this.options.variables && this.removeUnusedCSSVariables();
       const o = { css: n.toString(), file: "string" == typeof e ? e : void 0 };
       "string" == typeof e && (o.file = e),
         this.options.rejected &&
@@ -325,6 +408,9 @@ class PurgeCSS {
       i = await this.extractSelectorsFromFiles(n, r),
       a = this.extractSelectorsFromString(o, r);
     return this.getPurgedCSS(s, mergeExtractorSelectors(i, a));
+  }
+  removeUnusedCSSVariables() {
+    this.variablesStructure.removeUnused();
   }
   removeUnusedFontFaces() {
     for (const { name: e, node: t } of this.atRules.fontFace)

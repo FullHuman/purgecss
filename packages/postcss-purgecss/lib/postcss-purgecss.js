@@ -13,11 +13,12 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(e) {
       u = c.filter(e => "string" == typeof e),
       p = c.filter(e => "object" == typeof e),
       i = await r.extractSelectorsFromFiles(u, n),
-      l = r.extractSelectorsFromString(p, n),
-      g = purgecss.mergeExtractorSelectors(i, l);
-    r.walkThroughCSS(s, g),
+      a = r.extractSelectorsFromString(p, n),
+      l = purgecss.mergeExtractorSelectors(i, a);
+    r.walkThroughCSS(s, l),
       r.options.fontFace && r.removeUnusedFontFaces(),
       r.options.keyframes && r.removeUnusedKeyframes(),
+      r.options.variables && r.removeUnusedCSSVariables(),
       r.options.rejected &&
         r.selectorsRemoved.size > 0 &&
         (t.messages.push({

@@ -41,7 +41,6 @@ declare class PurgeCSSPlugin {
   purgedStats: PurgedStats;
   constructor(options: UserDefinedOptions);
   apply(compiler: Compiler): void;
-  onHooksCompilation(compilation: Compilation): Promise<void>;
   onHooksDone(stats: Stats, callback: () => void): void;
   getAssetsToPurge(
     assetsFromCompilation: PurgeAsset[],
@@ -50,4 +49,4 @@ declare class PurgeCSSPlugin {
   initializePlugin(compilation: Compilation): void;
   runPluginHook(compilation: Compilation, entryPaths: string[]): Promise<void>;
 }
-export { PurgeCSSPlugin };
+export { PurgeCSSPlugin as default };

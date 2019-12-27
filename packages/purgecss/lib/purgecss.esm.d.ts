@@ -81,7 +81,9 @@ declare class PurgeCSS {
   private usedAnimations;
   private usedFontFaces;
   selectorsRemoved: Set<string>;
+  private variablesStructure;
   options: Options;
+  private collectDeclarationsData;
   /**
    * Get the extractor corresponding to the extension file
    * @param filename Name of the file
@@ -144,6 +146,10 @@ declare class PurgeCSS {
     userOptions: UserDefinedOptions | string | undefined
   ): Promise<ResultPurge[]>;
   /**
+   * Remove unused CSS variables
+   */
+  removeUnusedCSSVariables(): void;
+  /**
    * Remove unused font-faces
    */
   removeUnusedFontFaces(): void;
@@ -164,4 +170,5 @@ declare class PurgeCSS {
    */
   walkThroughCSS(root: postcss.Root, selectors: ExtractorResultDetailed): void;
 }
+export { PurgeCSS as default };
 export { defaultOptions, setOptions, mergeExtractorSelectors, PurgeCSS };

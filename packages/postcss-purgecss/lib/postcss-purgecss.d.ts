@@ -27,20 +27,22 @@ interface UserDefinedOptions {
   whitelistPatterns?: Array<RegExp>;
   whitelistPatternsChildren?: Array<RegExp>;
 }
-declare const purgeCSSPlugin: postcss.Plugin<Pick<
-  UserDefinedOptions,
-  | "content"
-  | "defaultExtractor"
-  | "extractors"
-  | "fontFace"
-  | "keyframes"
-  | "output"
-  | "rejected"
-  | "stdin"
-  | "stdout"
-  | "variables"
-  | "whitelist"
-  | "whitelistPatterns"
-  | "whitelistPatternsChildren"
+declare const purgeCSSPlugin: postcss.Plugin<postcss.PluginInitializer<
+  Pick<
+    UserDefinedOptions,
+    | "content"
+    | "defaultExtractor"
+    | "extractors"
+    | "fontFace"
+    | "keyframes"
+    | "output"
+    | "rejected"
+    | "stdin"
+    | "stdout"
+    | "variables"
+    | "whitelist"
+    | "whitelistPatterns"
+    | "whitelistPatternsChildren"
+  >
 >>;
-export { purgeCSSPlugin };
+export { purgeCSSPlugin as default };

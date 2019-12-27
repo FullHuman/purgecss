@@ -1,30 +1,31 @@
 import { parse as e } from "postcss";
 import t from "postcss-selector-parser";
-import { promises as s, constants as r } from "fs";
-import n from "glob";
-import i from "path";
-const o = {
+import { access as s, readFile as r, constants as n } from "fs";
+import { promisify as i } from "util";
+import o from "glob";
+import a from "path";
+const u = {
     css: [],
     content: [],
     defaultExtractor: e => e.match(/[A-Za-z0-9_-]+/g) || [],
     extractors: [],
-    fontFace: !1,
-    keyframes: !1,
+    fontFace: !0,
+    keyframes: !0,
     rejected: !1,
     stdin: !1,
     stdout: !1,
-    variables: !1,
+    variables: !0,
     whitelist: [],
     whitelistPatterns: [],
     whitelistPatternsChildren: []
   },
-  a = "purgecss ignore current",
-  u = "purgecss ignore",
-  c = "purgecss start ignore",
-  l = "purgecss end ignore",
-  d = "purgecss.config.js",
-  f = "Error loading the config file",
-  m = [
+  c = "purgecss ignore current",
+  l = "purgecss ignore",
+  d = "purgecss start ignore",
+  h = "purgecss end ignore",
+  f = "purgecss.config.js",
+  m = "Error loading the config file",
+  p = [
     "*",
     "::-webkit-scrollbar",
     "::selection",
@@ -32,17 +33,66 @@ const o = {
     "::before",
     "::after"
   ];
-async function h(e = d) {
+class v {
+  constructor(e) {
+    (this.nodes = []), (this.isUsed = !1), (this.value = e);
+  }
+}
+class g {
+  constructor() {
+    (this.nodes = new Map()), (this.usedVariables = new Set());
+  }
+  getVariableNode(e) {
+    return this.nodes.get(e);
+  }
+  addVariable(e) {
+    const { prop: t } = e;
+    if (!this.nodes.has(t)) {
+      const s = new v(e);
+      this.nodes.set(t, s);
+    }
+  }
+  addVariableUsage(e, t) {
+    const { prop: s } = e,
+      r = this.nodes.get(s);
+    for (const e of t) {
+      const t = e[1];
+      if (this.nodes.has(t)) {
+        const e = this.nodes.get(t);
+        r.nodes.push(e);
+      }
+    }
+  }
+  addVariableUsageInProperties(e) {
+    for (const t of e) {
+      const e = t[1];
+      this.usedVariables.add(e);
+    }
+  }
+  setAsUsed(e) {
+    const t = [this.nodes.get(e)];
+    for (; 0 !== t.length; ) {
+      const e = t.pop();
+      e.isUsed || ((e.isUsed = !0), t.push(...e.nodes));
+    }
+  }
+  removeUnused() {
+    for (const e of this.usedVariables) this.setAsUsed(e);
+    for (const [, e] of this.nodes) e.isUsed || e.value.remove();
+  }
+}
+const y = { access: i(s), readFile: i(r) };
+async function b(e = f) {
   let t;
   try {
-    const s = i.join(process.cwd(), e);
+    const s = a.join(process.cwd(), e);
     t = await import(s);
   } catch (e) {
-    throw new Error(`${f} ${e.message}`);
+    throw new Error(`${m} ${e.message}`);
   }
-  return { ...o, ...t };
+  return { ...u, ...t };
 }
-function p(e, t) {
+function w(e, t) {
   const s = t(e);
   return Array.isArray(s)
     ? {
@@ -54,17 +104,17 @@ function p(e, t) {
       }
     : s;
 }
-function v(e, t) {
+function S(e, t) {
   switch (t) {
     case "next":
-      return e.text.includes(u);
-    case "start":
-      return e.text.includes(c);
-    case "end":
       return e.text.includes(l);
+    case "start":
+      return e.text.includes(d);
+    case "end":
+      return e.text.includes(h);
   }
 }
-function g(e, t) {
+function F(e, t) {
   return {
     attributes: {
       names: [...e.attributes.names, ...t.attributes.names],
@@ -76,10 +126,10 @@ function g(e, t) {
     undetermined: [...e.undetermined, ...t.undetermined]
   };
 }
-function y(e) {
+function x(e) {
   return e.replace(/(^["'])|(["']$)/g, "");
 }
-function w(e, t) {
+function k(e, t) {
   if (
     !t.attributes.names.includes(e.attribute) &&
     !t.undetermined.includes(e.attribute)
@@ -112,44 +162,84 @@ function w(e, t) {
       return !0;
   }
 }
-function F(e, t) {
+function U(e, t) {
   return t.ids.includes(e.value) || t.undetermined.includes(e.value);
 }
-function b(e, t) {
+function R(e, t) {
   return t.tags.includes(e.value) || t.undetermined.includes(e.value);
 }
-class S {
+class A {
   constructor() {
     (this.ignore = !1),
       (this.atRules = { fontFace: [], keyframes: [] }),
       (this.usedAnimations = new Set()),
       (this.usedFontFaces = new Set()),
-      (this.selectorsRemoved = new Set());
+      (this.selectorsRemoved = new Set()),
+      (this.variablesStructure = new g()),
+      (this.options = u);
+  }
+  collectDeclarationsData(e) {
+    const { prop: t, value: s } = e;
+    this.options.variables;
+    {
+      const r = (function(e, t) {
+        const s = [];
+        return (
+          e.replace(t, function() {
+            const t = Array.prototype.slice.call(arguments, 0, -2);
+            return (
+              (t.input = arguments[arguments.length - 1]),
+              (t.index = arguments[arguments.length - 2]),
+              s.push(t),
+              e
+            );
+          }),
+          s
+        );
+      })(s, /var\((.+?)[\,)]/g);
+      t.startsWith("--")
+        ? (this.variablesStructure.addVariable(e),
+          r.length > 0 && this.variablesStructure.addVariableUsage(e, r))
+        : r.length > 0 &&
+          this.variablesStructure.addVariableUsageInProperties(r);
+    }
+    if (
+      !this.options.keyframes ||
+      ("animation" !== t && "animation-name" !== t)
+    )
+      if (this.options.fontFace) {
+        if ("font-family" === t)
+          for (const e of s.split(",")) {
+            const t = x(e.trim());
+            this.usedFontFaces.add(t);
+          }
+      } else;
+    else for (const e of s.split(/[\s,]+/)) this.usedAnimations.add(e);
   }
   getFileExtractor(e, t) {
     const s = t.find(t => t.extensions.find(t => e.endsWith(t)));
     return void 0 === s ? this.options.defaultExtractor : s.extractor;
   }
   async extractSelectorsFromFiles(e, t) {
-    let i = {
+    let s = {
       attributes: { names: [], values: [] },
       classes: [],
       ids: [],
       tags: [],
       undetermined: []
     };
-    for (const o of e) {
+    for (const r of e) {
       let e = [];
       try {
-        await s.access(o, r.F_OK), e.push(o);
+        await y.access(r, n.F_OK), e.push(r);
       } catch (t) {
-        e = n.sync(o);
+        e = o.sync(r);
       }
       for (const r of e) {
-        i = g(i, p(await s.readFile(r, "utf-8"), this.getFileExtractor(r, t)));
+        s = F(s, w(await y.readFile(r, "utf-8"), this.getFileExtractor(r, t)));
       }
     }
-    return i;
+    return s;
   }
   extractSelectorsFromString(e, t) {
     let s = {
@@ -160,7 +250,7 @@ class S {
       undetermined: []
     };
     for (const { raw: r, extension: n } of e) {
-      s = g(s, p(r, this.getFileExtractor(`.${n}`, t)));
+      s = F(s, w(r, this.getFileExtractor(`.${n}`, t)));
     }
     return s;
   }
@@ -171,12 +261,12 @@ class S {
       for (const t of e.nodes)
         "decl" === t.type &&
           "font-family" === t.prop &&
-          this.atRules.fontFace.push({ name: y(t.value), node: e });
+          this.atRules.fontFace.push({ name: x(t.value), node: e });
   }
   async evaluateRule(e, s) {
     if (this.ignore) return;
     const r = e.prev();
-    if (r && "comment" === r.type && v(r, "next")) return void r.remove();
+    if (r && "comment" === r.type && S(r, "next")) return void r.remove();
     if (e.parent && "atrule" === e.parent.type && "keyframes" === e.parent.name)
       return;
     if ("rule" !== e.type) return;
@@ -187,7 +277,7 @@ class S {
           e.walkComments(e => {
             e &&
               "comment" === e.type &&
-              e.text.includes(a) &&
+              e.text.includes(c) &&
               ((t = !0), e.remove());
           }),
           t
@@ -207,20 +297,8 @@ class S {
       }).processSync(e.selector)),
       n && void 0 !== e.nodes)
     )
-      for (const t of e.nodes) {
-        if ("decl" !== t.type) continue;
-        const { prop: e, value: s } = t;
-        if (
-          this.options.keyframes &&
-          ("animation" === e || "animation-name" === e)
-        )
-          for (const e of s.split(/[\s,]+/)) this.usedAnimations.add(e);
-        if (this.options.fontFace && "font-family" === e)
-          for (const e of s.split(",")) {
-            const t = y(e.trim());
-            this.usedFontFaces.add(t);
-          }
-      }
+      for (const t of e.nodes)
+        "decl" === t.type && this.collectDeclarationsData(t);
     const i = e.parent;
     e.selector || e.remove(),
       (function(e) {
@@ -233,33 +311,34 @@ class S {
         );
       })(i) && i.remove();
   }
-  async getPurgedCSS(t, r) {
-    const i = [],
-      o = [];
-    for (const e of t) "string" == typeof e ? o.push(...n.sync(e)) : o.push(e);
-    for (const t of o) {
+  async getPurgedCSS(t, s) {
+    const r = [],
+      n = [];
+    for (const e of t) "string" == typeof e ? n.push(...o.sync(e)) : n.push(e);
+    for (const t of n) {
       const n =
           "string" == typeof t
             ? this.options.stdin
               ? t
-              : await s.readFile(t, "utf-8")
+              : await y.readFile(t, "utf-8")
             : t.raw,
-        o = e(n);
-      this.walkThroughCSS(o, r),
+        i = e(n);
+      this.walkThroughCSS(i, s),
         this.options.fontFace && this.removeUnusedFontFaces(),
-        this.options.keyframes && this.removeUnusedKeyframes();
-      const a = { css: o.toString(), file: "string" == typeof t ? t : void 0 };
-      "string" == typeof t && (a.file = t),
+        this.options.keyframes && this.removeUnusedKeyframes(),
+        this.options.variables && this.removeUnusedCSSVariables();
+      const o = { css: i.toString(), file: "string" == typeof t ? t : void 0 };
+      "string" == typeof t && (o.file = t),
         this.options.rejected &&
-          ((a.rejected = Array.from(this.selectorsRemoved)),
+          ((o.rejected = Array.from(this.selectorsRemoved)),
           this.selectorsRemoved.clear()),
-        i.push(a);
+        r.push(o);
     }
-    return i;
+    return r;
   }
   isSelectorWhitelisted(e) {
     return (
-      m.includes(e) ||
+      p.includes(e) ||
       (this.options.whitelist && this.options.whitelist.some(t => t === e)) ||
       (this.options.whitelistPatterns &&
         this.options.whitelistPatterns.some(t => t.test(e)))
@@ -272,13 +351,16 @@ class S {
     );
   }
   async purge(e) {
-    this.options = "object" != typeof e ? await h(e) : { ...o, ...e };
+    this.options = "object" != typeof e ? await b(e) : { ...u, ...e };
     const { content: t, css: s, extractors: r } = this.options,
       n = t.filter(e => "string" == typeof e),
       i = t.filter(e => "object" == typeof e),
-      a = await this.extractSelectorsFromFiles(n, r),
-      u = this.extractSelectorsFromString(i, r);
-    return this.getPurgedCSS(s, g(a, u));
+      o = await this.extractSelectorsFromFiles(n, r),
+      a = this.extractSelectorsFromString(i, r);
+    return this.getPurgedCSS(s, F(o, a));
+  }
+  removeUnusedCSSVariables() {
+    this.variablesStructure.removeUnused();
   }
   removeUnusedFontFaces() {
     for (const { name: e, node: t } of this.atRules.fontFace)
@@ -302,13 +384,13 @@ class S {
       if (i.value && this.isSelectorWhitelistedChildren(i.value)) return !0;
       if (
         i.value &&
-        (m.includes(i.value) || this.isSelectorWhitelisted(i.value))
+        (p.includes(i.value) || this.isSelectorWhitelisted(i.value))
       )
         s = !0;
       else {
         switch (i.type) {
           case "attribute":
-            s = "value" === i.attribute || w(i, t);
+            s = "value" === i.attribute || k(i, t);
             break;
           case "class":
             (r = i),
@@ -317,10 +399,10 @@ class S {
                 n.undetermined.includes(r.value));
             break;
           case "id":
-            s = F(i, t);
+            s = U(i, t);
             break;
           case "tag":
-            s = b(i, t);
+            s = R(i, t);
         }
         if (!s) return !1;
       }
@@ -336,17 +418,17 @@ class S {
         ? this.evaluateAtRule(e)
         : void (
             "comment" === e.type &&
-            (v(e, "start")
+            (S(e, "start")
               ? ((this.ignore = !0), e.remove())
-              : v(e, "end") && ((this.ignore = !1), e.remove()))
+              : S(e, "end") && ((this.ignore = !1), e.remove()))
           )
     );
   }
 }
-export default S;
+export default A;
 export {
-  S as PurgeCSS,
-  o as defaultOptions,
-  g as mergeExtractorSelectors,
-  h as setOptions
+  A as PurgeCSS,
+  u as defaultOptions,
+  F as mergeExtractorSelectors,
+  b as setOptions
 };
