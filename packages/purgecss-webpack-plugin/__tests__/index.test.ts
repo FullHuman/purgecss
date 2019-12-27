@@ -1,6 +1,11 @@
 import * as path from "path";
 import fs from "fs";
+import { promisify } from "util";
 import webpack, { Configuration, Stats } from "webpack";
+
+const asyncFs = {
+  readdir: promisify(fs.readdir)
+};
 
 function runWebpack(options: Configuration) {
   const compiler = webpack(options);
@@ -42,7 +47,7 @@ describe("Webpack integration", () => {
         }
       });
 
-      const files = await fs.promises.readdir(expectedDirectory);
+      const files = await asyncFs.readdir(expectedDirectory);
 
       for (const file of files) {
         const filePath = path.join(expectedDirectory, file);

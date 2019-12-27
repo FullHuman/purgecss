@@ -13,7 +13,7 @@ const pluginName = "PurgeCSS";
 
 export default class PurgeCSSPlugin {
   options: UserDefinedOptions;
-  purgedStats: PurgedStats;
+  purgedStats: PurgedStats = {};
 
   constructor(options: UserDefinedOptions) {
     this.options = options;

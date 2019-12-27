@@ -1,9 +1,11 @@
-import postcss from "postcss";
+import postcss, { PluginInitializer } from "postcss";
 import { PurgeCSS, defaultOptions, mergeExtractorSelectors } from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 
-type PurgeCSSPostCSSOptions = Omit<UserDefinedOptions, "css">;
+type PurgeCSSPostCSSOptions =
+  | PluginInitializer<Omit<UserDefinedOptions, "css">>
+  | undefined;
 
 const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
   opts: PurgeCSSPostCSSOptions
@@ -44,6 +46,7 @@ const purgeCSSPlugin = postcss.plugin("postcss-plugin-purgecss", function(
 
     if (purgeCSS.options.fontFace) purgeCSS.removeUnusedFontFaces();
     if (purgeCSS.options.keyframes) purgeCSS.removeUnusedKeyframes();
+    if (purgeCSS.options.variables) purgeCSS.removeUnusedCSSVariables();
 
     if (purgeCSS.options.rejected && purgeCSS.selectorsRemoved.size > 0) {
       result.messages.push({

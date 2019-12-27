@@ -1,9 +1,9 @@
 import * as postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import * as fs from "fs";
+import { promisify } from "util";
 
 import glob from "glob";
-import { promises as asyncFs } from "fs";
 import path from "path";
 
 import { defaultOptions } from "./options";
@@ -32,6 +32,11 @@ import {
 } from "./constants";
 import { CSS_WHITELIST } from "./internal-whitelist";
 import VariablesStructure from "./variables-structure";
+
+const asyncFs = {
+  access: promisify(fs.access),
+  readFile: promisify(fs.readFile)
+};
 
 /**
  * Load the configuration file from the path
@@ -274,6 +279,22 @@ function isInPseudoClassNot(selector: selectorParser.Node) {
   );
 }
 
+function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
+  const matches: RegExpMatchArray[] = [];
+  str.replace(regexp, function() {
+    const match: RegExpMatchArray = Array.prototype.slice.call(
+      arguments,
+      0,
+      -2
+    );
+    match.input = arguments[arguments.length - 1];
+    match.index = arguments[arguments.length - 2];
+    matches.push(match);
+    return str;
+  });
+  return matches;
+}
+
 class PurgeCSS {
   private ignore = false;
   private atRules: AtRules = {
@@ -286,16 +307,17 @@ class PurgeCSS {
   public selectorsRemoved: Set<string> = new Set();
   private variablesStructure: VariablesStructure = new VariablesStructure();
 
-  public options: Options;
+  public options: Options = defaultOptions;
 
   private collectDeclarationsData(declaration: postcss.Declaration) {
     const { prop, value } = declaration;
 
     // collect css properties data
     if (this.options.variables || true) {
-      const usedVariablesMatchesInDeclaration = [
-        ...value.matchAll(/var\((.+?)[\,)]/g)
-      ];
+      const usedVariablesMatchesInDeclaration = matchAll(
+        value,
+        /var\((.+?)[\,)]/g
+      );
       if (prop.startsWith("--")) {
         this.variablesStructure.addVariable(declaration);
 
