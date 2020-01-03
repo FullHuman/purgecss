@@ -42,22 +42,37 @@ yargsBin = yargs
     .alias("v", "version")
 argv = yargs.argv
 
-options = {
-    content: argv.content,
-    css: argv.css,
-    whitelist: argv.whitelist
-}
 
 var purgecss;
-if ((typeof argv.config === "undefined") && (typeof argv.css === "undefined" || typeof argv.content === "undefined")) {
-    yargsBin.showHelp("log")
-    return
-}
-if (argv.config) {
-    purgecss = new Purgecss(argv.config)
+var configObj;
+
+
+if (typeof argv.config === "undefined") {
+    if (typeof argv.css === "undefined" || typeof argv.content === "undefined") {
+        yargsBin.showHelp("log")
+        return
+    }
+    configObj = {
+        content: argv.content,
+        css: argv.css,
+        whitelist: argv.whitelist
+    }
 } else {
-    purgecss = new Purgecss(options)
+    const t = path.join(process.cwd(), argv.config)
+    configObj = require(t);
+    if (typeof argv.css !== "undefined") {
+        configObj.css = argv.css
+    }
+    if (typeof argv.content !== "undefined") {
+        configObj.content = argv.content
+    }
+    if (typeof argv.whitelist !== "undefined") {
+        configObj.whitelist = argv.whitelist
+    }
 }
+
+
+purgecss = new Purgecss(configObj)
 
 if (argv.out) {
     var result = purgecss.purge()
