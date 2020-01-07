@@ -268,14 +268,15 @@ function isTagFound(
 }
 
 /**
- * Returns true if the selector is inside a :not pseudo class
+ * Returns true if the selector is inside a pseudo class
+ * (e.g. :nth-child, :nth-of-type, :only-child, :not)
  * @param selector selector
  */
-function isInPseudoClassNot(selector: selectorParser.Node) {
+function isInPseudoClass(selector: selectorParser.Node) {
   return (
     selector.parent &&
     selector.parent.type === "pseudo" &&
-    selector.parent.value === ":not"
+    selector.parent.value.startsWith(":")
   );
 }
 
@@ -700,8 +701,8 @@ class PurgeCSS {
     selector: selectorParser.Selector,
     selectorsFromExtractor: ExtractorResultDetailed
   ): boolean {
-    // ignore the selector if it is inside a :not pseudo class.
-    if (isInPseudoClassNot(selector)) return true;
+    // ignore the selector if it is inside a pseudo class
+    if (isInPseudoClass(selector)) return true;
 
     let isPresent = false;
     for (const nodeSelector of selector.nodes) {
@@ -747,7 +748,7 @@ class PurgeCSS {
           break;
       }
       // selector is not in whitelist children or in whitelist
-      // and it has not been found  as an attribute/class/identifier/tag
+      // and it has not been found as an attribute/class/identifier/tag
       if (!isPresent) return false;
     }
     return isPresent;
