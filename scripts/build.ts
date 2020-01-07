@@ -21,10 +21,6 @@ const packages = [
       "util"
     ]
   },
-  // {
-  //   name: 'purgecss-from-blade',
-  //   external: ['@tarik02/bladejs-compiler']
-  // },
   {
     name: "purgecss-from-html",
     external: ["parse5", "parse5-htmlparser2-tree-adapter"]

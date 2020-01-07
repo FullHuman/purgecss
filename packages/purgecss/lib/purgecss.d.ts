@@ -1,4 +1,3 @@
-import postcss from "postcss";
 import * as postcss from "postcss";
 interface RawContent {
   extension: string;
@@ -17,8 +16,8 @@ interface ExtractorResultDetailed {
   tags: string[];
   undetermined: string[];
 }
-declare type ExtractorResult = ExtractorResultDetailed | string[];
-declare type ExtractorFunction = (content: string) => ExtractorResult;
+type ExtractorResult = ExtractorResultDetailed | string[];
+type ExtractorFunction = (content: string) => ExtractorResult;
 interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
@@ -170,5 +169,10 @@ declare class PurgeCSS {
    */
   walkThroughCSS(root: postcss.Root, selectors: ExtractorResultDetailed): void;
 }
-export { PurgeCSS as default };
-export { defaultOptions, setOptions, mergeExtractorSelectors, PurgeCSS };
+export {
+  PurgeCSS as default,
+  PurgeCSS,
+  defaultOptions,
+  setOptions,
+  mergeExtractorSelectors
+};

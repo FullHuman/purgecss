@@ -22,17 +22,16 @@ function n(t, s, e = t => t.resource, i) {
   }
   return n;
 }
-const r = [".css", ".scss", ".styl", ".sass", ".less"],
-  a = "PurgeCSS";
+const r = [".css", ".scss", ".styl", ".sass", ".less"];
 export default class {
   constructor(t) {
     (this.purgedStats = {}), (this.options = t);
   }
   apply(t) {
-    t.hooks.compilation.tap(a, t => {
+    t.hooks.compilation.tap("PurgeCSS", t => {
       this.initializePlugin(t);
     }),
-      t.hooks.done.tap(a, this.onHooksDone.bind(this));
+      t.hooks.done.tap("PurgeCSS", this.onHooksDone.bind(this));
   }
   onHooksDone(t, s) {
     t.hasErrors()
@@ -55,7 +54,9 @@ export default class {
     e.forEach(s => {
       if (!t(s)) throw new Error(`Path ${s} does not exist.`);
     }),
-      s.hooks.additionalAssets.tapPromise(a, () => this.runPluginHook(s, e));
+      s.hooks.additionalAssets.tapPromise("PurgeCSS", () =>
+        this.runPluginHook(s, e)
+      );
   }
   async runPluginHook(t, o) {
     const a = (function(t = {}, s) {
@@ -71,30 +72,30 @@ export default class {
         const l = o
             .concat(n(i, this.options.moduleExtensions || [], t => t.resource))
             .filter(t => !r.some(s => t.endsWith(s))),
-          h = { ...this.options, content: l, css: [{ raw: c.source() }] };
-        "function" == typeof h.whitelist && (h.whitelist = h.whitelist()),
-          "function" == typeof h.whitelistPatterns &&
-            (h.whitelistPatterns = h.whitelistPatterns()),
-          "function" == typeof h.whitelistPatternsChildren &&
-            (h.whitelistPatternsChildren = h.whitelistPatternsChildren());
-        const u = (
+          u = { ...this.options, content: l, css: [{ raw: c.source() }] };
+        "function" == typeof u.whitelist && (u.whitelist = u.whitelist()),
+          "function" == typeof u.whitelistPatterns &&
+            (u.whitelistPatterns = u.whitelistPatterns()),
+          "function" == typeof u.whitelistPatternsChildren &&
+            (u.whitelistPatternsChildren = u.whitelistPatternsChildren());
+        const h = (
           await new s().purge({
-            content: h.content,
-            css: h.css,
-            defaultExtractor: h.defaultExtractor,
-            extractors: h.extractors,
-            fontFace: h.fontFace,
-            keyframes: h.keyframes,
-            output: h.output,
-            rejected: h.rejected,
-            variables: h.variables,
-            whitelist: h.whitelist,
-            whitelistPatterns: h.whitelistPatterns,
-            whitelistPatternsChildren: h.whitelistPatternsChildren
+            content: u.content,
+            css: u.css,
+            defaultExtractor: u.defaultExtractor,
+            extractors: u.extractors,
+            fontFace: u.fontFace,
+            keyframes: u.keyframes,
+            output: u.output,
+            rejected: u.rejected,
+            variables: u.variables,
+            whitelist: u.whitelist,
+            whitelistPatterns: u.whitelistPatterns,
+            whitelistPatternsChildren: u.whitelistPatternsChildren
           })
         )[0];
-        u.rejected && (this.purgedStats[a] = u.rejected),
-          (t.assets[a] = new e(u.css));
+        h.rejected && (this.purgedStats[a] = h.rejected),
+          (t.assets[a] = new e(h.css));
       }
     }
   }

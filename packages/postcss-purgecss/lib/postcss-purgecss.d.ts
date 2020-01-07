@@ -6,7 +6,7 @@ interface RawContent {
 interface RawCSS {
   raw: string;
 }
-declare type ExtractorFunction = (content: string) => string[];
+type ExtractorFunction = (content: string) => string[];
 interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
@@ -27,22 +27,20 @@ interface UserDefinedOptions {
   whitelistPatterns?: Array<RegExp>;
   whitelistPatternsChildren?: Array<RegExp>;
 }
-declare const purgeCSSPlugin: postcss.Plugin<postcss.PluginInitializer<
-  Pick<
-    UserDefinedOptions,
-    | "content"
-    | "defaultExtractor"
-    | "extractors"
-    | "fontFace"
-    | "keyframes"
-    | "output"
-    | "rejected"
-    | "stdin"
-    | "stdout"
-    | "variables"
-    | "whitelist"
-    | "whitelistPatterns"
-    | "whitelistPatternsChildren"
-  >
+declare const purgeCSSPlugin: postcss.Plugin<Pick<
+  UserDefinedOptions,
+  | "content"
+  | "defaultExtractor"
+  | "extractors"
+  | "fontFace"
+  | "keyframes"
+  | "output"
+  | "rejected"
+  | "stdin"
+  | "stdout"
+  | "variables"
+  | "whitelist"
+  | "whitelistPatterns"
+  | "whitelistPatternsChildren"
 >>;
 export { purgeCSSPlugin as default };

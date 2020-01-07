@@ -1,7 +1,7 @@
 import { parse as e } from "postcss";
 import t from "postcss-selector-parser";
-import { access as s, readFile as r, constants as n } from "fs";
-import { promisify as i } from "util";
+import { access as s, readFile as r, constants as i } from "fs";
+import { promisify as n } from "util";
 import o from "glob";
 import a from "path";
 const u = {
@@ -19,13 +19,7 @@ const u = {
     whitelistPatterns: [],
     whitelistPatternsChildren: []
   },
-  c = "purgecss ignore current",
-  l = "purgecss ignore",
-  d = "purgecss start ignore",
-  h = "purgecss end ignore",
-  f = "purgecss.config.js",
-  m = "Error loading the config file",
-  p = [
+  c = [
     "*",
     "::-webkit-scrollbar",
     "::selection",
@@ -33,22 +27,19 @@ const u = {
     "::before",
     "::after"
   ];
-class v {
+class l {
   constructor(e) {
     (this.nodes = []), (this.isUsed = !1), (this.value = e);
   }
 }
-class g {
+class d {
   constructor() {
     (this.nodes = new Map()), (this.usedVariables = new Set());
-  }
-  getVariableNode(e) {
-    return this.nodes.get(e);
   }
   addVariable(e) {
     const { prop: t } = e;
     if (!this.nodes.has(t)) {
-      const s = new v(e);
+      const s = new l(e);
       this.nodes.set(t, s);
     }
   }
@@ -81,18 +72,18 @@ class g {
     for (const [, e] of this.nodes) e.isUsed || e.value.remove();
   }
 }
-const y = { access: i(s), readFile: i(r) };
-async function b(e = f) {
+const h = { access: n(s), readFile: n(r) };
+async function f(e = "purgecss.config.js") {
   let t;
   try {
     const s = a.join(process.cwd(), e);
     t = await import(s);
   } catch (e) {
-    throw new Error(`${m} ${e.message}`);
+    throw new Error(`Error loading the config file ${e.message}`);
   }
   return { ...u, ...t };
 }
-function w(e, t) {
+function m(e, t) {
   const s = t(e);
   return Array.isArray(s)
     ? {
@@ -104,17 +95,17 @@ function w(e, t) {
       }
     : s;
 }
-function S(e, t) {
+function p(e, t) {
   switch (t) {
     case "next":
-      return e.text.includes(l);
+      return e.text.includes("purgecss ignore");
     case "start":
-      return e.text.includes(d);
+      return e.text.includes("purgecss start ignore");
     case "end":
-      return e.text.includes(h);
+      return e.text.includes("purgecss end ignore");
   }
 }
-function F(e, t) {
+function v(e, t) {
   return {
     attributes: {
       names: [...e.attributes.names, ...t.attributes.names],
@@ -126,10 +117,10 @@ function F(e, t) {
     undetermined: [...e.undetermined, ...t.undetermined]
   };
 }
-function x(e) {
+function g(e) {
   return e.replace(/(^["'])|(["']$)/g, "");
 }
-function k(e, t) {
+function y(e, t) {
   if (
     !t.attributes.names.includes(e.attribute) &&
     !t.undetermined.includes(e.attribute)
@@ -162,20 +153,20 @@ function k(e, t) {
       return !0;
   }
 }
-function U(e, t) {
+function b(e, t) {
   return t.ids.includes(e.value) || t.undetermined.includes(e.value);
 }
-function R(e, t) {
+function w(e, t) {
   return t.tags.includes(e.value) || t.undetermined.includes(e.value);
 }
-class A {
+class S {
   constructor() {
     (this.ignore = !1),
       (this.atRules = { fontFace: [], keyframes: [] }),
       (this.usedAnimations = new Set()),
       (this.usedFontFaces = new Set()),
       (this.selectorsRemoved = new Set()),
-      (this.variablesStructure = new g()),
+      (this.variablesStructure = new d()),
       (this.options = u);
   }
   collectDeclarationsData(e) {
@@ -210,7 +201,7 @@ class A {
       if (this.options.fontFace) {
         if ("font-family" === t)
           for (const e of s.split(",")) {
-            const t = x(e.trim());
+            const t = g(e.trim());
             this.usedFontFaces.add(t);
           }
       } else;
@@ -231,12 +222,12 @@ class A {
     for (const r of e) {
       let e = [];
       try {
-        await y.access(r, n.F_OK), e.push(r);
+        await h.access(r, i.F_OK), e.push(r);
       } catch (t) {
         e = o.sync(r);
       }
       for (const r of e) {
-        s = F(s, w(await y.readFile(r, "utf-8"), this.getFileExtractor(r, t)));
+        s = v(s, m(await h.readFile(r, "utf-8"), this.getFileExtractor(r, t)));
       }
     }
     return s;
@@ -249,8 +240,8 @@ class A {
       tags: [],
       undetermined: []
     };
-    for (const { raw: r, extension: n } of e) {
-      s = F(s, w(r, this.getFileExtractor(`.${n}`, t)));
+    for (const { raw: r, extension: i } of e) {
+      s = v(s, m(r, this.getFileExtractor(`.${i}`, t)));
     }
     return s;
   }
@@ -261,12 +252,12 @@ class A {
       for (const t of e.nodes)
         "decl" === t.type &&
           "font-family" === t.prop &&
-          this.atRules.fontFace.push({ name: x(t.value), node: e });
+          this.atRules.fontFace.push({ name: g(t.value), node: e });
   }
   async evaluateRule(e, s) {
     if (this.ignore) return;
     const r = e.prev();
-    if (r && "comment" === r.type && S(r, "next")) return void r.remove();
+    if (r && "comment" === r.type && p(r, "next")) return void r.remove();
     if (e.parent && "atrule" === e.parent.type && "keyframes" === e.parent.name)
       return;
     if ("rule" !== e.type) return;
@@ -277,7 +268,7 @@ class A {
           e.walkComments(e => {
             e &&
               "comment" === e.type &&
-              e.text.includes(c) &&
+              e.text.includes("purgecss ignore current") &&
               ((t = !0), e.remove());
           }),
           t
@@ -285,21 +276,22 @@ class A {
       })(e)
     )
       return;
-    let n = !0;
+    let i = !0;
     if (
       ((e.selector = t(e => {
         e.walk(e => {
           "selector" === e.type &&
-            ((n = this.shouldKeepSelector(e, s)) ||
+            ((i = this.shouldKeepSelector(e, s)),
+            i ||
               (this.options.rejected && this.selectorsRemoved.add(e.toString()),
               e.remove()));
         });
       }).processSync(e.selector)),
-      n && void 0 !== e.nodes)
+      i && void 0 !== e.nodes)
     )
       for (const t of e.nodes)
         "decl" === t.type && this.collectDeclarationsData(t);
-    const i = e.parent;
+    const n = e.parent;
     e.selector || e.remove(),
       (function(e) {
         return !!(
@@ -309,25 +301,25 @@ class A {
             ((!e.nodes && !e.params) ||
               (!e.params && e.nodes && !e.nodes.length)))
         );
-      })(i) && i.remove();
+      })(n) && n.remove();
   }
   async getPurgedCSS(t, s) {
     const r = [],
-      n = [];
-    for (const e of t) "string" == typeof e ? n.push(...o.sync(e)) : n.push(e);
-    for (const t of n) {
-      const n =
+      i = [];
+    for (const e of t) "string" == typeof e ? i.push(...o.sync(e)) : i.push(e);
+    for (const t of i) {
+      const i =
           "string" == typeof t
             ? this.options.stdin
               ? t
-              : await y.readFile(t, "utf-8")
+              : await h.readFile(t, "utf-8")
             : t.raw,
-        i = e(n);
-      this.walkThroughCSS(i, s),
+        n = e(i);
+      this.walkThroughCSS(n, s),
         this.options.fontFace && this.removeUnusedFontFaces(),
         this.options.keyframes && this.removeUnusedKeyframes(),
         this.options.variables && this.removeUnusedCSSVariables();
-      const o = { css: i.toString(), file: "string" == typeof t ? t : void 0 };
+      const o = { css: n.toString(), file: "string" == typeof t ? t : void 0 };
       "string" == typeof t && (o.file = t),
         this.options.rejected &&
           ((o.rejected = Array.from(this.selectorsRemoved)),
@@ -338,7 +330,7 @@ class A {
   }
   isSelectorWhitelisted(e) {
     return (
-      p.includes(e) ||
+      c.includes(e) ||
       (this.options.whitelist && this.options.whitelist.some(t => t === e)) ||
       (this.options.whitelistPatterns &&
         this.options.whitelistPatterns.some(t => t.test(e)))
@@ -351,13 +343,13 @@ class A {
     );
   }
   async purge(e) {
-    this.options = "object" != typeof e ? await b(e) : { ...u, ...e };
+    this.options = "object" != typeof e ? await f(e) : { ...u, ...e };
     const { content: t, css: s, extractors: r } = this.options,
-      n = t.filter(e => "string" == typeof e),
-      i = t.filter(e => "object" == typeof e),
-      o = await this.extractSelectorsFromFiles(n, r),
-      a = this.extractSelectorsFromString(i, r);
-    return this.getPurgedCSS(s, F(o, a));
+      i = t.filter(e => "string" == typeof e),
+      n = t.filter(e => "object" == typeof e),
+      o = await this.extractSelectorsFromFiles(i, r),
+      a = this.extractSelectorsFromString(n, r);
+    return this.getPurgedCSS(s, v(o, a));
   }
   removeUnusedCSSVariables() {
     this.variablesStructure.removeUnused();
@@ -374,40 +366,42 @@ class A {
     if (
       (function(e) {
         return (
-          e.parent && "pseudo" === e.parent.type && ":not" === e.parent.value
+          e.parent &&
+          "pseudo" === e.parent.type &&
+          e.parent.value.startsWith(":")
         );
       })(e)
     )
       return !0;
     let s = !1;
-    for (const i of e.nodes) {
-      if (i.value && this.isSelectorWhitelistedChildren(i.value)) return !0;
+    for (const n of e.nodes) {
+      if (n.value && this.isSelectorWhitelistedChildren(n.value)) return !0;
       if (
-        i.value &&
-        (p.includes(i.value) || this.isSelectorWhitelisted(i.value))
+        n.value &&
+        (c.includes(n.value) || this.isSelectorWhitelisted(n.value))
       )
         s = !0;
       else {
-        switch (i.type) {
+        switch (n.type) {
           case "attribute":
-            s = "value" === i.attribute || k(i, t);
+            s = "value" === n.attribute || y(n, t);
             break;
           case "class":
-            (r = i),
+            (r = n),
               (s =
-                (n = t).classes.includes(r.value) ||
-                n.undetermined.includes(r.value));
+                (i = t).classes.includes(r.value) ||
+                i.undetermined.includes(r.value));
             break;
           case "id":
-            s = U(i, t);
+            s = b(n, t);
             break;
           case "tag":
-            s = R(i, t);
+            s = w(n, t);
         }
         if (!s) return !1;
       }
     }
-    var r, n;
+    var r, i;
     return s;
   }
   walkThroughCSS(e, t) {
@@ -418,17 +412,17 @@ class A {
         ? this.evaluateAtRule(e)
         : void (
             "comment" === e.type &&
-            (S(e, "start")
+            (p(e, "start")
               ? ((this.ignore = !0), e.remove())
-              : S(e, "end") && ((this.ignore = !1), e.remove()))
+              : p(e, "end") && ((this.ignore = !1), e.remove()))
           )
     );
   }
 }
-export default A;
+export default S;
 export {
-  A as PurgeCSS,
+  S as PurgeCSS,
   u as defaultOptions,
-  F as mergeExtractorSelectors,
-  b as setOptions
+  v as mergeExtractorSelectors,
+  f as setOptions
 };

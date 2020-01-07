@@ -71,9 +71,6 @@ class VariablesStructure {
   constructor() {
     (this.nodes = new Map()), (this.usedVariables = new Set());
   }
-  getVariableNode(e) {
-    return this.nodes.get(e);
-  }
   addVariable(e) {
     const { prop: t } = e;
     if (!this.nodes.has(t)) {
@@ -141,11 +138,11 @@ function extractSelectors(e, t) {
 function isIgnoreAnnotation(e, t) {
   switch (t) {
     case "next":
-      return e.text.includes(IGNORE_ANNOTATION_NEXT);
+      return e.text.includes("purgecss ignore");
     case "start":
-      return e.text.includes(IGNORE_ANNOTATION_START);
+      return e.text.includes("purgecss start ignore");
     case "end":
-      return e.text.includes(IGNORE_ANNOTATION_END);
+      return e.text.includes("purgecss end ignore");
   }
 }
 function isRuleEmpty(e) {
@@ -162,7 +159,7 @@ function hasIgnoreAnnotation(e) {
     e.walkComments(e => {
       e &&
         "comment" === e.type &&
-        e.text.includes(IGNORE_ANNOTATION_CURRENT) &&
+        e.text.includes("purgecss ignore current") &&
         ((t = !0), e.remove());
     }),
     t
@@ -225,8 +222,10 @@ function isIdentifierFound(e, t) {
 function isTagFound(e, t) {
   return t.tags.includes(e.value) || t.undetermined.includes(e.value);
 }
-function isInPseudoClassNot(e) {
-  return e.parent && "pseudo" === e.parent.type && ":not" === e.parent.value;
+function isInPseudoClass(e) {
+  return (
+    e.parent && "pseudo" === e.parent.type && e.parent.value.startsWith(":")
+  );
 }
 function matchAll(e, t) {
   const s = [];
@@ -347,7 +346,8 @@ class PurgeCSS {
       ((e.selector = selectorParser(e => {
         e.walk(e => {
           "selector" === e.type &&
-            ((r = this.shouldKeepSelector(e, t)) ||
+            ((r = this.shouldKeepSelector(e, t)),
+            r ||
               (this.options.rejected && this.selectorsRemoved.add(e.toString()),
               e.remove()));
         });
@@ -421,7 +421,7 @@ class PurgeCSS {
       this.usedAnimations.has(e.params) || e.remove();
   }
   shouldKeepSelector(e, t) {
-    if (isInPseudoClassNot(e)) return !0;
+    if (isInPseudoClass(e)) return !0;
     let s = !1;
     for (const r of e.nodes) {
       if (r.value && this.isSelectorWhitelistedChildren(r.value)) return !0;

@@ -1,13 +1,13 @@
 import { Compiler, Stats } from "webpack";
 import { compilation as compilationType } from "webpack";
-declare type ExtractorFunction = (content: string) => string[];
+type ExtractorFunction = (content: string) => string[];
 interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
 }
-declare type PathFunction = () => string[];
-declare type WhitelistFunction = () => string[];
-declare type WhitelistPatternsFunction = () => Array<RegExp>;
+type PathFunction = () => string[];
+type WhitelistFunction = () => string[];
+type WhitelistPatternsFunction = () => Array<RegExp>;
 interface UserDefinedOptions {
   paths: string[] | PathFunction;
   defaultExtractor?: ExtractorFunction;
@@ -26,7 +26,7 @@ interface UserDefinedOptions {
   whitelistPatternsChildren?: Array<RegExp> | WhitelistPatternsFunction;
   only?: string[];
 }
-declare type PurgedStats = {
+type PurgedStats = {
   [index: string]: string[];
 };
 interface PurgeAsset {
@@ -35,7 +35,7 @@ interface PurgeAsset {
   };
   name: string;
 }
-declare type Compilation = compilationType.Compilation;
+type Compilation = compilationType.Compilation;
 declare class PurgeCSSPlugin {
   options: UserDefinedOptions;
   purgedStats: PurgedStats;

@@ -20,17 +20,17 @@ function isFileOfTypes(t, e) {
 }
 function getAssets(t = {}, e) {
   const s = [];
-  for (const [i, n] of Object.entries(t))
-    isFileOfTypes(i, e) && s.push({ name: i, asset: n });
+  for (const [i, o] of Object.entries(t))
+    isFileOfTypes(i, e) && s.push({ name: i, asset: o });
   return s;
 }
 function files(t, e, s = t => t.resource, i) {
-  const n = [];
+  const o = [];
   for (const i of Array.from(t.modulesIterable || [])) {
     const t = s(i);
-    t && e.includes(path.extname(t)) && n.push(t);
+    t && e.includes(path.extname(t)) && o.push(t);
   }
-  return n;
+  return o;
 }
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"],
   pluginName = "PurgeCSS";
@@ -39,10 +39,10 @@ class PurgeCSSPlugin {
     (this.purgedStats = {}), (this.options = t);
   }
   apply(t) {
-    t.hooks.compilation.tap(pluginName, t => {
+    t.hooks.compilation.tap("PurgeCSS", t => {
       this.initializePlugin(t);
     }),
-      t.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
+      t.hooks.done.tap("PurgeCSS", this.onHooksDone.bind(this));
   }
   onHooksDone(t, e) {
     t.hasErrors()
@@ -65,22 +65,22 @@ class PurgeCSSPlugin {
     e.forEach(t => {
       if (!fs.existsSync(t)) throw new Error(`Path ${t} does not exist.`);
     }),
-      t.hooks.additionalAssets.tapPromise(pluginName, () =>
+      t.hooks.additionalAssets.tapPromise("PurgeCSS", () =>
         this.runPluginHook(t, e)
       );
   }
   async runPluginHook(t, e) {
     const s = getAssets(t.assets, [".css"]);
     for (const i of t.chunks) {
-      const { files: n } = i,
-        o = this.getAssetsToPurge(s, n);
-      for (const { name: s, asset: n } of o) {
-        const o = e
+      const { files: o } = i,
+        n = this.getAssetsToPurge(s, o);
+      for (const { name: s, asset: o } of n) {
+        const n = e
             .concat(
               files(i, this.options.moduleExtensions || [], t => t.resource)
             )
             .filter(t => !styleExtensions.some(e => t.endsWith(e))),
-          r = { ...this.options, content: o, css: [{ raw: n.source() }] };
+          r = { ...this.options, content: n, css: [{ raw: o.source() }] };
         "function" == typeof r.whitelist && (r.whitelist = r.whitelist()),
           "function" == typeof r.whitelistPatterns &&
             (r.whitelistPatterns = r.whitelistPatterns()),
