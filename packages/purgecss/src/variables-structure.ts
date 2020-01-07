@@ -14,10 +14,6 @@ class VariablesStructure {
   public nodes: Map<string, VariableNode> = new Map();
   public usedVariables: Set<string> = new Set();
 
-  getVariableNode(variableName: string) {
-    return this.nodes.get(variableName);
-  }
-
   addVariable(declaration: postcss.Declaration) {
     const { prop } = declaration;
     if (!this.nodes.has(prop)) {
