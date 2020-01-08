@@ -1,8 +1,8 @@
 {
   "name": "postcss-purgecss",
   "version": "2.0.0",
-  "description": "> TODO: description",
-  "author": "Ffloriel <florielfedry@gmail.com>",
+  "description": "PostCSS plugin for PurgeCSS",
+  "author": "FoundrySH <no-reply@foundry.sh>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
   "license": "MIT",
   "main": "lib/postcss-purgecss.js",
