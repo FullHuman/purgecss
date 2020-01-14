@@ -1,39 +1,39 @@
-const path = require("path");
-const rollup = require("rollup");
-const { terser } = require("rollup-plugin-terser");
-const typescript = require("@wessberg/rollup-plugin-ts");
+const path = require('path')
+const rollup = require('rollup')
+const { terser } = require('rollup-plugin-terser')
+const typescript = require('@wessberg/rollup-plugin-ts')
 
-const packagesDirectory = path.resolve(__dirname, "./../packages");
+const packagesDirectory = path.resolve(__dirname, './../packages')
 
 const packages = [
   {
-    name: "postcss-purgecss",
-    external: ["postcss", "purgecss"]
-  },
-  {
-    name: "purgecss",
+    name: 'purgecss',
     external: [
-      "postcss",
-      "postcss-selector-parser",
-      "glob",
-      "path",
-      "fs",
-      "util"
+      'postcss',
+      'postcss-selector-parser',
+      'glob',
+      'path',
+      'fs',
+      'util'
     ]
   },
   {
-    name: "purgecss-from-html",
-    external: ["parse5", "parse5-htmlparser2-tree-adapter"]
+    name: 'postcss-purgecss',
+    external: ['postcss', 'purgecss']
   },
   {
-    name: "purgecss-from-pug",
-    external: ["pug-lexer"]
+    name: 'purgecss-webpack-plugin',
+    external: ['fs', 'path', 'purgecss', 'webpack', 'webpack-sources']
   },
   {
-    name: "purgecss-webpack-plugin",
-    external: ["fs", "path", "purgecss", "webpack", "webpack-sources"]
+    name: 'purgecss-from-html',
+    external: ['parse5', 'parse5-htmlparser2-tree-adapter']
+  },
+  {
+    name: 'purgecss-from-pug',
+    external: ['pug-lexer']
   }
-];
+]
 
 async function build() {
   for (const pkg of packages) {
@@ -41,7 +41,7 @@ async function build() {
       input: path.resolve(packagesDirectory, `./${pkg.name}/src/index.ts`),
       plugins: [typescript({}), terser()],
       external: pkg.external
-    });
+    })
 
     await bundle.write({
       file: path.resolve(
@@ -49,20 +49,20 @@ async function build() {
         pkg.name,
         `./lib/${pkg.name}.esm.js`
       ),
-      format: "esm"
-    });
+      format: 'esm'
+    })
 
     await bundle.write({
       file: path.resolve(packagesDirectory, pkg.name, `./lib/${pkg.name}.js`),
-      format: "cjs"
-    });
+      format: 'cjs'
+    })
   }
 }
 
-(async () => {
+;(async () => {
   try {
-    await build();
+    await build()
   } catch (e) {
-    console.error(e);
+    console.error(e)
   }
-})();
+})()
