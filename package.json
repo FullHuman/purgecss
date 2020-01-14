@@ -1,81 +1,55 @@
 {
-  "name": "purgecss",
-  "version": "1.4.2",
-  "description": "Remove unused css selectors.",
-  "main": "./lib/purgecss.js",
-  "module": "./lib/purgecss.es.js",
-  "jsnext:main": "./lib/purgecss.es.js",
-  "types": "./lib/purgecss.d.ts",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__",
-    "example": "examples"
-  },
-  "files": [
-    "lib/",
-    "flow-typed/",
-    "bin/"
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "postcss-purgecss",
+    "purgecss",
+    "purgecss-from-html",
+    "purgecss-from-pug",
+    "purgecss-from-twig",
+    "purgecss-webpack-plugin"
   ],
-  "bin": "./bin/purgecss",
-  "scripts": {
-    "test": "jest __tests__/.+.test.js",
-    "dev": "rollup -c rollup.config.js -w",
-    "build": "rollup -c rollup.config.js",
-    "flow": "flow",
-    "lint": "eslint -c .eslintrc src/",
-    "prettier": "prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FullHuman/purgecss.git"
-  },
-  "keywords": [
-    "optimization",
-    "remove",
-    "unused",
-    "css",
-    "purge",
-    "uncss",
-    "purify"
-  ],
-  "author": "Ffloriel",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FullHuman/purgecss/issues"
-  },
-  "homepage": "https://www.purgecss.com",
-  "dependencies": {
-    "glob": "^7.1.3",
-    "postcss": "^7.0.14",
-    "postcss-selector-parser": "^6.0.0",
-    "yargs": "^14.0.0"
-  },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-flow": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.0.3",
-    "babel-jest": "^24.9.0",
-    "codacy-coverage": "^3.4.0",
-    "eslint": "^6.6.0",
-    "eslint-plugin-flowtype": "^4.3.0",
-    "flow-bin": "^0.114.0",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^13.1.0",
+    "@vuepress/theme-default": "^1.2.0",
+    "@wessberg/rollup-plugin-ts": "^1.1.65",
+    "conventional-changelog-cli": "^2.0.28",
+    "husky": "^4.0.0",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2",
-    "regenerator-runtime": "^0.13.3",
-    "rollup": "^1.26.0",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "lerna": "^3.18.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.19.0",
+    "rollup": "^1.26.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.2",
+    "vuepress": "^1.2.0"
   },
-  "engines": {
-    "npm": ">=5.2.0",
-    "node": ">=4.4.0"
+  "scripts": {
+    "build": "ts-node scripts/build.ts",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:deploy": "firebase deploy",
+    "prettier": "prettier --write --parser typescript '**/*.ts'",
+    "test": "jest"
   },
-  "funding": {
-    "url": "https://github.com/sponsors/Ffloriel"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "ts-node scripts/verify-commit.ts"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.ts": [
+      "yarn prettier",
+      "git add"
+    ]
   }
 }

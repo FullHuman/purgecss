@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "comparisons",
+  "version": "0.1.0",
+  "description": "PurgeCSS versions comparisons",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "purgecss": "^1.4.0",
+    "purgecss-from-html": "^1.1.0"
+  },
+  "author": "Leon Sorokin <leeoniya@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^8"
+  }
+}

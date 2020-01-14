@@ -1,0 +1,55 @@
+{
+  "name": "purgecss-webpack-plugin",
+  "version": "2.0.0",
+  "description": "PurgeCSS plugin for webpack - Remove unused css",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://purgecss.com",
+  "keywords": [
+    "webpack-plugin",
+    "optimize",
+    "optimization",
+    "remove",
+    "unused",
+    "css",
+    "html",
+    "rules",
+    "purge",
+    "uncss",
+    "purify"
+  ],
+  "license": "MIT",
+  "main": "lib/purgecss-webpack-plugin.js",
+  "module": "./lib/purgecss-webpack-plugin.esm.js",
+  "types": "./lib/purgecss-webpack-plugin.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "purgecss": "^2.0.0",
+    "webpack": "^4.41.2",
+    "webpack-sources": "^1.4.3"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "devDependencies": {
+    "@types/webpack": "^4.39.7",
+    "@types/webpack-sources": "^0.1.5",
+    "css-loader": "^3.2.0",
+    "mini-css-extract-plugin": "^0.9.0"
+  },
+  "peerDependencies": {
+    "webpack": "*"
+  }
+}

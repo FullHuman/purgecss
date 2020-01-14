@@ -1,0 +1,75 @@
+/* CSS [attribute] Selector */
+input[checked] {
+  color: red;
+}
+
+a[invented] {
+  color: red;
+}
+
+a[target] {
+  color:red;
+}
+
+/* CSS [attribute="value"] Selector */
+a[target="_blank"] {
+  background-color: yellow;
+}
+
+a[target="no_blank"] {
+  background-color: yellow;
+}
+
+input[value=""] {
+  background-color: yellow;
+}
+
+/* CSS [attribute~="value"] Selector */
+input[title~="flower"] {
+  border: 5px solid yellow;
+}
+
+input[title~="grass"] {
+  border: 5px solid yellow;
+}
+
+/* CSS [attribute|="value"] Selector */
+html[lang|="en"] {
+  background: yellow;
+}
+
+html[lang|="fr"] {
+  background: yellow;
+}
+
+/* CSS [attribute^="value"] Selector */
+a[href^="http"] {
+  color: green;
+}
+
+a[href^="ssl"] {
+  color: green;
+}
+
+/* CSS [attribute$="value"] Selector */
+a[href$="pdf"] {
+  color: blue;
+}
+
+a[href$="jpg"] {
+  color: blue;
+}
+
+a[href$="http"] {
+  color: blue;
+}
+
+/* CSS [attribute*="value"] Selector */
+
+a[title~="thin"] {
+  border: 5px solid yellow;
+}
+
+a[title~="fat"] {
+  border: 5px solid yellow;
+}

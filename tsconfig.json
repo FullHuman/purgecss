@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": false,
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "allowJs": false,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "lib": ["esnext", "dom"],
+    "types": ["jest", "@types/node"],
+    "rootDir": ".",
+    "paths": {
+      "*" : ["types/*"],
+      "@fullhuman/purgecss": ["packages/purgecss/src"],
+      "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
+      "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"]
+    }
+  },
+  "include": [
+    "packages/*/src",
+    "packages/*/__tests__"
+  ]
+}
