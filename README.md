@@ -21,6 +21,10 @@ When you are building a website, chances are that you are using a css framework 
 
 This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your css files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your css, resulting in smaller css files.
 
+## Documentation
+
+You can find the PurgeCSS documentation on [this website](https://purgecss.com).
+
 ## Packages
 
 This repository is a monorepo that we manage using [Lerna](https://github.com/lerna/lerna). That means that we actually publish [several packages](/packages) to npm from the same codebase, including:

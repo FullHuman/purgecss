@@ -166,7 +166,7 @@ await new PurgeCSS().purge({
 
 You can learn more about extractors [here](extractors.md).
 
-- **fontFace \(default: true\)**
+- **fontFace \(default: false\)**
 
 If there are any unused @font-face rules in your css, you can remove them by setting the `fontFace` option to `true`
 
@@ -178,7 +178,7 @@ await new PurgeCSS().purge({
 })
 ```
 
-- **keyframes \(default: true\)**
+- **keyframes \(default: false\)**
 
 If you are using a CSS animation library such as animate.css, you can remove unused keyframes by setting the `keyframes` option to `true`.
 
@@ -187,6 +187,18 @@ await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
   css: ['css/app.css'],
   keyframes: true
+})
+```
+
+- **variables \(default: false\)**
+
+If your are using Custom Properties (CSS variables), or a library using them such as Bootstrap, you can remove unused CSS variables by setting the `variables` option to `true`.
+
+```js
+await new PurgeCSS().purge({
+  content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
+  css: ['css/app.css'],
+  variables: true
 })
 ```
 

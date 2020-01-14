@@ -1,16 +1,6 @@
 # [](https://github.com/FullHuman/purgecss/compare/v2.0.1-alpha.0...v) (2019-11-23)
 
 
-### Bug Fixes
-
-* export named on default ([4502583](https://github.com/FullHuman/purgecss/commit/4502583599c0401b46fd892e0d89096780674e10))
-* github worflow ([4115e11](https://github.com/FullHuman/purgecss/commit/4115e11f1f283a0c2fab08180b2e957071c39cb9))
-* github workflow ([b1075bb](https://github.com/FullHuman/purgecss/commit/b1075bb025f83ba61b7dd32aadbf40647c1ecc2c))
-* github workflow ([9d23fc2](https://github.com/FullHuman/purgecss/commit/9d23fc2ebb54ebccc4144945f30ee13e4c1c62d3))
-* workflow: set CI to false ([8aea4e9](https://github.com/FullHuman/purgecss/commit/8aea4e9594453bb9af9e7e42980a05c86332f9a3))
-
-
-
 ## [2.0.1-alpha.0](https://github.com/FullHuman/purgecss/compare/1.4.0...v2.0.1-alpha.0) (2019-10-08)
 
 

@@ -7,7 +7,8 @@ describe("purge unused css variables", () => {
   beforeAll(async done => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${root}variables/variables.html`],
-      css: [`${root}variables/variables.css`]
+      css: [`${root}variables/variables.css`],
+      variables: true
     });
     purgedCSS = resultPurge[0].css;
     done();

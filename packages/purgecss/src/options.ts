@@ -6,12 +6,12 @@ export const defaultOptions: Options = {
   defaultExtractor: (content: string): ExtractorResult =>
     content.match(/[A-Za-z0-9_-]+/g) || [],
   extractors: [],
-  fontFace: true,
-  keyframes: true,
+  fontFace: false,
+  keyframes: false,
   rejected: false,
   stdin: false,
   stdout: false,
-  variables: true,
+  variables: false,
   whitelist: [],
   whitelistPatterns: [],
   whitelistPatternsChildren: []

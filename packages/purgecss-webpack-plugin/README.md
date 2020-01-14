@@ -80,7 +80,7 @@ new PurgecssPlugin({
 }),
 ```
 to filter out directories see the glob-all documentation [here](https://www.npmjs.com/package/glob-all#filtering-out-directories).
-
+<!-- 
 ### Webpack 3 (with extract-text-webpack-plugin)
 ```js
 const path = require('path')
@@ -116,7 +116,7 @@ module.exports = {
     })
   ]
 }
-```
+``` -->
 
 ### Options
 
@@ -195,16 +195,6 @@ Please read [CONTRIBUTING.md](./../../CONTRIBUTING.md) for details on our code o
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning.
-
-## Acknowledgment
-
-Purgecss was originally thought as the v2 of purifycss. And because of it, it is greatly inspired by it.
-The plugins such as purgecss-webpack-plugin are based on the purifycss plugin.
-Below is the list of the purifycss repositories:
-
-* [purifycss](https://github.com/purifycss/purifycss)
-* [gulp-purifycss](https://github.com/purifycss/gulp-purifycss)
-* [purifycss-webpack](https://github.com/webpack-contrib/purifycss-webpack)
 
 ## License
 

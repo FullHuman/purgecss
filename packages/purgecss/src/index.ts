@@ -314,7 +314,7 @@ class PurgeCSS {
     const { prop, value } = declaration;
 
     // collect css properties data
-    if (this.options.variables || true) {
+    if (this.options.variables) {
       const usedVariablesMatchesInDeclaration = matchAll(
         value,
         /var\((.+?)[\,)]/g

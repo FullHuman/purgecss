@@ -4,7 +4,6 @@
   "workspaces": [
     "postcss-purgecss",
     "purgecss",
-    "purgecss-from-blade",
     "purgecss-from-html",
     "purgecss-from-pug",
     "purgecss-from-twig",
