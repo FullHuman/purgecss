@@ -1,50 +1,56 @@
 # PurgeCSS
 
-[![Build Status](https://travis-ci.org/FullHuman/purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/purgecss)
-[![CircleCi](https://circleci.com/gh/FullHuman/purgecss/tree/master.svg?style=shield)]()
-[![dependencies Status](https://david-dm.org/fullhuman/purgecss/status.svg)](https://david-dm.org/fullhuman/purgecss)
-[![devDependencies Status](https://david-dm.org/fullhuman/purgecss/dev-status.svg)](https://david-dm.org/fullhuman/purgecss?type=dev)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2f2f3fb0a5c541beab2018483e62a828)](https://www.codacy.com/app/FullHuman/purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/purgecss&utm_campaign=Badge_Coverage)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![npm](https://img.shields.io/npm/v/purgecss.svg)](https://www.npmjs.com/package/purgecss)
-[![license](https://img.shields.io/github/license/fullhuman/purgecss.svg)]() [![Greenkeeper badge](https://badges.greenkeeper.io/FullHuman/purgecss.svg)](https://greenkeeper.io/)
+![David](https://img.shields.io/david/FullHuman/purgecss?style=for-the-badge)
+![David](https://img.shields.io/david/dev/FullHuman/purgecss?style=for-the-badge)
+![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
+![npm](https://img.shields.io/npm/v/purgecss?style=for-the-badge)
+![npm](https://img.shields.io/npm/dw/purgecss?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/FullHuman/purgecss?style=for-the-badge)
 
 <p align="center">
-	<img src="./.assets/logo.png" height="200" width="200" alt="PurgeCSS logo"/>
+	<img src="https://i.imgur.com/UEiUiJ0.png" height="200" width="200" alt="PurgeCSS logo"/>
 </p>
 
 ## What is PurgeCSS?
 
-When you are building a website, chances are that you are using a css framework
-like Bootstrap, Materializecss, Foundation, etc... But you will only use a small
-set of the framework and a lot of unused css styles will be included.
+When you are building a website, chances are that you are using a css framework like Bootstrap, Materializecss, Foundation, etc... But you will only use a small set of the framework and a lot of unused css styles will be included.
 
-This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your
-css files. Then it matches the selectors used in your files with the one in your
-content files. It removes unused selectors from your css, resulting in smaller
-css files.
+This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your css files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your css, resulting in smaller css files.
+
+## Version 1
+
+If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://purgecss.com)
 
 ## Documentation
 
-You can find the PurgeCSS documentation
-[on this website](https://www.purgecss.com).
+You can find the PurgeCSS documentation on [this website](https://purgecss.full-human.com).
 
-* [Configuration](https://www.purgecss.com/configuration)
-* [CLI](https://www.purgecss.com/cli)
-* [Javascript API](https://www.purgecss.com/javascript-api)
-* [Webpack plugin](https://www.purgecss.com/with-webpack)
-* [Gulp plugin](https://www.purgecss.com/with-gulp)
-* [Grunt plugin](https://www.purgecss.com/with-grunt)
-* [Rollup plugin](https://www.purgecss.com/with-rollup)
-* [Whitelisting](https://www.purgecss.com/whitelisting)
-* [Extractors](https://www.purgecss.com/extractors)
-* [Comparison](https://www.purgecss.com/comparison)
-* Guides
-  * [React](https://www.purgecss.com/guides/react)
-  * [Vue](https://www.purgecss.com/guides/vue)
-  * [Nuxt](https://www.purgecss.com/guides/nuxt)
-  * [Wordpress](https://www.purgecss.com/guides/wordpress)
+### Table of Contents
+
+#### PurgeCSS
+
+- [Configuration](https://purgecss.full-human.com/configuration.html)
+- [Command Line Interface](https://purgecss.full-human.com/CLI.html)
+- [Programmatic API](https://purgecss.full-human.com/api.html)
+- [Whitelisting](https://purgecss.full-human.com/whitelisting.html)
+- [Extractors](https://purgecss.full-human.com/extractors.html)
+- [Comparison](https://purgecss.full-human.com/comparison.html)
+
+#### Plugins
+
+- [PostCSS](https://purgecss.full-human.com/plugins/postcss.html)
+- [Webpack](https://purgecss.full-human.com/plugins/webpack.html)
+- [Gulp](https://purgecss.full-human.com/plugins/gulp.html)
+- [Grunt](https://purgecss.full-human.com/plugins/grunt.html)
+- [Gatsby](https://purgecss.full-human.com/plugins/gatsby.html)
+
+#### Guides
+
+- [Vue.js](https://purgecss.full-human.com/guides/vue.html)
+- [Nuxt.js](https://purgecss.full-human.com/guides/nuxt.html)
+- [React.js](https://purgecss.full-human.com/guides/react.html)
+- [Next.js](https://purgecss.full-human.com/guides/next.html)
+- [Razzle](https://purgecss.full-human.com/guides/razzle.html)
 
 ## Getting Started
 
@@ -57,52 +63,12 @@ npm i --save-dev purgecss
 ## Usage
 
 ```js
-import Purgecss from 'purgecss'
-const purgeCss = new Purgecss({
+import PurgeCSS from 'purgecss'
+const purgeCSSResults = await new Purgecss().purge({
   content: ['**/*.html'],
   css: ['**/*.css']
 })
-const result = purgeCss.purge()
 ```
-
-With a custom extractor:
-
-```js
-import purgeCSS from 'purgecss'
-import purgeHtml from 'purgecss-from-html'
-const result = await purgeCSS({
-  content: ['**/*.html'],
-  css: ['**/*.css'],
-  extractors: [
-    {
-      extractor: purgeHtml,
-      extensions: ['html']
-    }
-  ]
-})
-```
-
-### Build Plugin
-
-<div align="center">
-	  <a href="https://github.com/FullHuman/purgecss-webpack-plugin">
-    	<img width="200" heigth="200" src="https://webpack.js.org/assets/icon-square-big.svg">
-  	</a>
-	  <a href="https://github.com/FullHuman/gulp-purgecss">
-    	<img height="200" width="89" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
-  	</a>
-    <a href="https://github.com/FullHuman/grunt-purgecss">
-    	<img height="200" width="200" src="https://gruntjs.com/img/grunt-logo-no-wordmark.svg">
-  	</a>
-  	<a href="https://github.com/FullHuman/rollup-plugin-purgecss">
-  		<img height="200" width="200" src="https://rollupjs.org/logo.svg"/>
-	  </a>
-</div>
-
-* [Webpack](https://www.purgecss.com/with-webpack)
-* [Gulp](https://www.purgecss.com/with-gulp)
-* [Grunt](https://www.purgecss.com/with-grunt)
-* [Rollup](https://www.purgecss.com/with-rollup)
 
 ## Contributing
 
