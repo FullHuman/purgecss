@@ -26,6 +26,10 @@ const packages = [
     external: ['fs', 'path', 'purgecss', 'webpack', 'webpack-sources']
   },
   {
+    name: 'gulp-purgecss',
+    external: ['through2', 'plugin-error', 'purgecss', 'glob']
+  },
+  {
     name: 'purgecss-from-html',
     external: ['parse5', 'parse5-htmlparser2-tree-adapter']
   },

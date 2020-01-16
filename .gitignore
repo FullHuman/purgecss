@@ -1,3 +1,4 @@
+packages/*/lib/*
 docs/.vuepress/dist/
 .firebase/
 .firebaserc

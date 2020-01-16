@@ -1,5 +1,5 @@
 import postcss from "postcss";
-import { PurgeCSS, defaultOptions, mergeExtractorSelectors } from "purgecss";
+import PurgeCSS, { defaultOptions, mergeExtractorSelectors } from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 

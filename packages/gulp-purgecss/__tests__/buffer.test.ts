@@ -1,17 +1,18 @@
-import gulpPurgecss from "./../src/index.js"
+import gulpPurgecss from "../src/"
 import File from "vinyl"
+import internal from "stream"
 
 
 describe('gulp-purgecss with buffer', () => {
-    let myGulpPurgecss
-    let fileTest
+    let myGulpPurgecss: internal.Transform
+    let fileTest: File.BufferFile
     beforeEach(() => {
         fileTest = new File({
-            contents: new Buffer('.unused, .used, a { color: blue; }')
+            contents: Buffer.from('.unused, .used, a { color: blue; }', "utf-8")
         })
 
         myGulpPurgecss = gulpPurgecss({
-            content: ["./__tests__/test.html"]
+            content: ["./packages/gulp-purgecss/__tests__/test.html"]
         })    
     })
 

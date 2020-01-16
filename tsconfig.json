@@ -19,7 +19,7 @@
     "rootDir": ".",
     "paths": {
       "*" : ["types/*"],
-      "@fullhuman/purgecss": ["packages/purgecss/src"],
+      "purgecss": ["packages/purgecss/src"],
       "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
       "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"]
     }

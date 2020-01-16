@@ -1,3 +1,5 @@
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
+
 module.exports = {
   preset: 'ts-jest',
   coverageDirectory: 'coverage',
@@ -5,7 +7,7 @@ module.exports = {
   collectCoverageFrom: ['packages/*/src/**/*.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   moduleNameMapper: {
-    '^@fullhuman/(.*?)$': '<rootDir>/packages/$1/src'
+    '^purgecss$': '<rootDir>/packages/purgecss/src'
   },
   rootDir: __dirname,
   testMatch: ['<rootDir>/packages/**/__tests__/**/*test.ts']

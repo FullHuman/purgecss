@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "workspaces": [
+    "gulp-purgecss",
     "postcss-purgecss",
     "purgecss",
     "purgecss-from-html",
