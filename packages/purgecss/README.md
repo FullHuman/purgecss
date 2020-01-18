@@ -19,38 +19,38 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 
 ## Version 1
 
-If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://purgecss.com)
+If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://v1.purgecss.com)
 
 ## Documentation
 
-You can find the PurgeCSS documentation on [this website](https://purgecss.full-human.com).
+You can find the PurgeCSS documentation on [this website](https://purgecss.com).
 
 ### Table of Contents
 
 #### PurgeCSS
 
-- [Configuration](https://purgecss.full-human.com/configuration.html)
-- [Command Line Interface](https://purgecss.full-human.com/CLI.html)
-- [Programmatic API](https://purgecss.full-human.com/api.html)
-- [Whitelisting](https://purgecss.full-human.com/whitelisting.html)
-- [Extractors](https://purgecss.full-human.com/extractors.html)
-- [Comparison](https://purgecss.full-human.com/comparison.html)
+- [Configuration](https://purgecss.com/configuration.html)
+- [Command Line Interface](https://purgecss.com/CLI.html)
+- [Programmatic API](https://purgecss.com/api.html)
+- [Whitelisting](https://purgecss.com/whitelisting.html)
+- [Extractors](https://purgecss.com/extractors.html)
+- [Comparison](https://purgecss.com/comparison.html)
 
 #### Plugins
 
-- [PostCSS](https://purgecss.full-human.com/plugins/postcss.html)
-- [Webpack](https://purgecss.full-human.com/plugins/webpack.html)
-- [Gulp](https://purgecss.full-human.com/plugins/gulp.html)
-- [Grunt](https://purgecss.full-human.com/plugins/grunt.html)
-- [Gatsby](https://purgecss.full-human.com/plugins/gatsby.html)
+- [PostCSS](https://purgecss.com/plugins/postcss.html)
+- [Webpack](https://purgecss.com/plugins/webpack.html)
+- [Gulp](https://purgecss.com/plugins/gulp.html)
+- [Grunt](https://purgecss.com/plugins/grunt.html)
+- [Gatsby](https://purgecss.com/plugins/gatsby.html)
 
 #### Guides
 
-- [Vue.js](https://purgecss.full-human.com/guides/vue.html)
-- [Nuxt.js](https://purgecss.full-human.com/guides/nuxt.html)
-- [React.js](https://purgecss.full-human.com/guides/react.html)
-- [Next.js](https://purgecss.full-human.com/guides/next.html)
-- [Razzle](https://purgecss.full-human.com/guides/razzle.html)
+- [Vue.js](https://purgecss.com/guides/vue.html)
+- [Nuxt.js](https://purgecss.com/guides/nuxt.html)
+- [React.js](https://purgecss.com/guides/react.html)
+- [Next.js](https://purgecss.com/guides/next.html)
+- [Razzle](https://purgecss.com/guides/razzle.html)
 
 ## Getting Started
 

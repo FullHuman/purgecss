@@ -19,7 +19,7 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 
 ## Version 1
 
-If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://purgecss.com)
+If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://v1.purgecss.com)
 
 ## Documentation
 
