@@ -19,26 +19,26 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 
 ### PurgeCSS
 
-- [Configuration](configuration)
-- [Command Line Interface](CLI)
-- [Programmatic API](api)
-- [Whitelisting](whitelisting)
-- [Extractors](extractors)
-- [Comparison](comparison)
+- [Configuration](configuration.md)
+- [Command Line Interface](CLI.md)
+- [Programmatic API](api.md)
+- [Whitelisting](whitelisting.md)
+- [Extractors](extractors.md)
+- [Comparison](comparison.md)
 
 ### Plugins
 
-- [PostCSS](plugins/postcss)
-- [Webpack](plugins/webpack)
-- [Gulp](plugins/gulp)
-- [Grunt](plugins/grunt)
-- [Gatsby](plugins/gatsby)
+- [PostCSS](plugins/postcss.md)
+- [Webpack](plugins/webpack.md)
+- [Gulp](plugins/gulp.md)
+- [Grunt](plugins/grunt.md)
+- [Gatsby](plugins/gatsby.md)
 
 ### Guides
 
-- [Vue.js](guides/vue)
-- [Nuxt.js](guides/nuxt)
-- [React.js](guides/react)
-- [Next.js](guides/next)
-- [Razzle](guides/razzle)
-- [WordPress](guides/wordpress)
+- [Vue.js](guides/vue.md)
+- [Nuxt.js](guides/nuxt.md)
+- [React.js](guides/react.md)
+- [Next.js](guides/next.md)
+- [Razzle](guides/razzle.md)
+- [WordPress](guides/wordpress.md)
