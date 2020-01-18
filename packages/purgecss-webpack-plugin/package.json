@@ -1,6 +1,6 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "2.0.2",
+  "version": "2.0.0",
   "description": "PurgeCSS plugin for webpack - Remove unused css",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://purgecss.com",
@@ -36,7 +36,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "purgecss": "^2.0.2",
+    "purgecss": "^2.0.0",
     "webpack": "^4.41.2",
     "webpack-sources": "^1.4.3"
   },
