@@ -1,7 +1,7 @@
 {
   "name": "purgecss-from-pug",
   "version": "2.0.1-beta.0",
-  "description": "> TODO: description",
+  "description": "Pug extractor for PurgeCSS",
   "author": "Ffloriel <florielfedry@gmail.com>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
   "license": "ISC",

@@ -1,5 +1,7 @@
 <script>
 export default {
+  name: 'CarbonAds',
+
   render (h) {
     return h('div', { class: 'carbon-ads' })
   },
