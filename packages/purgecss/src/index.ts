@@ -731,7 +731,7 @@ class PurgeCSS {
           // the choice is to always leave `value` as it can change based on the user
           // idem for `checked`, `selected`
           isPresent =
-            nodeSelector.attribute === "value"
+            ["value", "checked", "selected"].includes(nodeSelector.attribute)
               ? true
               : isAttributeFound(nodeSelector, selectorsFromExtractor);
           break;

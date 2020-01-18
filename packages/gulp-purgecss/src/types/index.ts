@@ -12,7 +12,6 @@ export interface Extractors {
 }
 export interface UserDefinedOptions {
   content: Array<string>;
-  css: Array<string | RawCSS>;
   defaultExtractor?: ExtractorFunction;
   extractors?: Array<Extractors>;
   fontFace?: boolean;
