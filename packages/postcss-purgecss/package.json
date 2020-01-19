@@ -1,6 +1,6 @@
 {
   "name": "@fullhuman/postcss-purgecss",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "PostCSS plugin for PurgeCSS",
   "author": "FoundrySH <no-reply@foundry.sh>",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
