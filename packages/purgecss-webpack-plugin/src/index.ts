@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { PurgeCSS } from "purgecss";
+import PurgeCSS, { defaultOptions } from "purgecss";
 import { ConcatSource } from "webpack-sources";
 import * as search from "./search";
 import { UserDefinedOptions, PurgedStats, PurgeAsset } from "./types";
@@ -91,6 +91,7 @@ export default class PurgeCSSPlugin {
         // Compile through Purgecss and attach to output.
         // This loses sourcemaps should there be any!
         const options = {
+          ...defaultOptions,
           ...this.options,
           content: filesToSearch,
           css: [
