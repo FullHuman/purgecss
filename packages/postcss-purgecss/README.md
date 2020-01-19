@@ -1,13 +1,9 @@
 # PostCSS Purgecss
-[![Build Status](https://travis-ci.org/FullHuman/postcss-purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/postcss-purgecss)
-[![CircleCi](https://circleci.com/gh/FullHuman/postcss-purgecss/tree/master.svg?style=shield)]()
-[![dependencies Status](https://david-dm.org/fullhuman/postcss-purgecss/status.svg)](https://david-dm.org/fullhuman/postcss-purgecss)
-[![devDependencies Status](https://david-dm.org/fullhuman/postcss-purgecss/dev-status.svg)](https://david-dm.org/fullhuman/postcss-purgecss?type=dev)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2554f9858cb742ed93eb22f49ccec3c3)](https://www.codacy.com/app/FullHuman/postcss-purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/postcss-purgecss&utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2554f9858cb742ed93eb22f49ccec3c3)](https://www.codacy.com/app/FullHuman/postcss-purgecss?utm_source=github.com&utm_medium=referral&utm_content=FullHuman/postcss-purgecss&utm_campaign=Badge_Coverage)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![npm](https://img.shields.io/npm/v/postcss-purgecss.svg)](https://www.npmjs.com/package/@fullhuman/postcss-purgecss)
-[![license](https://img.shields.io/github/license/fullhuman/postcss-purgecss.svg)]() [![Greenkeeper badge](https://badges.greenkeeper.io/FullHuman/postcss-purgecss.svg)](https://greenkeeper.io/)
+![David (path)](https://img.shields.io/david/FullHuman/purgecss?path=packages%2Fpostcss-purgecss&style=for-the-badge)
+![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
+![npm](https://img.shields.io/npm/v/@fullhuman/postcss-purgecss?style=for-the-badge)
+![npm](https://img.shields.io/npm/dw/@fullhuman/postcss-purgecss?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/FullHuman/purgecss?style=for-the-badge)
 
 [PostCSS] plugin for PurgeCSS.
 

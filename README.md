@@ -1,7 +1,7 @@
 # PurgeCSS
 
-![David](https://img.shields.io/david/FullHuman/purgecss?style=for-the-badge)
-![David](https://img.shields.io/david/dev/FullHuman/purgecss?style=for-the-badge)
+![David (path)](https://img.shields.io/david/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
+![David (path)](https://img.shields.io/david/dev/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
 ![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
 ![npm](https://img.shields.io/npm/v/purgecss?style=for-the-badge)
 ![npm](https://img.shields.io/npm/dw/purgecss?style=for-the-badge)
@@ -74,14 +74,14 @@ const purgeCSSResults = await new Purgecss().purge({
 
 This repository is a monorepo that we manage using [Lerna](https://github.com/lerna/lerna). That means that we actually publish [several packages](/packages) to npm from the same codebase, including:
 
-| Package                                                      | Version | Description                                 |
-| ------------------------------------------------------------ | ------- | ------------------------------------------- |
-| [purgecss](/packages/purgecss)                               |         | The core of PurgeCSS                        |
-| [postcss-purgecss](/packages/postcss-purgecss)               |         | PostCSS plugin for PurgeCSS                 |
-| [purgecss-webpack-plugin](/packages/purgecss-webpack-plugin) |         | Webpack plugin for PurgeCSS                 |
-| [gulp-purgecss](/packages/gulp-purgecss)                     |         | Gulp plugin for PurgeCSS                    |
-| [grunt-purgecss](/packages/grunt-purgecss)                   |         | Grunt plugin for PurgeCSS                   |
-| [purgecss-from-html](/packages/purgecss-from-html)           |         | Html extractor for PurgeCSS                 |
-| [purgecss-from-js](/packages/purgecss-from-js)               |         | Js extractor for PurgeCSS                   |
-| [purgecss-from-pug](/packages/purgecss-from-pug)             |         | Pug extractor for PurgeCSS                  |
-| [purgecss-with-wordpress](/packages/purgecss-with-wordpress) |         | Collection of whitelist items for WordPress |
+| Package                                                      | Version                                                                                     | Description                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [purgecss](/packages/purgecss)                               | ![npm](https://img.shields.io/npm/v/purgecss?style=flat-square)                             | The core of PurgeCSS                        |
+| [postcss-purgecss](/packages/postcss-purgecss)               | ![npm (scoped)](https://img.shields.io/npm/v/@fullhuman/postcss-purgecss?style=flat-square) | PostCSS plugin for PurgeCSS                 |
+| [purgecss-webpack-plugin](/packages/purgecss-webpack-plugin) | ![npm](https://img.shields.io/npm/v/purgecss-webpack-plugin?style=flat-square)              | Webpack plugin for PurgeCSS                 |
+| [gulp-purgecss](/packages/gulp-purgecss)                     | ![npm](https://img.shields.io/npm/v/gulp-purgecss?style=flat-square)                        | Gulp plugin for PurgeCSS                    |
+| [grunt-purgecss](/packages/grunt-purgecss)                   | ![npm](https://img.shields.io/npm/v/grunt-purgecss?style=flat-square)                       | Grunt plugin for PurgeCSS                   |
+| [purgecss-from-html](/packages/purgecss-from-html)           | ![npm](https://img.shields.io/npm/v/purgecss-from-html?style=flat-square)                   | Html extractor for PurgeCSS                 |
+| [purgecss-from-js](/packages/purgecss-from-js)               | ![npm](https://img.shields.io/npm/v/purgecss-from-js?style=flat-square)                     | Js extractor for PurgeCSS                   |
+| [purgecss-from-pug](/packages/purgecss-from-pug)             | ![npm](https://img.shields.io/npm/v/purgecss-from-pug?style=flat-square)                    | Pug extractor for PurgeCSS                  |
+| [purgecss-with-wordpress](/packages/purgecss-with-wordpress) | ![npm](https://img.shields.io/npm/v/purgecss-with-wordpress?style=flat-square)              | Collection of whitelist items for WordPress |
