@@ -3,32 +3,42 @@ const program = require('commander');
 const fs = require('fs');
 const { default: PurgeCSS, defaultOptions, setOptions } = require('../lib/purgecss')
 
+function getList(list) {
+  return list.split(',')
+}
+
 program
   .usage('--css <css> --content <content> [options]')
-  .option('-con, --content', 'glob of content files')
-  .option('-css, --css', 'glob of css files')
-  .option('-c, --config', 'path to the configuration file')
-  .option('-o, --output', 'file path directory to write purged css files to')
-  .option('-w, --whitelist', 'list of classes that should not be removed', []);
+  .option('-con, --content <files>', 'glob of content files (comma separated)', getList)
+  .option('-css, --css <files>', 'glob of css files (comma separated)', getList)
+  .option('-c, --config <path>', 'path to the configuration file')
+  .option('-o, --output <path>', 'file path directory to write purged css files to')
+  .option('-font, --font-face', 'option to remove unused font-faces')
+  .option('-keyframes, --keyframes', 'option to remove unused keyframes')
+  .option('-rejected, --rejected', 'option to output rejected selectors')
+  .option('-w, --whitelist <list>', 'list of classes that should not be removed (comma separated)', getList);
 
 program.parse(process.argv);
 
 // config file is not specified or the content and css are not,
 // PurgeCSS will not run
-if (!program.config || !(program.content && program.css)) {
+if (!program.config && !(program.content && program.css)) {
   program.help();
 }
 
 (async() => {
   // if the config file is present, use it
   // other options specified will override
-  let options;
+  let options = defaultOptions;
   if (program.config) {
     options = await setOptions(program.config);
   }
-
   if (program.content) options.content = program.content;
   if (program.css) options.css = program.css;
+  if (program.fontFace) options.fontFace = program.fontFace;
+  if (program.keyframes) options.keyframes = program.keyframes;
+  if (program.rejected) options.rejected = program.rejected;
+  if (program.variables) options.variables = program.variables;
   if (program.whitelist) options.whitelist = program.whitelist;
 
   const purged = await new PurgeCSS().purge(options);
