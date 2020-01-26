@@ -60,12 +60,12 @@ You can use the CLI with a [configuration file](configuration.md). Use `--config
 purgecss --config ./purgecss.config.js
 ```
 
-### --out
+### --output
 
 By default, the CLI outputs the result in the console. If you wish to return the CSS as files, specify the directory to write the purified CSS files to.
 
 ```text
-purgecss --css css/app.css --content src/index.html src/**/*.js --out build/css/
+purgecss --css css/app.css --content src/index.html src/**/*.js --output build/css/
 ```
 
 ### --whitelist
