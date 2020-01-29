@@ -27,7 +27,7 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         fileFormatContents,
         extractors
       );
-      const cssRawSelectors = purgeCSS.extractSelectorsFromString(
+      const cssRawSelectors = await purgeCSS.extractSelectorsFromString(
         rawFormatContents,
         extractors
       );
