@@ -11,7 +11,7 @@
     "purgecss-webpack-plugin"
   ],
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^25.1.0",
     "@types/node": "^13.1.0",
     "@vuepress/theme-default": "^1.2.0",
     "@wessberg/rollup-plugin-ts": "^1.1.65",
@@ -19,7 +19,7 @@
     "husky": "^4.0.0",
     "jest": "^24.9.0",
     "lerna": "^3.18.0",
-    "lint-staged": "^9.4.2",
+    "lint-staged": "^10.0.2",
     "prettier": "^1.19.0",
     "rollup": "^1.26.4",
     "rollup-plugin-node-resolve": "^5.2.0",
