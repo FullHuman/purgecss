@@ -82,11 +82,11 @@ to filter out directories see the glob-all documentation [here](https://www.npmj
 
 ## Options
 
-The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also available in the webpack plugin with the exception of css and content.
+The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also available in the webpack plugin, with the exception of the `css` and `content` options.
 
 * #### paths
 
-With the webpack plugin, you can specified the content that should be analyzed by purgecss with an array of filename. It can be html, pug, blade, ... files. You can use a module like `glob` or `glob-all` to easily get a list of files.
+With the webpack plugin, you can specify the content that should be analyzed by purgecss by providing an array of filenames. These can be html, pug, blade, ... files. You can also use a module like `glob` or `glob-all` to easily get a list of files.
 
 ```js
 const PurgecssPlugin = require('purgecss-webpack-plugin')
@@ -101,7 +101,7 @@ new PurgecssPlugin({
 })
 ```
 
-If you want to regenerate the paths list on every compilation (e.g. with `--watch`), then you can also pass a function:
+If you want to regenerate the list of paths on every compilation (e.g. when using `--watch`), then you can also pass a function to the `paths` option as in the following example:
 ```js
 new PurgecssPlugin({
   paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true })
@@ -110,7 +110,7 @@ new PurgecssPlugin({
 
 * #### only
 
-You can specify entrypoints to the purgecss-webpack-plugin with the option only:
+You can specify entrypoints to the purgecss-webpack-plugin with the option `only`:
 
 ```js
 new PurgecssPlugin({
@@ -121,13 +121,14 @@ new PurgecssPlugin({
 
 * #### whitelist, whitelistPatterns and whitelistPatternsChildren
 
-Similar as for the `paths` option, you also can define functions for the these options:
+Similar as for the `paths` option, you can also define functions for the following options:
 
 ```js
 function collectWhitelist() {
     // do something to collect the whitelist
     return ['whitelisted'];
 }
+
 function collectWhitelistPatterns() {
     // do something to collect the whitelist
     return [/^whitelisted-/];
@@ -148,4 +149,4 @@ new PurgecssPlugin({
 
 * #### rejected
 
-If `true` all removed selectors are added to the [Stats Data](https://webpack.js.org/api/stats/) as `purged`.
+When this option is set to `true` all removed selectors are added to the [Stats Data](https://webpack.js.org/api/stats/) as `purged`.
