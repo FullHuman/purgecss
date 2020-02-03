@@ -705,21 +705,22 @@ class PurgeCSS {
     if (isInPseudoClass(selector)) return true;
 
     let isPresent = false;
+
     for (const nodeSelector of selector.nodes) {
+      const val =
+        (nodeSelector.type === "attribute" && nodeSelector.attribute) ||
+        nodeSelector.value;
+
       // if the selector is whitelisted with children
       // returns true to keep all children selectors
-      if (
-        nodeSelector.value &&
-        this.isSelectorWhitelistedChildren(nodeSelector.value)
-      ) {
+      if (val && this.isSelectorWhitelistedChildren(val)) {
         return true;
       }
 
       // The selector is found in the internal and user-defined whitelist
       if (
-        nodeSelector.value &&
-        (CSS_WHITELIST.includes(nodeSelector.value) ||
-          this.isSelectorWhitelisted(nodeSelector.value))
+        val &&
+        (CSS_WHITELIST.includes(val) || this.isSelectorWhitelisted(val))
       ) {
         isPresent = true;
         continue;
@@ -730,10 +731,11 @@ class PurgeCSS {
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
           // idem for `checked`, `selected`
-          isPresent =
-            ["value", "checked", "selected"].includes(nodeSelector.attribute)
-              ? true
-              : isAttributeFound(nodeSelector, selectorsFromExtractor);
+          isPresent = ["value", "checked", "selected"].includes(
+            nodeSelector.attribute
+          )
+            ? true
+            : isAttributeFound(nodeSelector, selectorsFromExtractor);
           break;
         case "class":
           isPresent = isClassFound(nodeSelector, selectorsFromExtractor);
@@ -747,9 +749,12 @@ class PurgeCSS {
         default:
           break;
       }
+
       // selector is not in whitelist children or in whitelist
       // and it has not been found as an attribute/class/identifier/tag
-      if (!isPresent) return false;
+      if (!isPresent) {
+        return false;
+      }
     }
     return isPresent;
   }
