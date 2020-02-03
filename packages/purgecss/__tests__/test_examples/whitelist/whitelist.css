@@ -21,3 +21,7 @@ button {
 .nav-red {
   background-color: red;
 }
+
+.random[data-v-test] {
+  color: green;
+}
