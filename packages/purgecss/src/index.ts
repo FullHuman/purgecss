@@ -730,8 +730,8 @@ class PurgeCSS {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
-          // idem for `checked`, `selected`
-          isPresent = ["value", "checked", "selected"].includes(
+          // idem for `checked`, `selected`, `open`
+          isPresent = ["value", "checked", "selected", "open"].includes(
             nodeSelector.attribute
           )
             ? true
