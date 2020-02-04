@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "cleanUrls": true,
     "public": "docs/.vuepress/dist",
     "ignore": [
       "firebase.json",

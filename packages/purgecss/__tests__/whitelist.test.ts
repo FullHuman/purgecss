@@ -9,10 +9,14 @@ describe("whitelist", () => {
       content: [`${root}whitelist/whitelist.html`],
       css: [`${root}whitelist/whitelist.css`],
       whitelist: ["random", "h1", "yep", "button"],
-      whitelistPatterns: [/nav-/]
+      whitelistPatterns: [/nav-/, /data-v-.*/]
     });
     purgedCSS = resultsPurge[0].css;
     done();
+  });
+
+  it("finds attr", () => {
+    expect(purgedCSS.includes("[data-v-test]")).toBe(true);
   });
 
   it("finds random class", () => {

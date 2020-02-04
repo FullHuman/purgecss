@@ -1033,6 +1033,7 @@ class PurgeCSS {
     if (isInPseudoClass(selector)) return true;
 
     let isPresent = false;
+
     for (const nodeSelector of selector.nodes) {
       // if the selector is whitelisted with children
       // returns true to keep all children selectors
@@ -1050,8 +1051,8 @@ class PurgeCSS {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
-          // idem for `checked`, `selected`
-          isPresent = ["value", "checked", "selected"].includes(
+          // idem for `checked`, `selected`, `open`
+          isPresent = ["value", "checked", "selected", "open"].includes(
             nodeSelector.attribute
           )
             ? true
@@ -1069,9 +1070,12 @@ class PurgeCSS {
         default:
           break;
       }
+
       // selector is not in whitelist children or in whitelist
       // and it has not been found as an attribute/class/identifier/tag
-      if (!isPresent) return false;
+      if (!isPresent) {
+        return false;
+      }
     }
     return isPresent;
   }
