@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "sourceMap": false,
-    "target": "esnext",
+    "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,

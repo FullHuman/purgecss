@@ -1,17 +1,17 @@
 import postcss from "postcss";
-import PurgeCSS, { defaultOptions, mergeExtractorSelectors } from "purgecss";
+import PurgeCSS, { mergeExtractorSelectors, parseUserOptions } from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 
-const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
+type PostCssUserDefinedOptions = Omit<UserDefinedOptions, "css">;
+
+const purgeCSSPlugin = postcss.plugin<PostCssUserDefinedOptions>(
   "postcss-plugin-purgecss",
   function(opts) {
     return async function(root, result) {
       const purgeCSS = new PurgeCSS();
-      const options = {
-        ...defaultOptions,
-        ...opts
-      };
+      const options = parseUserOptions<PostCssUserDefinedOptions>(opts);
+
       purgeCSS.options = options;
 
       const { content, extractors } = options;

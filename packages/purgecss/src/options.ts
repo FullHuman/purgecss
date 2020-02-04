@@ -12,7 +12,34 @@ export const defaultOptions: Options = {
   stdin: false,
   stdout: false,
   variables: false,
-  whitelist: [],
-  whitelistPatterns: [],
-  whitelistPatternsChildren: []
+  whitelist: {
+    attributes: {
+      names: [],
+      values: []
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: []
+  },
+  whitelistPatterns: {
+    attributes: {
+      names: [],
+      values: []
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: []
+  },
+  whitelistPatternsChildren: {
+    attributes: {
+      names: [],
+      values: []
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: []
+  }
 };

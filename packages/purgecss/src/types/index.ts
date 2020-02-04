@@ -18,16 +18,25 @@ export interface RawCSS {
   raw: string;
 }
 
-export interface ExtractorResultDetailed {
+interface GenericFilter<T = string> {
   attributes: {
-    names: string[];
-    values: string[];
+    names: T[];
+    values: T[];
   };
-  classes: string[];
-  ids: string[];
-  tags: string[];
-  undetermined: string[];
+  classes: T[];
+  ids: T[];
+  tags: T[];
+  undetermined: T[];
 }
+
+export type ExtractorResultDetailed = GenericFilter;
+
+export type WhiteListDetailed<T> = Omit<GenericFilter<T>, "attributes"> & {
+  attributes: {
+    names?: T[];
+    values?: T[];
+  };
+};
 
 export type ExtractorResult = ExtractorResultDetailed | string[];
 
@@ -52,9 +61,11 @@ export interface UserDefinedOptions {
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
-  whitelist?: string[];
-  whitelistPatterns?: Array<RegExp>;
-  whitelistPatternsChildren?: Array<RegExp>;
+  whitelist?: string[] | Partial<WhiteListDetailed<string>>;
+  whitelistPatterns?: Array<RegExp> | Partial<WhiteListDetailed<RegExp>>;
+  whitelistPatternsChildren?:
+    | Array<RegExp>
+    | Partial<WhiteListDetailed<RegExp>>;
 }
 
 export interface Options {
@@ -69,9 +80,9 @@ export interface Options {
   stdin: boolean;
   stdout: boolean;
   variables: boolean;
-  whitelist: string[];
-  whitelistPatterns: Array<RegExp>;
-  whitelistPatternsChildren: Array<RegExp>;
+  whitelist: WhiteListDetailed<string>;
+  whitelistPatterns: WhiteListDetailed<RegExp>;
+  whitelistPatternsChildren: WhiteListDetailed<RegExp>;
 }
 
 export interface ResultPurge {

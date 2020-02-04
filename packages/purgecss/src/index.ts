@@ -1,5 +1,5 @@
 import * as postcss from "postcss";
-import selectorParser from "postcss-selector-parser";
+import selectorParser, { Node } from "postcss-selector-parser";
 import * as fs from "fs";
 import { promisify } from "util";
 
@@ -19,7 +19,8 @@ import {
   AtRules,
   RawCSS,
   UserDefinedOptions,
-  ExtractorResultDetailed
+  ExtractorResultDetailed,
+  WhiteListDetailed
 } from "./types";
 
 import {
@@ -45,17 +46,14 @@ const asyncFs = {
 export async function setOptions(
   configFile: string = CONFIG_FILENAME
 ): Promise<Options> {
-  let options: Options;
+  let options: UserDefinedOptions;
   try {
     const t = path.join(process.cwd(), configFile);
     options = await import(t);
   } catch (err) {
     throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
   }
-  return {
-    ...defaultOptions,
-    ...options
-  };
+  return parseUserOptions(options);
 }
 
 /**
@@ -161,6 +159,62 @@ export function mergeExtractorSelectors(
       ...extractorSelectorsA.undetermined,
       ...extractorSelectorsB.undetermined
     ]
+  };
+}
+
+const emptyWhitelist = {
+  attributes: {
+    names: [],
+    values: []
+  },
+  classes: [],
+  ids: [],
+  tags: [],
+  undetermined: []
+};
+
+export function transformWhiteList<T = string>(
+  whitelist?: T[] | Partial<WhiteListDetailed<T>>
+): WhiteListDetailed<T> {
+  return {
+    ...emptyWhitelist,
+    ...(Array.isArray(whitelist) || !whitelist
+      ? {
+          attributes: {
+            names: [],
+            values: []
+          },
+          classes: [],
+          ids: [],
+          tags: [],
+          undetermined: whitelist ? [...whitelist] : []
+        }
+      : {
+          ...whitelist,
+          attributes: {
+            names: (whitelist.attributes && whitelist.attributes.names) || [],
+            values: (whitelist.attributes && whitelist.attributes.values) || []
+          }
+        })
+  };
+}
+
+/**
+ * converts user defined options to internal options
+ */
+export function parseUserOptions<
+  T extends Partial<UserDefinedOptions> = UserDefinedOptions
+>(userOptions?: T): Options {
+  return {
+    ...defaultOptions,
+    ...userOptions,
+    whitelist: transformWhiteList<string>(userOptions?.whitelist),
+    whitelistPatterns: transformWhiteList<RegExp>(
+      userOptions?.whitelistPatterns
+    ),
+    whitelistPatternsChildren: transformWhiteList<RegExp>(
+      userOptions?.whitelistPatternsChildren
+    )
   };
 }
 
@@ -602,26 +656,303 @@ class PurgeCSS {
    * Check if the selector is whitelisted by the option whitelist or whitelistPatterns
    * @param selector css selector
    */
-  private isSelectorWhitelisted(selector: string): boolean {
-    return (
-      CSS_WHITELIST.includes(selector) ||
-      (this.options.whitelist &&
-        this.options.whitelist.some((v: string) => v === selector)) ||
-      (this.options.whitelistPatterns &&
-        this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
-    );
+  private isSelectorWhitelisted(nodeSelector: Node): boolean {
+    let whitelists: (
+      | { type: "pattern"; list?: RegExp[]; test: string }
+      | { type: "string"; list?: string[]; test: string }
+    )[] = [];
+
+    switch (nodeSelector.type) {
+      case "attribute":
+        whitelists.push({
+          type: "string",
+          list: CSS_WHITELIST,
+          test: nodeSelector.attribute
+        });
+
+        whitelists.push({
+          type: "string",
+          list:
+            this.options.whitelist && this.options.whitelist.attributes.names,
+          test: nodeSelector.attribute
+        });
+
+        whitelists.push({
+          type: "string",
+          list:
+            this.options.whitelist && this.options.whitelist.attributes.values,
+          test: nodeSelector.value!
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.undetermined,
+          test: nodeSelector.attribute
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.attributes.names,
+          test: nodeSelector.attribute
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.attributes.values,
+          test: nodeSelector.value!
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.undetermined,
+          test: nodeSelector.attribute
+        });
+
+        // @todo: check if we should also add value! to the undertermined check, in the old code this was not the case
+        break;
+      case "class":
+        whitelists.push({
+          type: "string",
+          list: CSS_WHITELIST,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.classes,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.undetermined,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.classes,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      case "id":
+        whitelists.push({
+          type: "string",
+          list: CSS_WHITELIST,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.ids,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.undetermined,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.ids,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      case "tag":
+        whitelists.push({
+          type: "string",
+          list: CSS_WHITELIST,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.tags,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "string",
+          list: this.options.whitelist && this.options.whitelist.undetermined,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.tags,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          type: "pattern",
+          list:
+            this.options.whitelistPatterns &&
+            this.options.whitelistPatterns.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      default:
+        if (nodeSelector.value) {
+          whitelists.push({
+            type: "string",
+            list: CSS_WHITELIST,
+            test: nodeSelector.value
+          });
+
+          whitelists.push({
+            type: "string",
+            list: this.options.whitelist && this.options.whitelist.undetermined,
+            test: nodeSelector.value
+          });
+
+          whitelists.push({
+            type: "pattern",
+            list:
+              this.options.whitelistPatterns &&
+              this.options.whitelistPatterns.undetermined,
+            test: nodeSelector.value
+          });
+        }
+        break;
+    }
+
+    return whitelists.some(whitelist => {
+      return (
+        (whitelist.type === "pattern" &&
+          whitelist.list &&
+          whitelist.list.some(pattern => {
+            return pattern.test(whitelist.test);
+          })) ||
+        (whitelist.type === "string" &&
+          whitelist.list &&
+          whitelist.list.includes(whitelist.test))
+      );
+    });
   }
 
   /**
    * Check if the selector is whitelisted by the whitelistPatternsChildren option
    * @param selector selector
    */
-  private isSelectorWhitelistedChildren(selector: string): boolean {
-    return (
-      this.options.whitelistPatternsChildren &&
-      this.options.whitelistPatternsChildren.some((pattern: RegExp) =>
-        pattern.test(selector)
-      )
+  private isSelectorWhitelistedChildren(nodeSelector: Node): boolean {
+    let whitelists: { list?: RegExp[]; test: string }[] = [];
+
+    switch (nodeSelector.type) {
+      case "attribute":
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.attributes.names,
+          test: nodeSelector.attribute
+        });
+
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.attributes.values,
+          test: nodeSelector.value!
+        });
+
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.undetermined,
+          test: nodeSelector.attribute
+        });
+
+        // @todo: check if we should also add value! to the undertermined check, in the old code this was not the case
+        break;
+      case "class":
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.classes,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      case "id":
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.ids,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      case "tag":
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.tags,
+          test: nodeSelector.value
+        });
+
+        whitelists.push({
+          list:
+            this.options.whitelistPatternsChildren &&
+            this.options.whitelistPatternsChildren.undetermined,
+          test: nodeSelector.value
+        });
+        break;
+      default:
+        if (nodeSelector.value) {
+          whitelists.push({
+            list:
+              this.options.whitelistPatternsChildren &&
+              this.options.whitelistPatternsChildren.undetermined,
+            test: nodeSelector.value
+          });
+        }
+        break;
+    }
+
+    return whitelists.some(
+      whitelist =>
+        whitelist.list &&
+        whitelist.list.some((pattern: RegExp) => pattern.test(whitelist.test))
     );
   }
 
@@ -635,10 +966,7 @@ class PurgeCSS {
     this.options =
       typeof userOptions !== "object"
         ? await setOptions(userOptions)
-        : {
-            ...defaultOptions,
-            ...userOptions
-          };
+        : parseUserOptions(userOptions);
     const { content, css, extractors } = this.options;
 
     const fileFormatContents = content.filter(
@@ -708,19 +1036,12 @@ class PurgeCSS {
     for (const nodeSelector of selector.nodes) {
       // if the selector is whitelisted with children
       // returns true to keep all children selectors
-      if (
-        nodeSelector.value &&
-        this.isSelectorWhitelistedChildren(nodeSelector.value)
-      ) {
+      if (this.isSelectorWhitelistedChildren(nodeSelector)) {
         return true;
       }
 
       // The selector is found in the internal and user-defined whitelist
-      if (
-        nodeSelector.value &&
-        (CSS_WHITELIST.includes(nodeSelector.value) ||
-          this.isSelectorWhitelisted(nodeSelector.value))
-      ) {
+      if (this.isSelectorWhitelisted(nodeSelector)) {
         isPresent = true;
         continue;
       }
@@ -730,10 +1051,11 @@ class PurgeCSS {
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
           // idem for `checked`, `selected`
-          isPresent =
-            ["value", "checked", "selected"].includes(nodeSelector.attribute)
-              ? true
-              : isAttributeFound(nodeSelector, selectorsFromExtractor);
+          isPresent = ["value", "checked", "selected"].includes(
+            nodeSelector.attribute
+          )
+            ? true
+            : isAttributeFound(nodeSelector, selectorsFromExtractor);
           break;
         case "class":
           isPresent = isClassFound(nodeSelector, selectorsFromExtractor);
