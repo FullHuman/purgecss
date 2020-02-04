@@ -6,7 +6,7 @@ import { promisify } from "util";
 import glob from "glob";
 import path from "path";
 
-import {defaultOptions, emptyWhitelist} from "./options";
+import { defaultOptions, emptyWhitelist } from "./options";
 export { defaultOptions } from "./options";
 
 import {
@@ -174,8 +174,8 @@ export function transformWhiteList<T = string>(
       : {
           ...whitelist,
           attributes: {
-            names: (whitelist.attributes && whitelist.attributes.names) || [],
-            values: (whitelist.attributes && whitelist.attributes.values) || []
+            names: whitelist.attributes?.names || [],
+            values: whitelist.attributes?.values || []
           }
         })
   };
@@ -654,45 +654,37 @@ class PurgeCSS {
 
         whitelists.push({
           type: "string",
-          list:
-            this.options.whitelist && this.options.whitelist.attributes.names,
+          list: this.options.whitelist?.attributes?.names,
           test: nodeSelector.attribute
         });
 
         whitelists.push({
           type: "string",
-          list:
-            this.options.whitelist && this.options.whitelist.attributes.values,
+          list: this.options.whitelist?.attributes?.values,
           test: nodeSelector.value!
         });
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.undetermined,
+          list: this.options.whitelist?.undetermined,
           test: nodeSelector.attribute
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.attributes.names,
+          list: this.options.whitelistPatterns?.attributes?.names,
           test: nodeSelector.attribute
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.attributes.values,
+          list: this.options.whitelistPatterns?.attributes?.values,
           test: nodeSelector.value!
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.undetermined,
+          list: this.options.whitelistPatterns?.undetermined,
           test: nodeSelector.attribute
         });
 
@@ -707,29 +699,25 @@ class PurgeCSS {
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.classes,
+          list: this.options.whitelist?.classes,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.undetermined,
+          list: this.options.whitelist?.undetermined,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.classes,
+          list: this.options.whitelistPatterns?.classes,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.undetermined,
+          list: this.options.whitelistPatterns?.undetermined,
           test: nodeSelector.value
         });
         break;
@@ -742,13 +730,13 @@ class PurgeCSS {
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.ids,
+          list: this.options.whitelist?.ids,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.undetermined,
+          list: this.options.whitelist?.undetermined,
           test: nodeSelector.value
         });
 
@@ -762,9 +750,7 @@ class PurgeCSS {
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.undetermined,
+          list: this.options.whitelistPatterns?.undetermined,
           test: nodeSelector.value
         });
         break;
@@ -777,29 +763,25 @@ class PurgeCSS {
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.tags,
+          list: this.options.whitelist?.tags,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "string",
-          list: this.options.whitelist && this.options.whitelist.undetermined,
+          list: this.options.whitelist?.undetermined,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.tags,
+          list: this.options.whitelistPatterns?.tags,
           test: nodeSelector.value
         });
 
         whitelists.push({
           type: "pattern",
-          list:
-            this.options.whitelistPatterns &&
-            this.options.whitelistPatterns.undetermined,
+          list: this.options.whitelistPatterns?.undetermined,
           test: nodeSelector.value
         });
         break;
@@ -813,15 +795,13 @@ class PurgeCSS {
 
           whitelists.push({
             type: "string",
-            list: this.options.whitelist && this.options.whitelist.undetermined,
+            list: this.options.whitelist?.undetermined,
             test: nodeSelector.value
           });
 
           whitelists.push({
             type: "pattern",
-            list:
-              this.options.whitelistPatterns &&
-              this.options.whitelistPatterns.undetermined,
+            list: this.options.whitelistPatterns?.undetermined,
             test: nodeSelector.value
           });
         }
@@ -852,23 +832,17 @@ class PurgeCSS {
     switch (nodeSelector.type) {
       case "attribute":
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.attributes.names,
+          list: this.options.whitelistPatternsChildren?.attributes?.names,
           test: nodeSelector.attribute
         });
 
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.attributes.values,
+          list: this.options.whitelistPatternsChildren?.attributes?.values,
           test: nodeSelector.value!
         });
 
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.undetermined,
+          list: this.options.whitelistPatternsChildren?.undetermined,
           test: nodeSelector.attribute
         });
 
@@ -876,55 +850,41 @@ class PurgeCSS {
         break;
       case "class":
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.classes,
+          list: this.options.whitelistPatternsChildren?.classes,
           test: nodeSelector.value
         });
 
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.undetermined,
+          list: this.options.whitelistPatternsChildren?.undetermined,
           test: nodeSelector.value
         });
         break;
       case "id":
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.ids,
+          list: this.options.whitelistPatternsChildren?.ids,
           test: nodeSelector.value
         });
 
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.undetermined,
+          list: this.options.whitelistPatternsChildren?.undetermined,
           test: nodeSelector.value
         });
         break;
       case "tag":
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.tags,
+          list: this.options.whitelistPatternsChildren?.tags,
           test: nodeSelector.value
         });
 
         whitelists.push({
-          list:
-            this.options.whitelistPatternsChildren &&
-            this.options.whitelistPatternsChildren.undetermined,
+          list: this.options.whitelistPatternsChildren?.undetermined,
           test: nodeSelector.value
         });
         break;
       default:
         if (nodeSelector.value) {
           whitelists.push({
-            list:
-              this.options.whitelistPatternsChildren &&
-              this.options.whitelistPatternsChildren.undetermined,
+            list: this.options.whitelistPatternsChildren?.undetermined,
             test: nodeSelector.value
           });
         }
