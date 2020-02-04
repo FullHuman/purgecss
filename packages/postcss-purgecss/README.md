@@ -33,10 +33,26 @@ See [PostCSS] docs for examples for your environment.
 All of the options of purgecss are available to use with the plugins.
 You will find below the main options available. For the complete list, go to the [purgecss documentation website](https://www.purgecss.com/configuration.html#options).
 
-### `content` (**required**)
-Type: `string | Object`
+### `content` (**required** or use `contentFunction` instead)
+Type: `Array<string>`
 
 You can specify content that should be analyzed by Purgecss with an array of filenames or globs. The files can be HTML, Pug, Blade, etc.
+
+### `contentFunction` (as alternative to `content`)
+Type: `(sourceInputFile: string) => Array<string>`
+
+The function receives the current source input file. With this you may provide a specific array of globs for each input. E.g. for 
+an angular application only scan the components template counterpart for every component scss file:
+
+```js
+purgecss({
+  contentFunction: (source: string) => {
+    (/component\.scss$/.test(source))
+      ? [sourceInputFile.replace(/scss$/, 'html')]
+      : ['./src/**/*.html']
+  },
+})
+```
 
 ### `extractors`
 Type: `Array<Object>`
