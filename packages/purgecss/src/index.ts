@@ -6,7 +6,7 @@ import { promisify } from "util";
 import glob from "glob";
 import path from "path";
 
-import { defaultOptions } from "./options";
+import {defaultOptions, emptyWhitelist} from "./options";
 export { defaultOptions } from "./options";
 
 import {
@@ -162,17 +162,6 @@ export function mergeExtractorSelectors(
   };
 }
 
-const emptyWhitelist = {
-  attributes: {
-    names: [],
-    values: []
-  },
-  classes: [],
-  ids: [],
-  tags: [],
-  undetermined: []
-};
-
 export function transformWhiteList<T = string>(
   whitelist?: T[] | Partial<WhiteListDetailed<T>>
 ): WhiteListDetailed<T> {
@@ -180,13 +169,6 @@ export function transformWhiteList<T = string>(
     ...emptyWhitelist,
     ...(Array.isArray(whitelist) || !whitelist
       ? {
-          attributes: {
-            names: [],
-            values: []
-          },
-          classes: [],
-          ids: [],
-          tags: [],
           undetermined: whitelist ? [...whitelist] : []
         }
       : {

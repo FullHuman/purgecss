@@ -1,5 +1,16 @@
 import { Options, ExtractorResult } from "./types/";
 
+export const emptyWhitelist = {
+  attributes: {
+    names: [],
+    values: []
+  },
+  classes: [],
+  ids: [],
+  tags: [],
+  undetermined: []
+};
+
 export const defaultOptions: Options = {
   css: [],
   content: [],
@@ -12,34 +23,7 @@ export const defaultOptions: Options = {
   stdin: false,
   stdout: false,
   variables: false,
-  whitelist: {
-    attributes: {
-      names: [],
-      values: []
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: []
-  },
-  whitelistPatterns: {
-    attributes: {
-      names: [],
-      values: []
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: []
-  },
-  whitelistPatternsChildren: {
-    attributes: {
-      names: [],
-      values: []
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: []
-  }
+  whitelist: {...emptyWhitelist},
+  whitelistPatterns: {...emptyWhitelist},
+  whitelistPatternsChildren: {...emptyWhitelist}
 };
