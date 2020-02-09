@@ -12,6 +12,13 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         ...defaultOptions,
         ...opts
       };
+
+      if (opts && typeof opts.contentFunction === "function") {
+        options.content = opts.contentFunction(
+          (root.source && root.source.input.file) || ""
+        );
+      }
+
       purgeCSS.options = options;
 
       const { content, extractors } = options;

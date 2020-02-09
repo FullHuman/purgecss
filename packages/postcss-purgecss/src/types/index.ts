@@ -11,7 +11,8 @@ export interface Extractors {
   extractor: ExtractorFunction;
 }
 export interface UserDefinedOptions {
-  content: Array<string | RawContent>;
+  content?: Array<string | RawContent>;
+  contentFunction?: (sourceFile: string) => Array<string | RawContent>;
   css: Array<string | RawCSS>;
   defaultExtractor?: ExtractorFunction;
   extractors?: Array<Extractors>;
