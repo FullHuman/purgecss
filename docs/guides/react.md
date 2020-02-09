@@ -77,6 +77,6 @@ const glob = require('glob-all')
     // for more information about PurgeCSS.
     // Specify the path of the html files and source files
     new PurgecssPlugin({
-      paths: [paths.appHtml, ...glob.sync(`${paths.appSrc}/*`)]
+      paths: [paths.appHtml, ...glob.sync(`${paths.appSrc}/**/*`, { nodir: true })]
     }),
 ```
