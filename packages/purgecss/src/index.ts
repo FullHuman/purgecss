@@ -63,11 +63,11 @@ export async function setOptions(
  * @param content content (e.g. html file)
  * @param extractor PurgeCSS extractor used to extract the selectors
  */
-function extractSelectors(
+async function extractSelectors(
   content: string,
   extractor: ExtractorFunction
-): ExtractorResultDetailed {
-  const selectors = extractor(content);
+): Promise<ExtractorResultDetailed> {
+  const selectors = await extractor(content);
   return Array.isArray(selectors)
     ? {
         attributes: {
@@ -409,7 +409,7 @@ class PurgeCSS {
       for (const file of filesNames) {
         const content = await asyncFs.readFile(file, "utf-8");
         const extractor = this.getFileExtractor(file, extractors);
-        const extractedSelectors = extractSelectors(content, extractor);
+        const extractedSelectors = await extractSelectors(content, extractor);
         selectors = mergeExtractorSelectors(selectors, extractedSelectors);
       }
     }
@@ -421,10 +421,10 @@ class PurgeCSS {
    * @param content Array of content
    * @param extractors Array of extractors
    */
-  public extractSelectorsFromString(
+  public async extractSelectorsFromString(
     content: RawContent[],
     extractors: Extractors[]
-  ): ExtractorResultDetailed {
+  ): Promise<ExtractorResultDetailed> {
     let selectors: ExtractorResultDetailed = {
       attributes: {
         names: [],
@@ -438,7 +438,7 @@ class PurgeCSS {
 
     for (const { raw, extension } of content) {
       const extractor = this.getFileExtractor(`.${extension}`, extractors);
-      const extractedSelectors = extractSelectors(raw, extractor);
+      const extractedSelectors = await extractSelectors(raw, extractor);
       selectors = mergeExtractorSelectors(selectors, extractedSelectors);
     }
     return selectors;
@@ -652,7 +652,7 @@ class PurgeCSS {
       fileFormatContents,
       extractors
     );
-    const cssRawSelectors = this.extractSelectorsFromString(
+    const cssRawSelectors = await this.extractSelectorsFromString(
       rawFormatContents,
       extractors
     );
