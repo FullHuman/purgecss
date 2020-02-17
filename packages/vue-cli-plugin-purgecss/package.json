@@ -1,0 +1,28 @@
+{
+  "name": "@fullhuman/vue-cli-plugin-purgecss",
+  "version": "1.0.0",
+  "description": "vue-cli plugin to add PurgeCSS",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://purgecss.com",
+  "keywords": [
+    "vue-cli",
+    "vue-cli-3",
+    "purgecss",
+    "plugin",
+    "remove",
+    "unused",
+    "css",
+    "optimization"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  }
+}
