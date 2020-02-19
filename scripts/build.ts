@@ -61,6 +61,17 @@ async function build() {
       format: 'cjs'
     })
   }
+
+  // grunt plugin
+  const gruntBundle = await rollup.rollup({
+    input: path.resolve(packagesDirectory, './grunt-purgecss/src/index.ts'),
+    plugins: [typescript({}), terser()],
+    external: ['purgecss']
+  })
+  await gruntBundle.write({
+    file: path.resolve(packagesDirectory, 'grunt-purgecss', './tasks/purgecss.js'),
+    format: 'cjs'
+  })
 }
 
 ;(async () => {

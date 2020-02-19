@@ -3,6 +3,9 @@ docs/.vuepress/dist/
 .firebase/
 .firebaserc
 
+packages/purgecss-webpack-plugin/__tests__/js
+packages/grunt-purgecss/__tests__/tmp
+
 package-lock.json
 npm-shrinkwrap.json
 yarn.lock

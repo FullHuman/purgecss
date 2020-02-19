@@ -1,50 +1,47 @@
 {
   "name": "grunt-purgecss",
-  "version": "1.0.0",
-  "description": "Grunt plugin for purgecss",
-  "main": "./lib/grunt-purgecss.js",
-  "directories": {
-    "test": "__tests__"
-  },
-  "dependencies": {
-    "purgecss": "^1.0.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^8.2.2",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "eslint": "^4.19.0",
-    "grunt": "~1.0.3",
-    "jest": "^23.1.0",
-    "rollup": "^0.59.4",
-    "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^3.3.0"
-  },
-  "scripts": {
-    "test": "grunt && npx jest __tests__/.+.test.js",
-    "dev": "rollup -c rollup.config.js -w",
-    "build": "rollup -c rollup.config.js",
-    "lint": "npx eslint -c .eslintrc src/",
-    "prettier": "npx prettier --write --print-width 100 --tab-width 4 --no-semi --single-quote '{src,__{tests,mocks}__}/**/*.js'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FullHuman/grunt-purgecss.git"
-  },
+  "version": "2.0.6",
+  "description": "Grunt plugin for PurgeCSS",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://purgecss.com",
   "keywords": [
-    "gruntplugin",
+    "optimize",
+    "optimization",
     "remove",
     "unused",
     "css",
-    "purgecss"
+    "html",
+    "rules",
+    "purge",
+    "uncss",
+    "purify"
   ],
-  "author": "Ffloriel",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FullHuman/grunt-purgecss/issues"
+  "main": "lib/grunt-purgecss.js",
+  "module": "./lib/grunt-purgecss.esm.js",
+  "types": "./lib/grunt-purgecss.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
   },
-  "homepage": "https://github.com/FullHuman/grunt-purgecss#readme"
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@types/grunt": "^0.4.25",
+    "purgecss": "^2.0.6"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.3"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  }
 }
