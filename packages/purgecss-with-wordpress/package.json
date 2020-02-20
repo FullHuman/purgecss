@@ -1,26 +1,32 @@
 {
   "name": "purgecss-with-wordpress",
-  "version": "1.1.0",
-  "description": "purgecss with wordpress",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FullHuman/purgecss-with-wordpress.git"
-  },
+  "version": "2.0.6",
+  "description": "PurgeCSS with wordpress",
+  "author": "Ffloriel <florielfedry@gmail.com>",
+  "homepage": "https://purgecss.com",
   "keywords": [
-    "purgecss",
     "wordpress",
+    "optimize",
+    "optimization",
     "remove",
     "unused",
-    "css"
+    "css",
+    "html",
+    "rules",
+    "purge",
+    "uncss",
+    "purify"
   ],
-  "author": "Ffloriel",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FullHuman/purgecss-with-wordpress/issues"
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "homepage": "https://github.com/FullHuman/purgecss-with-wordpress#readme"
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  }
 }

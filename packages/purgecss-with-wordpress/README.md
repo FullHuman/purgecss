@@ -1,5 +1,4 @@
-# Purgecss with Wordpress
-
+# PurgeCSS with Wordpress
 
 Based on the [gist](https://gist.github.com/frnwtr/5647673bb15ca8893642469d3b400cba) made by @frnwtr, `purgecss-with-wordpress` is a set of templates for
 Wordpress CMS.
@@ -8,7 +7,7 @@ Wordpress CMS.
 
 #### Installation
 
-You need to install [purgecss](https://github.com/FullHuman/purgecss) first.
+You need to install [PurgeCSS](https://github.com/FullHuman/purgecss) first.
 
 Install `purgecss-with-wordpress`:
 ```sh
@@ -19,16 +18,15 @@ npm i --save-dev purgecss-with-wordpress
 
 ```js
 
-import Purgecss from 'purgecss'
+import PurgeCSS from 'purgecss'
 import purgecssWordpress from 'purgecss-with-wordpress'
 
-const purgeCss = new Purgecss({
+const purgeCSSResults = await new PurgeCSS().purge({
   content: ['**/*.html'],
   css: ['**/*.css'],
   whitelist: purgecssWordpress.whitelist,
   whitelistPatterns: purgecssWordpress.whitelistPatterns
 })
-const result = purgecss.purge()
 ```
 
 If you have additional classes you want to include in either of the `whitelist` or `whitelistPatterns`, you can include them using the spread operator:
