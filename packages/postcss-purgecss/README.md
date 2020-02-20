@@ -46,10 +46,11 @@ an angular application only scan the components template counterpart for every c
 
 ```js
 purgecss({
-  contentFunction: (source: string) => {
-    (/component\.scss$/.test(source))
-      ? [sourceInputFile.replace(/scss$/, 'html')]
-      : ['./src/**/*.html']
+  contentFunction: (sourceInputFileName: string) => {
+    if (/component\.scss$/.test(sourceInputFileName))
+      return [sourceInputFileName.replace(/scss$/, 'html')]
+    else
+      return ['./src/**/*.html']
   },
 })
 ```
