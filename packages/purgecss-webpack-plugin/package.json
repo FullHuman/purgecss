@@ -2,7 +2,7 @@
   "name": "purgecss-webpack-plugin",
   "version": "2.0.6",
   "description": "PurgeCSS plugin for webpack - Remove unused css",
-  "author": "Ffloriel <florielfedry@gmail.com>",
+  "author": "Ffloriel",
   "homepage": "https://purgecss.com",
   "keywords": [
     "webpack-plugin",
