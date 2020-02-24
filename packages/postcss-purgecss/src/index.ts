@@ -12,11 +12,10 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         ...defaultOptions,
         ...opts
       };
+      const sourceFile = (root.source && root.source.input.file) || "";
 
       if (opts && typeof opts.contentFunction === "function") {
-        options.content = opts.contentFunction(
-          (root.source && root.source.input.file) || ""
-        );
+        options.content = opts.contentFunction(sourceFile);
       }
 
       purgeCSS.options = options;
@@ -30,7 +29,10 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         o => typeof o === "object"
       ) as RawContent[];
 
-      const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
+      const {
+        selectors: cssFileSelectors,
+        fileList: fileDependencies
+      } = await purgeCSS.extractSelectorsFromFiles(
         fileFormatContents,
         extractors
       );
@@ -43,6 +45,17 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         cssFileSelectors,
         cssRawSelectors
       );
+
+      if (fileDependencies && fileDependencies.length) {
+        fileDependencies.forEach(file => {
+          result.messages.push({
+            type: "dependency",
+            plugin: "postcss-purgecss",
+            file: file,
+            parent: sourceFile
+          });
+        });
+      }
 
       //purge unused selectors
       purgeCSS.walkThroughCSS(root, selectors);

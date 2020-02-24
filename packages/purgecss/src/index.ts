@@ -385,7 +385,7 @@ class PurgeCSS {
   public async extractSelectorsFromFiles(
     files: string[],
     extractors: Extractors[]
-  ): Promise<ExtractorResultDetailed> {
+  ): Promise<{ selectors: ExtractorResultDetailed; fileList: string[] }> {
     let selectors: ExtractorResultDetailed = {
       attributes: {
         names: [],
@@ -397,6 +397,8 @@ class PurgeCSS {
       undetermined: []
     };
 
+    let fileList: string[] = [];
+
     for (const globfile of files) {
       let filesNames: string[] = [];
 
@@ -407,13 +409,14 @@ class PurgeCSS {
         filesNames = glob.sync(globfile);
       }
       for (const file of filesNames) {
+        fileList.push(file);
         const content = await asyncFs.readFile(file, "utf-8");
         const extractor = this.getFileExtractor(file, extractors);
         const extractedSelectors = await extractSelectors(content, extractor);
         selectors = mergeExtractorSelectors(selectors, extractedSelectors);
       }
     }
-    return selectors;
+    return { selectors, fileList };
   }
 
   /**
@@ -648,10 +651,9 @@ class PurgeCSS {
       o => typeof o === "object"
     ) as RawContent[];
 
-    const cssFileSelectors = await this.extractSelectorsFromFiles(
-      fileFormatContents,
-      extractors
-    );
+    const {
+      selectors: cssFileSelectors
+    } = await this.extractSelectorsFromFiles(fileFormatContents, extractors);
     const cssRawSelectors = await this.extractSelectorsFromString(
       rawFormatContents,
       extractors
