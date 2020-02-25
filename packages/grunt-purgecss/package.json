@@ -1,6 +1,6 @@
 {
   "name": "grunt-purgecss",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "Grunt plugin for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@types/grunt": "^0.4.25",
-    "purgecss": "^2.0.6"
+    "purgecss": "^2.1.0"
   },
   "devDependencies": {
     "grunt": "~1.0.3"
