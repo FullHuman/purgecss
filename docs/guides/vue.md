@@ -10,31 +10,42 @@ meta:
 
 # Vue
 
-## Created with vue-cli
+## Use the vue CLI plugin
 
-This example shows how to set up PurgeCSS with vue-webpack template.  
-Once you initialized your project with `vue init webpack`, install the webpack plugin for PurgeCSS:
+![vue cli plugin purgecss](https://i.imgur.com/ZYnJSin.png)
 
-```text
-npm i --save-dev glob-all purgecss-webpack-plugin
+### Install
+
+If you haven't yet installed vue-cli 3, first follow the install instructions here: https://github.com/vuejs/vue-cli
+
+Generate a project using vue-cli 3.0:
+
+```bash
+vue create my-app
 ```
 
-You need to modify the file `webpack.prod.conf.js` by adding the following code:
+Before installing the PurgeCSS plugin, make sure to commit or stash your changes in case you need to revert the changes.
 
-```javascript
-// import PurgeCSS webpack plugin and glob-all
-const PurgecssPlugin = require('purgecss-webpack-plugin')
-const glob = require('glob-all')
+To install the PurgeCSS plugin simply navigate to your application folder and add PurgeCSS.
+
+```bash
+cd my-app
+
+vue add purgecss
 ```
 
-```javascript
-    // Remove unused CSS using PurgeCSS. See https://github.com/FullHuman/purgecss
-    // for more information about PurgeCSS.
-    new PurgecssPlugin({
-      paths: glob.sync([
-        path.join(__dirname, './../src/index.html'),
-        path.join(__dirname, './../**/*.vue'),
-        path.join(__dirname, './../src/**/*.js')
-      ])
-    }),
+### Usage
+
+Below are the PurgeCSS options set by this plugin:
+
+```js
+{
+  content: [ `./public/**/*.html`, `./src/**/*.vue` ],
+  defaultExtractor (content) {
+    const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '')
+    return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || []
+  },
+  whitelist: [],
+  whitelistPatterns: [ /-(leave|enter|appear)(|-(to|from|active))$/, /^(?!(|.*?:)cursor-move).+-move$/, /^router-link(|-exact)-active$/, /data-v-.*/ ],
+}
 ```

@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     load () {
-      console.log('hello')
       const s = document.createElement('script')
       s.id = '_carbonads_js'
       s.src = `//cdn.carbonads.com/carbon.js?serve=CE7DKKJJ&placement=wwwpurgecsscom`
