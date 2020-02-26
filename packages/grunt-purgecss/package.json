@@ -17,19 +17,11 @@
     "purify"
   ],
   "license": "MIT",
-  "main": "lib/grunt-purgecss.js",
-  "module": "./lib/grunt-purgecss.esm.js",
-  "types": "./lib/grunt-purgecss.d.ts",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
+  "types": "./tasks/purgecss.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FullHuman/purgecss.git"
+    "url": "git+https://github.com/FullHuman/purgecss.git",
+    "directory": "packages/grunt-purgecss"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
