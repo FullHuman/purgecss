@@ -1,7 +1,8 @@
+import path from "path";
+import purgeCSSPlugin from "../src";
+
 const fs = require("fs");
 const postcss = require("postcss");
-
-import purgeCSSPlugin from "../src";
 
 describe("Purgecss postcss plugin", () => {
   const files = ["simple", "font-keyframes"];
@@ -57,6 +58,38 @@ describe("Purgecss postcss plugin", () => {
           expect(result.warnings().length).toBe(0);
           expect(contentFunction).toHaveBeenCalledTimes(1);
           expect(contentFunction.mock.calls[0][0]).toContain(sourceFileName);
+          done();
+        });
+    });
+
+    it(`register content files as dependencies in webpack: ${file}`, done => {
+      const sourceFileName = `src/${file}/${file}.css`;
+      const contentFileName = `src/${file}/${file}.html`;
+      const inputFilePath = path.resolve(__dirname, "fixtures", sourceFileName);
+      const contentFilePath = path.resolve(__dirname, "fixtures", contentFileName);
+
+      const input = fs.readFileSync(inputFilePath).toString();
+
+      const sourceFilePath = path.resolve(sourceFileName);
+      const contentFunction = jest.fn().mockReturnValue([contentFilePath]);
+
+      postcss([
+        purgeCSSPlugin({
+          contentFunction,
+          fontFace: true,
+          keyframes: true,
+          registerDependencies: true
+        })
+      ])
+        .process(input, {from: sourceFileName})
+        .then((result: any) => {
+          expect(result.messages.length).toBe(1);
+          expect(result.messages[0]).toEqual({
+            type: "dependency",
+            plugin: "postcss-purgecss",
+            file: contentFilePath,
+            parent: sourceFilePath
+          });
           done();
         });
     });

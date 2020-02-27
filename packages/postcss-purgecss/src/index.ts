@@ -46,7 +46,7 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
         cssRawSelectors
       );
 
-      if (fileDependencies && fileDependencies.length) {
+      if (opts?.registerDependencies && fileDependencies && fileDependencies.length) {
         fileDependencies.forEach(file => {
           result.messages.push({
             type: "dependency",

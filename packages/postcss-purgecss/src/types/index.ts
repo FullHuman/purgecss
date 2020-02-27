@@ -19,6 +19,7 @@ export interface UserDefinedOptions {
   fontFace?: boolean;
   keyframes?: boolean;
   output?: string;
+  registerDependencies?: boolean;
   rejected?: boolean;
   stdin?: boolean;
   stdout?: boolean;
