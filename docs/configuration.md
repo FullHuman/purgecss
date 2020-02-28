@@ -44,6 +44,7 @@ interface UserDefinedOptions {
   fontFace?: boolean
   keyframes?: boolean
   output?: string
+  registerDependencies?: boolean
   rejected?: boolean
   stdin?: boolean
   stdout?: boolean
@@ -212,6 +213,33 @@ await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
   css: ['css/app.css'],
   rejected: true
+})
+```
+
+- **registerDependencies \(default: false\)**
+
+Some time you may want PurgeCSS to be enabled in development mode, if so then you want it to purge css correctly your css based on updated source content. In order for this to work we need to register all the content files that you specify in content globs as dependencies to webpack. This will inform webpack that when you change content source your css needs to be processed again since the class list may have been updated.
+
+To enable this behaviour just set `registerDependencies` option to `true`;
+
+__Keep in mind__ that if you just specify a very broad glob pattern in `content` option then all that source will have to be scanned and processed for every css entry point, that can be quite expensive and wasteful. Use `contentFunction` to provide a more granular information about what css entry is dependent on what content source files.
+
+```js
+await new PurgeCSS().purge({
+  contentFunction: (styleSource) => {
+    if (/component\.scss$/.test(styleSource)) {
+      // if style source is a part of component then
+      // it's dependent content is it's component template and code
+      return [
+        styleSource.replace(/scss$/, 'html'),
+        styleSource.replace(/scss$/, 'js')
+      ]
+    } else {
+      return ['./src/**/*.html']
+    }
+  },
+  css: ['css/app.css'],
+  registerDependencies: true
 })
 ```
 

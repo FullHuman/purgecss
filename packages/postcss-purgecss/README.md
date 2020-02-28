@@ -41,7 +41,7 @@ You can specify content that should be analyzed by Purgecss with an array of fil
 ### `contentFunction` (as alternative to `content`)
 Type: `(sourceInputFile: string) => Array<string>`
 
-The function receives the current source input file. With this you may provide a specific array of globs for each input. E.g. for 
+The function receives the current source input file. With this you may provide a specific array of globs for each input. E.g. for
 an angular application only scan the components template counterpart for every component scss file:
 
 ```js
@@ -73,6 +73,14 @@ You can whitelist selectors based on a regular expression with whitelistPatterns
 ### `rejected`
 Type: `boolean`
 Default value: `false`
+
+### `registerDependencies`
+Type: `boolean`
+Default value: `false`
+
+If true, all files that are found by content globs or returned from content function will be registered as dependencies for webpack through PostCSS messages.
+More information and examples [here](https://purgecss.com/configuration.html#options).
+
 
 If true, purged selectors will be captured and rendered as PostCSS messages.
 Use with a PostCSS reporter plugin like [`postcss-reporter`](https://github.com/postcss/postcss-reporter)
