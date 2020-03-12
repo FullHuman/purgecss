@@ -22,7 +22,7 @@
     "lerna": "^3.18.0",
     "lint-staged": "^10.0.2",
     "prettier": "^1.19.0",
-    "rollup": "^1.26.4",
+    "rollup": "^2.0.4",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.2",
     "ts-jest": "^24.1.0",
