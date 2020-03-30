@@ -117,19 +117,9 @@ Please note that using this configuration PurgeCSS will be active in production 
 npm i --save-dev @fullhuman/postcss-purgecss
 ```
 
-```js
-import purgecss from '@fullhuman/postcss-purgecss'
-```
-
 ```javascript
-build: {
-  postcss: {
-    plugins: [
-      purgecss({
-        content: ['./pages/**/*.vue', './layouts/**/*.vue', './components/**/*.vue'],
-        whitelist: ['html', 'body'],
-      })
-    ]
-  }
+'@fullhuman/postcss-purgecss': {
+  content: ['./pages/**/*.vue', './layouts/**/*.vue', './components/**/*.vue'],
+  whitelist: ['html', 'body']
 }
 ```
