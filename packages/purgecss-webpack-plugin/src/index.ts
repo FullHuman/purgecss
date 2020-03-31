@@ -53,16 +53,16 @@ export default class PurgeCSSPlugin {
   }
 
   initializePlugin(compilation: Compilation) {
-    const entryPaths =
-      typeof this.options.paths === "function"
-        ? this.options.paths()
-        : this.options.paths;
-
-    entryPaths.forEach(p => {
-      if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
-    });
-
     compilation.hooks.additionalAssets.tapPromise(pluginName, () => {
+      const entryPaths =
+        typeof this.options.paths === "function"
+          ? this.options.paths()
+          : this.options.paths;
+
+      entryPaths.forEach(p => {
+        if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
+      });
+      
       return this.runPluginHook(compilation, entryPaths);
     });
   }
