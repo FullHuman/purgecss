@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "purgecss": "^2.1.0",
-    "webpack": "^4.41.2",
+    "webpack": "^4.42.1",
     "webpack-sources": "^1.4.3"
   },
   "bugs": {
