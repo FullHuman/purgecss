@@ -19,7 +19,7 @@
     "conventional-changelog-cli": "^2.0.31",
     "husky": "^4.0.0",
     "jest": "^24.9.0",
-    "lerna": "^3.18.0",
+    "lerna": "^3.20.2",
     "lint-staged": "^10.1.1",
     "prettier": "^2.0.2",
     "rollup": "^2.3.0",
