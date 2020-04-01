@@ -12,7 +12,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^25.1.4",
-    "@types/node": "^13.1.0",
+    "@types/node": "^13.9.8",
     "@vuepress/plugin-google-analytics": "^1.4.0",
     "@vuepress/theme-default": "^1.4.0",
     "@wessberg/rollup-plugin-ts": "^1.2.23",
