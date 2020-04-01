@@ -93,3 +93,19 @@ h6 {
 /* purgecss end ignore */
 ```
 
+### Gotchas
+
+Some CSS optimising tools such as PostCSS or cssnano will strip comments before PurgeCSS runs in your build process, this can go unnoticed as often these steps are disabled in development. To prevent these comments being removed you can mark as important with an exclamation mark.
+
+```css
+/*! purgecss start ignore */
+h5 {
+  color: pink;
+}
+
+h6 {
+  color: lightcoral;
+}
+
+/*! purgecss end ignore */
+```
