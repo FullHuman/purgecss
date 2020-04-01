@@ -60,7 +60,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a, 4)).toEqual(matches);
+    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
   });
 
   it("does not fail with missing modules", () => {
@@ -68,7 +68,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a, 4)).toEqual(matches);
+    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
   });
 
   it("returns matches based on extension with a customized getter", () => {
@@ -83,7 +83,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource, 4)).toEqual(
+    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
       matches
     );
   });
@@ -101,7 +101,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource, 4)).toEqual(
+    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
       matches
     );
   });
