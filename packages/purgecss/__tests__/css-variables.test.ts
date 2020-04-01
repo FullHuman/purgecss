@@ -4,11 +4,11 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("purge unused css variables", () => {
   let purgedCSS: string;
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${root}variables/variables.html`],
       css: [`${root}variables/variables.css`],
-      variables: true
+      variables: true,
     });
     purgedCSS = resultPurge[0].css;
     done();

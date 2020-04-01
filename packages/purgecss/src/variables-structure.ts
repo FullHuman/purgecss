@@ -3,7 +3,7 @@ import postcss from "postcss";
 class VariableNode {
   public nodes: VariableNode[] = [];
   public value: postcss.Declaration;
-  public isUsed: boolean = false;
+  public isUsed = false;
 
   constructor(declaration: postcss.Declaration) {
     this.value = declaration;
@@ -14,7 +14,7 @@ class VariablesStructure {
   public nodes: Map<string, VariableNode> = new Map();
   public usedVariables: Set<string> = new Set();
 
-  addVariable(declaration: postcss.Declaration) {
+  addVariable(declaration: postcss.Declaration): void {
     const { prop } = declaration;
     if (!this.nodes.has(prop)) {
       const node = new VariableNode(declaration);
@@ -25,7 +25,7 @@ class VariablesStructure {
   addVariableUsage(
     declaration: postcss.Declaration,
     matchedVariables: RegExpMatchArray[]
-  ) {
+  ): void {
     const { prop } = declaration;
     const node = this.nodes.get(prop)!;
     for (const variableMatch of matchedVariables) {
@@ -38,7 +38,7 @@ class VariablesStructure {
     }
   }
 
-  addVariableUsageInProperties(matchedVariables: RegExpMatchArray[]) {
+  addVariableUsageInProperties(matchedVariables: RegExpMatchArray[]): void {
     for (const variableMatch of matchedVariables) {
       // catpuring group containing the variable is in index 1
       const variableName = variableMatch[1];
@@ -46,7 +46,7 @@ class VariablesStructure {
     }
   }
 
-  setAsUsed(variableName: string) {
+  setAsUsed(variableName: string): void {
     const node = this.nodes.get(variableName)!;
     const queue = [node];
     while (queue.length !== 0) {
@@ -58,7 +58,7 @@ class VariablesStructure {
     }
   }
 
-  removeUnused() {
+  removeUnused(): void {
     for (const used of this.usedVariables) {
       this.setAsUsed(used);
     }

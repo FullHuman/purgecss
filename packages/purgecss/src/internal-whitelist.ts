@@ -4,5 +4,5 @@ export const CSS_WHITELIST = [
   "::selection",
   ":root",
   "::before",
-  "::after"
+  "::after",
 ];

@@ -8,7 +8,7 @@ describe("keyframes", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/keyframes.html`],
       css: [`${root}keyframes/keyframes.css`],
-      keyframes: true
+      keyframes: true,
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -30,7 +30,7 @@ describe("purge unused keyframe animations", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/index.html`],
       css: [`${root}keyframes/index.css`],
-      keyframes: true
+      keyframes: true,
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -48,7 +48,7 @@ describe("do not purge keyframes if option set to false", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}keyframes/index.html`],
       css: [`${root}keyframes/index.css`],
-      keyframes: false
+      keyframes: false,
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -67,8 +67,8 @@ describe("keep keyframe decimals", () => {
       content: [
         {
           raw: '<div class="xx"></div>',
-          extension: "html"
-        }
+          extension: "html",
+        },
       ],
       css: [
         {
@@ -78,10 +78,10 @@ describe("keep keyframe decimals", () => {
                   99.9% {opacity: 1;}
               }
               .xx { animation: xxx 200ms linear both }
-              `
-        }
+              `,
+        },
       ],
-      keyframes: false
+      keyframes: false,
     });
     purgedCSS = resultsPurge[0].css;
   });

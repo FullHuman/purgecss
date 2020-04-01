@@ -13,10 +13,13 @@
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.8",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "@vuepress/plugin-google-analytics": "^1.4.0",
     "@vuepress/theme-default": "^1.4.0",
     "@wessberg/rollup-plugin-ts": "^1.2.23",
     "conventional-changelog-cli": "^2.0.31",
+    "eslint": "^6.8.0",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "lerna": "^3.20.2",
@@ -35,6 +38,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:deploy": "firebase deploy",
+    "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "jest"
   },
@@ -50,7 +54,7 @@
       "git add"
     ],
     "*.ts": [
-      "yarn prettier",
+      "npm run prettier",
       "git add"
     ]
   }

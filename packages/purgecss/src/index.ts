@@ -19,7 +19,7 @@ import {
   AtRules,
   RawCSS,
   UserDefinedOptions,
-  ExtractorResultDetailed
+  ExtractorResultDetailed,
 } from "./types";
 
 import {
@@ -28,14 +28,14 @@ import {
   IGNORE_ANNOTATION_NEXT,
   IGNORE_ANNOTATION_START,
   IGNORE_ANNOTATION_END,
-  IGNORE_ANNOTATION_CURRENT
+  IGNORE_ANNOTATION_CURRENT,
 } from "./constants";
 import { CSS_WHITELIST } from "./internal-whitelist";
 import VariablesStructure from "./variables-structure";
 
 const asyncFs = {
   access: promisify(fs.access),
-  readFile: promisify(fs.readFile)
+  readFile: promisify(fs.readFile),
 };
 
 /**
@@ -54,7 +54,7 @@ export async function setOptions(
   }
   return {
     ...defaultOptions,
-    ...options
+    ...options,
   };
 }
 
@@ -72,12 +72,12 @@ async function extractSelectors(
     ? {
         attributes: {
           names: [],
-          values: []
+          values: [],
         },
         classes: [],
         ids: [],
         tags: [],
-        undetermined: selectors
+        undetermined: selectors,
       }
     : selectors;
 }
@@ -121,7 +121,7 @@ function isRuleEmpty(node: postcss.Container): boolean {
  */
 function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
   let found = false;
-  rule.walkComments(node => {
+  rule.walkComments((node) => {
     if (
       node &&
       node.type === "comment" &&
@@ -147,20 +147,20 @@ export function mergeExtractorSelectors(
     attributes: {
       names: [
         ...extractorSelectorsA.attributes.names,
-        ...extractorSelectorsB.attributes.names
+        ...extractorSelectorsB.attributes.names,
       ],
       values: [
         ...extractorSelectorsA.attributes.values,
-        ...extractorSelectorsB.attributes.values
-      ]
+        ...extractorSelectorsB.attributes.values,
+      ],
     },
     classes: [...extractorSelectorsA.classes, ...extractorSelectorsB.classes],
     ids: [...extractorSelectorsA.ids, ...extractorSelectorsB.ids],
     tags: [...extractorSelectorsA.tags, ...extractorSelectorsB.tags],
     undetermined: [
       ...extractorSelectorsA.undetermined,
-      ...extractorSelectorsB.undetermined
-    ]
+      ...extractorSelectorsB.undetermined,
+    ],
   };
 }
 
@@ -168,7 +168,7 @@ export function mergeExtractorSelectors(
  * Strips quotes of a string
  * @param str string to be stripped
  */
-function stripQuotes(str: string) {
+function stripQuotes(str: string): string {
   return str.replace(/(^["'])|(["']$)/g, "");
 }
 
@@ -191,31 +191,34 @@ function isAttributeFound(
   switch (attributeNode.operator) {
     case "$=":
       return (
-        selectors.attributes.values.some(str =>
+        selectors.attributes.values.some((str) =>
           str.endsWith(attributeNode.value!)
         ) ||
-        selectors.undetermined.some(str => str.endsWith(attributeNode.value!))
+        selectors.undetermined.some((str) => str.endsWith(attributeNode.value!))
       );
     case "~=":
     case "*=":
       return (
-        selectors.attributes.values.some(str =>
+        selectors.attributes.values.some((str) =>
           str.includes(attributeNode.value!)
         ) ||
-        selectors.undetermined.some(str => str.includes(attributeNode.value!))
+        selectors.undetermined.some((str) => str.includes(attributeNode.value!))
       );
     case "=":
       return (
-        selectors.attributes.values.some(str => str === attributeNode.value) ||
-        selectors.undetermined.some(str => str === attributeNode.value!)
+        selectors.attributes.values.some(
+          (str) => str === attributeNode.value
+        ) || selectors.undetermined.some((str) => str === attributeNode.value!)
       );
     case "|=":
     case "^=":
       return (
-        selectors.attributes.values.some(str =>
+        selectors.attributes.values.some((str) =>
           str.startsWith(attributeNode.value!)
         ) ||
-        selectors.undetermined.some(str => str.startsWith(attributeNode.value!))
+        selectors.undetermined.some((str) =>
+          str.startsWith(attributeNode.value!)
+        )
       );
     default:
       return true;
@@ -272,24 +275,23 @@ function isTagFound(
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
  * @param selector selector
  */
-function isInPseudoClass(selector: selectorParser.Node) {
+function isInPseudoClass(selector: selectorParser.Node): boolean {
   return (
-    selector.parent &&
-    selector.parent.type === "pseudo" &&
-    selector.parent.value.startsWith(":")
+    (selector.parent &&
+      selector.parent.type === "pseudo" &&
+      selector.parent.value.startsWith(":")) ||
+    false
   );
 }
 
 function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
   const matches: RegExpMatchArray[] = [];
-  str.replace(regexp, function() {
-    const match: RegExpMatchArray = Array.prototype.slice.call(
-      arguments,
-      0,
-      -2
-    );
-    match.input = arguments[arguments.length - 1];
-    match.index = arguments[arguments.length - 2];
+  str.replace(regexp, function () {
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
+    const match: RegExpMatchArray = Array.prototype.slice.call(args, 0, -2);
+    match.input = args[args.length - 1];
+    match.index = args[args.length - 2];
     matches.push(match);
     return str;
   });
@@ -300,7 +302,7 @@ class PurgeCSS {
   private ignore = false;
   private atRules: AtRules = {
     fontFace: [],
-    keyframes: []
+    keyframes: [],
   };
 
   private usedAnimations: Set<string> = new Set();
@@ -310,14 +312,14 @@ class PurgeCSS {
 
   public options: Options = defaultOptions;
 
-  private collectDeclarationsData(declaration: postcss.Declaration) {
+  private collectDeclarationsData(declaration: postcss.Declaration): void {
     const { prop, value } = declaration;
 
     // collect css properties data
     if (this.options.variables) {
       const usedVariablesMatchesInDeclaration = matchAll(
         value,
-        /var\((.+?)[\,)]/g
+        /var\((.+?)[,)]/g
       );
       if (prop.startsWith("--")) {
         this.variablesStructure.addVariable(declaration);
@@ -368,8 +370,8 @@ class PurgeCSS {
     filename: string,
     extractors: Extractors[]
   ): ExtractorFunction {
-    const extractorObj = extractors.find(extractor =>
-      extractor.extensions.find(ext => filename.endsWith(ext))
+    const extractorObj = extractors.find((extractor) =>
+      extractor.extensions.find((ext) => filename.endsWith(ext))
     );
 
     return typeof extractorObj === "undefined"
@@ -389,12 +391,12 @@ class PurgeCSS {
     let selectors: ExtractorResultDetailed = {
       attributes: {
         names: [],
-        values: []
+        values: [],
       },
       classes: [],
       ids: [],
       tags: [],
-      undetermined: []
+      undetermined: [],
     };
 
     for (const globfile of files) {
@@ -428,12 +430,12 @@ class PurgeCSS {
     let selectors: ExtractorResultDetailed = {
       attributes: {
         names: [],
-        values: []
+        values: [],
       },
       classes: [],
       ids: [],
       tags: [],
-      undetermined: []
+      undetermined: [],
     };
 
     for (const { raw, extension } of content) {
@@ -460,7 +462,7 @@ class PurgeCSS {
         if (childnode.type === "decl" && childnode.prop === "font-family") {
           this.atRules.fontFace.push({
             name: stripQuotes(childnode.value),
-            node
+            node,
           });
         }
       }
@@ -512,8 +514,8 @@ class PurgeCSS {
     }
 
     let keepSelector = true;
-    node.selector = selectorParser(selectorsParsed => {
-      selectorsParsed.walk(selector => {
+    node.selector = selectorParser((selectorsParsed) => {
+      selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
           return;
         }
@@ -581,7 +583,7 @@ class PurgeCSS {
 
       const result: ResultPurge = {
         css: root.toString(),
-        file: typeof option === "string" ? option : undefined
+        file: typeof option === "string" ? option : undefined,
       };
 
       if (typeof option === "string") {
@@ -637,15 +639,15 @@ class PurgeCSS {
         ? await setOptions(userOptions)
         : {
             ...defaultOptions,
-            ...userOptions
+            ...userOptions,
           };
     const { content, css, extractors } = this.options;
 
     const fileFormatContents = content.filter(
-      o => typeof o === "string"
+      (o) => typeof o === "string"
     ) as string[];
     const rawFormatContents = content.filter(
-      o => typeof o === "object"
+      (o) => typeof o === "object"
     ) as RawContent[];
 
     const cssFileSelectors = await this.extractSelectorsFromFiles(
@@ -767,8 +769,8 @@ class PurgeCSS {
   public walkThroughCSS(
     root: postcss.Root,
     selectors: ExtractorResultDetailed
-  ) {
-    root.walk(node => {
+  ): void {
+    root.walk((node) => {
       if (node.type === "rule") {
         return this.evaluateRule(node, selectors);
       }

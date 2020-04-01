@@ -27,7 +27,7 @@ describe("filters out unused selectors", () => {
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}remove_unused/remove_unused.js`],
-      css: [`${root}remove_unused/remove_unused.css`]
+      css: [`${root}remove_unused/remove_unused.css`],
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -45,7 +45,7 @@ describe("filters out unused selectors", () => {
 });
 
 describe("special characters, with custom Extractor", () => {
-  let purgedCSS: string = "";
+  let purgedCSS = "";
   const CustomExtractor = (content: string): ExtractorResult =>
     content.match(/[A-z0-9-:/]+/g) || [];
 
@@ -56,9 +56,9 @@ describe("special characters, with custom Extractor", () => {
       extractors: [
         {
           extractor: CustomExtractor,
-          extensions: ["html", "js"]
-        }
-      ]
+          extensions: ["html", "js"],
+        },
+      ],
     });
     purgedCSS = resultsPurge[0].css;
   });

@@ -19,14 +19,14 @@ export default class PurgeCSSPlugin {
     this.options = options;
   }
 
-  apply(compiler: Compiler) {
+  apply(compiler: Compiler): void {
     compiler.hooks.compilation.tap(pluginName, (compilation: Compilation) => {
       this.initializePlugin(compilation);
     });
     compiler.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
   }
 
-  onHooksDone(stats: Stats, callback: () => void) {
+  onHooksDone(stats: Stats): void {
     if (stats.hasErrors()) {
       if (this.options.verbose) {
         console.warn("purge-webpack-plugin: pausing due to webpack errors");
@@ -35,15 +35,19 @@ export default class PurgeCSSPlugin {
     }
 
     if (this.options.rejected) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       stats["purged"] = this.purgedStats;
     }
   }
 
-  getAssetsToPurge(assetsFromCompilation: PurgeAsset[], files: string[]) {
-    return assetsFromCompilation.filter(asset => {
+  getAssetsToPurge(
+    assetsFromCompilation: PurgeAsset[],
+    files: string[]
+  ): PurgeAsset[] {
+    return assetsFromCompilation.filter((asset) => {
       if (this.options.only) {
-        return this.options.only.some(only => {
+        return this.options.only.some((only) => {
           return asset && asset.name.includes(only);
         });
       } else {
@@ -52,13 +56,13 @@ export default class PurgeCSSPlugin {
     });
   }
 
-  initializePlugin(compilation: Compilation) {
+  initializePlugin(compilation: Compilation): void {
     const entryPaths =
       typeof this.options.paths === "function"
         ? this.options.paths()
         : this.options.paths;
 
-    entryPaths.forEach(p => {
+    entryPaths.forEach((p) => {
       if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
     });
 
@@ -67,9 +71,12 @@ export default class PurgeCSSPlugin {
     });
   }
 
-  async runPluginHook(compilation: Compilation, entryPaths: string[]) {
+  async runPluginHook(
+    compilation: Compilation,
+    entryPaths: string[]
+  ): Promise<void> {
     const assetsFromCompilation = search.getAssets(compilation.assets, [
-      ".css"
+      ".css",
     ]);
 
     for (const chunk of compilation.chunks) {
@@ -82,11 +89,10 @@ export default class PurgeCSSPlugin {
             search.files(
               chunk,
               this.options.moduleExtensions || [],
-              (file: any) => file.resource,
-              4
+              (file: any) => file.resource
             )
           )
-          .filter(v => !styleExtensions.some(ext => v.endsWith(ext)));
+          .filter((v) => !styleExtensions.some((ext) => v.endsWith(ext)));
 
         // Compile through Purgecss and attach to output.
         // This loses sourcemaps should there be any!
@@ -96,9 +102,9 @@ export default class PurgeCSSPlugin {
           content: filesToSearch,
           css: [
             {
-              raw: asset.source()
-            }
-          ]
+              raw: asset.source(),
+            },
+          ],
         };
 
         if (typeof options.whitelist === "function") {
@@ -123,7 +129,7 @@ export default class PurgeCSSPlugin {
           variables: options.variables,
           whitelist: options.whitelist,
           whitelistPatterns: options.whitelistPatterns,
-          whitelistPatternsChildren: options.whitelistPatternsChildren
+          whitelistPatternsChildren: options.whitelistPatternsChildren,
         });
         const purged = purgecss[0];
 

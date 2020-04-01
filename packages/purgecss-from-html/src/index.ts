@@ -15,6 +15,7 @@ const getSelectorsInElement = (element: htmlparser2.Element): string[] => {
     selectors.push(...element.attribs.id.split(" "));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return [...getSelectorsInNodes(element), ...selectors, tagName];
 };
 
@@ -41,7 +42,7 @@ const getSelectorsInNodes = (
 
 const purgecssFromHtml = (content: string): string[] => {
   const tree = parse5.parse(content, {
-    treeAdapter: htmlparser2
+    treeAdapter: htmlparser2,
   }) as htmlparser2.Document;
 
   return getSelectorsInNodes(tree);

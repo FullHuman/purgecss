@@ -16,14 +16,14 @@ export const TEST_1_TAG = [
   "body",
   "div",
   "a",
-  "input"
+  "input",
 ];
 
 export const TEST_1_CLASS = [
   "test-container",
   "test-footer",
   "a-link",
-  "enabled"
+  "enabled",
 ];
 
 export const TEST_1_ID = ["a-link", "blo"];
