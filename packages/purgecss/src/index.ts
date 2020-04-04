@@ -20,6 +20,7 @@ import {
   RawCSS,
   UserDefinedOptions,
   ExtractorResultDetailed,
+  ComparatorFunction,
 } from "./types";
 
 import {
@@ -232,11 +233,16 @@ function isAttributeFound(
  */
 function isClassFound(
   classNode: selectorParser.ClassName,
-  selectors: ExtractorResultDetailed
+  selectors: ExtractorResultDetailed,
+  comparator: ComparatorFunction
 ): boolean {
   return (
-    selectors.classes.includes(classNode.value) ||
-    selectors.undetermined.includes(classNode.value)
+    selectors.classes.some((selector) =>
+      comparator(classNode.value, selector)
+    ) ||
+    selectors.undetermined.some((selector) =>
+      comparator(classNode.value, selector)
+    )
   );
 }
 
@@ -740,7 +746,11 @@ class PurgeCSS {
             : isAttributeFound(nodeSelector, selectorsFromExtractor);
           break;
         case "class":
-          isPresent = isClassFound(nodeSelector, selectorsFromExtractor);
+          isPresent = isClassFound(
+            nodeSelector,
+            selectorsFromExtractor,
+            this.options.customClassComparator
+          );
           break;
         case "id":
           isPresent = isIdentifierFound(nodeSelector, selectorsFromExtractor);

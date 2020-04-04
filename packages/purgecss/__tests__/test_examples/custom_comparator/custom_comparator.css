@@ -1,0 +1,12 @@
+.w-full {
+  color: green;
+}
+
+.md\:w-full {
+  color: red;
+}
+
+
+.hover\:w-full {
+  color: blue;
+}
