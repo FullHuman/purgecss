@@ -2,8 +2,6 @@ import PurgeCSS from "../src/index";
 
 describe("performance", () => {
   it("should not suffer from tons of content and css", function () {
-    // TODO Remove this excessive timeout once performance is better.
-    jest.setTimeout(60000);
     const start = Date.now();
     return new PurgeCSS()
       .purge({
