@@ -6,6 +6,7 @@ export const defaultOptions: Options = {
   defaultExtractor: (content: string): ExtractorResult =>
     content.match(/[A-Za-z0-9_-]+/g) || [],
   extractors: [],
+  customClassComparator: (node, selector) => node === selector,
   fontFace: false,
   keyframes: false,
   rejected: false,

@@ -33,6 +33,8 @@ export type ExtractorResult = ExtractorResultDetailed | string[];
 
 export type ExtractorFunction = (content: string) => ExtractorResult;
 
+export type ComparatorFunction = (node: string, selector: string) => boolean;
+
 export interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
@@ -45,6 +47,7 @@ export interface UserDefinedOptions {
   css: Array<string | RawCSS>;
   defaultExtractor?: ExtractorFunction;
   extractors?: Array<Extractors>;
+  customClassComparator?: ComparatorFunction;
   fontFace?: boolean;
   keyframes?: boolean;
   output?: string;
@@ -62,6 +65,7 @@ export interface Options {
   css: Array<string | RawCSS>;
   defaultExtractor: ExtractorFunction;
   extractors: Array<Extractors>;
+  customClassComparator: ComparatorFunction;
   fontFace: boolean;
   keyframes: boolean;
   output?: string;

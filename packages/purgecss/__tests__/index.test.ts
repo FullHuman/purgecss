@@ -71,3 +71,37 @@ describe("special characters, with custom Extractor", () => {
     expect(purgedCSS.includes("\\32 -panel")).toBe(false);
   });
 });
+
+describe("with custom Comparator", () => {
+  let purgedCSS = "";
+  const CustomExtractor = (content: string): ExtractorResult =>
+    content.match(/[A-z0-9-:/]+/g) || [];
+
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${root}custom_comparator/custom_comparator.js`],
+      css: [`${root}custom_comparator/custom_comparator.css`],
+      extractors: [
+        {
+          extractor: CustomExtractor,
+          extensions: ["html", "js"],
+        },
+      ],
+      customClassComparator: (node, selector) =>
+        node === selector || node.endsWith(":" + selector),
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("finds literal class", () => {
+    expect(purgedCSS.includes("w-full")).toBe(true);
+  });
+
+  it("finds decorated class 1", () => {
+    expect(purgedCSS.includes("md\\:w-full")).toBe(true);
+  });
+
+  it("finds decorated class 2", () => {
+    expect(purgedCSS.includes("hover\\:w-full")).toBe(true);
+  });
+});
