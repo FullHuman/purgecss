@@ -23,7 +23,7 @@
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "lerna": "^3.20.2",
-    "lint-staged": "^10.1.1",
+    "lint-staged": "^10.1.2",
     "prettier": "^2.0.3",
     "rollup": "^2.3.2",
     "rollup-plugin-node-resolve": "^5.2.0",
