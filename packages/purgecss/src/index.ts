@@ -20,7 +20,6 @@ import {
   RawCSS,
   UserDefinedOptions,
   ExtractorResultDetailed,
-  ExtractorResultSets,
 } from "./types";
 
 import {
@@ -32,7 +31,8 @@ import {
   IGNORE_ANNOTATION_CURRENT,
 } from "./constants";
 import { CSS_WHITELIST } from "./internal-whitelist";
-import VariablesStructure from "./variables-structure";
+import VariablesStructure from "./VariablesStructure";
+import ExtractorResultSets from "./ExtractorResultSets";
 
 const asyncFs = {
   access: promisify(fs.access),
