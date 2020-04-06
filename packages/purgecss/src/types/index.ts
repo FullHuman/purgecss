@@ -76,16 +76,11 @@ export class ExtractorResultSets {
   }
 
   private someAttrValue(predicate: (value: string) => boolean): boolean {
-    const forEachFn = (value: string) => {
-      if (predicate(value)) throw true;
-    };
-    try {
-      // The only way to break early from a Set.prototype.forEach
-      // loop is to throw from the callback function.
-      this.attrValues.forEach(forEachFn);
-      this.undetermined.forEach(forEachFn);
-    } catch (result) {
-      return result;
+    for (const val of this.attrValues) {
+      if (predicate(val)) return true;
+    }
+    for (const val of this.undetermined) {
+      if (predicate(val)) return true;
     }
     return false;
   }
