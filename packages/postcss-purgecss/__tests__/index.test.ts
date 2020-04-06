@@ -22,7 +22,7 @@ describe("Purgecss postcss plugin", () => {
         }),
       ])
         .process(input, { from: undefined })
-        .then((result: any) => {
+        .then((result) => {
           expect(result.css).toBe(expected);
           expect(result.warnings().length).toBe(0);
           done();

@@ -27,13 +27,13 @@ class VariablesStructure {
     matchedVariables: RegExpMatchArray[]
   ): void {
     const { prop } = declaration;
-    const node = this.nodes.get(prop)!;
+    const node = this.nodes.get(prop);
     for (const variableMatch of matchedVariables) {
       // catpuring group containing the variable is in index 1
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
         const usedVariableNode = this.nodes.get(variableName)!;
-        node.nodes.push(usedVariableNode);
+        node?.nodes.push(usedVariableNode);
       }
     }
   }
@@ -47,11 +47,11 @@ class VariablesStructure {
   }
 
   setAsUsed(variableName: string): void {
-    const node = this.nodes.get(variableName)!;
+    const node = this.nodes.get(variableName);
     const queue = [node];
     while (queue.length !== 0) {
-      const currentNode = queue.pop()!;
-      if (!currentNode.isUsed) {
+      const currentNode = queue.pop();
+      if (currentNode && !currentNode.isUsed) {
         currentNode.isUsed = true;
         queue.push(...currentNode.nodes);
       }

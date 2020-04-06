@@ -157,17 +157,21 @@ function isAttributeFound(
     return false;
   }
 
+  if (typeof attributeNode.value === "undefined") {
+    return true;
+  }
+
   switch (attributeNode.operator) {
     case "$=":
-      return selectors.hasAttrSuffix(attributeNode.value!);
+      return selectors.hasAttrSuffix(attributeNode.value);
     case "~=":
     case "*=":
-      return selectors.hasAttrSubstr(attributeNode.value!);
+      return selectors.hasAttrSubstr(attributeNode.value);
     case "=":
-      return selectors.hasAttrValue(attributeNode.value!);
+      return selectors.hasAttrValue(attributeNode.value);
     case "|=":
     case "^=":
-      return selectors.hasAttrPrefix(attributeNode.value!);
+      return selectors.hasAttrPrefix(attributeNode.value);
     default:
       return true;
   }
