@@ -24,7 +24,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "parse5": "^5.1.0",
+    "parse5": "^5.1.1",
     "parse5-htmlparser2-tree-adapter": "^5.1.1"
   },
   "devDependencies": {
