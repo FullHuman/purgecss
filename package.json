@@ -8,7 +8,9 @@
     "purgecss-from-html",
     "purgecss-from-pug",
     "purgecss-from-twig",
-    "purgecss-webpack-plugin"
+    "purgecss-webpack-plugin",
+    "purgecss-with-wordpress",
+    "vue-cli-plugin-purgecss"
   ],
   "devDependencies": {
     "@types/jest": "^25.2.1",
