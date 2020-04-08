@@ -18,6 +18,9 @@
   ],
   "license": "MIT",
   "types": "./tasks/purgecss.d.ts",
+  "files": [
+    "tasks"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git",
