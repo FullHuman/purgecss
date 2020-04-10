@@ -4,10 +4,10 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("chaining rules", () => {
   let purgedCSS: string;
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}chaining_rules/index.html`],
-      css: [`${root}chaining_rules/index.css`]
+      css: [`${root}chaining_rules/index.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();

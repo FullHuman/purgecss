@@ -1,6 +1,6 @@
 {
   "name": "purgecss-from-html",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "HTML extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
@@ -24,8 +24,8 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "parse5": "^5.1.0",
-    "parse5-htmlparser2-tree-adapter": "^5.1.0"
+    "parse5": "^5.1.1",
+    "parse5-htmlparser2-tree-adapter": "^5.1.1"
   },
   "devDependencies": {
     "@types/parse5": "^5.0.2",

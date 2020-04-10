@@ -4,18 +4,27 @@ import { promisify } from "util";
 import webpack, { Configuration, Stats } from "webpack";
 
 const asyncFs = {
-  readdir: promisify(fs.readdir)
+  readdir: promisify(fs.readdir),
 };
 
-function runWebpack(options: Configuration) {
+function runWebpack(options: Configuration): Promise<webpack.Stats> {
   const compiler = webpack(options);
-  return new Promise((resolve, reject) => {
+  return new Promise<webpack.Stats>((resolve, reject) => {
     compiler.run((err: Error, stats: Stats) => {
       if (err) reject(err);
       if (stats.hasErrors()) reject(new Error(stats.toString()));
       resolve(stats);
     });
   });
+}
+
+async function readFileOrEmpty(path: string): Promise<string> {
+  try {
+    return await fs.promises.readFile(path, "utf-8");
+    // eslint-disable-next-line no-empty
+  } catch (e) {
+    return "";
+  }
 }
 
 describe("Webpack integration", () => {
@@ -27,7 +36,7 @@ describe("Webpack integration", () => {
   const cases: string[] = [
     "path-and-whitelist-functions",
     "simple",
-    "simple-with-exclusion"
+    "simple-with-exclusion",
   ];
 
   for (const testCase of cases) {
@@ -37,14 +46,14 @@ describe("Webpack integration", () => {
       const expectedDirectory = path.resolve(testDirectory, "expected");
 
       process.chdir(testDirectory);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const webpackConfig = require(`${testDirectory}/webpack.config.js`);
 
-      // @ts-ignore
       await runWebpack({
         ...webpackConfig,
         output: {
-          path: outputDirectory
-        }
+          path: outputDirectory,
+        },
       });
 
       const files = await asyncFs.readdir(expectedDirectory);
@@ -61,11 +70,3 @@ describe("Webpack integration", () => {
     });
   }
 });
-
-async function readFileOrEmpty(path: string) {
-  let result = "";
-  try {
-    result = await fs.promises.readFile(path, "utf-8");
-  } catch (e) {}
-  return result;
-}

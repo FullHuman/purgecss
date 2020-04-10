@@ -4,10 +4,10 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("ignore comment", () => {
   let purgedCSS: string;
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}ignore_comment/ignore_comment.html`],
-      css: [`${root}ignore_comment/ignore_comment.css`]
+      css: [`${root}ignore_comment/ignore_comment.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -28,13 +28,13 @@ describe("ignore comment range", () => {
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}ignore_comment_range/index.html`],
-      css: [`${root}ignore_comment_range/index.css`]
+      css: [`${root}ignore_comment_range/index.css`],
     });
     purgedCSS = resultsPurge[0].css;
   });
 
   it("ignores h1, h3, h5, h6", () => {
-    ["h1", "h3", "h5", "h6"].forEach(selector => {
+    ["h1", "h3", "h5", "h6"].forEach((selector) => {
       expect(purgedCSS.includes(selector)).toBe(true);
     });
   });

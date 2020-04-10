@@ -14,5 +14,5 @@ export const defaultOptions: Options = {
   variables: false,
   whitelist: [],
   whitelistPatterns: [],
-  whitelistPatternsChildren: []
+  whitelistPatternsChildren: [],
 };

@@ -3,13 +3,13 @@ import PurgeCSS from "./../src/index";
 const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("whitelist", () => {
-  let purgedCSS: string = "";
-  beforeAll(async done => {
+  let purgedCSS = "";
+  beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}whitelist/whitelist.html`],
       css: [`${root}whitelist/whitelist.css`],
       whitelist: ["random", "h1", "yep", "button"],
-      whitelistPatterns: [/nav-/, /data-v-.*/]
+      whitelistPatterns: [/nav-/, /data-v-.*/],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -49,12 +49,12 @@ describe("whitelistPatternsChildren", () => {
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [
-        `${root}whitelist_patterns_children/whitelist_patterns_children.html`
+        `${root}whitelist_patterns_children/whitelist_patterns_children.html`,
       ],
       css: [
-        `${root}whitelist_patterns_children/whitelist_patterns_children.css`
+        `${root}whitelist_patterns_children/whitelist_patterns_children.css`,
       ],
-      whitelistPatternsChildren: [/^card$/]
+      whitelistPatternsChildren: [/^card$/],
     });
     purgedCSS = resultsPurge[0].css;
   });

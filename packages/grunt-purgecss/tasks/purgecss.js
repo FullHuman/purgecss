@@ -1,1 +1,30 @@
-"use strict";function _interopDefault(e){return e&&"object"==typeof e&&"default"in e?e.default:e}var PurgeCSS=require("purgecss"),PurgeCSS__default=_interopDefault(PurgeCSS);function getAvailableFiles(e,t=[]){return t.filter(t=>!!e.file.exists(t)||(e.log.warn(`Source file "${t}" not found.`),!1))}function gruntPurgeCSS(e){e.registerMultiTask("purgecss","Grunt plugin for PurgeCSS",(function(){const t=this.async(),r=this.options(PurgeCSS.defaultOptions);for(const u of this.files){const i=getAvailableFiles(e,u.src);(new PurgeCSS__default).purge({...r,css:i}).then(r=>{e.file.write(u.dest,r[0].css),e.log.writeln(`File "${u.dest}" created.`),t()}).catch(()=>{t(!1)})}}))}module.exports=gruntPurgeCSS;
+"use strict";
+var t,
+  e = require("purgecss"),
+  s = (t = e) && "object" == typeof t && "default" in t ? t.default : t;
+function i(t, e = []) {
+  return e.filter(
+    (e) =>
+      !!t.file.exists(e) || (t.log.warn(`Source file "${e}" not found.`), !1)
+  );
+}
+module.exports = function (t) {
+  t.registerMultiTask("purgecss", "Grunt plugin for PurgeCSS", function () {
+    const n = this.async(),
+      o = this.options(e.defaultOptions);
+    for (const e of this.files) {
+      const r = i(t, e.src);
+      new s()
+        .purge({ ...o, css: r })
+        .then((s) => {
+          if (void 0 === e.dest) throw new Error("Destination file not found");
+          t.file.write(e.dest, s[0].css),
+            t.log.writeln(`File "${e.dest}" created.`),
+            n();
+        })
+        .catch(() => {
+          n(!1);
+        });
+    }
+  });
+};

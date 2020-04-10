@@ -1,3 +1,3 @@
-var x = 'added-' + 'together'
+const x = "added-" + "together";
 
-var y = ['array', 'joined'].join('-')
+const y = ["array", "joined"].join("-");

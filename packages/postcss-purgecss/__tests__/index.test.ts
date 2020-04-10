@@ -1,5 +1,5 @@
-const fs = require("fs");
-const postcss = require("postcss");
+import fs from "fs";
+import postcss from "postcss";
 
 import purgeCSSPlugin from "../src";
 
@@ -7,7 +7,7 @@ describe("Purgecss postcss plugin", () => {
   const files = ["simple", "font-keyframes"];
 
   for (const file of files) {
-    it(`remove unused css with content option successfully: ${file}`, done => {
+    it(`remove unused css with content option successfully: ${file}`, (done) => {
       const input = fs
         .readFileSync(`${__dirname}/fixtures/src/${file}/${file}.css`)
         .toString();
@@ -18,11 +18,11 @@ describe("Purgecss postcss plugin", () => {
         purgeCSSPlugin({
           content: [`${__dirname}/fixtures/src/${file}/${file}.html`],
           fontFace: true,
-          keyframes: true
-        })
+          keyframes: true,
+        }),
       ])
         .process(input, { from: undefined })
-        .then((result: any) => {
+        .then((result) => {
           expect(result.css).toBe(expected);
           expect(result.warnings().length).toBe(0);
           done();
@@ -31,7 +31,7 @@ describe("Purgecss postcss plugin", () => {
   }
 
   for (const file of files) {
-    it(`remove unused css with contentFunction option successfully: ${file}`, done => {
+    it(`remove unused css with contentFunction option successfully: ${file}`, (done) => {
       const input = fs
         .readFileSync(`${__dirname}/fixtures/src/${file}/${file}.css`)
         .toString();
@@ -48,11 +48,11 @@ describe("Purgecss postcss plugin", () => {
         purgeCSSPlugin({
           contentFunction,
           fontFace: true,
-          keyframes: true
-        })
+          keyframes: true,
+        }),
       ])
         .process(input, { from: sourceFileName })
-        .then((result: any) => {
+        .then((result) => {
           expect(result.css).toBe(expected);
           expect(result.warnings().length).toBe(0);
           expect(contentFunction).toHaveBeenCalledTimes(1);
@@ -63,7 +63,7 @@ describe("Purgecss postcss plugin", () => {
   }
 
   for (const file of ["simple"]) {
-    it(`queues messages when using reject flag: ${file}`, done => {
+    it(`queues messages when using reject flag: ${file}`, (done) => {
       const input = fs
         .readFileSync(`${__dirname}/fixtures/src/${file}/${file}.css`)
         .toString();
@@ -73,11 +73,11 @@ describe("Purgecss postcss plugin", () => {
       postcss([
         purgeCSSPlugin({
           content: [`${__dirname}/fixtures/src/${file}/${file}.html`],
-          rejected: true
-        })
+          rejected: true,
+        }),
       ])
         .process(input, { from: undefined })
-        .then((result: any) => {
+        .then((result) => {
           expect(result.css).toBe(expected);
           expect(result.warnings().length).toBe(0);
           expect(result.messages.length).toBeGreaterThan(0);

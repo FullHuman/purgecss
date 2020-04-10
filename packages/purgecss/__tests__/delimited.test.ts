@@ -4,10 +4,10 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 
 describe("delimited", () => {
   let purgedCSS: string;
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${root}delimited/delimited.html`],
-      css: [`${root}delimited/delimited.css`]
+      css: [`${root}delimited/delimited.css`],
     });
     purgedCSS = resultPurge[0].css;
     done();

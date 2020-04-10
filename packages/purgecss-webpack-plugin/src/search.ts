@@ -7,10 +7,7 @@ import { PurgeAsset } from "./types";
  */
 export function getFormattedFilename(fileName: string): string {
   if (fileName.includes("?")) {
-    return fileName
-      .split("?")
-      .slice(0, -1)
-      .join("");
+    return fileName.split("?").slice(0, -1).join("");
   }
   return fileName;
 }
@@ -20,7 +17,7 @@ export function getFormattedFilename(fileName: string): string {
  * @param filename file name
  * @param extensions extensions
  */
-export function isFileOfTypes(filename: string, extensions: string[]) {
+export function isFileOfTypes(filename: string, extensions: string[]): boolean {
   const extension = path.extname(getFormattedFilename(filename));
   return extensions.includes(extension);
 }
@@ -44,7 +41,7 @@ export function getAssets(
     if (isFileOfTypes(name, extensions)) {
       purgeAssets.push({
         name,
-        asset
+        asset,
       });
     }
   }
@@ -55,9 +52,8 @@ export function getAssets(
 export function files(
   chunk: any,
   extensions: string[],
-  getter: Function = (a: any) => a.resource,
-  webpackVersion: number
-) {
+  getter: Function = (a: any) => a.resource
+): any[] {
   const mods = [];
   for (const module of Array.from(chunk.modulesIterable || [])) {
     const file = getter(module);

@@ -5,10 +5,10 @@ const root = "./packages/purgecss/__tests__/test_examples/";
 describe("attributes", () => {
   let purgedCSS: string;
 
-  beforeAll(async done => {
+  beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${root}attribute_selector/attribute_selector.html`],
-      css: [`${root}attribute_selector/attribute_selector.css`]
+      css: [`${root}attribute_selector/attribute_selector.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();

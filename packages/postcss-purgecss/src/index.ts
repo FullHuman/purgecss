@@ -5,12 +5,12 @@ import { RawContent, UserDefinedOptions } from "./types";
 
 const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
   "postcss-plugin-purgecss",
-  function(opts) {
-    return async function(root, result) {
+  function (opts) {
+    return async function (root, result): Promise<void> {
       const purgeCSS = new PurgeCSS();
       const options = {
         ...defaultOptions,
-        ...opts
+        ...opts,
       };
 
       if (opts && typeof opts.contentFunction === "function") {
@@ -24,10 +24,10 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
       const { content, extractors } = options;
 
       const fileFormatContents = content.filter(
-        o => typeof o === "string"
+        (o) => typeof o === "string"
       ) as string[];
       const rawFormatContents = content.filter(
-        o => typeof o === "object"
+        (o) => typeof o === "object"
       ) as RawContent[];
 
       const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
@@ -57,8 +57,8 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
           plugin: "postcss-purgecss",
           text: `purging ${purgeCSS.selectorsRemoved.size} selectors:
         ${Array.from(purgeCSS.selectorsRemoved)
-          .map(selector => selector.trim())
-          .join("\n  ")}`
+          .map((selector) => selector.trim())
+          .join("\n  ")}`,
         });
         purgeCSS.selectorsRemoved.clear();
       }

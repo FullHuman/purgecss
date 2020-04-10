@@ -4,14 +4,16 @@ describe("Search assets", () => {
   it("returns matches based on a pattern", () => {
     const modules = {
       "foobar.txt": {
-        source: () => ""
+        source: (): string => "",
       },
       "barbar.css": {
-        source: () => ""
-      }
+        source: (): string => "",
+      },
     };
     const extensions = [".txt"];
-    const matches = [{ name: "foobar.txt", asset: { source: () => "" } }];
+    const matches = [
+      { name: "foobar.txt", asset: { source: (): string => "" } },
+    ];
 
     expect(JSON.stringify(getAssets(modules, extensions))).toBe(
       JSON.stringify(matches)
@@ -21,20 +23,20 @@ describe("Search assets", () => {
   it("returns matches if they have query", () => {
     const modules = {
       "foobar.txt?123": {
-        source: () => ""
+        source: (): string => "",
       },
       "barbar.css": {
-        source: () => ""
-      }
+        source: (): string => "",
+      },
     };
     const extensions = [".txt"];
     const matches = [
       {
         name: "foobar.txt?123",
         asset: {
-          source: () => ""
-        }
-      }
+          source: (): string => "",
+        },
+      },
     ];
 
     expect(JSON.stringify(getAssets(modules, extensions))).toBe(
@@ -47,9 +49,9 @@ describe("Search files", () => {
   let chunk: any;
   beforeEach(() => {
     chunk = {
-      mapModules: function(cb: any) {
+      mapModules: function (cb: any) {
         return Array.from(this.modules, cb);
-      }
+      },
     };
   });
 
@@ -58,7 +60,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a, 4)).toEqual(matches);
+    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
   });
 
   it("does not fail with missing modules", () => {
@@ -66,22 +68,22 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a, 4)).toEqual(matches);
+    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
   });
 
   it("returns matches based on extension with a customized getter", () => {
     chunk.modulesIterable = [
       {
-        resource: "foobar.txt"
+        resource: "foobar.txt",
       },
       {
-        resource: "barbar.css"
-      }
+        resource: "barbar.css",
+      },
     ];
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource, 4)).toEqual(
+    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
       matches
     );
   });
@@ -89,17 +91,17 @@ describe("Search files", () => {
   it("does not fail with missing modules when a getter fails", () => {
     chunk.modulesIterable = [
       {
-        resource: "foobar.txt"
+        resource: "foobar.txt",
       },
       {},
       {
-        resource: "barbar.css"
-      }
+        resource: "barbar.css",
+      },
     ];
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource, 4)).toEqual(
+    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
       matches
     );
   });
