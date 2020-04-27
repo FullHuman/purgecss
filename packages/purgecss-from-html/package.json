@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "parse5": "^6.0.0",
-    "parse5-htmlparser2-tree-adapter": "^5.1.1"
+    "parse5-htmlparser2-tree-adapter": "^6.0.0"
   },
   "devDependencies": {
     "@types/parse5": "^5.0.2",
