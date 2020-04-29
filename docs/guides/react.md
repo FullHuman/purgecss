@@ -47,7 +47,7 @@ Add the following code in **package.json**
 
 ```json
 "scripts": {
-  "postbuild": "purgecss --css build/static/css/*.css --content build/static/index.html build/static/js/*.js --output build/static/css"
+  "postbuild": "purgecss --css build/static/css/*.css --content build/index.html build/static/js/*.js --output build/static/css"
 },
 ```
 
