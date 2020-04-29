@@ -88,6 +88,8 @@ The options available in purgecss [Configuration](https://www.purgecss.com/confi
 
 With the webpack plugin, you can specify the content that should be analyzed by purgecss by providing an array of filenames. These can be html, pug, blade, ... files. You can also use a module like `glob` or `glob-all` to easily get a list of files.
 
+> You likely need to pass `{ noDir: true }` as an option to `glob.sync()` as `glob.sync` is matching a dir which the plugin can't operate on.
+
 ```js
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 const glob = require('glob')
