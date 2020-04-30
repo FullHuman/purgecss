@@ -4,6 +4,7 @@
   "description": "vue-cli plugin to add PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
+  "main": "index.js",
   "keywords": [
     "vue-cli",
     "vue-cli-3",
