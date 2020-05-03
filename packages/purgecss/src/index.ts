@@ -214,7 +214,7 @@ function isTagFound(
 }
 
 /**
- * Returns true if the node is  a pseudo class
+ * Returns true if the node is a pseudo class
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
  * @param node node
  */
