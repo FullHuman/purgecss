@@ -52,7 +52,7 @@ export function getAssets(
 export function files(
   chunk: any,
   extensions: string[],
-  getter: Function = (a: any) => a.resource
+  getter: Function
 ): any[] {
   const mods = [];
   for (const module of Array.from(chunk.modulesIterable || [])) {
