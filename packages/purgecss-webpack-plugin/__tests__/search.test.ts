@@ -48,11 +48,7 @@ describe("Search assets", () => {
 describe("Search files", () => {
   let chunk: any;
   beforeEach(() => {
-    chunk = {
-      mapModules: function (cb: any) {
-        return Array.from(this.modules, cb);
-      },
-    };
+    chunk = {};
   });
 
   it("returns matches based on extension", () => {
