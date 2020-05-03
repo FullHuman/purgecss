@@ -214,17 +214,31 @@ function isTagFound(
 }
 
 /**
+ * Returns true if the selector is  a pseudo class
+ * (e.g. :nth-child, :nth-of-type, :only-child, :not)
+ * @param selector selector
+ */
+function isPseudoSelector(selector: selectorParser.Node): boolean {
+  return selector.type === "pseudo" && selector.value.startsWith(":");
+}
+
+/**
  * Returns true if the selector is inside a pseudo class
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
  * @param selector selector
  */
 function isInPseudoClass(selector: selectorParser.Node): boolean {
-  return (
-    (selector.parent &&
-      selector.parent.type === "pseudo" &&
-      selector.parent.value.startsWith(":")) ||
-    false
-  );
+  if (isPseudoSelector(selector.parent as selectorParser.Node)) {
+    return true;
+  }
+  const potentialSelector = selector as selectorParser.Selector;
+  if (
+    potentialSelector.nodes.length === 2 &&
+    isPseudoSelector(potentialSelector.nodes[0])
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
