@@ -50,6 +50,7 @@ export function getAssets(
 }
 
 export function files(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chunk: any,
   extensions: string[],
   getter: Function
