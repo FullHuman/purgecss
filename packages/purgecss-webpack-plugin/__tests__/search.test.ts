@@ -1,4 +1,5 @@
 import { getAssets, files } from "../src/search";
+import { File } from "../src/types";
 
 describe("Search assets", () => {
   it("returns matches based on a pattern", () => {
@@ -45,8 +46,12 @@ describe("Search assets", () => {
   });
 });
 
+interface Chunk {
+  modulesIterable?: string[] | File[];
+}
+
 describe("Search files", () => {
-  let chunk: any;
+  let chunk: Chunk;
   beforeEach(() => {
     chunk = {};
   });
@@ -56,7 +61,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
+    expect(files(chunk, extensions, (a: string) => a)).toEqual(matches);
   });
 
   it("does not fail with missing modules", () => {
@@ -64,7 +69,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (a: any) => a)).toEqual(matches);
+    expect(files(chunk, extensions, (a: string) => a)).toEqual(matches);
   });
 
   it("returns matches based on extension with a customized getter", () => {
@@ -79,7 +84,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
+    expect(files(chunk, extensions, (file: File) => file.resource)).toEqual(
       matches
     );
   });
@@ -97,7 +102,7 @@ describe("Search files", () => {
     const extensions = [".txt"];
     const matches = ["foobar.txt"];
 
-    expect(files(chunk, extensions, (file: any) => file.resource)).toEqual(
+    expect(files(chunk, extensions, (file: File) => file.resource)).toEqual(
       matches
     );
   });

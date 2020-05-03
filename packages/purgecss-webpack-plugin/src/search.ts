@@ -53,7 +53,7 @@ export function files(
   chunk: any,
   extensions: string[],
   getter: Function
-): any[] {
+): string[] {
   const mods = [];
   for (const module of Array.from(chunk.modulesIterable || [])) {
     const file = getter(module);

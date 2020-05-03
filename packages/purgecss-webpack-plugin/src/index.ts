@@ -2,7 +2,7 @@ import * as fs from "fs";
 import PurgeCSS, { defaultOptions } from "purgecss";
 import { ConcatSource } from "webpack-sources";
 import * as search from "./search";
-import { UserDefinedOptions, PurgedStats, PurgeAsset } from "./types";
+import { File, UserDefinedOptions, PurgedStats, PurgeAsset } from "./types";
 
 import { Compiler, Stats, compilation as compilationType } from "webpack";
 
@@ -56,7 +56,6 @@ export default class PurgeCSSPlugin {
     });
   }
 
-
   initializePlugin(compilation: Compilation): void {
     compilation.hooks.additionalAssets.tapPromise(pluginName, () => {
       const entryPaths =
@@ -67,7 +66,7 @@ export default class PurgeCSSPlugin {
       entryPaths.forEach((p) => {
         if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
       });
-      
+
       return this.runPluginHook(compilation, entryPaths);
     });
   }
@@ -90,7 +89,7 @@ export default class PurgeCSSPlugin {
             search.files(
               chunk,
               this.options.moduleExtensions || [],
-              (file: any) => file.resource
+              (file: File) => file.resource
             )
           )
           .filter((v) => !styleExtensions.some((ext) => v.endsWith(ext)));

@@ -44,3 +44,7 @@ export interface PurgeAsset {
   };
   name: string;
 }
+
+export interface File {
+  resource?: string;
+}
