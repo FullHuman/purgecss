@@ -223,19 +223,16 @@ function isPseudoSelector(selector: selectorParser.Node): boolean {
 }
 
 /**
- * Returns true if the selector is inside a pseudo class
+ * Returns true if the node is inside a pseudo class
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
- * @param selector selector
+ * @param node selector
  */
-function isInPseudoClass(selector: selectorParser.Node): boolean {
-  if (isPseudoSelector(selector.parent as selectorParser.Node)) {
+function isInPseudoClass(node: selectorParser.Node): boolean {
+  if (isPseudoSelector(node.parent as selectorParser.Node)) {
     return true;
   }
-  const potentialSelector = selector as selectorParser.Selector;
-  if (
-    potentialSelector.nodes.length === 2 &&
-    isPseudoSelector(potentialSelector.nodes[0])
-  ) {
+  const selector = node as selectorParser.Selector;
+  if (selector.nodes.length === 2 && isPseudoSelector(selector.nodes[0])) {
     return true;
   }
   return false;
