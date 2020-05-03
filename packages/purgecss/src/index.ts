@@ -407,7 +407,7 @@ class PurgeCSS {
       return;
     }
 
-    // exit if the previous anotation is a ignore next line comment
+    // exit if the previous annotation is a ignore next line comment
     const annotation = node.prev();
     if (
       annotation &&
