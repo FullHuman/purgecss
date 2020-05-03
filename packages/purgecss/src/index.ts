@@ -214,12 +214,12 @@ function isTagFound(
 }
 
 /**
- * Returns true if the selector is  a pseudo class
+ * Returns true if the node is  a pseudo class
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
- * @param selector selector
+ * @param node node
  */
-function isPseudoSelector(selector: selectorParser.Node): boolean {
-  return selector.type === "pseudo" && selector.value.startsWith(":");
+function isPseudoSelector(node: selectorParser.Node): boolean {
+  return node.type === "pseudo" && node.value.startsWith(":");
 }
 
 /**
