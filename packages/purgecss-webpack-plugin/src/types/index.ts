@@ -1,11 +1,11 @@
-export interface RawContent {
+export interface RawContent<T = string> {
   extension: string;
-  raw: string;
+  raw: T;
 }
 export interface RawCSS {
   raw: string;
 }
-type ExtractorFunction = (content: string) => string[];
+type ExtractorFunction<T = string> = (content: T) => string[];
 export interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;

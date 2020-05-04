@@ -56,7 +56,6 @@ export default class PurgeCSSPlugin {
     });
   }
 
-
   initializePlugin(compilation: Compilation): void {
     compilation.hooks.additionalAssets.tapPromise(pluginName, () => {
       const entryPaths =
@@ -67,7 +66,7 @@ export default class PurgeCSSPlugin {
       entryPaths.forEach((p) => {
         if (!fs.existsSync(p)) throw new Error(`Path ${p} does not exist.`);
       });
-      
+
       return this.runPluginHook(compilation, entryPaths);
     });
   }
