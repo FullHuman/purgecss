@@ -29,7 +29,7 @@ class VariablesStructure {
     const { prop } = declaration;
     const node = this.nodes.get(prop);
     for (const variableMatch of matchedVariables) {
-      // catpuring group containing the variable is in index 1
+      // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -41,7 +41,7 @@ class VariablesStructure {
 
   addVariableUsageInProperties(matchedVariables: RegExpMatchArray[]): void {
     for (const variableMatch of matchedVariables) {
-      // catpuring group containing the variable is in index 1
+      // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
       this.usedVariables.add(variableName);
     }

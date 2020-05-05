@@ -407,7 +407,7 @@ class PurgeCSS {
       return;
     }
 
-    // exit if the previous anotation is a ignore next line comment
+    // exit if the previous annotation is a ignore next line comment
     const annotation = node.prev();
     if (
       annotation &&
@@ -553,7 +553,7 @@ class PurgeCSS {
 
   /**
    * Remove unused css
-   * @param options PurgeCSS options
+   * @param userOptions PurgeCSS options
    */
   public async purge(
     userOptions: UserDefinedOptions | string | undefined
@@ -620,7 +620,7 @@ class PurgeCSS {
 
   /**
    * Determine if the selector should be kept, based on the selectors found in the files
-   * @param selectorsInContent set of css selectors found in the content files or string
+   * @param selector set of css selectors found in the content files or string
    * @param selectorsFromExtractor selectors in the css rule
    */
   private shouldKeepSelector(
