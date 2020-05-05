@@ -32,6 +32,7 @@ class VariablesStructure {
       // catpuring group containing the variable is in index 1
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const usedVariableNode = this.nodes.get(variableName)!;
         node?.nodes.push(usedVariableNode);
       }

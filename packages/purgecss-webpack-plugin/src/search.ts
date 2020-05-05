@@ -50,10 +50,11 @@ export function getAssets(
 }
 
 export function files(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chunk: any,
   extensions: string[],
-  getter: Function = (a: any) => a.resource
-): any[] {
+  getter: Function
+): string[] {
   const mods = [];
   for (const module of Array.from(chunk.modulesIterable || [])) {
     const file = getter(module);
