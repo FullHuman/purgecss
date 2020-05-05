@@ -232,7 +232,7 @@ function isInPseudoClass(node: selectorParser.Node): boolean {
     return true;
   }
   const selector = node as selectorParser.Selector;
-  if (selector.nodes.length === 2 && isPseudoSelector(selector.nodes[0])) {
+  if (selector.nodes.length > 1 && isPseudoSelector(selector.nodes[0])) {
     return true;
   }
   return false;
