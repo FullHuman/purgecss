@@ -18,6 +18,7 @@ module.exports = {
     'wp-caption-text',
     'screen-reader-text',
     'comment-list',
+    'wp-social-link',
   ],
   whitelistPatterns: [
     /^search(-.*)?$/,
@@ -34,5 +35,10 @@ module.exports = {
     /^tax-(.*)?$/,
     /^term-(.*)?$/,
     /^(.*)?-?paged(-.*)?$/,
+    /^wp-block-(.*)?$/,
+    /^has-(.*)?$/,
+    /^is-(.*)?$/,
+    /^wp-embed-(.*)?$/,
+    /^blocks-gallery-(.*)?$/,
   ],
 };
