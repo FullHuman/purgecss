@@ -87,3 +87,41 @@ describe("whitelistPatternsChildren", () => {
     expect(purgedCSS.includes(".btn__green")).toBe(false);
   });
 });
+
+describe("whitelistPatternsGreedy", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        `${root}whitelist_patterns_greedy/whitelist_patterns_greedy.html`,
+      ],
+      css: [`${root}whitelist_patterns_greedy/whitelist_patterns_greedy.css`],
+      whitelistPatternsGreedy: [/data-v-.*/],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("finds card", () => {
+    expect(purgedCSS.includes(".card")).toBe(true);
+  });
+
+  it("finds card with data-v attribute", () => {
+    expect(purgedCSS.includes(".card[data-v-test]")).toBe(true);
+  });
+
+  it("excludes card--large", () => {
+    expect(purgedCSS.includes(".card.card--large")).toBe(false);
+  });
+
+  it("finds card--large with data-v attribute", () => {
+    expect(purgedCSS.includes(".card[data-v-test].card--large")).toBe(true);
+  });
+
+  it("excludes card-content", () => {
+    expect(purgedCSS.includes(".card .card-content")).toBe(false);
+  });
+
+  it("finds card-content inside card with data-v attribute", () => {
+    expect(purgedCSS.includes(".card[data-v-test] .card-content")).toBe(true);
+  });
+});

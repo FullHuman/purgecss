@@ -10,7 +10,7 @@ meta:
 
 # Whitelisting
 
-You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the PurgeCSS options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, or directly in your CSS with a special comment.
+You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the PurgeCSS options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, `whitelistPatternsGreedy`, or directly in your CSS with a special comment.
 
 ## Specific selectors
 
@@ -28,18 +28,19 @@ In the example, the selectors `.random`, `#yep`, `button` will be left in the fi
 
 ## Patterns
 
-You can whitelist selectors based on a regular expression with `whitelistPatterns` and `whitelistPatternsChildren`.
+You can whitelist selectors based on a regular expression with `whitelistPatterns`, `whitelistPatternsChildren`, and `whitelistPatternsGreedy`.
 
 ```javascript
 const purgecss = new Purgecss({
     content: [], // content
     css: [], // css
     whitelistPatterns: [/red$/],
-    whitelistPatternsChildren: [/blue$/]
+    whitelistPatternsChildren: [/blue$/],
+    whitelistPatternsGreedy: [/yellow$/]
 })
 ```
 
-In the example, selectors ending with `red` such as `.bg-red`, and children of selectors ending with `blue` such as `blue p` or `.bg-blue .child-of-bg`, will be left in the final CSS.
+In the example, selectors ending with `red` such as `.bg-red`, selectors ending with `blue` as well as their children such as `blue p` or `.bg-blue .child-of-bg`, and selectors that have any part ending with `yellow` such as `button.bg-yellow.other-class`, will be left in the final CSS.
 
 Patterns are regular expressions. You can use [regexr](https://regexr.com) to verify the regular expressions correspond to what you are looking for.
 

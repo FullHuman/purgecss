@@ -121,7 +121,7 @@ new PurgecssPlugin({
 })
 ```
 
-* #### whitelist, whitelistPatterns and whitelistPatternsChildren
+* #### whitelist, whitelistPatterns, whitelistPatternsChildren, and whitelistPatternsGreedy
 
 Similar as for the `paths` option, you can also define functions for the following options:
 
@@ -141,11 +141,17 @@ function collectWhitelistPatternsChildren() {
     return [/^whitelisted-/];
 }
 
+function collectWhitelistPatternsGreedy() {
+    // do something to collect the whitelist
+    return [/^whitelisted-/];
+}
+
 // In the webpack configuration
 new PurgecssPlugin({
   whitelist: collectWhitelist,
   whitelistPatterns: collectWhitelistPatterns,
-  whitelistPatternsChildren: collectWhitelistPatternsChildren
+  whitelistPatternsChildren: collectWhitelistPatternsChildren,
+  whitelistPatternsGreedy: collectWhitelistPatternsGreedy
 })
 ```
 

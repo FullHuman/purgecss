@@ -51,6 +51,7 @@ interface UserDefinedOptions {
   whitelist?: string[]
   whitelistPatterns?: Array<RegExp>
   whitelistPatternsChildren?: Array<RegExp>
+  whitelistPatternsGreedy?: Array<RegExp>
 }
 
 interface RawContent {
@@ -168,7 +169,7 @@ You can learn more about extractors [here](extractors.md).
 
 - **fontFace \(default: false\)**
 
-If there are any unused @font-face rules in your css, you can remove them by setting the `fontFace` option to `true`
+If there are any unused @font-face rules in your css, you can remove them by setting the `fontFace` option to `true`.
 
 ```js
 await new PurgeCSS().purge({
@@ -192,7 +193,7 @@ await new PurgeCSS().purge({
 
 - **variables \(default: false\)**
 
-If your are using Custom Properties (CSS variables), or a library using them such as Bootstrap, you can remove unused CSS variables by setting the `variables` option to `true`.
+If you are using Custom Properties (CSS variables), or a library using them such as Bootstrap, you can remove unused CSS variables by setting the `variables` option to `true`.
 
 ```js
 await new PurgeCSS().purge({
@@ -204,8 +205,7 @@ await new PurgeCSS().purge({
 
 - **rejected \(default: false\)**
 
-It can sometimes be more practical to scan through the removed list to see if there's anything obviously wrong.
-If you want to do it, use the `rejected` option.
+It can sometimes be more practical to scan through the removed list to see if there's anything obviously wrong. If you want to do it, use the `rejected` option.
 
 ```js
 await new PurgeCSS().purge({
@@ -217,7 +217,7 @@ await new PurgeCSS().purge({
 
 - **whitelist**
 
-You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the options `whitelist` and `whitelistPatterns`.
+You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, and `whitelistPatternsGreedy`.
 
 ```js
 const purgecss = await new PurgeCSS().purge({
@@ -227,7 +227,7 @@ const purgecss = await new PurgeCSS().purge({
 })
 ```
 
-In the example, the selectors `.random`, `#yep`, `button` will be left in the final CSS.
+In this example, the selectors `.random`, `#yep`, `button` will be left in the final CSS.
 
 - **whitelistPatterns**
 
@@ -241,11 +241,11 @@ const purgecss = await new PurgeCSS().purge({
 })
 ```
 
-In the example, selectors ending with `red` such as `.bg-red` will be left in the final CSS.
+In this example, selectors ending with `red` such as `.bg-red` will be left in the final CSS.
 
 - **whitelistPatternsChildren**
 
-You can whitelist selectors based on a regular expression with `whitelistPatternsChildren`. Contrary to `whitelistPatterns`, it will also whitelist children of the selectors.
+You can whitelist selectors and their children based on a regular expression with `whitelistPatternsChildren`.
 
 ```js
 const purgecss = await new PurgeCSS().purge({
@@ -255,5 +255,18 @@ const purgecss = await new PurgeCSS().purge({
 })
 ```
 
-In the example, selectors such as `red p` or `.bg-red .child-of-bg` will be left in the final CSS.
+In this example, selectors such as `.bg-red .child-of-bg` will be left in the final CSS, even if `child-of-bg` is not found.
 
+- **whitelistPatternsGreedy**
+
+Finally, you can whitelist whole selectors if any part of that selector matches a regular expression with `whitelistPatternsGreedy`.
+
+```js
+const purgecss = await new PurgeCSS().purge({
+  content: [], // content
+  css: [], // css
+  whitelistPatternsGreedy: [/red$/]
+})
+```
+
+In this example, selectors such as `button.bg-red.nonexistent-class` will be left in the final CSS, even if `button` and `nonexistent-class` are not found.

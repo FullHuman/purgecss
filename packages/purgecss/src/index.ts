@@ -552,6 +552,19 @@ class PurgeCSS {
   }
 
   /**
+   * Check if the selector is whitelisted by the whitelistPatternsGreedy option
+   * @param selector selector
+   */
+  private isSelectorWhitelistedGreedy(selector: string): boolean {
+    return (
+      this.options.whitelistPatternsGreedy &&
+      this.options.whitelistPatternsGreedy.some((pattern: RegExp) =>
+        pattern.test(selector)
+      )
+    );
+  }
+
+  /**
    * Remove unused css
    * @param userOptions PurgeCSS options
    */
@@ -619,6 +632,15 @@ class PurgeCSS {
   }
 
   /**
+   * Transform a selector node into a string
+   */
+  private getSelectorValue(selector: selectorParser.Node): string | undefined {
+    return (
+      (selector.type === "attribute" && selector.attribute) || selector.value
+    );
+  }
+
+  /**
    * Determine if the selector should be kept, based on the selectors found in the files
    * @param selector set of css selectors found in the content files or string
    * @param selectorsFromExtractor selectors in the css rule
@@ -630,58 +652,72 @@ class PurgeCSS {
     // ignore the selector if it is inside a pseudo class
     if (isInPseudoClass(selector)) return true;
 
+    // if there is any greedy whitelist pattern, run all the selector parts through them
+    // if there is any match, return true
+    if (this.options.whitelistPatternsGreedy?.length) {
+      const selectorParts = selector.nodes.map(this.getSelectorValue);
+      if (
+        selectorParts.some(
+          (selectorPart) =>
+            selectorPart && this.isSelectorWhitelistedGreedy(selectorPart)
+        )
+      ) {
+        return true;
+      }
+    }
+
     let isPresent = false;
 
-    for (const nodeSelector of selector.nodes) {
-      const val =
-        (nodeSelector.type === "attribute" && nodeSelector.attribute) ||
-        nodeSelector.value;
+    for (const selectorNode of selector.nodes) {
+      const selectorValue = this.getSelectorValue(selectorNode);
 
       // if the selector is whitelisted with children
       // returns true to keep all children selectors
-      if (val && this.isSelectorWhitelistedChildren(val)) {
+      if (selectorValue && this.isSelectorWhitelistedChildren(selectorValue)) {
         return true;
       }
 
       // The selector is found in the internal and user-defined whitelist
       if (
-        val &&
-        (CSS_WHITELIST.includes(val) || this.isSelectorWhitelisted(val))
+        selectorValue &&
+        (CSS_WHITELIST.includes(selectorValue) ||
+          this.isSelectorWhitelisted(selectorValue))
       ) {
         isPresent = true;
         continue;
       }
 
-      switch (nodeSelector.type) {
+      switch (selectorNode.type) {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
           // idem for `checked`, `selected`, `open`
           isPresent = ["value", "checked", "selected", "open"].includes(
-            nodeSelector.attribute
+            selectorNode.attribute
           )
             ? true
-            : isAttributeFound(nodeSelector, selectorsFromExtractor);
+            : isAttributeFound(selectorNode, selectorsFromExtractor);
           break;
         case "class":
-          isPresent = isClassFound(nodeSelector, selectorsFromExtractor);
+          isPresent = isClassFound(selectorNode, selectorsFromExtractor);
           break;
         case "id":
-          isPresent = isIdentifierFound(nodeSelector, selectorsFromExtractor);
+          isPresent = isIdentifierFound(selectorNode, selectorsFromExtractor);
           break;
         case "tag":
-          isPresent = isTagFound(nodeSelector, selectorsFromExtractor);
+          isPresent = isTagFound(selectorNode, selectorsFromExtractor);
           break;
         default:
-          break;
+          continue;
       }
 
-      // selector is not in whitelist children or in whitelist
-      // and it has not been found as an attribute/class/identifier/tag
+      // selector is not whitelisted
+      // and it has not been found as an attribute/class/id/tag
       if (!isPresent) {
         return false;
       }
     }
+
     return isPresent;
   }
 
