@@ -9,9 +9,9 @@ export interface AtRules {
   keyframes: postcss.AtRule[];
 }
 
-export interface RawContent {
+export interface RawContent<T = string> {
   extension: string;
-  raw: string;
+  raw: T;
 }
 
 export interface RawCSS {
@@ -31,7 +31,7 @@ export interface ExtractorResultDetailed {
 
 export type ExtractorResult = ExtractorResultDetailed | string[];
 
-export type ExtractorFunction = (content: string) => ExtractorResult;
+export type ExtractorFunction<T = string> = (content: T) => ExtractorResult;
 
 export interface Extractors {
   extensions: string[];
