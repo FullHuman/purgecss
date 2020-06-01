@@ -26,7 +26,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "postcss": "7.0.30",
+    "postcss": "7.0.31",
     "purgecss": "^2.2.0"
   }
 }
