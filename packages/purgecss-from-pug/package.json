@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "pug-lexer": "^5.0.0",
-    "pug-parser": "^5.0.1"
+    "pug-parser": "^6.0.0"
   }
 }
