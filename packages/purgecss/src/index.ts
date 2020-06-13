@@ -340,7 +340,7 @@ class PurgeCSS {
         await asyncFs.access(globfile, fs.constants.F_OK);
         filesNames.push(globfile);
       } catch (err) {
-        filesNames = glob.sync(globfile);
+        filesNames = glob.sync(globfile, { nodir: true });
       }
       for (const file of filesNames) {
         const content = await asyncFs.readFile(file, "utf-8");
@@ -483,7 +483,7 @@ class PurgeCSS {
     const processedOptions: Array<string | RawCSS> = [];
     for (const option of cssOptions) {
       if (typeof option === "string") {
-        processedOptions.push(...glob.sync(option));
+        processedOptions.push(...glob.sync(option, { nodir: true }));
       } else {
         processedOptions.push(option);
       }
