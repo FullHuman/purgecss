@@ -42,7 +42,8 @@
     "docs:deploy": "firebase deploy",
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "jest"
+    "test": "jest",
+    "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "husky": {
     "hooks": {
