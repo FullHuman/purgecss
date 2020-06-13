@@ -17,10 +17,6 @@ When you are building a website, chances are that you are using a css framework 
 
 This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your css files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your css, resulting in smaller css files.
 
-## Version 1
-
-If you are looking for [PurgeCSS 1](https://github.com/FullHuman/purgecss/tree/v1), the documentation is [here](https://v1.purgecss.com)
-
 ## Documentation
 
 You can find the PurgeCSS documentation on [this website](https://purgecss.com).
