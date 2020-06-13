@@ -42,6 +42,7 @@ module.exports = {
             whitelist: () => ['whitelisted'],
             whitelistPatterns: () => [/^whitelistedPat/],
             whitelistPatternsChildren: () => [/^whitelistedPatternChildren/],
+            whitelistPatternsGreedy: () => [/^whitelistedPatternGreedy/],
             extractors: [
                 {
                     extractor: customExtractor,

@@ -55,6 +55,7 @@ export interface UserDefinedOptions {
   whitelist?: string[];
   whitelistPatterns?: Array<RegExp>;
   whitelistPatternsChildren?: Array<RegExp>;
+  whitelistPatternsGreedy?: Array<RegExp>;
 }
 
 export interface Options {
@@ -72,6 +73,7 @@ export interface Options {
   whitelist: string[];
   whitelistPatterns: Array<RegExp>;
   whitelistPatternsChildren: Array<RegExp>;
+  whitelistPatternsGreedy: Array<RegExp>;
 }
 
 export interface ResultPurge {

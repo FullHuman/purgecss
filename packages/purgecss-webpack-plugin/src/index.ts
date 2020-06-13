@@ -116,6 +116,9 @@ export default class PurgeCSSPlugin {
         if (typeof options.whitelistPatternsChildren === "function") {
           options.whitelistPatternsChildren = options.whitelistPatternsChildren();
         }
+        if (typeof options.whitelistPatternsGreedy === "function") {
+          options.whitelistPatternsGreedy = options.whitelistPatternsGreedy();
+        }
 
         const purgecss = await new PurgeCSS().purge({
           content: options.content,
@@ -130,6 +133,7 @@ export default class PurgeCSSPlugin {
           whitelist: options.whitelist,
           whitelistPatterns: options.whitelistPatterns,
           whitelistPatternsChildren: options.whitelistPatternsChildren,
+          whitelistPatternsGreedy: options.whitelistPatternsGreedy,
         });
         const purged = purgecss[0];
 

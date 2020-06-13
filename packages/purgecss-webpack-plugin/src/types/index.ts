@@ -31,6 +31,7 @@ export interface UserDefinedOptions {
   whitelist?: string[] | WhitelistFunction;
   whitelistPatterns?: Array<RegExp> | WhitelistPatternsFunction;
   whitelistPatternsChildren?: Array<RegExp> | WhitelistPatternsFunction;
+  whitelistPatternsGreedy?: Array<RegExp> | WhitelistPatternsFunction;
   only?: string[];
 }
 

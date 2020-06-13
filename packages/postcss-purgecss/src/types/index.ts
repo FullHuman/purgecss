@@ -26,4 +26,5 @@ export interface UserDefinedOptions {
   whitelist?: string[];
   whitelistPatterns?: Array<RegExp>;
   whitelistPatternsChildren?: Array<RegExp>;
+  whitelistPatternsGreedy?: Array<RegExp>;
 }

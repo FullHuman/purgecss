@@ -15,4 +15,5 @@ export const defaultOptions: Options = {
   whitelist: [],
   whitelistPatterns: [],
   whitelistPatternsChildren: [],
+  whitelistPatternsGreedy: [],
 };
