@@ -10,6 +10,10 @@ meta:
 
 # Webpack
 
+:::tip
+You can use either the Webpack plugin directly in your webpack configuration or use the [PostCSS plugin](postcss.md) when you are using the Webpack postCSS loader.
+:::
+
 ## Installation
 
 ```sh
