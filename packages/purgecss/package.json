@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Remove unused css selectors",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",

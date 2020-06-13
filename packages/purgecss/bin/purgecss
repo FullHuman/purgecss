@@ -28,11 +28,9 @@ program
 
 program.parse(process.argv);
 
-const stdInCSS = fs.readFileSync(0).toString();
-
 // config file is not specified or the content and css are not,
 // PurgeCSS will not run
-if (!program.config && !(program.content && (program.css || stdInCSS))) {
+if (!program.config && !(program.content && program.css)) {
   program.help();
 }
 
@@ -51,11 +49,11 @@ if (!program.config && !(program.content && (program.css || stdInCSS))) {
   if (program.variables) options.variables = program.variables;
   if (program.whitelist) options.whitelist = program.whitelist;
 
-  if (!options.css) {
-    options.css = [{
-      raw: stdInCSS
-    }]
-  }
+  // if (!options.css) {
+  //   options.css = [{
+  //     raw: stdInCSS
+  //   }]
+  // }
 
   const purged = await new PurgeCSS().purge(options);
 
