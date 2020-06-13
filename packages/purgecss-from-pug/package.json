@@ -24,7 +24,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "devDependencies": {
-    "pug-lexer": "^4.1.0",
+    "pug-lexer": "^5.0.0",
     "pug-parser": "^5.0.1"
   }
 }
