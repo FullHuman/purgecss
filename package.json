@@ -13,7 +13,7 @@
     "vue-cli-plugin-purgecss"
   ],
   "devDependencies": {
-    "@types/jest": "^25.2.1",
+    "@types/jest": "^26.0.3",
     "@types/node": "^14.0.5",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
