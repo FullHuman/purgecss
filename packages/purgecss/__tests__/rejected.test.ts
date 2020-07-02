@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("rejected", () => {
   it("does not return the rejected selectors if rejected set to false", async (done) => {
     expect.assertions(1);
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}simple/simple.js`],
-      css: [`${root}simple/simple.css`],
+      content: [`${ROOT_TEST_EXAMPLES}rejected/simple.js`],
+      css: [`${ROOT_TEST_EXAMPLES}rejected/simple.css`],
     });
     expect(resultsPurge[0].rejected).toBe(undefined);
     done();
@@ -16,8 +16,8 @@ describe("rejected", () => {
   it("returns an empty array if no selectors are rejected", async (done) => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
-      content: [`${root}simple/simple.js`],
-      css: [`${root}simple/simple.css`],
+      content: [`${ROOT_TEST_EXAMPLES}rejected/simple.js`],
+      css: [`${ROOT_TEST_EXAMPLES}rejected/simple.css`],
       rejected: true,
     });
     expect(purgecssResult[0].rejected).toEqual([]);
@@ -27,8 +27,8 @@ describe("rejected", () => {
   it("returns the list of rejected selectors", async (done) => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
-      content: [`${root}remove_unused/remove_unused.js`],
-      css: [`${root}remove_unused/remove_unused.css`],
+      content: [`${ROOT_TEST_EXAMPLES}others/remove_unused.js`],
+      css: [`${ROOT_TEST_EXAMPLES}others/remove_unused.css`],
       rejected: true,
     });
     expect(purgecssResult[0].rejected).toEqual([
@@ -41,8 +41,8 @@ describe("rejected", () => {
   it("returns the list of rejected selectors with chaining rules", async (done) => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
-      content: [`${root}chaining_rules/index.html`],
-      css: [`${root}chaining_rules/index.css`],
+      content: [`${ROOT_TEST_EXAMPLES}chaining-rules/index.html`],
+      css: [`${ROOT_TEST_EXAMPLES}chaining-rules/index.css`],
       rejected: true,
     });
     expect(purgecssResult[0].rejected).toEqual([

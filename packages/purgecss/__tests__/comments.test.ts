@@ -1,13 +1,12 @@
 import PurgeCSS from "./../src/index";
-
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES, findInCSS } from "./utils";
 
 describe("ignore comment", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}ignore_comment/ignore_comment.html`],
-      css: [`${root}ignore_comment/ignore_comment.css`],
+      content: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment.html`],
+      css: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -27,16 +26,14 @@ describe("ignore comment range", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}ignore_comment_range/index.html`],
-      css: [`${root}ignore_comment_range/index.css`],
+      content: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment_range.html`],
+      css: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment_range.css`],
     });
     purgedCSS = resultsPurge[0].css;
   });
 
   it("ignores h1, h3, h5, h6", () => {
-    ["h1", "h3", "h5", "h6"].forEach((selector) => {
-      expect(purgedCSS.includes(selector)).toBe(true);
-    });
+    findInCSS(expect, ["h1", "h3", "h5", "h6"], purgedCSS);
   });
 
   it("removes h4", () => {

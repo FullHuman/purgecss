@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe(":not pseudo class", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}not/not.html`],
-      css: [`${root}not/not.css`],
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/not.html`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/not.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -25,8 +25,8 @@ describe("pseudo selectors", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}pseudo_selector/pseudo_selector.html`],
-      css: [`${root}pseudo_selector/pseudo_selector.css`],
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_selector.html`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_selector.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -68,8 +68,8 @@ describe("nth-child", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}nth_child/nth_child.html`],
-      css: [`${root}nth_child/nth_child.css`],
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/nth_child.html`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/nth_child.css`],
     });
     purgedCSS = resultsPurge[0].css;
     done();
@@ -88,8 +88,8 @@ describe("nth-child", () => {
 describe("pseudo classes", () => {
   it("finds div:before", async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}pseudo_class/pseudo_class.js`],
-      css: [`${root}pseudo_class/pseudo_class.css`],
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_class.js`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_class.css`],
     });
     const purgedCSS = resultsPurge[0].css;
     expect(purgedCSS.includes("div:before")).toBe(true);
@@ -97,8 +97,8 @@ describe("pseudo classes", () => {
 
   it("removes row:after", async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}pseudo_class/pseudo_class.js`],
-      css: [`${root}pseudo_class/pseudo_class.css`],
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_class.js`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_class.css`],
     });
     const purgedCSS = resultsPurge[0].css;
     expect(purgedCSS.includes("row:after")).toBe(false);

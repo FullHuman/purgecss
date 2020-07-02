@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("keyframes", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}keyframes/keyframes.html`],
-      css: [`${root}keyframes/keyframes.css`],
+      content: [`${ROOT_TEST_EXAMPLES}keyframes/keyframes.html`],
+      css: [`${ROOT_TEST_EXAMPLES}keyframes/keyframes.css`],
       keyframes: true,
     });
     purgedCSS = resultsPurge[0].css;
@@ -28,8 +28,8 @@ describe("purge unused keyframe animations", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}keyframes/index.html`],
-      css: [`${root}keyframes/index.css`],
+      content: [`${ROOT_TEST_EXAMPLES}keyframes/index.html`],
+      css: [`${ROOT_TEST_EXAMPLES}keyframes/index.css`],
       keyframes: true,
     });
     purgedCSS = resultsPurge[0].css;
@@ -46,8 +46,8 @@ describe("do not purge keyframes if option set to false", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}keyframes/index.html`],
-      css: [`${root}keyframes/index.css`],
+      content: [`${ROOT_TEST_EXAMPLES}keyframes/index.html`],
+      css: [`${ROOT_TEST_EXAMPLES}keyframes/index.css`],
       keyframes: false,
     });
     purgedCSS = resultsPurge[0].css;

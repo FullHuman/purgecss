@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purge unused font-face", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultPurge = await new PurgeCSS().purge({
-      content: [`${root}font_face/font_face.html`],
-      css: [`${root}font_face/font_face.css`],
+      content: [`${ROOT_TEST_EXAMPLES}font-faces/font_face.html`],
+      css: [`${ROOT_TEST_EXAMPLES}font-faces/font_face.css`],
       fontFace: true,
     });
     purgedCSS = resultPurge[0].css;

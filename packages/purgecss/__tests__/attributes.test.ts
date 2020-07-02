@@ -1,17 +1,16 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("attributes", () => {
   let purgedCSS: string;
 
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}attribute_selector/attribute_selector.html`],
-      css: [`${root}attribute_selector/attribute_selector.css`],
+      content: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.html`],
+      css: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.css`],
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
 
   it("always keep attribute when attribute is 'value'", () => {

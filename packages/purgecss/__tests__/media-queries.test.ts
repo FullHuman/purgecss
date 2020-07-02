@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("media queries", () => {
   let purgecssResult: string;
   beforeAll(async (done) => {
     const purgecss = await new PurgeCSS().purge({
-      content: [`${root}media_queries/media_queries.html`],
-      css: [`${root}media_queries/media_queries.css`],
+      content: [`${ROOT_TEST_EXAMPLES}media-queries/media_queries.html`],
+      css: [`${ROOT_TEST_EXAMPLES}media-queries/media_queries.css`],
     });
     purgecssResult = purgecss[0].css;
     done();

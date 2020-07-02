@@ -1,3 +1,0 @@
-'testFoo'
-
-'camelCase'

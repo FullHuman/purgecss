@@ -1,13 +1,13 @@
 import PurgeCSS from "./../src/index";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("delimited", () => {
   let purgedCSS: string;
   beforeAll(async (done) => {
     const resultPurge = await new PurgeCSS().purge({
-      content: [`${root}delimited/delimited.html`],
-      css: [`${root}delimited/delimited.css`],
+      content: [`${ROOT_TEST_EXAMPLES}delimited/delimited.html`],
+      css: [`${ROOT_TEST_EXAMPLES}delimited/delimited.css`],
     });
     purgedCSS = resultPurge[0].css;
     done();

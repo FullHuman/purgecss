@@ -22,6 +22,6 @@ button {
   background-color: red;
 }
 
-.random[data-v-test] {
+[data-v-test] {
   color: green;
 }

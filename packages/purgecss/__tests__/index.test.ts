@@ -1,7 +1,7 @@
 import PurgeCSS from "./../src/index";
 import { ExtractorResult } from "../src/types";
 
-const root = "./packages/purgecss/__tests__/test_examples/";
+import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purgecss with config file", () => {
   it("initialize without error with a config file specified", () => {
@@ -26,8 +26,8 @@ describe("filters out unused selectors", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}remove_unused/remove_unused.js`],
-      css: [`${root}remove_unused/remove_unused.css`],
+      content: [`${ROOT_TEST_EXAMPLES}others/remove_unused.js`],
+      css: [`${ROOT_TEST_EXAMPLES}others/remove_unused.css`],
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -51,8 +51,8 @@ describe("special characters, with custom Extractor", () => {
 
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${root}special_characters/special_characters.js`],
-      css: [`${root}special_characters/special_characters.css`],
+      content: [`${ROOT_TEST_EXAMPLES}others/special_characters.js`],
+      css: [`${ROOT_TEST_EXAMPLES}others/special_characters.css`],
       extractors: [
         {
           extractor: CustomExtractor,
