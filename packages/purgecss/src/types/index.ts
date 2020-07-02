@@ -40,6 +40,18 @@ export interface Extractors {
 
 export type IgnoreType = "end" | "start" | "next";
 
+export type StringRegExpArray = Array<RegExp | string>;
+
+export type ComplexSafelist = {
+  standard?: StringRegExpArray;
+  deep?: RegExp[];
+  greedy?: RegExp[];
+  variables?: StringRegExpArray;
+  keyframes?: StringRegExpArray;
+};
+
+export type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
+
 export interface UserDefinedOptions {
   content: Array<string | RawContent>;
   css: Array<string | RawCSS>;
@@ -52,10 +64,7 @@ export interface UserDefinedOptions {
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
-  whitelist?: string[];
-  whitelistPatterns?: Array<RegExp>;
-  whitelistPatternsChildren?: Array<RegExp>;
-  whitelistPatternsGreedy?: Array<RegExp>;
+  safelist?: UserDefinedSafelist;
 }
 
 export interface Options {
@@ -70,10 +79,7 @@ export interface Options {
   stdin: boolean;
   stdout: boolean;
   variables: boolean;
-  whitelist: string[];
-  whitelistPatterns: Array<RegExp>;
-  whitelistPatternsChildren: Array<RegExp>;
-  whitelistPatternsGreedy: Array<RegExp>;
+  safelist: Required<ComplexSafelist>;
 }
 
 export interface ResultPurge {

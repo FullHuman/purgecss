@@ -1,4 +1,4 @@
-export const CSS_WHITELIST = [
+export const CSS_SAFELIST = [
   "*",
   "::-webkit-scrollbar",
   "::selection",

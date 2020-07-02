@@ -1,5 +1,9 @@
 import postcss from "postcss";
-import PurgeCSS, { defaultOptions, mergeExtractorSelectors } from "purgecss";
+import PurgeCSS, {
+  defaultOptions,
+  mergeExtractorSelectors,
+  standardizeSafelist,
+} from "purgecss";
 
 import { RawContent, UserDefinedOptions } from "./types";
 
@@ -11,6 +15,7 @@ const purgeCSSPlugin = postcss.plugin<Omit<UserDefinedOptions, "css">>(
       const options = {
         ...defaultOptions,
         ...opts,
+        safelist: standardizeSafelist(opts?.safelist),
       };
 
       if (opts && typeof opts.contentFunction === "function") {

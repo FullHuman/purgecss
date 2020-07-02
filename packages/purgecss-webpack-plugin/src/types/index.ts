@@ -1,3 +1,8 @@
+import {
+  ComplexSafelist,
+  StringRegExpArray,
+} from "./../../../purgecss/src/types/index";
+
 export interface RawContent<T = string> {
   extension: string;
   raw: T;
@@ -12,8 +17,8 @@ export interface Extractors {
 }
 
 type PathFunction = () => string[];
-type WhitelistFunction = () => string[];
-type WhitelistPatternsFunction = () => Array<RegExp>;
+
+type SafelistFunction = () => ComplexSafelist;
 
 export interface UserDefinedOptions {
   paths: string[] | PathFunction;
@@ -28,10 +33,7 @@ export interface UserDefinedOptions {
   stdout?: boolean;
   variables?: boolean;
   verbose?: boolean;
-  whitelist?: string[] | WhitelistFunction;
-  whitelistPatterns?: Array<RegExp> | WhitelistPatternsFunction;
-  whitelistPatternsChildren?: Array<RegExp> | WhitelistPatternsFunction;
-  whitelistPatternsGreedy?: Array<RegExp> | WhitelistPatternsFunction;
+  safelist?: StringRegExpArray | ComplexSafelist | SafelistFunction;
   only?: string[];
 }
 

@@ -107,17 +107,8 @@ export default class PurgeCSSPlugin {
           ],
         };
 
-        if (typeof options.whitelist === "function") {
-          options.whitelist = options.whitelist();
-        }
-        if (typeof options.whitelistPatterns === "function") {
-          options.whitelistPatterns = options.whitelistPatterns();
-        }
-        if (typeof options.whitelistPatternsChildren === "function") {
-          options.whitelistPatternsChildren = options.whitelistPatternsChildren();
-        }
-        if (typeof options.whitelistPatternsGreedy === "function") {
-          options.whitelistPatternsGreedy = options.whitelistPatternsGreedy();
+        if (typeof options.safelist === "function") {
+          options.safelist = options.safelist();
         }
 
         const purgecss = await new PurgeCSS().purge({
@@ -130,10 +121,7 @@ export default class PurgeCSSPlugin {
           output: options.output,
           rejected: options.rejected,
           variables: options.variables,
-          whitelist: options.whitelist,
-          whitelistPatterns: options.whitelistPatterns,
-          whitelistPatternsChildren: options.whitelistPatternsChildren,
-          whitelistPatternsGreedy: options.whitelistPatternsGreedy,
+          safelist: options.safelist,
         });
         const purged = purgecss[0];
 

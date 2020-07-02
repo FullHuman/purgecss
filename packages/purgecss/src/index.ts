@@ -20,6 +20,8 @@ import {
   RawCSS,
   UserDefinedOptions,
   ExtractorResultDetailed,
+  UserDefinedSafelist,
+  ComplexSafelist,
 } from "./types";
 
 import {
@@ -30,7 +32,7 @@ import {
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_CURRENT,
 } from "./constants";
-import { CSS_WHITELIST } from "./internal-whitelist";
+import { CSS_SAFELIST } from "./internal-safelist";
 import VariablesStructure from "./VariablesStructure";
 import ExtractorResultSets from "./ExtractorResultSets";
 
@@ -38,6 +40,21 @@ const asyncFs = {
   access: promisify(fs.access),
   readFile: promisify(fs.readFile),
 };
+
+export function standardizeSafelist(
+  userDefinedSafelist: UserDefinedSafelist = []
+): Required<ComplexSafelist> {
+  if (Array.isArray(userDefinedSafelist)) {
+    return {
+      ...defaultOptions.safelist,
+      standard: userDefinedSafelist,
+    };
+  }
+  return {
+    ...defaultOptions.safelist,
+    ...userDefinedSafelist,
+  };
+}
 
 /**
  * Load the configuration file from the path
@@ -56,6 +73,7 @@ export async function setOptions(
   return {
     ...defaultOptions,
     ...options,
+    safelist: standardizeSafelist(options.safelist),
   };
 }
 
@@ -525,42 +543,35 @@ class PurgeCSS {
   }
 
   /**
-   * Check if the selector is whitelisted by the option whitelist or whitelistPatterns
+   * Check if the selector is safelisted with the option safelist standard
    * @param selector css selector
    */
-  private isSelectorWhitelisted(selector: string): boolean {
-    return (
-      CSS_WHITELIST.includes(selector) ||
-      (this.options.whitelist &&
-        this.options.whitelist.some((v: string) => v === selector)) ||
-      (this.options.whitelistPatterns &&
-        this.options.whitelistPatterns.some((v: RegExp) => v.test(selector)))
+  private isSelectorSafelisted(selector: string): boolean {
+    const isSafelisted = this.options.safelist.standard.some((safelistItem) => {
+      return typeof safelistItem === "string"
+        ? safelistItem === selector
+        : safelistItem.test(selector);
+    });
+    return CSS_SAFELIST.includes(selector) || isSafelisted;
+  }
+
+  /**
+   * Check if the selector is safelisted with the option safelist deep
+   * @param selector selector
+   */
+  private isSelectorSafelistedDeep(selector: string): boolean {
+    return this.options.safelist.deep.some((safelistItem) =>
+      safelistItem.test(selector)
     );
   }
 
   /**
-   * Check if the selector is whitelisted by the whitelistPatternsChildren option
+   * Check if the selector is safelisted with the option safelist greedy
    * @param selector selector
    */
-  private isSelectorWhitelistedChildren(selector: string): boolean {
-    return (
-      this.options.whitelistPatternsChildren &&
-      this.options.whitelistPatternsChildren.some((pattern: RegExp) =>
-        pattern.test(selector)
-      )
-    );
-  }
-
-  /**
-   * Check if the selector is whitelisted by the whitelistPatternsGreedy option
-   * @param selector selector
-   */
-  private isSelectorWhitelistedGreedy(selector: string): boolean {
-    return (
-      this.options.whitelistPatternsGreedy &&
-      this.options.whitelistPatternsGreedy.some((pattern: RegExp) =>
-        pattern.test(selector)
-      )
+  private isSelectorSafelistedGreedy(selector: string): boolean {
+    return this.options.safelist.greedy.some((safelistItem) =>
+      safelistItem.test(selector)
     );
   }
 
@@ -577,6 +588,7 @@ class PurgeCSS {
         : {
             ...defaultOptions,
             ...userOptions,
+            safelist: standardizeSafelist(userOptions.safelist),
           };
     const { content, css, extractors } = this.options;
 
@@ -652,14 +664,14 @@ class PurgeCSS {
     // ignore the selector if it is inside a pseudo class
     if (isInPseudoClass(selector)) return true;
 
-    // if there is any greedy whitelist pattern, run all the selector parts through them
+    // if there is any greedy safelist pattern, run all the selector parts through them
     // if there is any match, return true
-    if (this.options.whitelistPatternsGreedy?.length) {
+    if (this.options.safelist.greedy.length > 0) {
       const selectorParts = selector.nodes.map(this.getSelectorValue);
       if (
         selectorParts.some(
           (selectorPart) =>
-            selectorPart && this.isSelectorWhitelistedGreedy(selectorPart)
+            selectorPart && this.isSelectorSafelistedGreedy(selectorPart)
         )
       ) {
         return true;
@@ -671,17 +683,17 @@ class PurgeCSS {
     for (const selectorNode of selector.nodes) {
       const selectorValue = this.getSelectorValue(selectorNode);
 
-      // if the selector is whitelisted with children
+      // if the selector is safelisted with children
       // returns true to keep all children selectors
-      if (selectorValue && this.isSelectorWhitelistedChildren(selectorValue)) {
+      if (selectorValue && this.isSelectorSafelistedDeep(selectorValue)) {
         return true;
       }
 
-      // The selector is found in the internal and user-defined whitelist
+      // The selector is found in the internal and user-defined safelist
       if (
         selectorValue &&
-        (CSS_WHITELIST.includes(selectorValue) ||
-          this.isSelectorWhitelisted(selectorValue))
+        (CSS_SAFELIST.includes(selectorValue) ||
+          this.isSelectorSafelisted(selectorValue))
       ) {
         isPresent = true;
         continue;
@@ -711,7 +723,7 @@ class PurgeCSS {
           continue;
       }
 
-      // selector is not whitelisted
+      // selector is not safelisted
       // and it has not been found as an attribute/class/id/tag
       if (!isPresent) {
         return false;

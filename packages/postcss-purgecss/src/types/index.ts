@@ -1,3 +1,5 @@
+import { UserDefinedSafelist } from "../../../purgecss/src/types/index";
+
 export interface RawContent<T = string> {
   extension: string;
   raw: T;
@@ -10,6 +12,7 @@ export interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
 }
+
 export interface UserDefinedOptions {
   content?: Array<string | RawContent>;
   contentFunction?: (sourceFile: string) => Array<string | RawContent>;
@@ -23,8 +26,5 @@ export interface UserDefinedOptions {
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
-  whitelist?: string[];
-  whitelistPatterns?: Array<RegExp>;
-  whitelistPatternsChildren?: Array<RegExp>;
-  whitelistPatternsGreedy?: Array<RegExp>;
+  safelist?: UserDefinedSafelist;
 }

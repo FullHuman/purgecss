@@ -12,8 +12,11 @@ export const defaultOptions: Options = {
   stdin: false,
   stdout: false,
   variables: false,
-  whitelist: [],
-  whitelistPatterns: [],
-  whitelistPatternsChildren: [],
-  whitelistPatternsGreedy: [],
+  safelist: {
+    standard: [],
+    deep: [],
+    greedy: [],
+    variables: [],
+    keyframes: [],
+  },
 };
