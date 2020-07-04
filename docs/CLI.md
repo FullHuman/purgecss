@@ -35,7 +35,7 @@ Options:
   -font, --font-face       option to remove unused font-faces
   -keyframes, --keyframes  option to remove unused keyframes
   -rejected, --rejected    option to output rejected selectors
-  -w, --whitelist <list>   list of classes that should not be removed (comma separated)
+  -s, --safelist <list>   list of classes that should not be removed (comma separated)
   -h, --help               display help for command
 ```
 
@@ -71,10 +71,10 @@ By default, the CLI outputs the result in the console. If you wish to return the
 purgecss --css css/app.css --content src/index.html,"src/**/*.js" --output build/css/
 ```
 
-### --whitelist
+### --safelist
 
-If you wish to prevent PurgeCSS from removing a specific CSS selector, you can whitelist it.
+If you wish to prevent PurgeCSS from removing a specific CSS selector, you can add it to the safelist.
 
 ```text
-purgecss --css css/app.css --content src/index.html --whitelist classnameToWhitelist
+purgecss --css css/app.css --content src/index.html --safelist classnameToSafelist
 ```

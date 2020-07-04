@@ -41,9 +41,9 @@ module.exports = {
       paths: () => glob.sync(`${PATHS.src}/*`),
       safelist: () => {
         return {
-          standard: ["whitelisted", /^whitelistedPat/],
-          deep: [/^whitelistedPatternChildren/],
-          greedy: [/^whitelistedPatternGreedy/],
+          standard: ["safelisted", /^safelistedPat/],
+          deep: [/^safelistedPatternChildren/],
+          greedy: [/^safelistedPatternGreedy/],
         };
       },
       extractors: [

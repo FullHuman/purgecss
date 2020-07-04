@@ -1,30 +1,45 @@
 #!/usr/bin/env node
-const program = require('commander');
-const fs = require('fs');
-const { default: PurgeCSS, defaultOptions, setOptions } = require('../lib/purgecss')
+const program = require("commander");
+const fs = require("fs");
+const {
+  default: PurgeCSS,
+  defaultOptions,
+  setOptions,
+} = require("../lib/purgecss");
 
 function getList(list) {
-  return list.split(',')
+  return list.split(",");
 }
 
 async function writeCSSToFile(filePath, css) {
   try {
     await fs.promises.writeFile(filePath, css);
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   }
 }
 
 program
-  .usage('--css <css> --content <content> [options]')
-  .option('-con, --content <files>', 'glob of content files (comma separated)', getList)
-  .option('-css, --css <files>', 'glob of css files (comma separated)', getList)
-  .option('-c, --config <path>', 'path to the configuration file')
-  .option('-o, --output <path>', 'file path directory to write purged css files to')
-  .option('-font, --font-face', 'option to remove unused font-faces')
-  .option('-keyframes, --keyframes', 'option to remove unused keyframes')
-  .option('-rejected, --rejected', 'option to output rejected selectors')
-  .option('-w, --whitelist <list>', 'list of classes that should not be removed (comma separated)', getList);
+  .usage("--css <css> --content <content> [options]")
+  .option(
+    "-con, --content <files>",
+    "glob of content files (comma separated)",
+    getList
+  )
+  .option("-css, --css <files>", "glob of css files (comma separated)", getList)
+  .option("-c, --config <path>", "path to the configuration file")
+  .option(
+    "-o, --output <path>",
+    "file path directory to write purged css files to"
+  )
+  .option("-font, --font-face", "option to remove unused font-faces")
+  .option("-keyframes, --keyframes", "option to remove unused keyframes")
+  .option("-rejected, --rejected", "option to output rejected selectors")
+  .option(
+    "-s, --safellist <list>",
+    "list of classes that should not be removed (comma separated)",
+    getList
+  );
 
 program.parse(process.argv);
 
@@ -34,7 +49,7 @@ if (!program.config && !(program.content && program.css)) {
   program.help();
 }
 
-(async() => {
+(async () => {
   // if the config file is present, use it
   // other options specified will override
   let options = defaultOptions;
@@ -47,22 +62,16 @@ if (!program.config && !(program.content && program.css)) {
   if (program.keyframes) options.keyframes = program.keyframes;
   if (program.rejected) options.rejected = program.rejected;
   if (program.variables) options.variables = program.variables;
-  if (program.whitelist) options.whitelist = program.whitelist;
-
-  // if (!options.css) {
-  //   options.css = [{
-  //     raw: stdInCSS
-  //   }]
-  // }
+  if (program.safelist) options.safelist = program.safelist;
 
   const purged = await new PurgeCSS().purge(options);
 
   const output = options.output || program.output;
   // output results in specified directory
   if (output) {
-    if (purged.length === 1 && output.endsWith('.css')) {
-      await writeCSSToFile(output, purged[0].css)
-      return
+    if (purged.length === 1 && output.endsWith(".css")) {
+      await writeCSSToFile(output, purged[0].css);
+      return;
     }
 
     for (const purgedResult of purged) {
@@ -72,6 +81,4 @@ if (!program.config && !(program.content && program.css)) {
   } else {
     console.log(JSON.stringify(purged));
   }
-
-})()
-
+})();

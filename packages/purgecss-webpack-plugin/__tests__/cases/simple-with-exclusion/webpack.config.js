@@ -42,7 +42,7 @@ module.exports = {
     new PurgecssPlugin({
       paths: glob.sync(`${PATHS.src}/*`),
       styleExtensions: [".css"],
-      safelist: ["whitelisted"],
+      safelist: ["safelisted"],
       only: ["bundle"],
       extractors: [
         {

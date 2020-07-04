@@ -1,26 +1,26 @@
 ---
-title: Whitelisting | PurgeCSS
+title: Safelisting | PurgeCSS
 lang: en-US
 meta:
   - name: description
-    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can whitelist selectors.
+    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
   - name: keywords
     content: PurgeCSS remove unused CSS optimization web
 ---
 
-# Whitelisting
+# Safelisting
 
-You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the PurgeCSS options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, `whitelistPatternsGreedy`, or directly in your CSS with a special comment.
+You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the PurgeCSS option `safelist`, or directly in your CSS with a special comment.
 
 ## Specific selectors
 
-You can whitelist selectors with `whitelist`.
+You can add selectors to the safelist with `safelist`. 
 
 ```javascript
 const purgecss = new Purgecss({
     content: [], // content
     css: [], // css
-    whitelist: ['random', 'yep', 'button']
+    safelist: ['random', 'yep', 'button']
 })
 ```
 
@@ -28,15 +28,17 @@ In the example, the selectors `.random`, `#yep`, `button` will be left in the fi
 
 ## Patterns
 
-You can whitelist selectors based on a regular expression with `whitelistPatterns`, `whitelistPatternsChildren`, and `whitelistPatternsGreedy`.
+You can safelist selectors based on a regular expression with `safelist.standard`, `safelist.deep`, and `safelist.greedy`.
 
 ```javascript
 const purgecss = new Purgecss({
     content: [], // content
     css: [], // css
-    whitelistPatterns: [/red$/],
-    whitelistPatternsChildren: [/blue$/],
-    whitelistPatternsGreedy: [/yellow$/]
+    safelist: {
+      standard: [/red$/],
+      deep: [/blue$/],
+      greedy: [/yellow$/]
+    }
 })
 ```
 
@@ -46,8 +48,8 @@ Patterns are regular expressions. You can use [regexr](https://regexr.com) to ve
 
 ## In the CSS directly
 
-You can whitelist directly in your CSS with a special comment.
-Use `/* purgecss ignore */` to whitelist the next rule.
+You can safelist directly in your CSS with a special comment.
+Use `/* purgecss ignore */` to safelist the next rule.
 
 ```css
 /* purgecss ignore */
@@ -56,7 +58,7 @@ h1 {
 }
 ```
 
-Use `/* purgecss ignore current */` to whitelist the current rule.
+Use `/* purgecss ignore current */` to safelist the current rule.
 
 ```css
 h1 {
@@ -65,7 +67,7 @@ h1 {
 }
 ```
 
-You can use `/* purgecss start ignore */` and `/* purgecss end ignore */` to whitelist a range of rules.
+You can use `/* purgecss start ignore */` and `/* purgecss end ignore */` to safelist a range of rules.
 
 ```css
 /* purgecss start ignore */

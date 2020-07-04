@@ -64,8 +64,3 @@ interface ResultPurge {
   rejected?: string[];
 }
 ```
-
-::: tip
- Take a look at the type definition file to get the complete information.
- [Definition file](https://github.com/FullHuman/purgecss/tree/master/packages/purgecss/lib/purgecss.d.ts)
-:::

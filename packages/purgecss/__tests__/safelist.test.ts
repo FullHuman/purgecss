@@ -6,8 +6,8 @@ describe("safelist string", () => {
   let purgedCSS = "";
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.html`],
-      css: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.css`],
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist.css`],
       safelist: ["random", "h1", "yep", "button"],
     });
     purgedCSS = resultsPurge[0].css;
@@ -22,8 +22,8 @@ describe("safelist regular expression", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.html`],
-      css: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.css`],
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist.css`],
       safelist: [/nav-/, /data-v-.*/],
     });
     purgedCSS = resultsPurge[0].css;
@@ -38,8 +38,8 @@ describe("safelist option: standard", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.html`],
-      css: [`${ROOT_TEST_EXAMPLES}safelist/whitelist.css`],
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist.css`],
       safelist: {
         standard: ["random", "h1", "yep", "button", /nav-/, /data-v-.*/],
       },
@@ -69,9 +69,9 @@ describe("safelist option: deep", () => {
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [
-        `${ROOT_TEST_EXAMPLES}safelist/whitelist_patterns_children.html`,
+        `${ROOT_TEST_EXAMPLES}safelist/safelist_patterns_children.html`,
       ],
-      css: [`${ROOT_TEST_EXAMPLES}safelist/whitelist_patterns_children.css`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist_patterns_children.css`],
       safelist: {
         deep: [/^card$/],
       },
@@ -96,8 +96,8 @@ describe("safelist option: greedy", () => {
   let purgedCSS: string;
   beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
-      content: [`${ROOT_TEST_EXAMPLES}safelist/whitelist_patterns_greedy.html`],
-      css: [`${ROOT_TEST_EXAMPLES}safelist/whitelist_patterns_greedy.css`],
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist_patterns_greedy.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist_patterns_greedy.css`],
       safelist: {
         greedy: [/data-v-.*/],
       },

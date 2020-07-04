@@ -32,7 +32,7 @@ You can find the PurgeCSS documentation on [this website](https://purgecss.com).
 - [Configuration](https://purgecss.com/configuration.html)
 - [Command Line Interface](https://purgecss.com/CLI.html)
 - [Programmatic API](https://purgecss.com/api.html)
-- [Whitelisting](https://purgecss.com/whitelisting.html)
+- [Whitelisting](https://purgecss.com/safelisting.html)
 - [Extractors](https://purgecss.com/extractors.html)
 - [Comparison](https://purgecss.com/comparison.html)
 

@@ -21,7 +21,7 @@
   "module": "./lib/purgecss.esm.js",
   "types": "./lib/purgecss.d.ts",
   "bin": {
-    "purgecss": "bin/purgecss"
+    "purgecss": "bin/purgecss.js"
   },
   "directories": {
     "lib": "lib",

@@ -24,21 +24,21 @@ import purgecssWordpress from 'purgecss-with-wordpress'
 const purgeCSSResults = await new PurgeCSS().purge({
   content: ['**/*.html'],
   css: ['**/*.css'],
-  whitelist: purgecssWordpress.whitelist,
-  whitelistPatterns: purgecssWordpress.whitelistPatterns
+  safelist: purgecssWordpress.safelist,
+  safelistPatterns: purgecssWordpress.safelistPatterns
 })
 ```
 
-If you have additional classes you want to include in either of the `whitelist` or `whitelistPatterns`, you can include them using the spread operator:
+If you have additional classes you want to include in either of the `safelist` or `safelistPatterns`, you can include them using the spread operator:
 
 ```js
-whitelist: [
-  ...purgecssWordpress.whitelist,
+safelist: [
+  ...purgecssWordpress.safelist,
   'red',
   'blue',
 ],
-whitelistPatterns: [
-  ...purgecssWordpress.whitelistPatterns,
+safelistPatterns: [
+  ...purgecssWordpress.safelistPatterns,
   /^red/,
   /blue$/,
 ]

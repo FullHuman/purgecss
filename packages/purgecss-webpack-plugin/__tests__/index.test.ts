@@ -34,7 +34,7 @@ describe("Webpack integration", () => {
   });
 
   const cases: string[] = [
-    "path-and-whitelist-functions",
+    "path-and-safelist-functions",
     "simple",
     "simple-with-exclusion",
   ];

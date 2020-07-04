@@ -125,39 +125,25 @@ new PurgecssPlugin({
 })
 ```
 
-* #### whitelist, whitelistPatterns, whitelistPatternsChildren, and whitelistPatternsGreedy
+* #### safelist
 
-Similar as for the `paths` option, you can also define functions for the following options:
+Similar as for the `paths` option, you also can define a function for this option:
 
 ```js
-function collectWhitelist() {
-    // do something to collect the whitelist
-    return ['whitelisted'];
-}
-
-function collectWhitelistPatterns() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
-}
-
-function collectWhitelistPatternsChildren() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
-}
-
-function collectWhitelistPatternsGreedy() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
+function collectSafelist() {
+  return {
+    standard: ['safelisted', /^safelisted-/],
+    deep: [/^safelisted-deep-/],
+    greedy: [/^safelisted-greedy/]
+  }
 }
 
 // In the webpack configuration
-new PurgecssPlugin({
-  whitelist: collectWhitelist,
-  whitelistPatterns: collectWhitelistPatterns,
-  whitelistPatternsChildren: collectWhitelistPatternsChildren,
-  whitelistPatternsGreedy: collectWhitelistPatternsGreedy
+new PurgeCSSPlugin({
+  safelist: collectSafelist
 })
 ```
+
 
 * #### rejected
 

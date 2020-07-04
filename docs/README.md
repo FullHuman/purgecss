@@ -13,7 +13,7 @@ meta:
 PurgeCSS is a tool to remove unused CSS. It can be part of your development workflow.  
 When you are building a website, you might decide to use a CSS framework like TailwindCSS, Bootstrap, MaterializeCSS, Foundation, etc... But you will only use a small set of the framework, and a lot of unused CSS styles will be included.
 
-This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your css files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your css, resulting in smaller css files.
+This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your CSS files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your CSS, resulting in smaller CSS files.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 - [Configuration](configuration.md)
 - [Command Line Interface](CLI.md)
 - [Programmatic API](api.md)
-- [Whitelisting](whitelisting.md)
+- [Safelisting](safelisting.md)
 - [Extractors](extractors.md)
 - [Comparison](comparison.md)
 
@@ -42,3 +42,8 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 - [Next.js](guides/next.md)
 - [Razzle](guides/razzle.md)
 - [WordPress](guides/wordpress.md)
+
+### Common Questions
+
+- [How to use with CSS modules?](css_modules.md)
+- [How to use with Ant Design?](ant_design.md)

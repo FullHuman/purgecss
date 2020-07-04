@@ -2,19 +2,22 @@
   color: red;
 }
 
-.whitelisted {
+.unused {
+  color: blue;
+}
+
+.safelisted {
   color: green;
 }
 
-.whitelistedPattern {
+.safelistedPattern {
   color: rebeccapurple;
 }
 
-.whitelistedPatternChildren > p a {
+.safelistedPatternChildren > p a {
   color: orange;
 }
 
 md\:w-2\/3 {
   color: red;
 }
-

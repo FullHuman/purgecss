@@ -25,7 +25,7 @@ npm i purgecss-webpack-plugin -D
 const path = require('path')
 const glob = require('glob')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PurgecssPlugin = require('purgecss-webpack-plugin')
+const PurgeCSSPlugin = require('purgecss-webpack-plugin')
 
 const PATHS = {
   src: path.join(__dirname, 'src')
@@ -64,7 +64,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new PurgecssPlugin({
+    new PurgeCSSPlugin({
       paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
     }),
   ]
@@ -73,50 +73,13 @@ module.exports = {
 ### Multiple paths
 If you need multiple paths use the npm package `glob-all` instead of `glob`, then you can use this syntax:
 ```javascript
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync([
     // ...
   ])
 }),
 ```
 to filter out directories see the glob-all documentation [here](https://www.npmjs.com/package/glob-all#filtering-out-directories).
-<!-- 
-### Webpack 3 (with extract-text-webpack-plugin)
-```js
-const path = require('path')
-const glob = require('glob')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const PurgecssPlugin = require('purgecss-webpack-plugin')
-
-const PATHS = {
-  src: path.join(__dirname, 'src')
-}
-
-module.exports = {
-  entry: './src/index.js',
-  output: {
-    filename: 'bundle.js',
-    path: path.join(__dirname, 'dist')
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?sourceMap'
-        })
-      }
-    ]
-  },
-  plugins: [
-    new ExtractTextPlugin('[name].css?[hash]'),
-    new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
-    })
-  ]
-}
-``` -->
 
 ### Options
 
@@ -127,21 +90,21 @@ The options available in purgecss [Configuration](https://www.purgecss.com/confi
 With the webpack plugin, you can specified the content that should be analyzed by purgecss with an array of filename. It can be html, pug, blade, ... files. You can use a module like `glob` or `glob-all` to easily get a list of files.
 
 ```js
-const PurgecssPlugin = require('purgecss-webpack-plugin')
+const PurgeCSSPlugin = require('purgecss-webpack-plugin')
 const glob = require('glob')
 const PATHS = {
   src: path.join(__dirname, 'src')
 }
 
 // In the webpack configuration
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
 })
 ```
 
 If you want to regenerate the paths list on every compilation (e.g. with `--watch`), then you can also pass a function:
 ```js
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true })
 })
 ```
@@ -151,42 +114,28 @@ new PurgecssPlugin({
 You can specify entrypoints to the purgecss-webpack-plugin with the option only:
 
 ```js
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
   only: ['bundle', 'vendor']
 })
 ```
 
-* #### whitelist, whitelistPatterns, whitelistPatternsChildren, and whitelistPatternsGreedy
+* #### safelist
 
-Similar as for the `paths` option, you also can define functions for the these options:
+Similar as for the `paths` option, you also can define a function for this option:
 
 ```js
-function collectWhitelist() {
-    // do something to collect the whitelist
-    return ['whitelisted'];
-}
-function collectWhitelistPatterns() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
-}
-
-function collectWhitelistPatternsChildren() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
-}
-
-function collectWhitelistPatternsGreedy() {
-    // do something to collect the whitelist
-    return [/^whitelisted-/];
+function collectSafelist() {
+  return {
+    standard: ['safelisted', /^safelisted-/],
+    deep: [/^safelisted-deep-/],
+    greedy: [/^safelisted-greedy/]
+  }
 }
 
 // In the webpack configuration
-new PurgecssPlugin({
-  whitelist: collectWhitelist,
-  whitelistPatterns: collectWhitelistPatterns,
-  whitelistPatternsChildren: collectWhitelistPatternsChildren,
-  whitelistPatternsGreedy: collectWhitelistPatternsGreedy
+new PurgeCSSPlugin({
+  safelist: collectSafelist
 })
 ```
 

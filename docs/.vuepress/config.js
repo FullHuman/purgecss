@@ -99,7 +99,7 @@ module.exports = {
             ["configuration", "Configuration"],
             ["CLI", "Command Line Interface"],
             ["api", "Programmatic API"],
-            ["whitelisting", "Whitelisting"],
+            ["safelisting", "Safelisting"],
             ["extractors", "Extractors"],
           ],
         },

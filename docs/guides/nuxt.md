@@ -120,6 +120,6 @@ npm i --save-dev @fullhuman/postcss-purgecss
 ```javascript
 '@fullhuman/postcss-purgecss': {
   content: ['./pages/**/*.vue', './layouts/**/*.vue', './components/**/*.vue'],
-  whitelist: ['html', 'body']
+  safelist: ['html', 'body']
 }
 ```

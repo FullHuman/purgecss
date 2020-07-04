@@ -37,21 +37,18 @@ The options are defined by the following types:
 
 ```ts
 interface UserDefinedOptions {
-  content: Array<string | RawContent>
-  css: Array<string | RawCSS>
-  defaultExtractor?: ExtractorFunction
-  extractors?: Array<Extractors>
-  fontFace?: boolean
-  keyframes?: boolean
-  output?: string
-  rejected?: boolean
-  stdin?: boolean
-  stdout?: boolean
-  variables?: boolean
-  whitelist?: string[]
-  whitelistPatterns?: Array<RegExp>
-  whitelistPatternsChildren?: Array<RegExp>
-  whitelistPatternsGreedy?: Array<RegExp>
+  content: Array<string | RawContent>;
+  css: Array<string | RawCSS>;
+  defaultExtractor?: ExtractorFunction;
+  extractors?: Array<Extractors>;
+  fontFace?: boolean;
+  keyframes?: boolean;
+  output?: string;
+  rejected?: boolean;
+  stdin?: boolean;
+  stdout?: boolean;
+  variables?: boolean;
+  safelist?: UserDefinedSafelist;
 }
 
 interface RawContent {
@@ -62,6 +59,18 @@ interface RawContent {
 interface RawCSS {
   raw: string
 }
+
+type StringRegExpArray = Array<RegExp | string>;
+
+type ComplexSafelist = {
+  standard?: StringRegExpArray;
+  deep?: RegExp[];
+  greedy?: RegExp[];
+  variables?: StringRegExpArray;
+  keyframes?: StringRegExpArray;
+};
+
+type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 ```
 
 - **content**
@@ -215,57 +224,79 @@ await new PurgeCSS().purge({
 })
 ```
 
-- **whitelist**
+- **safelist**
 
-You can whitelist selectors to stop PurgeCSS from removing them from your CSS. This can be accomplished with the options `whitelist`, `whitelistPatterns`, `whitelistPatternsChildren`, and `whitelistPatternsGreedy`.
+You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the option `safelist`.
+
+Two forms are available for this option.
+
+```ts
+safelist: ['random', 'yep', 'button', /^nav-/]
+```
+
+In this form, safelist is an array that can take a string or a regex.
+
+The _complex_ form is:
+
+```ts
+safelist: {
+    standard: ['random', 'yep', 'button', /^nav-/],
+    deep: [],
+    greedy: [],
+    keyframes: [],
+    variables: []
+}
+```
+
+e.g:
 
 ```js
 const purgecss = await new PurgeCSS().purge({
   content: [], // content
   css: [], // css
-  whitelist: ['random', 'yep', 'button']
+  safelist: ['random', 'yep', 'button']
 })
 ```
 
 In this example, the selectors `.random`, `#yep`, `button` will be left in the final CSS.
 
-- **whitelistPatterns**
-
-You can whitelist selectors based on a regular expression with `whitelistPatterns`.
-
 ```js
 const purgecss = await new PurgeCSS().purge({
   content: [], // content
   css: [], // css
-  whitelistPatterns: [/red$/]
+  safelist: [/red$/]
 })
 ```
 
 In this example, selectors ending with `red` such as `.bg-red` will be left in the final CSS.
 
-- **whitelistPatternsChildren**
+- **safelist.deep**
 
-You can whitelist selectors and their children based on a regular expression with `whitelistPatternsChildren`.
+You can safelist selectors and their children based on a regular expression with `safelist.deep`.
 
 ```js
 const purgecss = await new PurgeCSS().purge({
   content: [], // content
   css: [], // css
-  whitelistPatternsChildren: [/red$/]
+  safelist: {
+    deep: [/red$/]
+  }
 })
 ```
 
 In this example, selectors such as `.bg-red .child-of-bg` will be left in the final CSS, even if `child-of-bg` is not found.
 
-- **whitelistPatternsGreedy**
+- **safelist.greedy**
 
-Finally, you can whitelist whole selectors if any part of that selector matches a regular expression with `whitelistPatternsGreedy`.
+Finally, you can safelist whole selectors if any part of that selector matches a regular expression with `safelist.greedy`.
 
 ```js
 const purgecss = await new PurgeCSS().purge({
   content: [], // content
   css: [], // css
-  whitelistPatternsGreedy: [/red$/]
+  safelist: {
+    greedy: [/red$/]
+  }
 })
 ```
 
