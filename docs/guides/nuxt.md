@@ -26,7 +26,7 @@ to the configuration.
 
 ```js
 {
-  modules: [
+  buildModules: [ // if you are using nuxt < 2.9.0, use modules property instead.
     'nuxt-purgecss',
   ],
 
