@@ -1,4 +1,5 @@
 import postcss from "postcss";
+import { StringRegExpArray } from "./types";
 
 class VariableNode {
   public nodes: VariableNode[] = [];
@@ -13,6 +14,7 @@ class VariableNode {
 class VariablesStructure {
   public nodes: Map<string, VariableNode> = new Map();
   public usedVariables: Set<string> = new Set();
+  public safelist: StringRegExpArray = [];
 
   addVariable(declaration: postcss.Declaration): void {
     const { prop } = declaration;
@@ -63,11 +65,19 @@ class VariablesStructure {
     for (const used of this.usedVariables) {
       this.setAsUsed(used);
     }
-    for (const [, declaration] of this.nodes) {
-      if (!declaration.isUsed) {
+    for (const [name, declaration] of this.nodes) {
+      if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
         declaration.value.remove();
       }
     }
+  }
+
+  isVariablesSafelisted(variable: string): boolean {
+    return this.safelist.some((safelistItem) => {
+      return typeof safelistItem === "string"
+        ? safelistItem === variable
+        : safelistItem.test(variable);
+    });
   }
 }
 

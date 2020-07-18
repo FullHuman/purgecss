@@ -126,3 +126,53 @@ describe("safelist option: greedy", () => {
     );
   });
 });
+
+describe("safelist option: keyframes", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist_keyframes.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist_keyframes.css`],
+      safelist: {
+        keyframes: [/^scale/, "spin"],
+      },
+      keyframes: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("finds safelisted keyframes", () => {
+    findInCSS(
+      expect,
+      ["@keyframes scale", "@keyframes scale-down", "@keyframes spin"],
+      purgedCSS
+    );
+  });
+
+  it("excludes non-safelisted keyframes", () => {
+    notFindInCSS(expect, ["flash"], purgedCSS);
+  });
+});
+
+describe("safelist option: variables", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}safelist/safelist_css_variables.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/safelist_css_variables.css`],
+      safelist: {
+        variables: [/^--b/, "--unused-color"],
+      },
+      variables: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("finds safelisted css variables", () => {
+    findInCSS(expect, ["--unused-color", "--button-color"], purgedCSS);
+  });
+
+  it("excludes non-safelisted css variables", () => {
+    notFindInCSS(expect, ["--tertiary-color:"], purgedCSS);
+  });
+});

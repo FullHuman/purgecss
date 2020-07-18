@@ -543,6 +543,18 @@ class PurgeCSS {
   }
 
   /**
+   * Check if the keyframe is safelisted with the option safelist keyframes
+   * @param keyframesName name of the keyframe animation
+   */
+  private isKeyframesSafelisted(keyframesName: string): boolean {
+    return this.options.safelist.keyframes.some((safelistItem) => {
+      return typeof safelistItem === "string"
+        ? safelistItem === keyframesName
+        : safelistItem.test(keyframesName);
+    });
+  }
+
+  /**
    * Check if the selector is safelisted with the option safelist standard
    * @param selector css selector
    */
@@ -590,7 +602,11 @@ class PurgeCSS {
             ...userOptions,
             safelist: standardizeSafelist(userOptions.safelist),
           };
-    const { content, css, extractors } = this.options;
+    const { content, css, extractors, safelist } = this.options;
+
+    if (this.options.variables) {
+      this.variablesStructure.safelist = safelist.variables || [];
+    }
 
     const fileFormatContents = content.filter(
       (o) => typeof o === "string"
@@ -637,7 +653,10 @@ class PurgeCSS {
    */
   public removeUnusedKeyframes(): void {
     for (const node of this.atRules.keyframes) {
-      if (!this.usedAnimations.has(node.params)) {
+      if (
+        !this.usedAnimations.has(node.params) &&
+        !this.isKeyframesSafelisted(node.params)
+      ) {
         node.remove();
       }
     }
