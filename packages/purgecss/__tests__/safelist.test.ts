@@ -176,3 +176,27 @@ describe("safelist option: variables", () => {
     notFindInCSS(expect, ["--tertiary-color:"], purgedCSS);
   });
 });
+
+describe("blocklist option", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}safelist/blocklist.html`],
+      css: [`${ROOT_TEST_EXAMPLES}safelist/blocklist.css`],
+      blocklist: ["h1", "yep", "button", /nav-/],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("excludes blocklisted selectors", () => {
+    notFindInCSS(
+      expect,
+      ["h1", "yep", "button", "nav-blue", "nav-red"],
+      purgedCSS
+    );
+  });
+
+  it("includes non-blocklisted selectors", () => {
+    findInCSS(expect, ["data-v-test", ".random"], purgedCSS);
+  });
+});

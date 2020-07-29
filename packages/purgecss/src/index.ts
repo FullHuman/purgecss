@@ -555,6 +555,18 @@ class PurgeCSS {
   }
 
   /**
+   * Check if the selector is blocklisted with the option blocklist
+   * @param selector css selector
+   */
+  private isSelectorBlocklisted(selector: string): boolean {
+    return this.options.blocklist.some((blocklistItem) => {
+      return typeof blocklistItem === "string"
+        ? blocklistItem === selector
+        : blocklistItem.test(selector);
+    });
+  }
+
+  /**
    * Check if the selector is safelisted with the option safelist standard
    * @param selector css selector
    */
@@ -715,6 +727,12 @@ class PurgeCSS {
           this.isSelectorSafelisted(selectorValue))
       ) {
         isPresent = true;
+        continue;
+      }
+
+      // The selector is present in the blocklist
+      if (selectorValue && this.isSelectorBlocklisted(selectorValue)) {
+        isPresent = false;
         continue;
       }
 

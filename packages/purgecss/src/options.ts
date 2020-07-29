@@ -19,4 +19,5 @@ export const defaultOptions: Options = {
     variables: [],
     keyframes: [],
   },
+  blocklist: [],
 };
