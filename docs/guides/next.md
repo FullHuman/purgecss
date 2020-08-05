@@ -12,9 +12,45 @@ meta:
 
 > Next.js is a React framework for production grade applications that scale. The world's leading companies use Next.js to build server-rendered applications, static websites, and more.
 
-You can use PurgeCSS with Next.js by using the [Next.js plugin](https://github.com/lucleray/next-purgecss) or the PostCSS plugin.
+You can use PurgeCSS with Next.js by using the postCSS plugin in the Next.js configuration
 
-## Next.js plugin
+## Customize PostCSS configuration (Next.js >= 9.3)
+
+To customize the PostCSS configuration, create a postcss.config.json file in the root of your project.
+
+Add PurgeCSS to the default configuration:
+
+```js
+{
+  "plugins": [
+    "postcss-flexbugs-fixes",
+    [
+      "postcss-preset-env",
+      {
+        "autoprefixer": {
+          "flexbox": "no-2009"
+        },
+        "stage": 3,
+        "features": {
+          "custom-properties": false
+        }
+      }
+    ],
+    [
+    '@fullhuman/postcss-purgecss',
+    {
+        content: [
+            './pages/**/*.{js,jsx,ts,tsx}',
+            './components/**/*.{js,jsx,ts,tsx}'
+        ],
+        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+    }
+],
+  ]
+}
+```
+
+## Next.js plugin (Next.js < 9.3)
 
 ### Intallation
 
@@ -42,10 +78,10 @@ Once you installed the packages, you need to edit `next.config.js`.
 
 ```js
 // next.config.js
-const withCss = require('@zeit/next-css')
-const withPurgeCss = require('next-purgecss')
+const withCss = require("@zeit/next-css");
+const withPurgeCss = require("next-purgecss");
 
-module.exports = withCss(withPurgeCss())
+module.exports = withCss(withPurgeCss());
 ```
 
 ### Options
@@ -63,9 +99,9 @@ By default, `next-purgecss` will always remove unused CSS, regardless of build e
 // next.config.js
 module.exports = withCss(
   withPurgeCss({
-    purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer // Only enable PurgeCSS for client-side production builds
+    purgeCssEnabled: ({ dev, isServer }) => !dev && !isServer, // Only enable PurgeCSS for client-side production builds
   })
-)
+);
 ```
 
 #### `purgeCssPaths`
@@ -78,12 +114,12 @@ directories for classnames. You can change that by defining `purgeCssPaths`.
 module.exports = withCss(
   withPurgeCss({
     purgeCssPaths: [
-      'pages/**/*',
-      'components/**/*',
-      'other-components/**/*' // also scan other-components folder
-    ]
+      "pages/**/*",
+      "components/**/*",
+      "other-components/**/*", // also scan other-components folder
+    ],
   })
-)
+);
 ```
 
 #### `purgeCss`
@@ -97,10 +133,10 @@ You can pass custom options to
 module.exports = withCss(
   withPurgeCss({
     purgeCss: {
-      whitelist: () => ['my-custom-class']
-    }
+      whitelist: () => ["my-custom-class"],
+    },
   })
-)
+);
 ```
 
 The list of available options are documented in [`purgecss-webpack-plugin`
