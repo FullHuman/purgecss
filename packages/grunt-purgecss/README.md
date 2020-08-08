@@ -67,17 +67,29 @@ Type: `Array<Object>`
 Purgecss can be adapted to suit your needs. If you notice a lot of unused CSS is not being removed, you might want to use a custom extractor.
 More information about extractors [here](https://www.purgecss.com/extractors.html).
 
-#### options.whitelist
+#### options.safelist
 
-Type: `Array<string>`
+You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the option `safelist`.
 
-You can whitelist selectors to stop Purgecss from removing them from your CSS. This can be accomplished with the options `whitelist` and `whitelistPatterns`.
+Two forms are available for this option.
 
-#### options.whitelistPatterns
+```ts
+safelist: ['random', 'yep', 'button', /^nav-/]
+```
 
-Type: `Array<RegExp>`
+In this form, safelist is an array that can take a string or a regex.
 
-You can whitelist selectors based on a regular expression with `whitelistPatterns`.
+The _complex_ form is:
+
+```ts
+safelist: {
+    standard: ['random', 'yep', 'button', /^nav-/],
+    deep: [],
+    greedy: [],
+    keyframes: [],
+    variables: []
+}
+```
 
 #### options.keyframes
 
@@ -112,8 +124,7 @@ grunt.initConfig({
             },
             extension: ['html', 'blade']
           },
-          whitelist: ['random', 'yep', 'button'],
-          whitelistPatterns: [/red$/],
+          safelist: ['random', 'yep', 'button', /red$/]
           keyframes: true,
           fontFace: true
         },

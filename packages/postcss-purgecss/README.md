@@ -61,15 +61,29 @@ Type: `Array<Object>`
 Purgecss can be adapted to suit your needs. If you notice a lot of unused CSS is not being removed, you might want to use a custom extractor.
 More information about extractors [here](https://www.purgecss.com/extractors.html).
 
-### `whitelist`
-Type: `Array<string>`
+### `safelist`
 
-You can whitelist selectors to stop Purgecss from removing them from your CSS. This can be accomplished with the options whitelist and whitelistPatterns.
+You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the option `safelist`.
 
-### `whitelistPatterns`
-Type: `Array<RegExp>`
+Two forms are available for this option.
 
-You can whitelist selectors based on a regular expression with whitelistPatterns.
+```ts
+safelist: ['random', 'yep', 'button', /^nav-/]
+```
+
+In this form, safelist is an array that can take a string or a regex.
+
+The _complex_ form is:
+
+```ts
+safelist: {
+    standard: ['random', 'yep', 'button', /^nav-/],
+    deep: [],
+    greedy: [],
+    keyframes: [],
+    variables: []
+}
+```
 
 ### `rejected`
 Type: `boolean`

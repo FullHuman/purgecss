@@ -51,18 +51,19 @@ All of the options of PurgeCSS are available to use with the plugins.
 You will find below the type definition of the main options available. For the complete list, go to the [PurgeCSS documentation website](https://www.purgecss.com/configuration.html#options).
 
 ```ts
-interface UserDefinedOptions {
-  content: Array<string | RawContent>
-  css: Array<string | RawCSS>
-  defaultExtractor?: ExtractorFunction
-  extractors?: Array<Extractors>
-  fontFace?: boolean
-  keyframes?: boolean
-  output?: string
-  variables?: boolean
-  whitelist?: string[]
-  whitelistPatterns?: Array<RegExp>
-  whitelistPatternsChildren?: Array<RegExp>
+export interface UserDefinedOptions {
+  content?: Array<string | RawContent>;
+  contentFunction?: (sourceFile: string) => Array<string | RawContent>;
+  defaultExtractor?: ExtractorFunction;
+  extractors?: Array<Extractors>;
+  fontFace?: boolean;
+  keyframes?: boolean;
+  output?: string;
+  rejected?: boolean;
+  stdin?: boolean;
+  stdout?: boolean;
+  variables?: boolean;
+  safelist?: UserDefinedSafelist;
 }
 
 interface RawContent {

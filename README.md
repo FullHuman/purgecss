@@ -80,5 +80,5 @@ This repository is a monorepo that we manage using [Lerna](https://github.com/le
 | [purgecss-from-html](/packages/purgecss-from-html)           | ![npm](https://img.shields.io/npm/v/purgecss-from-html?style=flat-square)                   | Html extractor for PurgeCSS                 |
 | [purgecss-from-js](/packages/purgecss-from-js)               | ![npm](https://img.shields.io/npm/v/purgecss-from-js?style=flat-square)                     | Js extractor for PurgeCSS                   |
 | [purgecss-from-pug](/packages/purgecss-from-pug)             | ![npm](https://img.shields.io/npm/v/purgecss-from-pug?style=flat-square)                    | Pug extractor for PurgeCSS                  |
-| [purgecss-with-wordpress](/packages/purgecss-with-wordpress) | ![npm](https://img.shields.io/npm/v/purgecss-with-wordpress?style=flat-square)              | Collection of whitelist items for WordPress |
+| [purgecss-with-wordpress](/packages/purgecss-with-wordpress) | ![npm](https://img.shields.io/npm/v/purgecss-with-wordpress?style=flat-square)              | Collection of safelist items for WordPress |
 | [vue-cli-plugin-purgecss](/packages/vue-cli-plugin-purgecss) | ![npm](https://img.shields.io/npm/v/@fullhuman/vue-cli-plugin-purgecss?style=flat-square)   | Vue CLI Plugin for PurgeCSS                 |
