@@ -65,7 +65,7 @@ const purgeFromJs = (content) => {
 
 ::: warning
 Those extractors are still a work in progress.
-It is not encourage to use them in production yet.
+It is not encouraged to use them in production yet.
 :::
 
 - [purgecss-from-html](https://github.com/FullHuman/purgecss/blob/master/packages/purgecss-from-html): HTML files (.html)
