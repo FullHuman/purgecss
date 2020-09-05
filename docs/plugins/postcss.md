@@ -64,6 +64,7 @@ export interface UserDefinedOptions {
   stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
+  blocklist?: StringRegExpArray;
 }
 
 interface RawContent {
@@ -74,4 +75,6 @@ interface RawContent {
 interface RawCSS {
   raw: string
 }
+
+type StringRegExpArray = Array<RegExp | string>;
 ```

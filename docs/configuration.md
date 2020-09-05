@@ -49,6 +49,7 @@ interface UserDefinedOptions {
   stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
+  blocklist?: StringRegExpArray;
 }
 
 interface RawContent {
@@ -301,3 +302,12 @@ const purgecss = await new PurgeCSS().purge({
 ```
 
 In this example, selectors such as `button.bg-red.nonexistent-class` will be left in the final CSS, even if `button` and `nonexistent-class` are not found.
+
+- **blocklist**
+
+Blocklist will block the CSS selectors from appearing in the final output CSS. The selectors will be removed even when they are seen as used by PurgeCSS.
+
+```ts
+blocklist: ['usedClass', /^nav-/]
+```
+Even if nav-links and usedClass are found by an extractor, they will be removed.

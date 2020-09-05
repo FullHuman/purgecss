@@ -85,6 +85,16 @@ safelist: {
 }
 ```
 
+### `blocklist`
+
+Blocklist will block the CSS selectors from appearing in the final output CSS. The selectors will be removed even when they are seen as used by PurgeCSS.
+
+```ts
+blocklist: ['usedClass', /^nav-/]
+```
+Even if nav-links and usedClass are found by an extractor, they will be removed.
+
+
 ### `rejected`
 Type: `boolean`
 Default value: `false`
