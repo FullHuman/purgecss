@@ -39,6 +39,11 @@ program
     "-s, --safellist <list>",
     "list of classes that should not be removed (comma separated)",
     getList
+  )
+  .option(
+    "-b, --blocklist <list>",
+    "list of selectors that should be removed",
+    getList
   );
 
 program.parse(process.argv);
@@ -63,6 +68,7 @@ if (!program.config && !(program.content && program.css)) {
   if (program.rejected) options.rejected = program.rejected;
   if (program.variables) options.variables = program.variables;
   if (program.safelist) options.safelist = program.safelist;
+  if (program.blocklist) options.blocklist = program.blocklist;
 
   const purged = await new PurgeCSS().purge(options);
 
