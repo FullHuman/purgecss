@@ -7,10 +7,6 @@ const {
   setOptions,
 } = require("../lib/purgecss");
 
-function getList(list) {
-  return list.split(",");
-}
-
 async function writeCSSToFile(filePath, css) {
   try {
     await fs.promises.writeFile(filePath, css);
@@ -20,13 +16,12 @@ async function writeCSSToFile(filePath, css) {
 }
 
 program
-  .usage("--css <css> --content <content> [options]")
+  .usage("--css <css...> --content <content...> [options]")
   .option(
-    "-con, --content <files>",
-    "glob of content files (comma separated)",
-    getList
+    "-con, --content <files...>",
+    "glob of content files"
   )
-  .option("-css, --css <files>", "glob of css files (comma separated)", getList)
+  .option("-css, --css <files...>", "glob of css files")
   .option("-c, --config <path>", "path to the configuration file")
   .option(
     "-o, --output <path>",
@@ -36,25 +31,23 @@ program
   .option("-keyframes, --keyframes", "option to remove unused keyframes")
   .option("-rejected, --rejected", "option to output rejected selectors")
   .option(
-    "-s, --safellist <list>",
-    "list of classes that should not be removed (comma separated)",
-    getList
+    "-s, --safelist <list...>",
+    "list of classes that should not be removed"
   )
   .option(
-    "-b, --blocklist <list>",
-    "list of selectors that should be removed",
-    getList
+    "-b, --blocklist <list...>",
+    "list of selectors that should be removed"
   );
 
-program.parse(process.argv);
+program.parse(process.argv); 
 
-// config file is not specified or the content and css are not,
-// PurgeCSS will not run
-if (!program.config && !(program.content && program.css)) {
-  program.help();
-}
+const run = async () => {
+  // config file is not specified or the content and css are not,
+  // PurgeCSS will not run
+  if (!program.config && !(program.content && program.css)) {
+    program.help();
+  }
 
-(async () => {
   // if the config file is present, use it
   // other options specified will override
   let options = defaultOptions;
@@ -71,7 +64,6 @@ if (!program.config && !(program.content && program.css)) {
   if (program.blocklist) options.blocklist = program.blocklist;
 
   const purged = await new PurgeCSS().purge(options);
-
   const output = options.output || program.output;
   // output results in specified directory
   if (output) {
@@ -87,4 +79,6 @@ if (!program.config && !(program.content && program.css)) {
   } else {
     console.log(JSON.stringify(purged));
   }
-})();
+};
+
+run();
