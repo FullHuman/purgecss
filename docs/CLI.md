@@ -28,14 +28,14 @@ To see the available options for the CLI: `purgecss --help`
 Usage: purgecss --css <css> --content <content> [options]
 
 Options:
-  -con, --content <files>  glob of content files (comma separated)
-  -css, --css <files>      glob of css files (comma separated)
+  -con, --content <files>  glob of content files
+  -css, --css <files>      glob of css files
   -c, --config <path>      path to the configuration file
   -o, --output <path>      file path directory to write purged css files to
   -font, --font-face       option to remove unused font-faces
   -keyframes, --keyframes  option to remove unused keyframes
   -rejected, --rejected    option to output rejected selectors
-  -s, --safelist <list>   list of classes that should not be removed (comma separated)
+  -s, --safelist <list>   list of classes that should not be removed
   -h, --help               display help for command
 ```
 
@@ -44,15 +44,15 @@ The options available through the CLI are similar to the ones available with a c
 ### --css
 
 ```text
-purgecss --css css/app.css,css/palette.css --content src/index.html
+purgecss --css css/app.css css/palette.css --content src/index.html
 ```
 
 ### --content
 
-You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). These files can be HTML, Pug, Blade, etc. The files should be comma separated.
+You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). These files can be HTML, Pug, Blade, etc.
 
 ```text
-purgecss --css css/app.css --content src/index.html,src/**/*.js
+purgecss --css css/app.css --content src/index.html src/**/*.js
 ```
 
 ### --config
@@ -68,7 +68,7 @@ purgecss --config ./purgecss.config.js
 By default, the CLI outputs the result in the console. If you wish to return the CSS as files, specify the directory to write the purified CSS files to.
 
 ```text
-purgecss --css css/app.css --content src/index.html,"src/**/*.js" --output build/css/
+purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build/css/
 ```
 
 ### --safelist
