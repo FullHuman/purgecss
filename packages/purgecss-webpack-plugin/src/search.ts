@@ -1,5 +1,5 @@
 import path from "path";
-import { PurgeAsset } from "./types";
+import { Chunk, File, PurgeAsset } from "./types";
 
 /**
  * Get the filename without ?hash
@@ -47,10 +47,6 @@ export function getAssets(
   }
 
   return purgeAssets;
-}
-
-type Chunk = {
-  modulesIterable: File[]
 }
 
 export function files(

@@ -11,7 +11,7 @@ describe("PurgeCSS CLI", () => {
     const response = await asyncExec(
       `${purgeCSSExecutable} --content ${testFolder}/src/content.html ${testFolder}/src/*.js --css ${testFolder}/src/style.css`
     );
-    const result = JSON.parse(response.stdout)
-    expect(result[0].css).toBe('.hello {\n  color: red;\n}\n')
+    const result = JSON.parse(response.stdout);
+    expect(result[0].css).toBe(".hello {\n  color: red;\n}\n");
   });
 });

@@ -52,3 +52,7 @@ export interface PurgeAsset {
 export interface File {
   resource?: string;
 }
+
+export type Chunk = {
+  modulesIterable: File[];
+};

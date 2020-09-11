@@ -1,5 +1,5 @@
 import { getAssets, files } from "../src/search";
-import { File } from "../src/types";
+import { Chunk, File } from "../src/types";
 
 describe("Search assets", () => {
   it("returns matches based on a pattern", () => {
@@ -46,30 +46,12 @@ describe("Search assets", () => {
   });
 });
 
-interface Chunk {
-  modulesIterable?: string[] | File[];
-}
-
 describe("Search files", () => {
   let chunk: Chunk;
   beforeEach(() => {
-    chunk = {};
-  });
-
-  it("returns matches based on extension", () => {
-    chunk.modulesIterable = ["foobar.txt", "barbar.css"];
-    const extensions = [".txt"];
-    const matches = ["foobar.txt"];
-
-    expect(files(chunk, extensions, (a: string) => a)).toEqual(matches);
-  });
-
-  it("does not fail with missing modules", () => {
-    chunk.modulesIterable = ["foobar.txt", "", "barbar.css"];
-    const extensions = [".txt"];
-    const matches = ["foobar.txt"];
-
-    expect(files(chunk, extensions, (a: string) => a)).toEqual(matches);
+    chunk = {
+      modulesIterable: [],
+    };
   });
 
   it("returns matches based on extension with a customized getter", () => {

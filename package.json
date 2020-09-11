@@ -53,7 +53,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write",
+      "prettier --write --ignore-path .gitignore",
       "git add"
     ],
     "*.ts": [
