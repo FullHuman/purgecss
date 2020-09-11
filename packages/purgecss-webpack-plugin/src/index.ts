@@ -35,7 +35,7 @@ export default class PurgeCSSPlugin {
     }
 
     if (this.options.rejected) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       stats["purged"] = this.purgedStats;
     }

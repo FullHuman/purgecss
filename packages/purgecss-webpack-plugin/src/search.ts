@@ -49,11 +49,14 @@ export function getAssets(
   return purgeAssets;
 }
 
+type Chunk = {
+  modulesIterable: File[]
+}
+
 export function files(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  chunk: any,
+  chunk: Chunk,
   extensions: string[],
-  getter: Function
+  getter: (file: File) => string | undefined
 ): string[] {
   const mods = [];
   for (const module of Array.from(chunk.modulesIterable || [])) {

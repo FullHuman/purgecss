@@ -60,7 +60,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
               optionsGulp.rejected && purge.rejected
                 ? purge.rejected.join(" {}\n") + " {}"
                 : purge.css;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             streamFile.contents = Buffer.from(result, "utf-8");
             callback(null, file);
