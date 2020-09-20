@@ -57,6 +57,7 @@ async function build(): Promise<void> {
     });
 
     await bundle.write({
+      exports: "auto",
       file: path.resolve(packagesDirectory, pkg.name, `./lib/${pkg.name}.js`),
       format: "cjs",
     });
@@ -69,6 +70,7 @@ async function build(): Promise<void> {
     external: ["purgecss"],
   });
   await gruntBundle.write({
+    exports: "auto",
     file: path.resolve(
       packagesDirectory,
       "grunt-purgecss",
