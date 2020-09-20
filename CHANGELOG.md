@@ -1,3 +1,14 @@
+# [3.0](https://github.com/FullHuman/purgecss/compare/v2.3.0...v) (2020-09-06)
+
+
+### Features
+
+* **CLI:** add blocklist option ([3961afb](https://github.com/FullHuman/purgecss/commit/3961afbc6d90eae83fe4862a4498857fa7ba3ff6))
+* add blocklist option ([04223f7](https://github.com/FullHuman/purgecss/commit/04223f7fe27f8d818961a53900a7c5293d2322b6))
+* add safelist option, replace whitelist
+* add safelist keyframes and css variables ([dc59d30](https://github.com/FullHuman/purgecss/commit/dc59d309a4a4be9845c40966a19f9705c42a33a1)), closes [#418](https://github.com/FullHuman/purgecss/issues/418) [#439](https://github.com/FullHuman/purgecss/issues/439)
+
+
 # [](https://github.com/FullHuman/purgecss/compare/v2.0.1-alpha.0...v) (2019-11-23)
 
 
