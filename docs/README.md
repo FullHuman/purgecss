@@ -29,6 +29,11 @@ When you are building a website, you might decide to use a CSS framework like Ta
 
 This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your CSS files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your CSS, resulting in smaller CSS files.
 
+## Sponsors 🥰
+
+[<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85">](tailwindcss.com)
+
+
 ## Table of Contents
 
 ### PurgeCSS
