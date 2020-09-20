@@ -31,7 +31,7 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 
 ## Sponsors 🥰
 
-[<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85">](tailwindcss.com)
+[<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85">](https://tailwindcss.com)
 
 
 ## Table of Contents
