@@ -17,10 +17,7 @@ async function writeCSSToFile(filePath, css) {
 
 program
   .usage("--css <css...> --content <content...> [options]")
-  .option(
-    "-con, --content <files...>",
-    "glob of content files"
-  )
+  .option("-con, --content <files...>", "glob of content files")
   .option("-css, --css <files...>", "glob of css files")
   .option("-c, --config <path>", "path to the configuration file")
   .option(
@@ -39,7 +36,7 @@ program
     "list of selectors that should be removed"
   );
 
-program.parse(process.argv); 
+program.parse(process.argv);
 
 const run = async () => {
   // config file is not specified or the content and css are not,
@@ -81,4 +78,9 @@ const run = async () => {
   }
 };
 
-run();
+try {
+  run();
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
