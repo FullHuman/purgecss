@@ -19,6 +19,8 @@ module.exports = {
     "screen-reader-text",
     "comment-list",
     "wp-social-link",
+  ],
+  safelistPatterns: [
     /^search(-.*)?$/,
     /^(.*)-template(-.*)?$/,
     /^(.*)?-?single(-.*)?$/,
