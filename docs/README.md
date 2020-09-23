@@ -22,6 +22,10 @@ meta:
   
 ---
 
+::: tip
+The documentation is for PurgeCSS 3.0 and above. To see the documentation for PurgeCSS 2.x, click [here](https://github.com/FullHuman/purgecss/tree/5314e41edf328e2ad2639549e1587b82a964a42e/docs)
+:::
+
 # About PurgeCSS
 
 PurgeCSS is a tool to remove unused CSS. It can be part of your development workflow.  

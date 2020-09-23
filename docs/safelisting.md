@@ -8,6 +8,10 @@ meta:
     content: PurgeCSS remove unused CSS optimization web
 ---
 
+::: tip
+The documentation is for PurgeCSS 3.0 and above. To see the documentation for PurgeCSS 2.x, click [here](https://github.com/FullHuman/purgecss/tree/5314e41edf328e2ad2639549e1587b82a964a42e/docs)
+:::
+
 # Safelisting
 
 You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the PurgeCSS option `safelist`, or directly in your CSS with a special comment.
