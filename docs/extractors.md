@@ -31,8 +31,8 @@ Using a specific extractor for an extension should provide you with the best acc
 You can use an extractor by settings the extractors option in the PurgeCSS config file.
 
 ```javascript
-import purgeJs from 'purge-from-js'
-import purgeHtml from 'purge-from-html'
+import purgeJs from 'purgecss-from-js'
+import purgeHtml from 'purgecss-from-html'
 
 const options = {
   content: [], // files to extract the selectors from
