@@ -1,9 +1,0 @@
-.some-item:nth-child(2n){
-  color: green
-}
-.some-item:nth-child(2n+1){
-  color: blue
-}
-canvas {
-  display: none
-}

@@ -1,6 +1,0 @@
-.bar:not(.foo) {
-  color: red;
-}
-.bar:not(.foo-bar) {
-  color: blue;
-}
