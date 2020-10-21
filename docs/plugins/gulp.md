@@ -45,7 +45,7 @@ gulp.task('purgecss-rejected', () => {
     return gulp.src('src/**/*.css')
         .pipe(rename({
             suffix: '.rejected'
-        })
+        }))
         .pipe(purgecss({
             content: ['src/**/*.html'],
             rejected: true
