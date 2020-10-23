@@ -36,6 +36,7 @@
     "vuepress": "^1.5.4"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "build": "ts-node scripts/build.ts",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
