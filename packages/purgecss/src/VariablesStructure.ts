@@ -1,4 +1,4 @@
-import postcss from "postcss";
+import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
 
 class VariableNode {

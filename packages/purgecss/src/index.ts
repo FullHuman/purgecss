@@ -109,11 +109,11 @@ function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
  * Check if the node correspond to an empty css rule
  * @param node node of postcss AST
  */
-function isRuleEmpty(node: postcss.Container): boolean {
+function isRuleEmpty(node?: postcss.Container): boolean {
   if (
-    (node.type === "rule" && !node.selector) ||
-    (node.nodes && !node.nodes.length) ||
-    (node.type === "atrule" &&
+    (isPostCSSRule(node) && !node.selector) ||
+    (node?.nodes && !node.nodes.length) ||
+    (isPostCSSAtRule(node) &&
       ((!node.nodes && !node.params) ||
         (!node.params && node.nodes && !node.nodes.length)))
   ) {
@@ -257,6 +257,18 @@ function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
     return str;
   });
   return matches;
+}
+
+function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
+  return node?.type === "atrule";
+}
+
+function isPostCSSRule(node?: postcss.Node): node is postcss.Rule {
+  return node?.type === "rule";
+}
+
+function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
+  return node?.type === "comment";
 }
 
 class PurgeCSS {
@@ -428,8 +440,7 @@ class PurgeCSS {
     // exit if the previous annotation is a ignore next line comment
     const annotation = node.prev();
     if (
-      annotation &&
-      annotation.type === "comment" &&
+      isPostCSSComment(annotation) &&
       isIgnoreAnnotation(annotation, "next")
     ) {
       annotation.remove();
@@ -439,14 +450,14 @@ class PurgeCSS {
     // exit if it is inside a keyframes
     if (
       node.parent &&
-      node.parent.type === "atrule" &&
+      isPostCSSAtRule(node.parent) &&
       node.parent.name === "keyframes"
     ) {
       return;
     }
 
     // exit if it is not a rule
-    if (node.type !== "rule") {
+    if (!isPostCSSRule(node)) {
       return;
     }
 
@@ -483,7 +494,7 @@ class PurgeCSS {
     // remove empty rules
     const parent = node.parent;
     if (!node.selector) node.remove();
-    if (isRuleEmpty(parent)) parent.remove();
+    if (isRuleEmpty(parent)) parent?.remove();
   }
 
   /**

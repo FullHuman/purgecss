@@ -41,7 +41,7 @@
   "dependencies": {
     "commander": "^6.0.0",
     "glob": "^7.0.0",
-    "postcss": "7.0.32",
+    "postcss": "^8.0.9",
     "postcss-selector-parser": "^6.0.2"
   },
   "devDependencies": {
