@@ -1,46 +1,96 @@
 import parse5 from "parse5";
 import * as htmlparser2 from "parse5-htmlparser2-tree-adapter";
 
-const getSelectorsInElement = (element: htmlparser2.Element): string[] => {
-  const selectors: string[] = [];
-  const tagName = element.name;
+type ExtractorResultDetailed = {
+  attributes: {
+    names: string[];
+    values: string[];
+  };
+  classes: string[];
+  ids: string[];
+  tags: string[];
+  undetermined: string[];
+};
 
-  // add class names
-  if (element.attribs.class) {
-    selectors.push(...element.attribs.class.split(" "));
+const mergedExtractorResults = (
+  resultLeft: ExtractorResultDetailed,
+  resultRight: ExtractorResultDetailed
+): ExtractorResultDetailed => {
+  return {
+    attributes: {
+      names: [...resultLeft.attributes.names, ...resultRight.attributes.names],
+      values: [
+        ...resultLeft.attributes.values,
+        ...resultRight.attributes.values,
+      ],
+    },
+    classes: [...resultLeft.classes, ...resultRight.classes],
+    ids: [...resultLeft.ids, ...resultRight.ids],
+    tags: [...resultLeft.tags, ...resultRight.tags],
+    undetermined: [],
+  };
+};
+
+const getSelectorsInElement = (
+  element: htmlparser2.Element
+): ExtractorResultDetailed => {
+  const result: ExtractorResultDetailed = {
+    attributes: {
+      names: [],
+      values: [],
+    },
+    classes: [],
+    ids: [],
+    tags: [element.name],
+    undetermined: [],
+  };
+
+  for (const [name, value] of Object.entries(element.attribs)) {
+    if (name === "class") {
+      result.classes.push(...value.split(" "));
+    } else if (name === "id") {
+      result.ids.push(...value.split(" "));
+    } else {
+      result.attributes.names.push(name);
+      result.attributes.values.push(...value.split(" "));
+    }
   }
 
-  // add ids
-  if (element.attribs.id) {
-    selectors.push(...element.attribs.id.split(" "));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  return [...getSelectorsInNodes(element), ...selectors, tagName];
+  return mergedExtractorResults(getSelectorsInNodes(element), result);
 };
 
 const getSelectorsInNodes = (
   node: htmlparser2.Document | htmlparser2.Element
-): string[] => {
-  const selectors: string[] = [];
+): ExtractorResultDetailed => {
+  let result: ExtractorResultDetailed = {
+    attributes: {
+      names: [],
+      values: [],
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: [],
+  };
+
   for (const childNode of node.children) {
     const element = childNode as htmlparser2.Element;
 
     switch (element.type) {
       case "tag":
-        selectors.push(...getSelectorsInElement(element));
+        result = mergedExtractorResults(result, getSelectorsInElement(element));
         break;
       case "root":
-        selectors.push(...getSelectorsInNodes(element));
+        result = mergedExtractorResults(result, getSelectorsInNodes(element));
         break;
       default:
         break;
     }
   }
-  return selectors;
+  return result;
 };
 
-const purgecssFromHtml = (content: string): string[] => {
+const purgecssFromHtml = (content: string): ExtractorResultDetailed => {
   const tree = parse5.parse(content, {
     treeAdapter: htmlparser2,
   }) as htmlparser2.Document;
