@@ -743,8 +743,7 @@ class PurgeCSS {
 
       // The selector is present in the blocklist
       if (selectorValue && this.isSelectorBlocklisted(selectorValue)) {
-        isPresent = false;
-        continue;
+        return false;
       }
 
       switch (selectorNode.type) {
