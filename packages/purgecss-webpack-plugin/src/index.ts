@@ -1,15 +1,34 @@
 import * as fs from "fs";
+import path from "path";
 import PurgeCSS, { defaultOptions } from "purgecss";
 import { ConcatSource } from "webpack-sources";
-import * as search from "./search";
-import { File, UserDefinedOptions, PurgedStats, PurgeAsset } from "./types";
+import { UserDefinedOptions, PurgedStats } from "./types";
 
-import { Compiler, Stats, compilation as compilationType } from "webpack";
-
-type Compilation = compilationType.Compilation;
+import { Compiler, Compilation } from "webpack";
 
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";
+
+/**
+ * Get the filename without ?hash
+ * @param fileName file name
+ */
+function getFormattedFilename(fileName: string): string {
+  if (fileName.includes("?")) {
+    return fileName.split("?").slice(0, -1).join("");
+  }
+  return fileName;
+}
+
+/**
+ * Returns true if the filename is of types of one of the specified extensions
+ * @param filename file name
+ * @param extensions extensions
+ */
+function isFileOfTypes(filename: string, extensions: string[]): boolean {
+  const extension = path.extname(getFormattedFilename(filename));
+  return extensions.includes(extension);
+}
 
 export default class PurgeCSSPlugin {
   options: UserDefinedOptions;
@@ -20,40 +39,10 @@ export default class PurgeCSSPlugin {
   }
 
   apply(compiler: Compiler): void {
-    compiler.hooks.compilation.tap(pluginName, (compilation: Compilation) => {
-      this.initializePlugin(compilation);
-    });
-    compiler.hooks.done.tap(pluginName, this.onHooksDone.bind(this));
-  }
-
-  onHooksDone(stats: Stats): void {
-    if (stats.hasErrors()) {
-      if (this.options.verbose) {
-        console.warn("purge-webpack-plugin: pausing due to webpack errors");
-      }
-      return;
-    }
-
-    if (this.options.rejected) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      stats["purged"] = this.purgedStats;
-    }
-  }
-
-  getAssetsToPurge(
-    assetsFromCompilation: PurgeAsset[],
-    files: string[]
-  ): PurgeAsset[] {
-    return assetsFromCompilation.filter((asset) => {
-      if (this.options.only) {
-        return this.options.only.some((only) => {
-          return asset && asset.name.includes(only);
-        });
-      } else {
-        return asset && files.includes(asset.name);
-      }
-    });
+    compiler.hooks.compilation.tap(
+      pluginName,
+      this.initializePlugin.bind(this)
+    );
   }
 
   initializePlugin(compilation: Compilation): void {
@@ -75,24 +64,24 @@ export default class PurgeCSSPlugin {
     compilation: Compilation,
     entryPaths: string[]
   ): Promise<void> {
-    const assetsFromCompilation = search.getAssets(compilation.assets, [
-      ".css",
-    ]);
+    const assetsFromCompilation = Object.entries(compilation.assets).filter(
+      ([name]) => {
+        return isFileOfTypes(name, [".css"]);
+      }
+    );
 
     for (const chunk of compilation.chunks) {
-      const { files } = chunk;
-      const assetsToPurge = this.getAssetsToPurge(assetsFromCompilation, files);
+      const assetsToPurge = assetsFromCompilation.filter(([name]) => {
+        if (this.options.only) {
+          return this.options.only.some((only) => name.includes(only));
+        }
+        return chunk.files.has(name);
+      });
 
-      for (const { name, asset } of assetsToPurge) {
-        const filesToSearch = entryPaths
-          .concat(
-            search.files(
-              chunk,
-              this.options.moduleExtensions || [],
-              (file: File) => file.resource
-            )
-          )
-          .filter((v) => !styleExtensions.some((ext) => v.endsWith(ext)));
+      for (const [name, asset] of assetsToPurge) {
+        const filesToSearch = entryPaths.filter(
+          (v) => !styleExtensions.some((ext) => v.endsWith(ext))
+        );
 
         // Compile through Purgecss and attach to output.
         // This loses sourcemaps should there be any!
@@ -102,7 +91,7 @@ export default class PurgeCSSPlugin {
           content: filesToSearch,
           css: [
             {
-              raw: asset.source(),
+              raw: asset.source().toString(),
             },
           ],
         };
@@ -129,7 +118,9 @@ export default class PurgeCSSPlugin {
           this.purgedStats[name] = purged.rejected;
         }
 
-        compilation.assets[name] = new ConcatSource(purged.css);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        compilation.updateAsset(name, new ConcatSource(purged.css));
       }
     }
   }
