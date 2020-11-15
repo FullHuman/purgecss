@@ -41,18 +41,3 @@ export interface UserDefinedOptions {
 export type PurgedStats = {
   [index: string]: string[];
 };
-
-export interface PurgeAsset {
-  asset: {
-    source: () => string;
-  };
-  name: string;
-}
-
-export interface File {
-  resource?: string;
-}
-
-export type Chunk = {
-  modulesIterable: File[];
-};

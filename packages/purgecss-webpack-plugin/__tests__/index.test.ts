@@ -10,9 +10,9 @@ const asyncFs = {
 function runWebpack(options: Configuration): Promise<webpack.Stats> {
   const compiler = webpack(options);
   return new Promise<webpack.Stats>((resolve, reject) => {
-    compiler.run((err: Error, stats: Stats) => {
+    compiler.run((err?: Error, stats?: Stats) => {
       if (err) reject(err);
-      if (stats.hasErrors()) reject(new Error(stats.toString()));
+      if (stats?.hasErrors()) reject(new Error(stats.toString()));
       resolve(stats);
     });
   });
