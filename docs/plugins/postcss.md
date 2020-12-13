@@ -3,9 +3,23 @@ title: PostCSS | PurgeCSS
 lang: en-US
 meta:
   - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project.
-  - name: keywords
-    content: PurgeCSS PostCSS remove unused CSS optimization web
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with postcss with a plugin.
+  - itemprop: description
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with postcss with a plugin.
+  - property: og:url
+    content:  https://purgecss.com/plugins/postcss
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:type
+    content: website
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with postcss with a plugin.
 ---
 
 # PostCSS
@@ -13,7 +27,7 @@ meta:
 ## Installation
 
 ```
-npm i -D @fullhuman/postcss-purgecss
+npm i -D @fullhuman/postcss-purgecss postcss
 ```
 
 ## Usage

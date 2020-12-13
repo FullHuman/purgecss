@@ -1,7 +1,7 @@
 # PurgeCSS
 
-![David](https://img.shields.io/david/FullHuman/purgecss?style=for-the-badge)
-![David](https://img.shields.io/david/dev/FullHuman/purgecss?style=for-the-badge)
+![David](https://img.shields.io/david/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
+![David](https://img.shields.io/david/dev/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
 ![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
 ![npm](https://img.shields.io/npm/v/purgecss?style=for-the-badge)
 ![npm](https://img.shields.io/npm/dw/purgecss?style=for-the-badge)

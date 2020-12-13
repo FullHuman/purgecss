@@ -4,8 +4,20 @@ lang: en-US
 meta:
   - name: description
     content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
-  - name: keywords
-    content: PurgeCSS remove unused CSS optimization web
+  - itemprop: description
+    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
+  - property: og:url
+    content:  https://purgecss.com/safelisting
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
 ---
 
 ::: tip

@@ -4,8 +4,20 @@ lang: en-US
 meta:
   - name: description
     content: PurgeCSS can be used with CSS modules by modifying the webpack configuration.
-  - name: keywords
-    content: PurgeCSS CSS modules webpack configuration common question
+  - itemprop: description
+    content: PurgeCSS can be used with CSS modules by modifying the webpack configuration.
+  - property: og:url
+    content:  https://purgecss.com/css_modules
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: PurgeCSS can be used with CSS modules by modifying the webpack configuration.
 ---
 
 # How to use with CSS modules

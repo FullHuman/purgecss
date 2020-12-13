@@ -4,8 +4,20 @@ lang: en-US
 meta:
   - name: description
     content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
-  - name: keywords
-    content: PurgeCSS remove unused CSS optimization web programmatic API typescript javascript
+  - itemprop: description
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
+  - property: og:url
+    content:  https://purgecss.com/api
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
 ---
 
 # Programmatic API

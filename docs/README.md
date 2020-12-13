@@ -3,21 +3,23 @@ title: PurgeCSS - Remove unused CSS
 lang: en-US
 meta:
   - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+    content: PurgeCSS is a tool to remove unused CSS that you're not using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
   - itemprop: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+    content: PurgeCSS is a tool to remove unused CSS that you're not using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
   - property: og:url
     content:  https://purgecss.com
   - property: og:site_name
     content: purgecss.com
   - property: og:type
     content: website
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
   - property: og:locale
     content: en_US
   - property: og:title
     content: Remove unused CSS - PurgeCSS
   - property: og:description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+    content: PurgeCSS is a tool to remove unused CSS that you're not using in your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
 
   
 ---

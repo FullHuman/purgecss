@@ -12,7 +12,7 @@
 ## Installation
 
 ```
-npm i -D @fullhuman/postcss-purgecss
+npm i -D @fullhuman/postcss-purgecss postcss
 ```
 
 ## Usage

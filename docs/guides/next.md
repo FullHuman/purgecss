@@ -3,9 +3,23 @@ title: Next.js | PurgeCSS
 lang: en-US
 meta:
   - name: description
-    content: PurgeCSS can be used with Next.js with the plugin next-purgecss.
-  - name: keywords
-    content: PurgeCSS Next.js Next plugin next-purgecss
+    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
+  - itemprop: description
+    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
+  - property: og:url
+    content:  https://purgecss.com/guides/next
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:type
+    content: website
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
 ---
 
 # Next.js
@@ -16,12 +30,12 @@ You can use PurgeCSS with Next.js by using the postCSS plugin in the Next.js con
 
 ## Customize PostCSS configuration (Next.js >= 9.3)
 
-To customize the PostCSS configuration, create a postcss.config.json file in the root of your project.
+To customize the PostCSS configuration, create a postcss.config.js file in the root of your project.
 
 Add PurgeCSS to the default configuration:
 
 ```js
-{
+module.exports = {
   "plugins": [
     "postcss-flexbugs-fixes",
     [
