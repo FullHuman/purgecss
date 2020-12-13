@@ -3,7 +3,7 @@
   "version": "3.1.0-alpha.0",
   "description": "PostCSS plugin for PurgeCSS",
   "author": "FoundrySH <no-reply@foundry.sh>",
-  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "homepage": "https://purgecss.com",
   "license": "MIT",
   "main": "lib/postcss-purgecss.js",
   "module": "lib/postcss-purgecss.esm.js",
