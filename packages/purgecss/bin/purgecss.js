@@ -5,6 +5,7 @@ const {
   default: PurgeCSS,
   defaultOptions,
   setOptions,
+  standardizeSafelist,
 } = require("../lib/purgecss");
 
 async function writeCSSToFile(filePath, css) {
@@ -57,7 +58,8 @@ const run = async () => {
   if (program.keyframes) options.keyframes = program.keyframes;
   if (program.rejected) options.rejected = program.rejected;
   if (program.variables) options.variables = program.variables;
-  if (program.safelist) options.safelist = program.safelist;
+  if (program.safelist)
+    options.safelist = standardizeSafelist(program.safelist);
   if (program.blocklist) options.blocklist = program.blocklist;
 
   const purged = await new PurgeCSS().purge(options);

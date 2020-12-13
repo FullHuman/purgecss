@@ -9,7 +9,7 @@ describe("PurgeCSS CLI", () => {
   const testFolder = path.resolve(__dirname, "./test_examples/cli/simple/");
   it("should print the correct output", async () => {
     const response = await asyncExec(
-      `${purgeCSSExecutable} --content ${testFolder}/src/content.html ${testFolder}/src/*.js --css ${testFolder}/src/style.css`
+      `${purgeCSSExecutable} --content ${testFolder}/src/content.html ${testFolder}/src/*.js --css ${testFolder}/src/style.css --safelist className`
     );
     const result = JSON.parse(response.stdout);
     expect(result[0].css).toBe(".hello {\n  color: red;\n}\n");
