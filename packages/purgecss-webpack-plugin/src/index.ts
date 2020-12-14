@@ -4,12 +4,10 @@ import PurgeCSS, { defaultOptions } from "purgecss";
 import { ConcatSource } from "webpack-sources";
 import { UserDefinedOptions, PurgedStats } from "./types";
 
-import { Compiler, Compilation, version as webpackVersion } from "webpack";
+import { Compiler, Compilation } from "webpack";
 
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";
-
-const isWebpack4 = webpackVersion[0] === "4";
 
 /**
  * Get the filename without ?hash
@@ -78,10 +76,8 @@ export default class PurgeCSSPlugin {
           return this.options.only.some((only) => name.includes(only));
         }
 
-        return isWebpack4
-          ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            chunk.files.includes(name)
+        return Array.isArray(chunk.files)
+          ? chunk.files.includes(name)
           : chunk.files.has(name);
       });
 
