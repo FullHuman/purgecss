@@ -1,3 +1,16 @@
+# [3.1](https://github.com/FullHuman/purgecss/compare/v3.1.0-alpha.0...v) (2020-12-14)
+
+* **PurgeCSS** Update to PostCSS 8
+* **postcss-purgecss** Add compatibility with PostCSS 8
+* **purgecss-webpack-plugin** Fix deprecation warning with Webpack 5
+
+### Bug Fixes
+
+* ci update to postcss 8.2 ([72302ff](https://github.com/FullHuman/purgecss/commit/72302ffa475a2f74af4211c5a3caa70f2de4abfd))
+* safelist option in CLI ([43dbe3c](https://github.com/FullHuman/purgecss/commit/43dbe3c498292a9c1ef2166d8c714275fcb9d62a)), closes [#513](https://github.com/FullHuman/purgecss/issues/513)
+
+
+
 # [3.0](https://github.com/FullHuman/purgecss/compare/v2.3.0...v) (2020-09-06)
 
 
