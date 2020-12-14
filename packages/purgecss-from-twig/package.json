@@ -1,6 +1,6 @@
 {
   "name": "purgecss-from-twig",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Twig extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
