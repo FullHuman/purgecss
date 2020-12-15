@@ -1,3 +1,8 @@
+# [](https://github.com/FullHuman/purgecss/compare/v3.1.3-alpha.0...v) (2020-12-15)
+
+* **postcss-purgecss** remove postcss 8 as peer dependency
+* **purgecss-webpack-plugin** fix backward compatibility with webpack 4
+
 # [3.1](https://github.com/FullHuman/purgecss/compare/v3.1.0-alpha.0...v) (2020-12-14)
 
 * **PurgeCSS** Update to PostCSS 8
