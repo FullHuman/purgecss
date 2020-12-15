@@ -4,6 +4,8 @@ docs/.vuepress/dist/
 .firebase/
 .firebaserc
 
+.DS_Store
+
 packages/purgecss-webpack-plugin/__tests__/js
 packages/grunt-purgecss/__tests__/tmp
 
