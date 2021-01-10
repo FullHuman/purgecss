@@ -1,16 +1,18 @@
 import * as path from "path";
 import fs from "fs";
 import { promisify } from "util";
-import webpack, { Configuration, Stats } from "webpack";
+import webpack, { Configuration } from "webpack";
 
 const asyncFs = {
   readdir: promisify(fs.readdir),
 };
 
-function runWebpack(options: Configuration): Promise<webpack.Stats> {
+function runWebpack(
+  options: Configuration
+): Promise<webpack.Stats | undefined> {
   const compiler = webpack(options);
-  return new Promise<webpack.Stats>((resolve, reject) => {
-    compiler.run((err?: Error, stats?: Stats) => {
+  return new Promise((resolve, reject) => {
+    compiler.run((err, stats) => {
       if (err) reject(err);
       if (stats?.hasErrors()) reject(new Error(stats.toString()));
       resolve(stats);
