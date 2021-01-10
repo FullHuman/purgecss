@@ -1,6 +1,5 @@
 import fs from "fs";
-import { UserDefinedOptions } from "../src/types";
-import postcss, { PluginCreator } from "postcss";
+import postcss from "postcss";
 
 import purgeCSSPlugin from "../src/";
 
@@ -16,7 +15,7 @@ describe("Purgecss postcss plugin", () => {
         .readFileSync(`${__dirname}/fixtures/expected/${file}.css`)
         .toString();
       const result = await postcss([
-        (purgeCSSPlugin as PluginCreator<UserDefinedOptions>)({
+        purgeCSSPlugin({
           content: [`${__dirname}/fixtures/src/${file}/${file}.html`],
           fontFace: true,
           keyframes: true,
@@ -43,7 +42,7 @@ describe("Purgecss postcss plugin", () => {
         .mockReturnValue([`${__dirname}/fixtures/src/${file}/${file}.html`]);
 
       postcss([
-        (purgeCSSPlugin as PluginCreator<UserDefinedOptions>)({
+        purgeCSSPlugin({
           contentFunction,
           fontFace: true,
           keyframes: true,
@@ -68,7 +67,7 @@ describe("Purgecss postcss plugin", () => {
       .readFileSync(`${__dirname}/fixtures/expected/simple.css`)
       .toString();
     postcss([
-      (purgeCSSPlugin as PluginCreator<UserDefinedOptions>)({
+      purgeCSSPlugin({
         content: [`${__dirname}/fixtures/src/simple/simple.html`],
         rejected: true,
       }),

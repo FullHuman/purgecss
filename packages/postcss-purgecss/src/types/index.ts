@@ -3,9 +3,6 @@ import {
   StringRegExpArray,
 } from "../../../purgecss/src/types/index";
 
-import postCSS7 from "postcss7";
-import * as postCSS8 from "postcss";
-
 export interface RawContent<T = string> {
   extension: string;
   raw: T;
@@ -34,8 +31,3 @@ export interface UserDefinedOptions {
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
 }
-
-export type PostCSSv7 = typeof postCSS7;
-export type PostCSSv8 = typeof postCSS8.default;
-
-export type PostCSSVersions = PostCSSv8 | PostCSSv7;
