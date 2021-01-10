@@ -45,8 +45,7 @@
     "postcss-selector-parser": "^6.0.2"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.1",
-    "tailwindcss": "^1.2.0"
+    "@types/glob": "^7.1.1"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
