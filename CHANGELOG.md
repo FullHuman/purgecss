@@ -1,3 +1,8 @@
+# [](https://github.com/FullHuman/purgecss/compare/v4.0.0...v) (2021-01-17)
+
+### Breaking Changes
+Drop PostCSS 7 support, use @fullhuman/postcss-purgecss 3.0 with PostCSS 7.
+
 # [](https://github.com/FullHuman/purgecss/compare/v3.1.3-alpha.0...v) (2020-12-15)
 
 * **postcss-purgecss** remove postcss 8 as peer dependency
