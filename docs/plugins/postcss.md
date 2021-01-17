@@ -24,6 +24,11 @@ meta:
 
 # PostCSS
 
+::: warning
+If you are using PostCSS 7, install @fullhuman/postcss-purgecss 3.0.0: `npm i -D @fullhuman/postcss-purgecss@3.0.0`.
+From version 4.0, it is compatible with PostCSS >=8 only.
+:::
+
 ## Installation
 
 ```
