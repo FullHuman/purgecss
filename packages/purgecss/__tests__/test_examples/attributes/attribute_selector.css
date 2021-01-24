@@ -66,10 +66,18 @@ a[href$="http"] {
 
 /* CSS [attribute*="value"] Selector */
 
-a[title~="thin"] {
+a[title*="thin"] {
   border: 5px solid yellow;
 }
 
-a[title~="fat"] {
+a[title*="fat"] {
   border: 5px solid yellow;
+}
+
+/* CSS [attribute*="value"] Selector with spaces */
+[class*=" class2"] {
+  color: green;
+}
+[class*="class1 class2 "] {
+  color: blue;
 }

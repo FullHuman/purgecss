@@ -65,7 +65,10 @@ class ExtractorResultSets {
   }
 
   hasAttrSubstr(substr: string): boolean {
-    return this.someAttrValue((value) => value.includes(substr));
+    const wordSubstr = substr.trim().split(" ");
+    return wordSubstr.every((word) =>
+      this.someAttrValue((value) => value.includes(word))
+    );
   }
 
   hasAttrValue(value: string): boolean {

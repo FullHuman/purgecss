@@ -63,8 +63,13 @@ describe("attributes", () => {
 
   it("handles [attribute*=value]", () => {
     // keep used css
-    expect(purgedCSS.includes('a[title~="thin"]')).toBe(true);
+    expect(purgedCSS.includes('a[title*="thin"]')).toBe(true);
     // remove unused css
-    expect(purgedCSS.includes('a[title~="fat"]')).toBe(false);
+    expect(purgedCSS.includes('a[title*="fat"]')).toBe(false);
+  });
+
+  it("handles spaces in attribute selector", () => {
+    expect(purgedCSS.includes('[class*=" class2"]')).toBe(true);
+    expect(purgedCSS.includes('[class*="class1 class2 "]')).toBe(true);
   });
 });
