@@ -34,6 +34,8 @@ To customize the PostCSS configuration, create a postcss.config.js file in the r
 
 > Warning: When you define a custom PostCSS configuration file, Next.js completely disables the default behavior. Be sure to manually configure all the features you need compiled, including [Autoprefixer](https://github.com/postcss/autoprefixer). You also need to install any plugins included in your custom configuration manually, i.e. `npm install postcss-flexbugs-fixes postcss-preset-env`.
 
+> By default, the outer document containing `html` and `body` is inside nextjs node module. Add `safelist:["html", "body"]` to make sure PurgeCSS does not remove those style.
+
 Add PurgeCSS to the default configuration:
 
 ```js
@@ -59,7 +61,8 @@ module.exports = {
             './pages/**/*.{js,jsx,ts,tsx}',
             './components/**/*.{js,jsx,ts,tsx}'
         ],
-        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+        safelist: ["html", "body"]
       }
     ],
   ]
