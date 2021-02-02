@@ -36,7 +36,7 @@ In the following examples, the options passed to PurgeCSS are the same as the on
 
 ### ES Module Import Syntax
 ```javascript
-import PurgeCSS from 'purgecss'
+import { PurgeCSS } from 'purgecss'
 const purgeCSSResult = await new PurgeCSS().purge({
   content: ['**/*.html'],
   css: ['**/*.css']
