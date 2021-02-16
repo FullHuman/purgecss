@@ -6,3 +6,7 @@ html, body {
 .there {
     color: green;
 }
+
+.unused {
+    color: #ff00ff;
+}
