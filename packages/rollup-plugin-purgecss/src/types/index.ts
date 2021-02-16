@@ -1,6 +1,6 @@
 import {
-  UserDefinedSafelist,
   StringRegExpArray,
+  UserDefinedSafelist,
 } from "../../../purgecss/src/types/index";
 
 export interface RawContent<T = string> {
@@ -16,18 +16,25 @@ export interface Extractors {
   extractor: ExtractorFunction;
 }
 
+type OutputFunction = (css: string, styles: string[]) => void;
+
 export interface UserDefinedOptions {
-  content?: Array<string | RawContent>;
+  content: Array<string | RawContent>;
   contentFunction?: (sourceFile: string) => Array<string | RawContent>;
   defaultExtractor?: ExtractorFunction;
   extractors?: Array<Extractors>;
   fontFace?: boolean;
   keyframes?: boolean;
-  output?: string;
+  output?: string | OutputFunction | boolean;
   rejected?: boolean;
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
+
+  insert?: boolean;
+  include?: string | RegExp | (string | RegExp)[];
+  exclude?: string | RegExp | (string | RegExp)[];
+  dest?: string;
 }

@@ -1,32 +1,24 @@
 import fs from "fs";
-import Purgecss, { PurgeCSS } from "purgecss";
+import { PurgeCSS } from "purgecss";
 import { Plugin } from "rollup";
 import { createFilter } from "rollup-pluginutils";
 import { UserDefinedOptions } from "./types";
 
 function pluginPurgeCSS(options: UserDefinedOptions): Plugin {
-  return {
-    name: "purgecss",
-    transform: async (code, id) => {
-      const v = await new PurgeCSS().purge();
-    },
-  };
-}
-
-const pluginPurgecss = function (options = {}) {
   const filter = createFilter(
     options.include || ["**/*.css"],
     options.exclude || "node_modules/**"
   );
-  const styles = [];
+
+  const styles: string[] = [];
   let dest = "";
 
   return {
     name: "purgecss",
-    transform(code, id) {
+    transform: async (code, id) => {
       if (!filter(id)) return null;
 
-      const purgecss = new Purgecss({
+      const v = await new PurgeCSS().purge({
         content: options.content,
         css: [
           {
@@ -34,7 +26,8 @@ const pluginPurgecss = function (options = {}) {
           },
         ],
       });
-      let css = purgecss.purge()[0].css;
+      let css = v[0].css;
+
       styles.push(css);
 
       css = JSON.stringify(css);
@@ -73,6 +66,6 @@ const pluginPurgecss = function (options = {}) {
       }
     },
   };
-};
+}
 
-export default pluginPurgecss;
+export default pluginPurgeCSS;

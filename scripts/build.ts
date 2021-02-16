@@ -1,7 +1,7 @@
+import typescript from "@wessberg/rollup-plugin-ts";
 import path from "path";
 import { rollup } from "rollup";
 import { terser } from "rollup-plugin-terser";
-import typescript from "@wessberg/rollup-plugin-ts";
 
 const packagesDirectory = path.resolve(__dirname, "./../packages");
 
@@ -24,6 +24,10 @@ const packages = [
   {
     name: "purgecss-webpack-plugin",
     external: ["fs", "path", "purgecss", "webpack", "webpack-sources"],
+  },
+  {
+    name: "rollup-plugin-purgecss",
+    external: ["fs", "rollup-pluginutils", "purgecss"],
   },
   {
     name: "gulp-purgecss",
