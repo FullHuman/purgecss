@@ -1,6 +1,6 @@
 {
   "name": "grunt-purgecss",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Grunt plugin for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -30,7 +30,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "purgecss": "^4.0.1"
+    "purgecss": "^4.0.2"
   },
   "devDependencies": {
     "@types/grunt": "^0.4.25",

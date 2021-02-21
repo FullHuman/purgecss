@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-purgecss",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Rollup plugin for purgecss",
   "main": "lib/rollup-plugin-purgecss.js",
   "module": "./lib/rollup-plugin-purgecss.es.js",
@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/FullHuman/rollup-plugin-purgecss#readme",
   "dependencies": {
-    "purgecss": "^4.0.1",
+    "purgecss": "^4.0.2",
     "rollup-pluginutils": "^2.8.0"
   }
 }
