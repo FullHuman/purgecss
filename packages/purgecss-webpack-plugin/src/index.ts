@@ -102,6 +102,10 @@ export default class PurgeCSSPlugin {
         if (typeof options.safelist === "function") {
           options.safelist = options.safelist();
         }
+        
+        if (typeof options.blocklist === "function") {
+          options.blocklist = options.blocklist();
+        }
 
         const purgecss = await new PurgeCSS().purge({
           content: options.content,
@@ -114,6 +118,7 @@ export default class PurgeCSSPlugin {
           rejected: options.rejected,
           variables: options.variables,
           safelist: options.safelist,
+          blocklist: options.blocklist,
         });
         const purged = purgecss[0];
 
