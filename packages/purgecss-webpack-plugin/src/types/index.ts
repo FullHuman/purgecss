@@ -17,8 +17,8 @@ export interface Extractors {
 }
 
 type PathFunction = () => string[];
-
 type SafelistFunction = () => ComplexSafelist;
+type BlocklistFunction = () => StringRegExpArray;
 
 export interface UserDefinedOptions {
   paths: string[] | PathFunction;
@@ -34,7 +34,7 @@ export interface UserDefinedOptions {
   variables?: boolean;
   verbose?: boolean;
   safelist?: StringRegExpArray | ComplexSafelist | SafelistFunction;
-  blocklist?: StringRegExpArray;
+  blocklist?: StringRegExpArray | BlocklistFunction;
   only?: string[];
 }
 

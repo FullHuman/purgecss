@@ -102,7 +102,7 @@ export default class PurgeCSSPlugin {
         if (typeof options.safelist === "function") {
           options.safelist = options.safelist();
         }
-        
+
         if (typeof options.blocklist === "function") {
           options.blocklist = options.blocklist();
         }

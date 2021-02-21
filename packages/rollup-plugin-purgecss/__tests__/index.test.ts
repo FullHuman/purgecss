@@ -14,7 +14,7 @@ describe("rollup-plugin-purgecss", () => {
         }),
       ],
     });
-    await bundle.generate({ format: "cjs" });
+    await bundle.generate({ format: "cjs", exports: "auto" });
 
     const actualA = fs
       .readFileSync(path.resolve(__dirname, "assets/actual_a.css"))
