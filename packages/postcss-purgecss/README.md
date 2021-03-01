@@ -94,6 +94,15 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Even if nav-links and usedClass are found by an extractor, they will be removed.
 
+### `skiplist`
+
+If you provide globs for the `content` parameter, you can use this option to exclude certain files/folders that would otherwise be scanned. Pass an array of regex patterns that should be excluded. Note: this option has no effect if `content` is not globs.
+
+```ts
+skiplist: ['node_modules', /^node_/]
+```
+Here, PurgeCSS will not scan any files in the "node_modules" folder, nor any files or folders that begin with "node_".
+
 
 ### `rejected`
 Type: `boolean`
