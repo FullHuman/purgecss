@@ -20,4 +20,5 @@ export const defaultOptions: Options = {
     keyframes: [],
   },
   blocklist: [],
+  skiplist: [],
 };

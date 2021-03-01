@@ -66,6 +66,7 @@ export interface UserDefinedOptions {
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
+  skiplist?: StringRegExpArray;
 }
 
 export interface Options {
@@ -82,6 +83,7 @@ export interface Options {
   variables: boolean;
   safelist: Required<ComplexSafelist>;
   blocklist: StringRegExpArray;
+  skiplist: StringRegExpArray;
 }
 
 export interface ResultPurge {
