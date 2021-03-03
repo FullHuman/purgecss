@@ -37,7 +37,7 @@ program
     "list of selectors that should be removed"
   )
   .option(
-    "-k, --skiplist <list...>",
+    "-k, --skippedContentGlobs <list...>",
     "list of glob patterns for folders/files that should not be scanned"
   );
 
@@ -64,7 +64,7 @@ const run = async () => {
   if (program.variables) options.variables = program.variables;
   if (program.safelist) options.safelist = standardizeSafelist(program.safelist);
   if (program.blocklist) options.blocklist = program.blocklist;
-  if (program.skiplist) options.skiplist = program.skiplist;
+  if (program.skippedContentGlobs) options.skippedContentGlobs = program.skippedContentGlobs;
 
   const purged = await new PurgeCSS().purge(options);
   const output = options.output || program.output;
