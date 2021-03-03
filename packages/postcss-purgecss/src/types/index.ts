@@ -30,5 +30,5 @@ export interface UserDefinedOptions {
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
-  skiplist?: StringRegExpArray;
+  skippedContentGlobs?: Array<String>;
 }
