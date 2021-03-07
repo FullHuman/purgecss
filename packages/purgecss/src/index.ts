@@ -1,40 +1,38 @@
-import * as postcss from "postcss";
-import selectorParser from "postcss-selector-parser";
 import * as fs from "fs";
-import { promisify } from "util";
-
 import glob from "glob";
 import path from "path";
-
-import { defaultOptions } from "./options";
-export { defaultOptions } from "./options";
-
-import {
-  Options,
-  ResultPurge,
-  RawContent,
-  Extractors,
-  ExtractorFunction,
-  IgnoreType,
-  AtRules,
-  RawCSS,
-  UserDefinedOptions,
-  ExtractorResultDetailed,
-  UserDefinedSafelist,
-  ComplexSafelist,
-} from "./types";
-
+import * as postcss from "postcss";
+import selectorParser from "postcss-selector-parser";
+import { promisify } from "util";
 import {
   CONFIG_FILENAME,
   ERROR_CONFIG_FILE_LOADING,
+  IGNORE_ANNOTATION_CURRENT,
+  IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
   IGNORE_ANNOTATION_START,
-  IGNORE_ANNOTATION_END,
-  IGNORE_ANNOTATION_CURRENT,
 } from "./constants";
-import { CSS_SAFELIST } from "./internal-safelist";
-import VariablesStructure from "./VariablesStructure";
 import ExtractorResultSets from "./ExtractorResultSets";
+import { CSS_SAFELIST } from "./internal-safelist";
+import { defaultOptions } from "./options";
+import {
+  AtRules,
+  ComplexSafelist,
+  ExtractorFunction,
+  ExtractorResultDetailed,
+  Extractors,
+  IgnoreType,
+  Options,
+  RawContent,
+  RawCSS,
+  ResultPurge,
+  UserDefinedOptions,
+  UserDefinedSafelist,
+} from "./types";
+import VariablesStructure from "./VariablesStructure";
+
+export { defaultOptions } from "./options";
+export { PurgeCSS };
 
 const asyncFs = {
   access: promisify(fs.access),
@@ -751,9 +749,13 @@ class PurgeCSS {
           // `value` is a dynamic attribute, highly used in input element
           // the choice is to always leave `value` as it can change based on the user
           // idem for `checked`, `selected`, `open`
-          isPresent = ["value", "checked", "selected", "open"].includes(
-            selectorNode.attribute
-          )
+          isPresent = [
+            ...this.options.dynamicAttributes,
+            "value",
+            "checked",
+            "selected",
+            "open",
+          ].includes(selectorNode.attribute)
             ? true
             : isAttributeFound(selectorNode, selectorsFromExtractor);
           break;
@@ -811,5 +813,4 @@ class PurgeCSS {
   }
 }
 
-export { PurgeCSS };
 export default PurgeCSS;

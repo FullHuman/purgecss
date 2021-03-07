@@ -1,5 +1,4 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("attributes", () => {
@@ -9,6 +8,7 @@ describe("attributes", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.html`],
       css: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.css`],
+      dynamicAttributes: ["aria-selected"],
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -71,5 +71,9 @@ describe("attributes", () => {
   it("handles spaces in attribute selector", () => {
     expect(purgedCSS.includes('[class*=" class2"]')).toBe(true);
     expect(purgedCSS.includes('[class*="class1 class2 "]')).toBe(true);
+  });
+
+  it("keeps dynamic attributes", () => {
+    expect(purgedCSS.includes("[aria-selected]")).toBe(true);
   });
 });
