@@ -10,7 +10,7 @@ describe("skipped-content", () => {
       content: [`${ROOT_TEST_EXAMPLES}skipped-content/**/*.html`],
       css: [`${ROOT_TEST_EXAMPLES}skipped-content/simple.css`],
       skippedContentGlobs: [
-        `${ROOT_TEST_EXAMPLES}skipped-content/skippedFolder/skipped.html`,
+        `${ROOT_TEST_EXAMPLES}skipped-content/skippedFolder/**`,
       ],
     });
     purgedCSS = resultsPurge[0].css;
