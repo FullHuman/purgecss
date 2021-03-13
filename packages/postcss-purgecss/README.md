@@ -96,12 +96,12 @@ Even if nav-links and usedClass are found by an extractor, they will be removed.
 
 ### `skippedContentGlobs`
 
-If you provide globs for the `content` parameter, you can use this option to exclude certain files/folders that would otherwise be scanned. Pass an array of strings matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
+If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
 
 ```ts
-skippedContentGlobs: ['node_modules', 'components']
+skippedContentGlobs: ['node_modules/**', 'components/**']
 ```
-Here, PurgeCSS will not scan any files in the "node_modules" and "components" folders.
+Here, PurgeCSS will not scan anything in the "node_modules" and "components" folders.
 
 
 ### `rejected`
