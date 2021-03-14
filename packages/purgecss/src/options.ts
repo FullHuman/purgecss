@@ -1,4 +1,4 @@
-import { Options, ExtractorResult } from "./types/";
+import { ExtractorResult, Options } from "./types/";
 
 export const defaultOptions: Options = {
   css: [],
@@ -21,4 +21,5 @@ export const defaultOptions: Options = {
   },
   blocklist: [],
   skippedContentGlobs: [],
+  dynamicAttributes: [],
 };

@@ -81,3 +81,7 @@ a[title*="fat"] {
 [class*="class1 class2 "] {
   color: blue;
 }
+
+[aria-selected] {
+  font-weight: 700;
+}

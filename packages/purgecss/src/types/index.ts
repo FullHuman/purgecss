@@ -67,6 +67,7 @@ export interface UserDefinedOptions {
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
   skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: string[];
 }
 
 export interface Options {
@@ -84,6 +85,7 @@ export interface Options {
   safelist: Required<ComplexSafelist>;
   blocklist: StringRegExpArray;
   skippedContentGlobs: Array<string>;
+  dynamicAttributes: string[];
 }
 
 export interface ResultPurge {
