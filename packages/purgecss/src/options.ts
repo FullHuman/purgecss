@@ -20,5 +20,6 @@ export const defaultOptions: Options = {
     keyframes: [],
   },
   blocklist: [],
+  skippedContentGlobs: [],
   dynamicAttributes: [],
 };

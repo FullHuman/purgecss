@@ -35,6 +35,10 @@ program
   .option(
     "-b, --blocklist <list...>",
     "list of selectors that should be removed"
+  )
+  .option(
+    "-k, --skippedContentGlobs <list...>",
+    "list of glob patterns for folders/files that should not be scanned"
   );
 
 program.parse(process.argv);
@@ -58,9 +62,9 @@ const run = async () => {
   if (program.keyframes) options.keyframes = program.keyframes;
   if (program.rejected) options.rejected = program.rejected;
   if (program.variables) options.variables = program.variables;
-  if (program.safelist)
-    options.safelist = standardizeSafelist(program.safelist);
+  if (program.safelist) options.safelist = standardizeSafelist(program.safelist);
   if (program.blocklist) options.blocklist = program.blocklist;
+  if (program.skippedContentGlobs) options.skippedContentGlobs = program.skippedContentGlobs;
 
   const purged = await new PurgeCSS().purge(options);
   const output = options.output || program.output;
