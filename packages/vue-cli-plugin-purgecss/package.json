@@ -1,6 +1,6 @@
 {
   "name": "@fullhuman/vue-cli-plugin-purgecss",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "vue-cli plugin to add PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
