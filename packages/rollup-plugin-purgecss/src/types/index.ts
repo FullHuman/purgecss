@@ -33,6 +33,7 @@ export interface UserDefinedOptions {
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
   skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: string[];
 
   insert?: boolean;
   include?: string | RegExp | (string | RegExp)[];

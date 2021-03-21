@@ -36,6 +36,7 @@ export interface UserDefinedOptions {
   safelist?: StringRegExpArray | ComplexSafelist | SafelistFunction;
   blocklist?: StringRegExpArray | BlocklistFunction;
   skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: string[];
   only?: string[];
 }
 

@@ -1,6 +1,6 @@
 import {
-  UserDefinedSafelist,
   StringRegExpArray,
+  UserDefinedSafelist,
 } from "../../../purgecss/src/types/index";
 
 export interface RawContent<T = string> {
@@ -31,4 +31,5 @@ export interface UserDefinedOptions {
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
   skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: string[];
 }
