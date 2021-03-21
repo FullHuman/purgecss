@@ -1,4 +1,5 @@
 import * as postcss from "postcss";
+import { matchAll } from "./index";
 import { StringRegExpArray } from "./types";
 
 class VariableNode {
@@ -62,9 +63,26 @@ class VariablesStructure {
   }
 
   removeUnused(): void {
+    // check unordered usage
+    for (const used of this.usedVariables) {
+      const usedNode = this.nodes.get(used);
+      if (usedNode) {
+        const usedVariablesMatchesInDeclaration = matchAll(
+          usedNode.value.value,
+          /var\((.+?)[,)]/g
+        );
+        usedVariablesMatchesInDeclaration.forEach((usage) => {
+          if (!this.usedVariables.has(usage[1])) {
+            this.usedVariables.add(usage[1]);
+          }
+        });
+      }
+    }
+
     for (const used of this.usedVariables) {
       this.setAsUsed(used);
     }
+
     for (const [name, declaration] of this.nodes) {
       if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
         declaration.value.remove();

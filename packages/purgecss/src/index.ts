@@ -243,7 +243,7 @@ function isInPseudoClass(selector: selectorParser.Node): boolean {
   );
 }
 
-function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
+export function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
   const matches: RegExpMatchArray[] = [];
   str.replace(regexp, function () {
     // eslint-disable-next-line prefer-rest-params

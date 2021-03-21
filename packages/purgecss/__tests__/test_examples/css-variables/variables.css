@@ -1,10 +1,13 @@
 :root {
+  --color-first: var(--wrong-order);
   --primary-color: blue;
   --secondary-color: indigo;
   --tertiary-color: aqua;
   --unused-color: violet;
   --used-color: rebeccapurple;
   --accent-color: orange;
+  --wrong-order: yellow;
+  --random: var(--not-existing);
 }
 
 .button {
@@ -19,4 +22,5 @@
 .button:focus {
   background-color: var(--accent-color);
   color: var(--primary-color);
+  border-color: var(--color-first);
 }

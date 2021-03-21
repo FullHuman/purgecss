@@ -1,5 +1,4 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purge unused css variables", () => {
@@ -24,5 +23,9 @@ describe("purge unused css variables", () => {
     expect(purgedCSS.includes("--tertiary-color")).toBe(false);
     expect(purgedCSS.includes("--unused-color")).toBe(false);
     expect(purgedCSS.includes("--button-color")).toBe(false);
+  });
+  it("keeps '--color-first:', '--wrong-order'", () => {
+    expect(purgedCSS.includes("--color-first:")).toBe(true);
+    expect(purgedCSS.includes("--wrong-order:")).toBe(true);
   });
 });
