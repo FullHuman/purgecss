@@ -323,3 +323,20 @@ Blocklist will block the CSS selectors from appearing in the final output CSS. T
 blocklist: ['usedClass', /^nav-/]
 ```
 Even if nav-links and usedClass are found by an extractor, they will be removed.
+
+- **skippedContentGlobs**
+
+If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
+
+```ts
+skippedContentGlobs: ['node_modules/**', 'components/**']
+```
+Here, PurgeCSS will not scan anything in the "node_modules" and "components" folders.
+
+- **dynamicAttributes**
+
+Option to add custom CSS attribute selectors like "aria-selected", "data-selected", ...etc. 
+
+```ts
+dynamicAttributes: ["aria-selected"]
+```
