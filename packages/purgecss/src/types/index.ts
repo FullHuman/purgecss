@@ -71,7 +71,7 @@ export interface UserDefinedOptions {
 }
 
 export interface Options {
-  content: Array<string | RawContent>;
+  content: Array<string | RawContent | Promise<string | RawContent>>;
   css: Array<string | RawCSS>;
   defaultExtractor: ExtractorFunction;
   extractors: Array<Extractors>;

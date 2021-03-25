@@ -617,6 +617,14 @@ class PurgeCSS {
   }
 
   /**
+   * Naively determines whether or not an object is a promise by checking if 'then' exists on the prototype
+   * @param obj obj
+   */
+  private isPromise<T = unknown>(obj: T): boolean {
+    return "then" in obj;
+  }
+
+  /**
    * Remove unused css
    * @param userOptions PurgeCSS options
    */
@@ -637,17 +645,29 @@ class PurgeCSS {
       this.variablesStructure.safelist = safelist.variables || [];
     }
 
-    const fileFormatContents = content.filter(
+    const contentPromises = await Promise.all(
+      content.filter(
+        (o) => typeof o === "object" && this.isPromise(o)
+      ) as Array<Promise<string | RawContent>>
+    );
+
+    const fileFormatContents = (content.filter(
       (o) => typeof o === "string"
-    ) as string[];
-    const rawFormatContents = content.filter(
-      (o) => typeof o === "object"
-    ) as RawContent[];
+    ) as string[]).concat(
+      contentPromises.filter((o) => typeof o === "string") as string[]
+    );
+
+    const rawFormatContents = (content.filter(
+      (o) => typeof o === "object" && !this.isPromise(o)
+    ) as RawContent[]).concat(
+      contentPromises.filter((o) => typeof o === "object") as RawContent[]
+    );
 
     const cssFileSelectors = await this.extractSelectorsFromFiles(
       fileFormatContents,
       extractors
     );
+
     const cssRawSelectors = await this.extractSelectorsFromString(
       rawFormatContents,
       extractors
