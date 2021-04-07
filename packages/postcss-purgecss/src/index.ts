@@ -77,7 +77,7 @@ const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = function (
     throw new Error("PurgeCSS plugin does not have the correct options");
   return {
     postcssPlugin: PLUGIN_NAME,
-    Once(root, helpers) {
+    OnceExit(root, helpers) {
       return purgeCSS(opts, root, helpers);
     },
   };
