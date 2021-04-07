@@ -93,7 +93,7 @@ describe("Purgecss postcss plugin", () => {
     const result = await postcss([
       {
         postcssPlugin: "postcss-test-prefixer",
-        Rule(rule, { Rule }) {
+        Rule(rule) {
           if (rule.selector.startsWith(".")) {
             rule.selector = ".prefixed-" + rule.selector.slice(1);
           }
