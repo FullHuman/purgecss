@@ -82,4 +82,31 @@ describe("Purgecss postcss plugin", () => {
         done();
       });
   });
+
+  it(`lets other plugins transform selectors before purging`, async () => {
+    const input = fs
+      .readFileSync(`${__dirname}/fixtures/src/other-plugins/other-plugins.css`)
+      .toString();
+    const expected = fs
+      .readFileSync(`${__dirname}/fixtures/expected/other-plugins.css`)
+      .toString();
+    const result = await postcss([
+      {
+        postcssPlugin: "postcss-test-prefixer",
+        Rule(rule) {
+          if (rule.selector.startsWith(".")) {
+            rule.selector = ".prefixed-" + rule.selector.slice(1);
+          }
+        },
+      },
+      purgeCSSPlugin({
+        content: [`${__dirname}/fixtures/src/other-plugins/other-plugins.html`],
+        fontFace: true,
+        keyframes: true,
+      }),
+    ]).process(input, { from: undefined });
+
+    expect(result.css).toBe(expected);
+    expect(result.warnings().length).toBe(0);
+  });
 });
