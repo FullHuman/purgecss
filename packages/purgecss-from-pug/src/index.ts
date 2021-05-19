@@ -8,12 +8,12 @@ const purgeFromPug = (content: string): string[] => {
       case "tag":
       case "id":
       case "class":
-        selectors.push(token.val);
+        selectors.push(...token.val.split(" "));
         break;
       case "attribute":
         if (token.name === "class" || token.name === "id") {
           selectors.push(
-            token.mustEscape ? token.val.replace(/"/g, "") : token.val
+            ...(token.mustEscape ? token.val.replace(/"/g, "") : token.val).split(" ")
           );
         }
         break;
