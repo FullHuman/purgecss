@@ -63,7 +63,7 @@ export async function setOptions(
 ): Promise<Options> {
   let options: Options;
   try {
-    const t = path.join(process.cwd(), configFile);
+    const t = path.resolve(process.cwd(), configFile);
     options = await import(t);
   } catch (err) {
     throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
