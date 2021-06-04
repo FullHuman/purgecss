@@ -1,1 +1,1 @@
-export function extend(base: object): void;
+export function extend(base: any): void;
