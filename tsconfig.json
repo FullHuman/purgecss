@@ -21,7 +21,8 @@
       "*" : ["types/*"],
       "purgecss": ["packages/purgecss/src"],
       "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
-      "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"]
+      "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"],
+      "@fullhuman/purgecss-from-jsx": ["packages/purgecss-from-jsx/src"]
     }
   },
   "include": [
