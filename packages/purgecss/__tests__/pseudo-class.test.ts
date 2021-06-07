@@ -1,16 +1,14 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe(":not pseudo class", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}pseudo-class/not.html`],
       css: [`${ROOT_TEST_EXAMPLES}pseudo-class/not.css`],
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
 
   it("finds foo-bar", () => {
@@ -23,13 +21,12 @@ describe(":not pseudo class", () => {
 
 describe("pseudo selectors", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_selector.html`],
       css: [`${ROOT_TEST_EXAMPLES}pseudo-class/pseudo_selector.css`],
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
   it("finds some-item:nth-child(2n)", () => {
     expect(purgedCSS.includes("some-item:nth-child(2n)")).toBe(true);
@@ -66,13 +63,12 @@ describe("pseudo selectors", () => {
 
 describe("nth-child", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}pseudo-class/nth_child.html`],
       css: [`${ROOT_TEST_EXAMPLES}pseudo-class/nth_child.css`],
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
   it("finds some-item:nth-child(2n)", () => {
     expect(purgedCSS.includes("some-item:nth-child(2n)")).toBe(true);

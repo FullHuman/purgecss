@@ -1,16 +1,14 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("media queries", () => {
   let purgecssResult: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const purgecss = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}media-queries/media_queries.html`],
       css: [`${ROOT_TEST_EXAMPLES}media-queries/media_queries.css`],
     });
     purgecssResult = purgecss[0].css;
-    done();
   });
   it("finds .media-class", () => {
     expect(purgecssResult.includes(".media-class")).toBe(true);

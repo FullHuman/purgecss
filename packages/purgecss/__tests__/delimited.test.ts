@@ -1,16 +1,14 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("delimited", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}delimited/delimited.html`],
       css: [`${ROOT_TEST_EXAMPLES}delimited/delimited.css`],
     });
     purgedCSS = resultPurge[0].css;
-    done();
   });
   it("removes the extra comma", () => {
     const commaCount = purgedCSS

@@ -1,15 +1,14 @@
 import PurgeCSS from "./../src/index";
-import { ROOT_TEST_EXAMPLES, findInCSS } from "./utils";
+import { findInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("ignore comment", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment.html`],
       css: [`${ROOT_TEST_EXAMPLES}comments/ignore_comment.css`],
     });
     purgedCSS = resultsPurge[0].css;
-    done();
   });
   it("ignores h1 h2", () => {
     expect(purgedCSS.includes("h1")).toBe(true);

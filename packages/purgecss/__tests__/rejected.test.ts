@@ -1,19 +1,17 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("rejected", () => {
-  it("does not return the rejected selectors if rejected set to false", async (done) => {
+  it("does not return the rejected selectors if rejected set to false", async () => {
     expect.assertions(1);
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}rejected/simple.js`],
       css: [`${ROOT_TEST_EXAMPLES}rejected/simple.css`],
     });
     expect(resultsPurge[0].rejected).toBe(undefined);
-    done();
   });
 
-  it("returns an empty array if no selectors are rejected", async (done) => {
+  it("returns an empty array if no selectors are rejected", async () => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}rejected/simple.js`],
@@ -21,10 +19,9 @@ describe("rejected", () => {
       rejected: true,
     });
     expect(purgecssResult[0].rejected).toEqual([]);
-    done();
   });
 
-  it("returns the list of rejected selectors", async (done) => {
+  it("returns the list of rejected selectors", async () => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}others/remove_unused.js`],
@@ -35,10 +32,9 @@ describe("rejected", () => {
       ".unused-class",
       ".another-one-not-found",
     ]);
-    done();
   });
 
-  it("returns the list of rejected selectors with chaining rules", async (done) => {
+  it("returns the list of rejected selectors with chaining rules", async () => {
     expect.assertions(1);
     const purgecssResult = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}chaining-rules/index.html`],
@@ -58,6 +54,5 @@ describe("rejected", () => {
       ".parent2.def",
       ".parent3.def1",
     ]);
-    done();
   });
 });

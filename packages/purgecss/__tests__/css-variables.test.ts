@@ -3,14 +3,13 @@ import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purge unused css variables", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}css-variables/variables.html`],
       css: [`${ROOT_TEST_EXAMPLES}css-variables/variables.css`],
       variables: true,
     });
     purgedCSS = resultPurge[0].css;
-    done();
   });
   it("keeps '--primary-color'", () => {
     expect(purgedCSS.includes("--primary-color:")).toBe(true);

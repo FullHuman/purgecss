@@ -1,17 +1,15 @@
 import PurgeCSS from "./../src/index";
-
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purge unused font-face", () => {
   let purgedCSS: string;
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     const resultPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}font-faces/font_face.html`],
       css: [`${ROOT_TEST_EXAMPLES}font-faces/font_face.css`],
       fontFace: true,
     });
     purgedCSS = resultPurge[0].css;
-    done();
   });
   it("keep @font-face 'Cerebri Bold'", () => {
     expect(
