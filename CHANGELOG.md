@@ -1,6 +1,65 @@
-# [](https://github.com/FullHuman/purgecss/compare/v4.0.0...v) (2021-01-17)
+# [](https://github.com/FullHuman/purgecss/compare/v4.0.3...v) (2021-06-07)
 
-### Breaking Changes
+
+### Bug Fixes
+
+* Allow Absolute Paths ([#679](https://github.com/FullHuman/purgecss/issues/679)) ([15335a2](https://github.com/FullHuman/purgecss/commit/15335a2f4643a60593ab071064ad51db8f47ce77))
+* **purgecss-from-pug:** class attribute with multiple values not correctly handled with pug ([#678](https://github.com/FullHuman/purgecss/issues/678)) ([ba6285d](https://github.com/FullHuman/purgecss/commit/ba6285def36c304ca7ae3fa5999cec378065060c)), closes [#677](https://github.com/FullHuman/purgecss/issues/677)
+* css variable removed when declared in wrong order ([89ece42](https://github.com/FullHuman/purgecss/commit/89ece42929a3fd62b2a84fb0b57c0ac16c98908f)), closes [#518](https://github.com/FullHuman/purgecss/issues/518)
+* Fix interaction with other plugins ([#647](https://github.com/FullHuman/purgecss/issues/647)) ([fb08e3a](https://github.com/FullHuman/purgecss/commit/fb08e3a3c27a1b25e4f023cbcbfca35a0cc2b43e))
+
+
+### Features
+
+* add dynamicAttributes option ([2f9cc65](https://github.com/FullHuman/purgecss/commit/2f9cc653ba77b0eb58ebed40269bcb6923b3fe83))
+
+
+
+## [4.0.3](https://github.com/FullHuman/purgecss/compare/v4.0.2...v4.0.3) (2021-03-20)
+
+
+### Features
+
+* add dynamic attributes option ([9b0fdc3](https://github.com/FullHuman/purgecss/commit/9b0fdc3219b1b24856e302e0798e4d22ab006a5a)), closes [#588](https://github.com/FullHuman/purgecss/issues/588)
+* add skippedContentGlobs option to webpack and gulp plugin ([e3dce1a](https://github.com/FullHuman/purgecss/commit/e3dce1a43791d32f5967d4aa320f2ec80690b299))
+
+
+
+## [4.0.2](https://github.com/FullHuman/purgecss/compare/v4.0.1...v4.0.2) (2021-02-21)
+
+
+
+## [4.0.1](https://github.com/FullHuman/purgecss/compare/v4.0.0...v4.0.1) (2021-02-21)
+
+
+### Bug Fixes
+
+* attribute selector with spaces being removed ([418dc7e](https://github.com/FullHuman/purgecss/commit/418dc7e0a7a30b57e1d7d9d10272e8f47eeb46fb)), closes [#392](https://github.com/FullHuman/purgecss/issues/392)
+* webpack plugin option blocklist types ([5b029c2](https://github.com/FullHuman/purgecss/commit/5b029c21eb0269bc464d8e5f5a4ab9c3eed23064))
+
+
+### Features
+
+* add option blocklist to webpack plugin ([#610](https://github.com/FullHuman/purgecss/issues/610)) ([0148cea](https://github.com/FullHuman/purgecss/commit/0148cea584f9a09c26846b505dbb4945b4c1b536))
+
+
+
+# [4.0.0](https://github.com/FullHuman/purgecss/compare/v3.1.3...v4.0.0) (2021-01-17)
+
+
+### Bug Fixes
+
+* **test:** webpack test type error ([c41ad27](https://github.com/FullHuman/purgecss/commit/c41ad27fac09fca62343ba5bdc0a6b7f53aeb757))
+
+
+### Features
+
+* **postcss-purgecss:** remove compatibility with postcss 7 ([48ce28f](https://github.com/FullHuman/purgecss/commit/48ce28fa10cb4bd72385f2ac0b25303f67c581be)), closes [#488](https://github.com/FullHuman/purgecss/issues/488) [#540](https://github.com/FullHuman/purgecss/issues/540)
+
+
+### BREAKING CHANGES
+
+* **postcss-purgecss:** dropping support for postcss 7
 Drop PostCSS 7 support, use @fullhuman/postcss-purgecss 3.0 with PostCSS 7.
 
 # [](https://github.com/FullHuman/purgecss/compare/v3.1.3-alpha.0...v) (2020-12-15)
