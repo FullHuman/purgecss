@@ -429,10 +429,10 @@ class PurgeCSS {
    * @param node node of postcss AST
    * @param selectors selectors used in content files
    */
-  private async evaluateRule(
+  private evaluateRule(
     node: postcss.Node,
     selectors: ExtractorResultSets
-  ): Promise<void> {
+  ): void {
     // exit if is in ignoring state activated by an ignore comment
     if (this.ignore) {
       return;
