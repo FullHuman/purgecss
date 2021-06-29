@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "acorn": "^7.4.0",
-    "acorn-walk": "^7.1.1",
     "acorn-jsx": "^5.3.1",
-    "acorn-jsx-walk": "^2.0.0"
+    "acorn-jsx-walk": "^2.0.0",
+    "acorn-walk": "^8.1.1"
   }
 }
