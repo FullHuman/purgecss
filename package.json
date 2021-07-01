@@ -22,7 +22,7 @@
     "@wessberg/rollup-plugin-ts": "^1.3.8",
     "conventional-changelog-cli": "^2.1.1",
     "eslint": "^7.28.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.0",
     "jest": "^27.0.4",
     "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
