@@ -6,6 +6,7 @@
     "postcss-purgecss",
     "purgecss",
     "purgecss-from-html",
+    "purgecss-from-jsx",
     "purgecss-from-pug",
     "purgecss-from-twig",
     "purgecss-webpack-plugin",

@@ -41,6 +41,10 @@ const packages = [
     name: "purgecss-from-pug",
     external: ["pug-lexer"],
   },
+  {
+    name: "purgecss-from-jsx",
+    external: ["acorn", "acorn-walk", "acorn-jsx", "acorn-jsx-walk"],
+  }
 ];
 
 async function build(): Promise<void> {
