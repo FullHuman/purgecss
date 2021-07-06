@@ -10,7 +10,7 @@ import {
   IGNORE_ANNOTATION_CURRENT,
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START,
+  IGNORE_ANNOTATION_START
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST } from "./internal-safelist";
@@ -23,12 +23,14 @@ import {
   Extractors,
   IgnoreType,
   Options,
+  PostCSSRoot,
   RawContent,
   RawCSS,
   ResultPurge,
   UserDefinedOptions,
-  UserDefinedSafelist,
+  UserDefinedSafelist
 } from "./types";
+import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
 
 export { defaultOptions } from "./options";
@@ -241,20 +243,6 @@ function isInPseudoClass(selector: selectorParser.Node): boolean {
       selector.parent.value.startsWith(":")) ||
     false
   );
-}
-
-export function matchAll(str: string, regexp: RegExp): RegExpMatchArray[] {
-  const matches: RegExpMatchArray[] = [];
-  str.replace(regexp, function () {
-    // eslint-disable-next-line prefer-rest-params
-    const args = arguments;
-    const match: RegExpMatchArray = Array.prototype.slice.call(args, 0, -2);
-    match.input = args[args.length - 1];
-    match.index = args[args.length - 2];
-    matches.push(match);
-    return str;
-  });
-  return matches;
 }
 
 function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
@@ -792,7 +780,7 @@ class PurgeCSS {
    * @param selectors selectors used in content files
    */
   public walkThroughCSS(
-    root: postcss.Root,
+    root: PostCSSRoot,
     selectors: ExtractorResultSets
   ): void {
     root.walk((node) => {

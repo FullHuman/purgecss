@@ -1,6 +1,6 @@
 import * as postcss from "postcss";
-import { matchAll } from "./index";
 import { StringRegExpArray } from "./types";
+import { matchAll } from "./utils";
 
 class VariableNode {
   public nodes: VariableNode[] = [];

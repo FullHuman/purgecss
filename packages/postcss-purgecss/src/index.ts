@@ -1,11 +1,9 @@
 import * as postcss from "postcss";
-
 import PurgeCSS, {
   defaultOptions,
   mergeExtractorSelectors,
-  standardizeSafelist,
+  standardizeSafelist
 } from "purgecss";
-
 import { RawContent, UserDefinedOptions } from "./types";
 
 const PLUGIN_NAME = "postcss-purgecss";
@@ -51,6 +49,8 @@ async function purgeCSS(
   const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
 
   //purge unused selectors
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   purgeCSS.walkThroughCSS(root, selectors);
 
   if (purgeCSS.options.fontFace) purgeCSS.removeUnusedFontFaces();

@@ -1,3 +1,4 @@
+import json from "@rollup/plugin-json";
 import typescript from "@wessberg/rollup-plugin-ts";
 import path from "path";
 import { rollup } from "rollup";
@@ -86,6 +87,19 @@ async function build(): Promise<void> {
     ),
     format: "cjs",
   });
+
+  // command line interface
+  const cliBundle = await rollup({
+    input: path.resolve(packagesDirectory, "./purgecss/src/bin.ts"),
+    plugins: [json(), typescript({ transpileOnly: true }), terser()],
+    external: [...packages[0].external, "commander"]
+  });
+  await cliBundle.write({
+    banner: "#!/usr/bin/env node",
+    exports: "auto",
+    file: path.resolve(packagesDirectory, "purgecss", "./bin/purgecss.js"),
+    format: "cjs"
+  })
 }
 
 (async (): Promise<void> => {

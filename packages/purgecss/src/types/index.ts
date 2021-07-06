@@ -1,5 +1,6 @@
 import * as postcss from "postcss";
 
+export type PostCSSRoot = postcss.Root
 export interface AtRules {
   fontFace: Array<{
     name: string;
