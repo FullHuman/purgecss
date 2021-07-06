@@ -39,10 +39,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "commander": "^6.0.0",
-    "glob": "^7.0.0",
-    "postcss": "^8.3.0",
-    "postcss-selector-parser": "^6.0.2"
+    "commander": "^8.0.0",
+    "glob": "^7.1.7",
+    "postcss": "^8.3.5",
+    "postcss-selector-parser": "^6.0.6"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1"
