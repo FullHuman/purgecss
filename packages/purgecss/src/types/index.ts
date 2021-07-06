@@ -16,6 +16,7 @@ export interface RawContent<T = string> {
 
 export interface RawCSS {
   raw: string;
+  name?: string;
 }
 
 export interface ExtractorResultDetailed {

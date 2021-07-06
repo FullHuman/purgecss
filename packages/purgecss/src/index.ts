@@ -542,12 +542,8 @@ class PurgeCSS {
 
       const result: ResultPurge = {
         css: root.toString(),
-        file: typeof option === "string" ? option : undefined,
+        file: typeof option === "string" ? option : option.name,
       };
-
-      if (typeof option === "string") {
-        result.file = option;
-      }
 
       if (this.options.rejected) {
         result.rejected = Array.from(this.selectorsRemoved);
