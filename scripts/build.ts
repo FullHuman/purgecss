@@ -45,6 +45,10 @@ const packages = [
   {
     name: "purgecss-from-jsx",
     external: ["acorn", "acorn-walk", "acorn-jsx", "acorn-jsx-walk"],
+  },
+  {
+    name: "purgecss-from-tsx",
+    external: ["acorn", "purgecss-from-jsx", "typescript"],
   }
 ];
 

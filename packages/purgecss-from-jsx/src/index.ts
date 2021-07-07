@@ -5,7 +5,7 @@ import {extend} from "acorn-jsx-walk";
 
 extend(walk.base);
 
-function purgeFromJsx(options: acorn.Options) {
+function purgeFromJsx(options?: acorn.Options) {
   return (content: string): string[] => {
     // Will be filled during walk
     const state = {selectors: []};
