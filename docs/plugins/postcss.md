@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with postcss with a plugin.
   - property: og:url
-    content:  https://purgecss.com/plugins/postcss
+    content: https://purgecss.com/plugins/postcss
   - property: og:site_name
     content: purgecss.com
   - property: og:type
@@ -40,26 +40,42 @@ npm i -D @fullhuman/postcss-purgecss postcss
 In `postcss.config.js`:
 
 ```js
-const purgecss = require('@fullhuman/postcss-purgecss')
+const purgecss = require("@fullhuman/postcss-purgecss");
 
 module.exports = {
   plugins: [
     purgecss({
-      content: ['./**/*.html']
-    })
-  ]
-}
+      content: ["./**/*.html"],
+    }),
+  ],
+};
 ```
 
 Using PostCSS API:
 
 ```js
+const purgecss = require("@fullhuman/postcss-purgecss");
+postcss([
+  purgecss({
+    content: ["./src/**/*.html"],
+  }),
+]);
+```
+
+Promises that resolve to either a `string` or `RawContent` are also supported.
+
+```js
 const purgecss = require('@fullhuman/postcss-purgecss')
 postcss([
   purgecss({
-    content: ['./src/**/*.html']
+    content: [
+      './src/**/*.html',
+
+      fetch('https://your-website/index.html').then(
+        res => res.text()
+      ),
   })
-])
+]);
 ```
 
 See [PostCSS](https://github.com/postcss/postcss) documentation for examples for your environment.
@@ -71,7 +87,7 @@ You will find below the type definition of the main options available. For the c
 
 ```ts
 export interface UserDefinedOptions {
-  content?: Array<string | RawContent>;
+  content?: Array<string | RawContent | Promise<string | RawContent>>;
   contentFunction?: (sourceFile: string) => Array<string | RawContent>;
   defaultExtractor?: ExtractorFunction;
   extractors?: Array<Extractors>;
@@ -87,12 +103,12 @@ export interface UserDefinedOptions {
 }
 
 interface RawContent {
-  extension: string
-  raw: string
+  extension: string;
+  raw: string;
 }
 
 interface RawCSS {
-  raw: string
+  raw: string;
 }
 
 type StringRegExpArray = Array<RegExp | string>;
