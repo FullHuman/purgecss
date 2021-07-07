@@ -1,0 +1,33 @@
+{
+  "name": "purgecss-from-tsx",
+  "version": "4.0.3",
+  "description": "TSX extractor for PurgeCSS",
+  "author": "Ffloriel",
+  "homepage": "https://github.com/FullHuman/purgecss#readme",
+  "license": "ISC",
+  "main": "./lib/purgecss-from-tsx.js",
+  "module": "./lib/purgecss-from-tsx.esm.js",
+  "types": "./lib/purgecss-from-tsx.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "dependencies": {
+    "acorn": "^7.4.0",
+    "purgecss-from-jsx": "^4.0.3",
+    "typescript": "^4.3.2"
+  }
+}
