@@ -1,5 +1,5 @@
 {
-  "name": "purgecss-from-tsx",
+  "name": "@fullhuman/purgecss-from-tsx",
   "version": "4.0.3",
   "description": "TSX extractor for PurgeCSS",
   "author": "Ffloriel",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "acorn": "^7.4.0",
-    "purgecss-from-jsx": "^4.0.3",
+    "@fullhuman/purgecss-from-jsx": "^4.0.3",
     "typescript": "^4.3.2"
   }
 }

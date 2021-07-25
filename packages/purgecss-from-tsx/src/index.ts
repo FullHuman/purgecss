@@ -1,6 +1,6 @@
+import purgeFromJsx from "@fullhuman/purgecss-from-jsx";
 import acorn from "acorn";
 import * as ts from "typescript";
-import purgeFromJsx from "purgecss-from-jsx";
 
 function purgeFromTsx(options?: {
   acornOptions?: acorn.Options,

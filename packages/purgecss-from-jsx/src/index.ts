@@ -1,78 +1,92 @@
 import * as acorn from "acorn";
+import jsx, {
+  JSXAttribute,
+  JSXIdentifier, JSXNamespacedName,
+  JSXOpeningElement,
+  Literal
+} from "acorn-jsx";
+import { extend } from "acorn-jsx-walk";
 import * as walk from "acorn-walk";
-import jsx from "acorn-jsx";
-import {extend} from "acorn-jsx-walk";
 
-extend(walk.base);
+type NodeState = {
+  selectors?: string[];
+  text?: string;
+};
+
+extend<NodeState>(walk.base);
 
 function purgeFromJsx(options?: acorn.Options) {
   return (content: string): string[] => {
     // Will be filled during walk
-    const state = {selectors: []};
+    const state: NodeState = { selectors: [] };
 
     // Parse and walk any JSXElement
-    walk.recursive(
-      acorn.Parser.extend(jsx()).parse(content, options), 
+    walk.recursive<NodeState>(
+      acorn.Parser.extend(jsx()).parse(content, options),
       state,
       {
-        JSXOpeningElement(node: any, state: any, callback) {
-          // JSXIdentifier | JSXMemberExpression | JSXNamespacedName
-          const nameState: any = {};
+        JSXOpeningElement(acornNode, state, callback) {
+          const node = acornNode as JSXOpeningElement;
+          const nameState: NodeState = {};
+
           callback(node.name, nameState);
           if (nameState.text) {
-            state.selectors.push(nameState.text);
+            state.selectors?.push(nameState.text);
           }
 
           for (let i = 0; i < node.attributes.length; ++i) {
             callback(node.attributes[i], state);
           }
         },
-        JSXAttribute(node: any, state: any, callback) {
-          // Literal | JSXExpressionContainer | JSXElement | nil
+        JSXAttribute(acornNode, state, callback) {
+          const node = acornNode as JSXAttribute;
+
           if (!node.value) {
             return;
           }
 
-          // JSXIdentifier | JSXNamespacedName
-          const nameState: any = {};
+          const nameState: NodeState = {};
           callback(node.name, nameState);
 
           // node.name is id or className
           switch (nameState.text) {
-          case "id":
-          case "className":
-            {
-              // Get text in node.value
-              const valueState: any = {};
-              callback(node.value, valueState);
+            case "id":
+            case "className":
+              {
+                // Get text in node.value
+                const valueState: NodeState = {};
+                callback(node.value, valueState);
 
-              // node.value is not empty
-              if (valueState.text) {
-                state.selectors.push(...valueState.text.split(" "));
+                // node.value is not empty
+                if (valueState.text) {
+                  state.selectors?.push(...valueState.text.split(" "));
+                }
               }
-            }
-            break;
-          default:
-            break;
+              break;
+            default:
+              break;
           }
         },
-        JSXIdentifier(node: any, state: any) {
+        JSXIdentifier(acornNode, state) {
+          const node = acornNode as JSXIdentifier;
           state.text = node.name;
         },
-        JSXNamespacedName(node: any, state: any) {
+        JSXNamespacedName(acornNode, state) {
+          const node = acornNode as JSXNamespacedName;
           state.text = node.namespace.name + ":" + node.name.name;
         },
         // Only handle Literal for now, not JSXExpressionContainer | JSXElement
-        Literal(node: any, state: any) {
+        Literal(acornNode, state) {
+          const node = acornNode as Literal;
           if (typeof node.value === "string") {
             state.text = node.value;
           }
-        }
+        },
       },
-      {...walk.base}
+      { ...walk.base }
     );
 
-    return state.selectors;
+    return state.selectors || [];
   };
 }
 

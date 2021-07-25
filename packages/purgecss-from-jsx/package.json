@@ -1,11 +1,13 @@
 {
-  "name": "purgecss-from-jsx",
+  "name": "@fullhuman/purgecss-from-jsx",
   "version": "4.0.3",
   "description": "JSX extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/purgecss-from-jsx.js",
+  "module": "lib/purgecss-from-jsx.esm.js",
+  "types": "lib/purgecss-from-jsx.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
