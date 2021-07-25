@@ -9,6 +9,7 @@
     "purgecss-from-jsx",
     "purgecss-from-pug",
     "purgecss-from-twig",
+    "purgecss-from-tsx",
     "purgecss-webpack-plugin",
     "purgecss-with-wordpress",
     "vue-cli-plugin-purgecss"
