@@ -10,17 +10,17 @@ describe("Purgecss grunt plugin", () => {
     execSync("npx grunt");
   });
 
-    function emptyFolder(directory: string) {
-        fs.readdir(directory, (err, files) => {
-            if (err) throw err;
+  function emptyFolder(directory: string) {
+    fs.readdir(directory, (err, files) => {
+      if (err) throw err;
 
-            for (const file of files) {
-                fs.unlink(path.join(directory, file), err => {
-                    if (err) throw err;
-                });
-            }
+      for (const file of files) {
+        fs.unlink(path.join(directory, file), err => {
+          if (err) throw err;
         });
-    }
+       }
+    });
+  }
 
   afterAll(() => {
     emptyFolder(`${__dirname}/tmp`);
@@ -34,7 +34,7 @@ describe("Purgecss grunt plugin", () => {
       const expected = fs
         .readFileSync(`${__dirname}/fixtures/expected/${file}`)
         .toString();
-        expect(actual.replace(/\s/g, '')).toBe(expected.replace(/\s/g, ''));
+      expect(actual.replace(/\s/g, '')).toBe(expected.replace(/\s/g, ''));
     });
   }
 });
