@@ -21,7 +21,7 @@ Purgecss use [SemVer](http://semver.org/) for versioning.
 
 ### Development Workflow
 
-After cloning Purgecss, run `npm i` to fetch its dependencies. Then, you can run
+After cloning Purgecss, run `npm i && npm run bootstrap` to fetch its dependencies. Then, you can run
 several commands:
 
 * `npm run dev` will build cjs and es module of all PurgeCSS packages in their `lib` folder and
