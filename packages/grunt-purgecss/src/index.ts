@@ -19,9 +19,10 @@ function gruntPurgeCSS(grunt: IGrunt): void {
   grunt.registerMultiTask("purgecss", "Grunt plugin for PurgeCSS", function () {
     const done = this.async();
     const options = this.options<UserDefinedOptions>(defaultOptions);
+    const promisedPurgedFiles = [];
     for (const file of this.files) {
       const source = getAvailableFiles(grunt, file.src);
-      new PurgeCSS()
+      const purgedCss = new PurgeCSS()
         .purge({
           ...options,
           css: source,
@@ -34,12 +35,15 @@ function gruntPurgeCSS(grunt: IGrunt): void {
           grunt.file.write(file.dest, purgeCSSResults[0].css);
           // Print a success message
           grunt.log.writeln(`File "${file.dest}" created.`);
-          done();
         })
-        .catch(() => {
-          done(false);
-        });
+
+        promisedPurgedFiles.push(purgedCss);
     }
+      Promise.all(promisedPurgedFiles)
+          .then(() => {
+              done();
+      }).catch(() => done(false))
+
   });
 }
 

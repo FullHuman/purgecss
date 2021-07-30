@@ -348,7 +348,6 @@ class PurgeCSS {
     extractors: Extractors[]
   ): Promise<ExtractorResultSets> {
     const selectors = new ExtractorResultSets([]);
-
     for (const globfile of files) {
       let filesNames: string[] = [];
 
