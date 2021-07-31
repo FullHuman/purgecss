@@ -9,6 +9,9 @@ module.exports = grunt => {
           content: ['./__tests__/fixtures/src/simple/**/*.html']
         },
         files: {
+          '__tests__/tmp/menu.css': ['__tests__/fixtures/src/menu.css'],
+          '__tests__/tmp/profile.css': ['__tests__/fixtures/src/profile.css'],
+          '__tests__/tmp/footer.css': ['__tests__/fixtures/src/footer.css'],
           '__tests__/tmp/simple.css': ['__tests__/fixtures/src/simple/simple.css']
         }
       }
