@@ -5,7 +5,7 @@ import {
   defaultOptions,
   PurgeCSS,
   setOptions,
-  standardizeSafelist
+  standardizeSafelist,
 } from "./index";
 
 async function writeCSSToFile(filePath: string, css: string) {

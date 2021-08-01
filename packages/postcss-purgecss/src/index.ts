@@ -2,7 +2,7 @@ import * as postcss from "postcss";
 import PurgeCSS, {
   defaultOptions,
   mergeExtractorSelectors,
-  standardizeSafelist
+  standardizeSafelist,
 } from "purgecss";
 import { RawContent, UserDefinedOptions } from "./types";
 

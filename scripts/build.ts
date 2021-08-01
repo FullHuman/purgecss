@@ -49,7 +49,7 @@ const packages = [
   {
     name: "purgecss-from-tsx",
     external: ["acorn", "@fullhuman/purgecss-from-jsx", "typescript"],
-  }
+  },
 ];
 
 async function build(): Promise<void> {
@@ -96,14 +96,14 @@ async function build(): Promise<void> {
   const cliBundle = await rollup({
     input: path.resolve(packagesDirectory, "./purgecss/src/bin.ts"),
     plugins: [json(), typescript({ transpileOnly: true }), terser()],
-    external: [...packages[0].external, "commander"]
+    external: [...packages[0].external, "commander"],
   });
   await cliBundle.write({
     banner: "#!/usr/bin/env node",
     exports: "auto",
     file: path.resolve(packagesDirectory, "purgecss", "./bin/purgecss.js"),
-    format: "cjs"
-  })
+    format: "cjs",
+  });
 }
 
 (async (): Promise<void> => {

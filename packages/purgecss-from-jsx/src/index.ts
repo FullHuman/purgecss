@@ -1,9 +1,10 @@
 import * as acorn from "acorn";
 import jsx, {
   JSXAttribute,
-  JSXIdentifier, JSXNamespacedName,
+  JSXIdentifier,
+  JSXNamespacedName,
   JSXOpeningElement,
-  Literal
+  Literal,
 } from "acorn-jsx";
 import { extend } from "acorn-jsx-walk";
 import * as walk from "acorn-walk";

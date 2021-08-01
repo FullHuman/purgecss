@@ -15,10 +15,10 @@ describe("Purgecss grunt plugin", () => {
       if (err) throw err;
 
       for (const file of files) {
-        fs.unlink(path.join(directory, file), err => {
+        fs.unlink(path.join(directory, file), (err) => {
           if (err) throw err;
         });
-       }
+      }
     });
   }
 
@@ -34,7 +34,7 @@ describe("Purgecss grunt plugin", () => {
       const expected = fs
         .readFileSync(`${__dirname}/fixtures/expected/${file}`)
         .toString();
-      expect(actual.replace(/\s/g, '')).toBe(expected.replace(/\s/g, ''));
+      expect(actual.replace(/\s/g, "")).toBe(expected.replace(/\s/g, ""));
     });
   }
 });
