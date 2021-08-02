@@ -77,7 +77,7 @@ module.exports = {
     searchPlaceholder: "Search...",
     repo: "FullHuman/purgecss",
     docsDir: "docs",
-    docsBranch: "master",
+    docsBranch: "main",
     editLinks: true,
     editLinkText: "Help us improve this page!",
     evergreen: true,

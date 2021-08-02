@@ -1,13 +1,7 @@
 # gulp-purgecss
 
-[![Build Status](https://travis-ci.org/FullHuman/gulp-purgecss.svg?branch=master)](https://travis-ci.org/FullHuman/gulp-purgecss)
-[![CircleCi](https://circleci.com/gh/FullHuman/gulp-purgecss/tree/master.svg?style=shield)]()
-[![David](https://img.shields.io/david/FullHuman/gulp-purgecss.svg)]()
-[![David](https://img.shields.io/david/dev/FullHuman/gulp-purgecss.svg)]()
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f41103d5c2754ebeac6e7701a142bb17)](https://www.codacy.com/app/FullHuman/gulp-purgecss?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=FullHuman/gulp-purgecss&amp;utm_campaign=Badge_Grade)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![npm](https://img.shields.io/npm/v/gulp-purgecss.svg)](https://www.npmjs.com/package/gulp-purgecss)
-[![license](https://img.shields.io/github/license/fullhuman/gulp-purgecss.svg)]() [![Greenkeeper badge](https://badges.greenkeeper.io/FullHuman/gulp-purgecss.svg)](https://greenkeeper.io/)
+[![license](https://img.shields.io/github/license/fullhuman/gulp-purgecss.svg)]()
 
 
 > [gulp](http://gulpjs.com/) plugin to removed unused CSS, using [purgecss](https://github.com/FullHuman/purgecss)

@@ -80,8 +80,8 @@ Those extractors are still a work in progress.
 It is not encouraged to use them in production yet.
 :::
 
-- [purgecss-from-html](https://github.com/FullHuman/purgecss/blob/master/packages/purgecss-from-html): HTML files (.html)
-- [purgecss-from-js](https://github.com/FullHuman/purgecss/blob/master/packages/purgecss-from-js): JS files
-- [purgecss-from-pug](https://github.com/FullHuman/purgecss/blob/master/packages/purgecss-from-pug): Pug files (.pug)
+- [purgecss-from-html](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-html): HTML files (.html)
+- [purgecss-from-js](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-js): JS files
+- [purgecss-from-pug](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-pug): Pug files (.pug)
 - [purgecss-from-twig](): Twig files
 - [purgecss-from-blade](): Blade files

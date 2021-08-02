@@ -1,11 +1,9 @@
 # PurgeCSS
 
-![David (path)](https://img.shields.io/david/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
-![David (path)](https://img.shields.io/david/dev/FullHuman/purgecss?path=packages%2Fpurgecss&style=for-the-badge)
-![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
-![npm](https://img.shields.io/npm/v/purgecss?style=for-the-badge)
-![npm](https://img.shields.io/npm/dw/purgecss?style=for-the-badge)
+[![npm](https://img.shields.io/npm/v/purgecss?style=for-the-badge)](https://www.npmjs.com/package/purgecss)
+![npm](https://img.shields.io/npm/dm/purgecss?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/FullHuman/purgecss?style=for-the-badge)
+![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
 
 <p align="center">
 	<img src="https://i.imgur.com/UEiUiJ0.png" height="200" width="200" alt="PurgeCSS logo"/>
