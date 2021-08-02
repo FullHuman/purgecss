@@ -1,8 +1,8 @@
 import json from "@rollup/plugin-json";
-import typescript from "@wessberg/rollup-plugin-ts";
 import path from "path";
 import { rollup } from "rollup";
 import { terser } from "rollup-plugin-terser";
+import typescript from "rollup-plugin-ts";
 
 const packagesDirectory = path.resolve(__dirname, "./../packages");
 
