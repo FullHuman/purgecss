@@ -10,13 +10,11 @@
     "test": "__tests__"
   },
   "scripts": {
-    "build": "npx rollup -c rollup.config.js",
-    "test": "npx ava __tests__/index.test.js -s",
-    "lint": "npx eslint -c .eslintrc src/"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FullHuman/rollup-plugin-purgecss.git"
+    "url": "git+https://github.com/FullHuman/purgecss.git"
   },
   "keywords": [
     "rollup-plugin",
@@ -28,9 +26,9 @@
   "author": "Ffloriel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FullHuman/rollup-plugin-purgecss/issues"
+    "url": "https://github.com/FullHuman/purgecss/issues"
   },
-  "homepage": "https://github.com/FullHuman/rollup-plugin-purgecss#readme",
+  "homepage": "https://purgecss.com",
   "dependencies": {
     "purgecss": "^4.0.3",
     "rollup-pluginutils": "^2.8.0"
