@@ -5,7 +5,6 @@ const PurgecssPlugin = require("../../../src/").default;
 
 const customExtractor = (content) => {
   const res = content.match(/[A-z0-9-:/]+/g) || [];
-  // console.log('hel', res)
   return res;
 };
 
@@ -20,6 +19,7 @@ module.exports = {
       cacheGroups: {
         styles: {
           name: "styles",
+          type: "css/mini-extract",
           test: /\.css$/,
           chunks: "all",
           enforce: true,

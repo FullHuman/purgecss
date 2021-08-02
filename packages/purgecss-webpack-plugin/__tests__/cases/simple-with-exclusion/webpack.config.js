@@ -20,6 +20,7 @@ module.exports = {
       cacheGroups: {
         styles: {
           name: "styles",
+          type: "css/mini-extract",
           test: /\.css$/,
           chunks: "all",
           enforce: true,

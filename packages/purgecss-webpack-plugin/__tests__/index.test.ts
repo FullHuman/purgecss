@@ -1,5 +1,5 @@
-import * as path from "path";
 import fs from "fs";
+import * as path from "path";
 import { promisify } from "util";
 import webpack, { Configuration } from "webpack";
 
@@ -66,7 +66,7 @@ describe("Webpack integration", () => {
 
         const actualFile = await readFileOrEmpty(actualPath);
         const expectedFile = await readFileOrEmpty(filePath);
-
+        console.log(actualFile)
         expect(actualFile).toBe(expectedFile);
       }
     });
