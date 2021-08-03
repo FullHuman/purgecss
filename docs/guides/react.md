@@ -29,7 +29,7 @@ meta:
 This guide assumes you are using create-react-app to build your single-page react application.
 
 
-## Use `craco`
+## Method 1: Use `craco`
 
 Custom PostCSS plugins (including PurgeCSS) can be added to Create React App apps using [craco](https://github.com/gsoft-inc/craco/). Follow the [craco installation instructions](https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#installation), then install the `PurgeCSS` PostCSS plugin and add it to the craco config:
 
@@ -55,7 +55,7 @@ module.exports = {
 
 ```
 
-## Run PurgeCSS CLI in `postbuild`
+## Method 2: Run PurgeCSS CLI in `postbuild`
 
 Add the following code in **package.json**
 
@@ -65,7 +65,7 @@ Add the following code in **package.json**
 },
 ```
 
-## `eject` create-react-app 
+## Method 3: `eject` create-react-app 
 
 You need to [eject](https://facebook.github.io/create-react-app/docs/available-scripts#npm-run-eject) in order to expose the webpack configuration offered by original create-react-app
 
