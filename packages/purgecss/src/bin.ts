@@ -25,6 +25,7 @@ type CommandOptions = {
   keyframes?: boolean;
   variables?: boolean;
   rejected?: boolean;
+  rejectedCss?: boolean;
   safelist?: string[];
   blocklist?: string[];
   skippedContentGlobs: string[];
@@ -48,6 +49,7 @@ function parseCommandOptions() {
     .option("-keyframes, --keyframes", "option to remove unused keyframes")
     .option("-v, --variables", "option to remove unused variables")
     .option("-rejected, --rejected", "option to output rejected selectors")
+    .option("-rejected-css, --rejected-css", "option to output rejected css")
     .option(
       "-s, --safelist <list...>",
       "list of classes that should not be removed"
@@ -77,6 +79,7 @@ async function run() {
     keyframes,
     variables,
     rejected,
+    rejectedCss,
     safelist,
     blocklist,
     skippedContentGlobs,
@@ -99,6 +102,7 @@ async function run() {
   if (fontFace) options.fontFace = fontFace;
   if (keyframes) options.keyframes = keyframes;
   if (rejected) options.rejected = rejected;
+  if (rejectedCss) options.rejectedCss = rejectedCss;
   if (variables) options.variables = variables;
   if (safelist) options.safelist = standardizeSafelist(safelist);
   if (blocklist) options.blocklist = blocklist;

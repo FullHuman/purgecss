@@ -9,6 +9,7 @@ export const defaultOptions: Options = {
   fontFace: false,
   keyframes: false,
   rejected: false,
+  rejectedCss: false,
   stdin: false,
   stdout: false,
   variables: false,
