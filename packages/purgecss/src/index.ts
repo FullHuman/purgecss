@@ -456,7 +456,8 @@ class PurgeCSS {
     }
 
     let keepSelector = true;
-    selectorParser((selectorsParsed) => {
+    const originalSelector = node.selector;
+    node.selector = selectorParser((selectorsParsed) => {
       selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
           return;
@@ -483,9 +484,10 @@ class PurgeCSS {
 
     // remove empty rules
     const parent = node.parent;
-    if (!keepSelector) {
+    if (!node.selector) {
       node.remove()
       if (this.options.rejectedCss) {
+        node.selector = originalSelector;
         this.removedNodes.push(node);
       }
     }
