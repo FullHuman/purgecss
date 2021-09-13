@@ -63,6 +63,7 @@ export interface UserDefinedOptions {
   keyframes?: boolean;
   output?: string;
   rejected?: boolean;
+  rejectedCss?: boolean;
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
