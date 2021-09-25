@@ -12,8 +12,7 @@ describe("rejectedCss", () => {
     const expected = `
 .rejected {
     color: blue;
-}
-`;
-    expect(resultsPurge[0].rejectedCss).toBe(expected);
+}`;
+    expect(resultsPurge[0].rejectedCss?.trim()).toBe(expected.trim());
   });
 });
