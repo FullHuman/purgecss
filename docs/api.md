@@ -74,5 +74,6 @@ interface ResultPurge {
   css: string;
   file?: string;
   rejected?: string[];
+  rejectedCss?: string;
 }
 ```
