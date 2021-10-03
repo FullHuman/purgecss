@@ -439,7 +439,7 @@ class PurgeCSS {
     if (
       node.parent &&
       isPostCSSAtRule(node.parent) &&
-      node.parent.name === "keyframes"
+      node.parent.name.endsWith("keyframes")
     ) {
       return;
     }
