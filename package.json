@@ -23,7 +23,7 @@
     "@vuepress/plugin-google-analytics": "^1.8.2",
     "@vuepress/theme-default": "^1.8.2",
     "conventional-changelog-cli": "^2.1.1",
-    "eslint": "^7.30.0",
+    "eslint": "^8.1.0",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "lerna": "^4.0.0",
