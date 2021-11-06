@@ -1,9 +1,9 @@
-import through from "through2";
-import PluginError from "plugin-error";
 import glob from "glob";
-import * as VinylFile from "vinyl";
-import internal from "stream";
+import PluginError from "plugin-error";
 import PurgeCSS from "purgecss";
+import internal from "stream";
+import through from "through2";
+import * as VinylFile from "vinyl";
 import { UserDefinedOptions } from "./types";
 
 const PLUGIN_NAME = "gulp-purgecss";
@@ -39,7 +39,8 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             : purge.css;
         file.contents = Buffer.from(result, "utf-8");
         callback(null, file);
-      } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
         this.emit("error", new PluginError(PLUGIN_NAME, e.message));
       }
     }
@@ -64,7 +65,8 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             // @ts-ignore
             streamFile.contents = Buffer.from(result, "utf-8");
             callback(null, file);
-          } catch (e) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (e: any) {
             this.emit("error", new PluginError(PLUGIN_NAME, e.message));
           }
         });

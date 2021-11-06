@@ -4,7 +4,7 @@ import jsx, {
   JSXIdentifier,
   JSXNamespacedName,
   JSXOpeningElement,
-  Literal,
+  Literal
 } from "acorn-jsx";
 import { extend } from "acorn-jsx-walk";
 import * as walk from "acorn-walk";
@@ -23,7 +23,7 @@ function purgeFromJsx(options?: acorn.Options) {
 
     // Parse and walk any JSXElement
     walk.recursive<NodeState>(
-      acorn.Parser.extend(jsx()).parse(content, options),
+      acorn.Parser.extend(jsx() as (BaseParser: typeof acorn.Parser) => typeof acorn.Parser).parse(content, options),
       state,
       {
         JSXOpeningElement(acornNode, state, callback) {
