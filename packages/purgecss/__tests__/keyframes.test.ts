@@ -90,3 +90,34 @@ describe("keep keyframe decimals", () => {
     expect(purgedCSS.includes("99.9%")).toBe(true);
   });
 });
+
+describe("keep webkit keyframe decimals", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: '<div class="xx"></div>',
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: `
+              @-webkit-keyframes xxx {
+                  0% {opacity: 0;}
+                  99.9% {opacity: 1;}
+              }
+              .xx { animation: xxx 200ms linear both }
+              `,
+        },
+      ],
+      keyframes: false,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps `99.9%`", () => {
+    expect(purgedCSS.includes("99.9%")).toBe(true);
+  });
+});

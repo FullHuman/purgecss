@@ -66,7 +66,7 @@ describe("Webpack integration", () => {
 
         const actualFile = await readFileOrEmpty(actualPath);
         const expectedFile = await readFileOrEmpty(filePath);
-        console.log(actualFile)
+
         expect(actualFile).toBe(expectedFile);
       }
     });

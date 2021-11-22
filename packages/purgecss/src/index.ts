@@ -10,7 +10,7 @@ import {
   IGNORE_ANNOTATION_CURRENT,
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START,
+  IGNORE_ANNOTATION_START
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST } from "./internal-safelist";
@@ -28,7 +28,7 @@ import {
   RawCSS,
   ResultPurge,
   UserDefinedOptions,
-  UserDefinedSafelist,
+  UserDefinedSafelist
 } from "./types";
 import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
@@ -67,7 +67,8 @@ export async function setOptions(
   try {
     const t = path.resolve(process.cwd(), configFile);
     options = await import(t);
-  } catch (err) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
   }
   return {
@@ -440,7 +441,7 @@ class PurgeCSS {
     if (
       node.parent &&
       isPostCSSAtRule(node.parent) &&
-      node.parent.name === "keyframes"
+      node.parent.name.endsWith("keyframes")
     ) {
       return;
     }
