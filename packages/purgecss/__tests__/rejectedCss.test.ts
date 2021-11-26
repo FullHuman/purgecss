@@ -23,7 +23,9 @@ describe("rejectedCss", () => {
       rejected: true,
       rejectedCss: true,
     });
-    expect(resultsPurge[0].rejectedCss?.trim()).toContain(resultsPurge[0].rejected?.[0]);
+    expect(resultsPurge[0].rejectedCss?.trim()).toContain(
+      resultsPurge[0].rejected?.[0]
+    );
   });
   /**
    * https://github.com/FullHuman/purgecss/pull/763#discussion_r754618902

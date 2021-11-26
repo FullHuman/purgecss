@@ -10,7 +10,7 @@ import {
   IGNORE_ANNOTATION_CURRENT,
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START
+  IGNORE_ANNOTATION_START,
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST } from "./internal-safelist";
@@ -28,13 +28,13 @@ import {
   RawCSS,
   ResultPurge,
   UserDefinedOptions,
-  UserDefinedSafelist
+  UserDefinedSafelist,
 } from "./types";
 import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
 
 export { defaultOptions } from "./options";
-export * from './types';
+export * from "./types";
 export { PurgeCSS };
 
 const asyncFs = {
@@ -68,7 +68,7 @@ export async function setOptions(
   try {
     const t = path.resolve(process.cwd(), configFile);
     options = await import(t);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
   }
@@ -555,7 +555,9 @@ class PurgeCSS {
       }
 
       if (this.options.rejectedCss) {
-        result.rejectedCss = postcss.root({ nodes: this.removedNodes }).toString();
+        result.rejectedCss = postcss
+          .root({ nodes: this.removedNodes })
+          .toString();
       }
 
       sources.push(result);

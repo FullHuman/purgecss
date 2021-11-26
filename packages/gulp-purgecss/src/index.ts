@@ -39,7 +39,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             : purge.css;
         file.contents = Buffer.from(result, "utf-8");
         callback(null, file);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         this.emit("error", new PluginError(PLUGIN_NAME, e.message));
       }
@@ -65,7 +65,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             // @ts-ignore
             streamFile.contents = Buffer.from(result, "utf-8");
             callback(null, file);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (e: any) {
             this.emit("error", new PluginError(PLUGIN_NAME, e.message));
           }
