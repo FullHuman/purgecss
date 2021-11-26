@@ -37,18 +37,25 @@ npm i -g purgecss
 To see the available options for the CLI: `purgecss --help`
 
 ```text
-Usage: purgecss --css <css> --content <content> [options]
+Usage: purgecss --css <css...> --content <content...> [options]
+
+Remove unused css selectors
 
 Options:
-  -con, --content <files>  glob of content files
-  -css, --css <files>      glob of css files
-  -c, --config <path>      path to the configuration file
-  -o, --output <path>      file path directory to write purged css files to
-  -font, --font-face       option to remove unused font-faces
-  -keyframes, --keyframes  option to remove unused keyframes
-  -rejected, --rejected    option to output rejected selectors
-  -s, --safelist <list>   list of classes that should not be removed
-  -h, --help               display help for command
+  -V, --version                        output the version number
+  -con, --content <files...>           glob of content files
+  -css, --css <files...>               glob of css files
+  -c, --config <path>                  path to the configuration file
+  -o, --output <path>                  file path directory to write purged css files to
+  -font, --font-face                   option to remove unused font-faces
+  -keyframes, --keyframes              option to remove unused keyframes
+  -v, --variables                      option to remove unused variables
+  -rejected, --rejected                option to output rejected selectors
+  -rejected-css, --rejected-css        option to output rejected css
+  -s, --safelist <list...>             list of classes that should not be removed
+  -b, --blocklist <list...>            list of selectors that should be removed
+  -k, --skippedContentGlobs <list...>  list of glob patterns for folders/files that should not be scanned
+  -h, --help                           display help for command
 ```
 
 The options available through the CLI are similar to the ones available with a configuration file. You can also use the CLI with a configuration file.

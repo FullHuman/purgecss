@@ -63,6 +63,7 @@ export interface UserDefinedOptions {
   keyframes?: boolean;
   output?: string;
   rejected?: boolean;
+  rejectedCss?: boolean;
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
@@ -81,6 +82,7 @@ export interface Options {
   keyframes: boolean;
   output?: string;
   rejected: boolean;
+  rejectedCss: boolean;
   stdin: boolean;
   stdout: boolean;
   variables: boolean;
@@ -92,6 +94,7 @@ export interface Options {
 
 export interface ResultPurge {
   css: string;
+  rejectedCss?: string;
   file?: string;
   rejected?: string[];
 }

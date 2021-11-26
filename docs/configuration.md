@@ -57,6 +57,7 @@ interface UserDefinedOptions {
   keyframes?: boolean;
   output?: string;
   rejected?: boolean;
+  rejectedCss?: boolean;
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
@@ -234,6 +235,17 @@ await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
   css: ['css/app.css'],
   rejected: true
+})
+```
+- **rejectedCss \(default: false\)**
+
+If you would like to keep the discarded CSS you can do so by using the `rejectedCss` option.
+
+```js
+await new PurgeCSS().purge({
+  content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
+  css: ['css/app.css'],
+  rejectedCss: true
 })
 ```
 

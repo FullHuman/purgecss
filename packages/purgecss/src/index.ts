@@ -268,6 +268,7 @@ class PurgeCSS {
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
+  public removedNodes: postcss.Node[] = [];
   private variablesStructure: VariablesStructure = new VariablesStructure();
 
   public options: Options = defaultOptions;
@@ -456,6 +457,7 @@ class PurgeCSS {
     }
 
     let keepSelector = true;
+    const originalSelector = node.selector;
     node.selector = selectorParser((selectorsParsed) => {
       selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
@@ -465,8 +467,9 @@ class PurgeCSS {
         keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
-          if (this.options.rejected)
+          if (this.options.rejected) {
             this.selectorsRemoved.add(selector.toString());
+          }
           selector.remove();
         }
       });
@@ -482,7 +485,19 @@ class PurgeCSS {
 
     // remove empty rules
     const parent = node.parent;
-    if (!node.selector) node.remove();
+    if (!node.selector) {
+      node.remove();
+      if (this.options.rejectedCss) {
+        node.selector = originalSelector;
+        if (parent && isRuleEmpty(parent)) {
+          const clone = parent.clone();
+          clone.append(node);
+          this.removedNodes.push(clone);
+        } else {
+          this.removedNodes.push(node);
+        }
+      }
+    }
     if (isRuleEmpty(parent)) parent?.remove();
   }
 
@@ -536,6 +551,10 @@ class PurgeCSS {
       if (this.options.rejected) {
         result.rejected = Array.from(this.selectorsRemoved);
         this.selectorsRemoved.clear();
+      }
+
+      if (this.options.rejectedCss) {
+        result.rejectedCss = postcss.root({ nodes: this.removedNodes }).toString();
       }
 
       sources.push(result);
