@@ -34,6 +34,7 @@ import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
 
 export { defaultOptions } from "./options";
+export * from './types';
 export { PurgeCSS };
 
 const asyncFs = {
