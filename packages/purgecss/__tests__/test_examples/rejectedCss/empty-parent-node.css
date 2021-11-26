@@ -1,5 +1,5 @@
 @media (max-width: 66666px) {
-  .unused-class, .unused-class2 {
+  .used-class, .unused-class {
     color: black;
   }
 }
