@@ -4,6 +4,7 @@
 ![npm](https://img.shields.io/npm/dm/purgecss?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/FullHuman/purgecss?style=for-the-badge)
 ![Dependabot](https://img.shields.io/badge/dependabot-enabled-%23024ea4?style=for-the-badge)
+[![Coverage Status](https://img.shields.io/coveralls/github/FullHuman/purgecss/main?style=for-the-badge)](https://coveralls.io/github/FullHuman/purgecss?branch=main)
 
 <p align="center">
 	<img src="https://i.imgur.com/UEiUiJ0.png" height="200" width="200" alt="PurgeCSS logo"/>
