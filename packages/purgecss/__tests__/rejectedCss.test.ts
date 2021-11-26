@@ -32,7 +32,7 @@ describe("rejectedCss", () => {
       css: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.css`],
       rejectedCss: true,
     });
-    const expectedRejectedCss = `@media (max-width: 66666px) {\n  .unused-class {\n    color: black;\n  }\n}`;
+    const expectedRejectedCss = `@media (max-width: 66666px) {\n   .unused-class {\n    color: black;\n  }\n}`;
     const expectedPurgedCss = `@media (max-width: 66666px) {\n  .used-class {\n    color: black;\n  }\n}`;
     expect(resultsPurge[0].rejectedCss?.trim()).toEqual(expectedRejectedCss);
     expect(resultsPurge[0].css.trim()).toEqual(expectedPurgedCss);
