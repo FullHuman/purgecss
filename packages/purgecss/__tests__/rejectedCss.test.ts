@@ -25,4 +25,17 @@ describe("rejectedCss", () => {
     });
     expect(resultsPurge[0].rejectedCss?.trim()).toContain(resultsPurge[0].rejected?.[0]);
   });
+  /**
+   * https://github.com/FullHuman/purgecss/pull/763#discussion_r754618902
+   */
+  it("preserves the node correctly when having an empty parent node", async () => {
+    expect.assertions(1);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.js`],
+      css: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.css`],
+      rejectedCss: true,
+    });
+    const expected = `@media (max-width: 66666px) {\n  .unused-class, .unused-class2 {\n    color: black;\n  }\n}`;
+    expect(resultsPurge[0].rejectedCss?.trim()).toEqual(expected);
+  });
 });

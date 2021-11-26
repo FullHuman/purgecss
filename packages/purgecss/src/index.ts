@@ -486,10 +486,16 @@ class PurgeCSS {
     // remove empty rules
     const parent = node.parent;
     if (!node.selector) {
-      node.remove()
+      node.remove();
       if (this.options.rejectedCss) {
         node.selector = originalSelector;
-        this.removedNodes.push(node);
+        if (parent && isRuleEmpty(parent)) {
+          const clone = parent.clone();
+          clone.append(node);
+          this.removedNodes.push(clone);
+        } else {
+          this.removedNodes.push(node);
+        }
       }
     }
     if (isRuleEmpty(parent)) parent?.remove();
