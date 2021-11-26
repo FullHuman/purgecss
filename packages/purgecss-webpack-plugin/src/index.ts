@@ -1,10 +1,9 @@
 import * as fs from "fs";
 import path from "path";
 import PurgeCSS, { defaultOptions } from "purgecss";
+import { Compilation, Compiler } from "webpack";
 import { ConcatSource } from "webpack-sources";
-import { UserDefinedOptions, PurgedStats } from "./types";
-
-import { Compiler, Compilation } from "webpack";
+import { PurgedStats, UserDefinedOptions } from "./types";
 
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";

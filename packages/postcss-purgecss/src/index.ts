@@ -49,8 +49,6 @@ async function purgeCSS(
   const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
 
   //purge unused selectors
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   purgeCSS.walkThroughCSS(root, selectors);
 
   if (purgeCSS.options.fontFace) purgeCSS.removeUnusedFontFaces();

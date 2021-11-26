@@ -23,7 +23,6 @@ function runWebpack(
 async function readFileOrEmpty(path: string): Promise<string> {
   try {
     return await fs.promises.readFile(path, "utf-8");
-    // eslint-disable-next-line no-empty
   } catch (e) {
     return "";
   }

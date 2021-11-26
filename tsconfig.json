@@ -3,7 +3,7 @@
     "declaration": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "target": "es2019",
     "module": "commonjs",
     "moduleResolution": "node",
