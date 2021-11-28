@@ -1,4 +1,4 @@
-import es from 'event-stream';
+import es from "event-stream";
 import internal, { PassThrough } from "stream";
 import File from "vinyl";
 import gulpPurgecss from "../src/";
@@ -22,14 +22,14 @@ describe("gulp-purgecss with stream", () => {
     });
   });
 
-//   it("returns a stream", (done) => {
-//     expect.assertions(1);
-//     myGulpPurgecss.write(fileTest);
-//     myGulpPurgecss.once("data", (file) => {
-//       expect(file.isStream()).toBe(true);
-//       done();
-//     });
-//   });
+  it("returns a stream", (done) => {
+    expect.assertions(1);
+    myGulpPurgecss.write(fileTest);
+    myGulpPurgecss.once("data", (file) => {
+      expect(file.isStream()).toBe(true);
+      done();
+    });
+  });
 
   it("returns a purged css stream", (done) => {
     expect.assertions(3);
@@ -44,7 +44,5 @@ describe("gulp-purgecss with stream", () => {
         })
       );
     });
-    // myGulpPurgecss.on("end", done);
   });
-
 });

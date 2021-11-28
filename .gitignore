@@ -71,3 +71,4 @@ typings/
 # dotenv environment variables file
 .env
 
+packages/purgecss/bin/purgecss.d.ts
