@@ -13,7 +13,7 @@ class VariableNode {
 }
 
 class VariablesStructure {
-  public nodes: Map<string, VariableNode> = new Map();
+  public nodes: Map<string, VariableNode[]> = new Map();
   public usedVariables: Set<string> = new Set();
   public safelist: StringRegExpArray = [];
 
@@ -21,7 +21,11 @@ class VariablesStructure {
     const { prop } = declaration;
     if (!this.nodes.has(prop)) {
       const node = new VariableNode(declaration);
-      this.nodes.set(prop, node);
+      this.nodes.set(prop, [node]);
+    } else {
+      const node = new VariableNode(declaration);
+      const variableNodes = this.nodes.get(prop) || [];
+      this.nodes.set(prop, [...variableNodes, node]);
     }
   }
 
@@ -30,14 +34,15 @@ class VariablesStructure {
     matchedVariables: RegExpMatchArray[]
   ): void {
     const { prop } = declaration;
-    const node = this.nodes.get(prop);
+    const nodes = this.nodes.get(prop);
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const usedVariableNode = this.nodes.get(variableName)!;
-        node?.nodes.push(usedVariableNode);
+        const usedVariableNodes = this.nodes.get(variableName);
+        nodes?.forEach(node => {
+          usedVariableNodes?.forEach(usedVariableNode => node.nodes.push(usedVariableNode))
+        });
       }
     }
   }
@@ -51,13 +56,15 @@ class VariablesStructure {
   }
 
   setAsUsed(variableName: string): void {
-    const node = this.nodes.get(variableName);
-    const queue = [node];
-    while (queue.length !== 0) {
-      const currentNode = queue.pop();
-      if (currentNode && !currentNode.isUsed) {
-        currentNode.isUsed = true;
-        queue.push(...currentNode.nodes);
+    const nodes = this.nodes.get(variableName);
+    if (nodes) {
+      const queue = [...nodes];
+      while (queue.length !== 0) {
+        const currentNode = queue.pop();
+        if (currentNode && !currentNode.isUsed) {
+          currentNode.isUsed = true;
+          queue.push(...currentNode.nodes);
+        }
       }
     }
   }
@@ -65,17 +72,19 @@ class VariablesStructure {
   removeUnused(): void {
     // check unordered usage
     for (const used of this.usedVariables) {
-      const usedNode = this.nodes.get(used);
-      if (usedNode) {
-        const usedVariablesMatchesInDeclaration = matchAll(
-          usedNode.value.value,
-          /var\((.+?)[,)]/g
-        );
-        usedVariablesMatchesInDeclaration.forEach((usage) => {
-          if (!this.usedVariables.has(usage[1])) {
-            this.usedVariables.add(usage[1]);
-          }
-        });
+      const usedNodes = this.nodes.get(used);
+      if (usedNodes) {
+        for (const usedNode of usedNodes) {   
+          const usedVariablesMatchesInDeclaration = matchAll(
+            usedNode.value.value,
+            /var\((.+?)[,)]/g
+          );
+          usedVariablesMatchesInDeclaration.forEach((usage) => {
+            if (!this.usedVariables.has(usage[1])) {
+              this.usedVariables.add(usage[1]);
+            }
+          });
+        }
       }
     }
 
@@ -83,9 +92,11 @@ class VariablesStructure {
       this.setAsUsed(used);
     }
 
-    for (const [name, declaration] of this.nodes) {
-      if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
-        declaration.value.remove();
+    for (const [name, declarations] of this.nodes) {
+      for (const declaration of declarations) {
+        if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
+          declaration.value.remove();
+        }
       }
     }
   }
