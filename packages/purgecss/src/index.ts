@@ -458,7 +458,7 @@ class PurgeCSS {
     }
 
     let keepSelector = true;
-    const originalSelector = node.selector;
+    const selectorsRemovedFromRule: string[] = [];
     node.selector = selectorParser((selectorsParsed) => {
       selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
@@ -470,6 +470,9 @@ class PurgeCSS {
         if (!keepSelector) {
           if (this.options.rejected) {
             this.selectorsRemoved.add(selector.toString());
+          }
+          if (this.options.rejectedCss) {
+            selectorsRemovedFromRule.push(selector.toString());
           }
           selector.remove();
         }
@@ -488,18 +491,19 @@ class PurgeCSS {
     const parent = node.parent;
     if (!node.selector) {
       node.remove();
-      if (this.options.rejectedCss) {
-        node.selector = originalSelector;
-        if (parent && isRuleEmpty(parent)) {
-          const clone = parent.clone();
-          clone.append(node);
-          this.removedNodes.push(clone);
-        } else {
-          this.removedNodes.push(node);
-        }
-      }
     }
     if (isRuleEmpty(parent)) parent?.remove();
+
+    // rebuild the rule with the removed selectors and optionally its parent 
+    if (this.options.rejectedCss) {
+      if (selectorsRemovedFromRule.length > 0) {
+        const clone = node.clone();
+        const parentClone = parent?.clone().removeAll().append(clone);
+        clone.selectors = selectorsRemovedFromRule;
+        const nodeToPreserve = parentClone ? parentClone : clone;
+        this.removedNodes.push(nodeToPreserve);
+      }
+    }
   }
 
   /**

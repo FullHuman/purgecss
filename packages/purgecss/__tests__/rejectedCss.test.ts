@@ -9,10 +9,7 @@ describe("rejectedCss", () => {
       css: [`${ROOT_TEST_EXAMPLES}rejectedCss/simple.css`],
       rejectedCss: true,
     });
-    const expected = `
-.rejected {
-    color: blue;
-}`;
+    const expected = `.rejected {\n  color: blue;\n}`;
     expect(resultsPurge[0].rejectedCss?.trim()).toBe(expected.trim());
   });
   it("contains the rejected selectors as part of the rejected css", async () => {
@@ -30,14 +27,16 @@ describe("rejectedCss", () => {
   /**
    * https://github.com/FullHuman/purgecss/pull/763#discussion_r754618902
    */
-  it("preserves the node correctly when having an empty parent node", async () => {
-    expect.assertions(1);
+  it("preserves the node correctly", async () => {
+    expect.assertions(2);
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.js`],
       css: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.css`],
       rejectedCss: true,
     });
-    const expected = `@media (max-width: 66666px) {\n  .unused-class, .unused-class2 {\n    color: black;\n  }\n}`;
-    expect(resultsPurge[0].rejectedCss?.trim()).toEqual(expected);
+    const expectedRejectedCss = `@media (max-width: 66666px) {\n   .unused-class {\n    color: black;\n  }\n}`;
+    const expectedPurgedCss = `@media (max-width: 66666px) {\n  .used-class {\n    color: black;\n  }\n}`;
+    expect(resultsPurge[0].rejectedCss?.trim()).toEqual(expectedRejectedCss);
+    expect(resultsPurge[0].css.trim()).toEqual(expectedPurgedCss);
   });
 });
