@@ -1,8 +1,1 @@
-export const CSS_SAFELIST = [
-  "*",
-  "::-webkit-scrollbar",
-  "::selection",
-  ":root",
-  "::before",
-  "::after",
-];
+export const CSS_SAFELIST = ["*", ":root", ":after", ":before"];

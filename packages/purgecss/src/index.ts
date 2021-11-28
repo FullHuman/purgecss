@@ -494,7 +494,7 @@ class PurgeCSS {
     }
     if (isRuleEmpty(parent)) parent?.remove();
 
-    // rebuild the rule with the removed selectors and optionally its parent 
+    // rebuild the rule with the removed selectors and optionally its parent
     if (this.options.rejectedCss) {
       if (selectorsRemovedFromRule.length > 0) {
         const clone = node.clone();
@@ -603,7 +603,8 @@ class PurgeCSS {
         ? safelistItem === selector
         : safelistItem.test(selector);
     });
-    return CSS_SAFELIST.includes(selector) || isSafelisted;
+    const isPseudoElement = /^::.*/.test(selector);
+    return CSS_SAFELIST.includes(selector) || isPseudoElement || isSafelisted;
   }
 
   /**

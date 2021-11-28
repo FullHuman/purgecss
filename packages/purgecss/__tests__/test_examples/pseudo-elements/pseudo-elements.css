@@ -1,0 +1,67 @@
+/* Remove inner border and padding from Firefox, but don't restore the outline like Normalize. */
+
+::-moz-focus-inner {
+  padding: 0;
+  border-style: none;
+}
+
+
+/* Fix height of inputs with a type of datetime-local, date, month, week, or time
+See https://github.com/twbs/bootstrap/issues/18842 */
+
+::-webkit-datetime-edit-fields-wrapper,
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-minute,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-year-field {
+  padding: 0;
+}
+
+::-webkit-inner-spin-button {
+  height: auto;
+}
+
+
+/* Remove the inner padding in Chrome and Safari on macOS. */
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* Remove padding around color pickers in webkit browsers */
+
+::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+
+/* Inherit font family and line height for file input buttons */
+
+::file-selector-button {
+  font: inherit;
+}
+
+/* 1. Change font properties to `inherit`
+2. Correct the inability to style clickable types in iOS and Safari. */
+
+::-webkit-file-upload-button {
+  font: inherit;
+  -webkit-appearance: button;
+}
+
+::grammar-error  {
+    text-decoration: underline green;
+    color: green;
+}
+
+.used::grammar-error {
+    text-decoration: underline blue;
+    color: blue;
+}
+
+.unused::grammar-error  {
+    text-decoration: underline red;
+    color: red;
+}
