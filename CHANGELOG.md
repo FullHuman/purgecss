@@ -1,3 +1,27 @@
+# [4.1.0](https://github.com/FullHuman/purgecss/compare/v4.0.3...v4.1.0) (2021-11-28)
+
+
+### Bug Fixes
+
+* Allow Absolute Paths ([#679](https://github.com/FullHuman/purgecss/issues/679)) ([15335a2](https://github.com/FullHuman/purgecss/commit/15335a2f4643a60593ab071064ad51db8f47ce77))
+* css variable removed when declared in wrong order ([89ece42](https://github.com/FullHuman/purgecss/commit/89ece42929a3fd62b2a84fb0b57c0ac16c98908f)), closes [#518](https://github.com/FullHuman/purgecss/issues/518)
+* Fix interaction with other plugins ([#647](https://github.com/FullHuman/purgecss/issues/647)) ([fb08e3a](https://github.com/FullHuman/purgecss/commit/fb08e3a3c27a1b25e4f023cbcbfca35a0cc2b43e))
+* **grunt-purgecss:** Fix plugin not ouputting all files ([#723](https://github.com/FullHuman/purgecss/issues/723)) ([646e419](https://github.com/FullHuman/purgecss/commit/646e419cac01b3e647cc77ffebcfd5c31d087e23))
+* **gulp-purgecss:** fix support for stream input ([fd5d3bf](https://github.com/FullHuman/purgecss/commit/fd5d3bf578344f2512d1c0961d8dbbb1f3b8d0d5))
+* Keep keyframe decimals for prefixed [@keyframes](https://github.com/keyframes) ([#749](https://github.com/FullHuman/purgecss/issues/749)) ([b804441](https://github.com/FullHuman/purgecss/commit/b80444195c08e2ae62f5e5f249a1e346b1d70097))
+* **purgecss-from-pug:** class attribute with multiple values not correctly handled with pug ([#678](https://github.com/FullHuman/purgecss/issues/678)) ([ba6285d](https://github.com/FullHuman/purgecss/commit/ba6285def36c304ca7ae3fa5999cec378065060c)), closes [#677](https://github.com/FullHuman/purgecss/issues/677)
+
+
+### Features
+
+* add dynamicAttributes option ([2f9cc65](https://github.com/FullHuman/purgecss/commit/2f9cc653ba77b0eb58ebed40269bcb6923b3fe83))
+* add option to ouput unused css ([#763](https://github.com/FullHuman/purgecss/issues/763)) ([3a3d958](https://github.com/FullHuman/purgecss/commit/3a3d9582f28434acceaca5622f82c39f598a85e1))
+* add purgecss-from-tsx ([#716](https://github.com/FullHuman/purgecss/issues/716)) ([e556afc](https://github.com/FullHuman/purgecss/commit/e556afc6401a56886f10f8fda7f729853c0735e7))
+* export all types [#780](https://github.com/FullHuman/purgecss/issues/780) ([1a959c6](https://github.com/FullHuman/purgecss/commit/1a959c6700bf82975fd52ac32ec1012b3e2e1b5b))
+* new purgecss-from-jsx plugin ([#692](https://github.com/FullHuman/purgecss/issues/692)) ([3570c7d](https://github.com/FullHuman/purgecss/commit/3570c7db9a4028e494ad684a7689f2cc5a99a585))
+
+
+
 # [](https://github.com/FullHuman/purgecss/compare/v4.0.3...v) (2021-06-07)
 
 
