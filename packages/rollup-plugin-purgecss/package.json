@@ -32,5 +32,9 @@
   "dependencies": {
     "purgecss": "^4.1.0",
     "rollup-pluginutils": "^2.8.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

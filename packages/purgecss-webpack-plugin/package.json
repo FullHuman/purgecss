@@ -50,5 +50,9 @@
   },
   "peerDependencies": {
     "webpack": "*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

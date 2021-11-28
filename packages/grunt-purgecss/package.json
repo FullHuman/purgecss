@@ -38,5 +38,9 @@
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

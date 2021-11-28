@@ -25,5 +25,9 @@
   },
   "dependencies": {
     "twing": "^5.0.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

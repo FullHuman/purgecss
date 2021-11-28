@@ -16,14 +16,15 @@
     "optimization"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

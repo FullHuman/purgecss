@@ -30,5 +30,9 @@
     "acorn-jsx": "^5.3.1",
     "acorn-jsx-walk": "^2.0.0",
     "acorn-walk": "^8.1.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

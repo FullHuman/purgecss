@@ -29,5 +29,9 @@
     "@fullhuman/purgecss-from-jsx": "^4.1.0",
     "acorn": "^7.4.0",
     "typescript": "^4.3.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
