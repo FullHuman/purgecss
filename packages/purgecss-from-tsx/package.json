@@ -1,6 +1,6 @@
 {
   "name": "@fullhuman/purgecss-from-tsx",
-  "version": "4.1.0",
+  "version": "4.0.3",
   "description": "TSX extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
@@ -26,8 +26,8 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "@fullhuman/purgecss-from-jsx": "^4.1.0",
     "acorn": "^7.4.0",
+    "@fullhuman/purgecss-from-jsx": "^4.0.3",
     "typescript": "^4.3.2"
   },
   "publishConfig": {
