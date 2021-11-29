@@ -37,3 +37,7 @@
 .parent3.def1{
     color:red;
 }
+
+[href^='#'] {
+    color: green;
+}

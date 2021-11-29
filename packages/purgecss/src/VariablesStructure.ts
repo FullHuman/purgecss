@@ -40,8 +40,10 @@ class VariablesStructure {
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
         const usedVariableNodes = this.nodes.get(variableName);
-        nodes?.forEach(node => {
-          usedVariableNodes?.forEach(usedVariableNode => node.nodes.push(usedVariableNode))
+        nodes?.forEach((node) => {
+          usedVariableNodes?.forEach((usedVariableNode) =>
+            node.nodes.push(usedVariableNode)
+          );
         });
       }
     }
@@ -74,7 +76,7 @@ class VariablesStructure {
     for (const used of this.usedVariables) {
       const usedNodes = this.nodes.get(used);
       if (usedNodes) {
-        for (const usedNode of usedNodes) {   
+        for (const usedNode of usedNodes) {
           const usedVariablesMatchesInDeclaration = matchAll(
             usedNode.value.value,
             /var\((.+?)[,)]/g

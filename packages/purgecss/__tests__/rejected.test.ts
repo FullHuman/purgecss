@@ -53,6 +53,7 @@ describe("rejected", () => {
       ".parent.d33ef1",
       ".parent2.def",
       ".parent3.def1",
+      "[href^='#']",
     ]);
   });
 });

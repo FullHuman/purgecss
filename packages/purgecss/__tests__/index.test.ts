@@ -1,7 +1,7 @@
-import PurgeCSS from "./../src/index";
+import purgecssFromHtml from "@fullhuman/purgecss-from-html";
 import { ExtractorResult } from "../src/types";
-
-import { ROOT_TEST_EXAMPLES } from "./utils";
+import PurgeCSS from "./../src/index";
+import { notFindInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purgecss with config file", () => {
   it("initialize without error with a config file specified", () => {
@@ -69,5 +69,29 @@ describe("special characters, with custom Extractor", () => {
 
   it("discards unused class beginning with number", () => {
     expect(purgedCSS.includes("\\32 -panel")).toBe(false);
+  });
+});
+
+describe("PurgeCSS with detailed extractor for html", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}chaining-rules/index.html`],
+      css: [`${ROOT_TEST_EXAMPLES}chaining-rules/index.css`],
+      extractors: [
+        {
+          extensions: ["html"],
+          extractor: purgecssFromHtml,
+        },
+      ],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps parent1 selector", () => {
+    expect(purgedCSS.includes("parent1")).toBe(true);
+  });
+  it("removes parent3, d33ef1, .parent2", () => {
+    notFindInCSS(expect, ["parent3", "d33ef1", "parent2"], purgedCSS);
   });
 });
