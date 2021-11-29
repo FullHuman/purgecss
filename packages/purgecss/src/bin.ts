@@ -119,7 +119,7 @@ async function run() {
 
     for (const purgedResult of purged) {
       const fileName = purgedResult?.file?.split("/").pop();
-      await writeCSSToFile(`${output}/${fileName}`, purgedResult.css);
+      await writeCSSToFile(`${resultOutput}/${fileName}`, purgedResult.css);
     }
   } else {
     console.log(JSON.stringify(purged));
