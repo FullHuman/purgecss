@@ -8,7 +8,7 @@ import { UserDefinedOptions } from "./types";
 
 const PLUGIN_NAME = "gulp-purgecss";
 
-export function getFiles(contentArray: string[]): string[] {
+function getFiles(contentArray: string[]): string[] {
   return contentArray.reduce((acc: string[], content) => {
     return [...acc, ...glob.sync(content)];
   }, []);
