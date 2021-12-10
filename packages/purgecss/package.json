@@ -39,13 +39,13 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "commander": "^8.0.0",
-    "glob": "^7.1.7",
-    "postcss": "^8.3.5",
-    "postcss-selector-parser": "^6.0.6"
+    "commander": "^8.3.0",
+    "glob": "^7.2.0",
+    "postcss": "^8.4.4",
+    "postcss-selector-parser": "^6.0.7"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.1"
+    "@types/glob": "^7.2.0"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"

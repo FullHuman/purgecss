@@ -24,7 +24,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "twing": "^5.0.2"
+    "twing": "^5.1.0"
   },
   "publishConfig": {
     "access": "public",
