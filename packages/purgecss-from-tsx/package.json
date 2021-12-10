@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@fullhuman/purgecss-from-jsx": "^4.1.0",
-    "acorn": "^7.4.0",
+    "acorn": "^8.6.0",
     "typescript": "^4.3.2"
   },
   "publishConfig": {
