@@ -115,6 +115,7 @@ export default class PurgeCSSPlugin {
           keyframes: options.keyframes,
           output: options.output,
           rejected: options.rejected,
+          rejectedCss : options.rejectedCss,
           variables: options.variables,
           safelist: options.safelist,
           blocklist: options.blocklist,
