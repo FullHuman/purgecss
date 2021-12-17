@@ -136,6 +136,10 @@ new PurgeCSSPlugin({
 
 If `true` all removed selectors are added to the [Stats Data](https://webpack.js.org/api/stats/) as `purged`.
 
+* #### rejectedCss
+
+If `true` generate another output file based on output name containing rejected css.<br> For an entry point named `foo`, the purged file will be named `foo.css` and the rejected one `foo-rejected.css`  
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](./../../CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
