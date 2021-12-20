@@ -29,7 +29,7 @@ function isFileOfTypes(filename: string, extensions: string[]): boolean {
   return extensions.includes(extension);
 }
 
-export default class PurgeCSSPlugin {
+export class PurgeCSSPlugin {
   options: UserDefinedOptions;
   purgedStats: PurgedStats = {};
 
@@ -132,3 +132,5 @@ export default class PurgeCSSPlugin {
     }
   }
 }
+
+export default PurgeCSSPlugin;
