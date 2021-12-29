@@ -1,1 +1,1 @@
-export const CSS_SAFELIST = ["*", ":root", ":after", ":before"];
+export const CSS_SAFELIST = ["*", ":root", ":after", ":before", "body", "html"];
