@@ -28,7 +28,7 @@ PurgeCSS is available via a Command Line Interface. You can use the CLI by itsel
 
 You can either install PurgeCSS as a dev dependency and use the CLI with `npx` or you can also install PurgeCSS globally:
 
-```text
+```sh
 npm i -g purgecss
 ```
 
@@ -62,7 +62,7 @@ The options available through the CLI are similar to the ones available with a c
 
 ### --css
 
-```text
+```sh
 purgecss --css css/app.css css/palette.css --content src/index.html
 ```
 
@@ -70,7 +70,7 @@ purgecss --css css/app.css css/palette.css --content src/index.html
 
 You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). These files can be HTML, Pug, Blade, etc.
 
-```text
+```sh
 purgecss --css css/app.css --content src/index.html src/**/*.js
 ```
 
@@ -78,7 +78,7 @@ purgecss --css css/app.css --content src/index.html src/**/*.js
 
 You can use the CLI with a [configuration file](configuration.md). Use `--config` or `-c` with the path to the config file.
 
-```text
+```sh
 purgecss --config ./purgecss.config.js
 ```
 
@@ -86,7 +86,7 @@ purgecss --config ./purgecss.config.js
 
 By default, the CLI outputs the result in the console. If you wish to return the CSS as files, specify the directory to write the purified CSS files to.
 
-```text
+```sh
 purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build/css/
 ```
 
@@ -94,6 +94,6 @@ purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build
 
 If you wish to prevent PurgeCSS from removing a specific CSS selector, you can add it to the safelist.
 
-```text
+```sh
 purgecss --css css/app.css --content src/index.html --safelist classnameToSafelist
 ```

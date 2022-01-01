@@ -83,15 +83,18 @@ Just pick the one that fits your needs. In the following steps, I will use `next
 
 For example, install `next-css` and `next-purgecss` :
 
-```
-yarn add @zeit/next-css next-purgecss --dev
-```
-
-or with npm :
-
-```
+:::: code-group
+::: code-group-item NPM
+```sh
 npm install @zeit/next-css next-purgecss --save-dev
 ```
+:::
+::: code-group-item YARN
+```sh
+yarn add @zeit/next-css next-purgecss --dev
+```
+:::
+::::
 
 Once you installed the packages, you need to edit `next.config.js`.
 

@@ -132,11 +132,20 @@ When generating your application this might be a lot of small files.
 To include the CSS into the header of the HTML file you'll need to run the following commands. 
 Please note that using this configuration PurgeCSS will be active in production and development mode.
 
-```text
-npm i --save-dev @fullhuman/postcss-purgecss
+:::: code-group
+::: code-group-item NPM
+```sh
+npm i -D @fullhuman/postcss-purgecss
 ```
+:::
+::: code-group-item YARN
+```sh
+yarn add @fullhuman/postcss-purgecss --dev
+```
+:::
+::::
 
-```javascript
+```js
 '@fullhuman/postcss-purgecss': {
   content: ['./pages/**/*.vue', './layouts/**/*.vue', './components/**/*.vue'],
   safelist: ['html', 'body']

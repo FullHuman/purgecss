@@ -31,7 +31,7 @@ From version 4.0, it is compatible with PostCSS >=8 only.
 
 ## Installation
 
-```
+```sh
 npm i -D @fullhuman/postcss-purgecss postcss
 ```
 

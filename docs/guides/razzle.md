@@ -32,17 +32,18 @@ This example shows how to set up PurgeCSS with `create-razzle-app` template.
 
 Once you initialized your project with `npx create-razzle-app my-app`, install the PurgeCSS plugin:
 
-if you're using `npm`:
-
-```
+:::: code-group
+::: code-group-item NPM
+```sh
 npm i --save-dev razzle-plugin-purgecss
 ```
-
-if you're using `yarn`:
-
-```
+:::
+::: code-group-item YARN
+```sh
 yarn add --dev razzle-plugin-purgecss
 ```
+:::
+::::
 
 ### 2. Edit `razzle.config.js`
 

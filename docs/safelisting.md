@@ -32,7 +32,7 @@ You can indicate which selectors are safe to leave in the final CSS. This can be
 
 You can add selectors to the safelist with `safelist`. 
 
-```javascript
+```js
 const purgecss = new Purgecss({
     content: [], // content
     css: [], // css
@@ -46,7 +46,7 @@ In the example, the selectors `.random`, `#yep`, `button` will be left in the fi
 
 You can safelist selectors based on a regular expression with `safelist.standard`, `safelist.deep`, and `safelist.greedy`.
 
-```javascript
+```js
 const purgecss = new Purgecss({
     content: [], // content
     css: [], // css

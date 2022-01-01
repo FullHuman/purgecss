@@ -255,7 +255,7 @@ You can indicate which selectors are safe to leave in the final CSS. This can be
 
 Two forms are available for this option.
 
-```ts
+```js
 safelist: ['random', 'yep', 'button', /^nav-/]
 ```
 
@@ -263,7 +263,7 @@ In this form, safelist is an array that can take a string or a regex.
 
 The _complex_ form is:
 
-```ts
+```js
 safelist: {
     standard: ['random', 'yep', 'button', /^nav-/],
     deep: [],
@@ -331,7 +331,7 @@ In this example, selectors such as `button.bg-red.nonexistent-class` will be lef
 
 Blocklist will block the CSS selectors from appearing in the final output CSS. The selectors will be removed even when they are seen as used by PurgeCSS.
 
-```ts
+```js
 blocklist: ['usedClass', /^nav-/]
 ```
 Even if nav-links and usedClass are found by an extractor, they will be removed.
@@ -340,7 +340,7 @@ Even if nav-links and usedClass are found by an extractor, they will be removed.
 
 If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
 
-```ts
+```js
 skippedContentGlobs: ['node_modules/**', 'components/**']
 ```
 Here, PurgeCSS will not scan anything in the "node_modules" and "components" folders.
@@ -349,6 +349,6 @@ Here, PurgeCSS will not scan anything in the "node_modules" and "components" fol
 
 Option to add custom CSS attribute selectors like "aria-selected", "data-selected", ...etc. 
 
-```ts
+```js
 dynamicAttributes: ["aria-selected"]
 ```

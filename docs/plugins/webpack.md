@@ -89,7 +89,8 @@ module.exports = {
 ```
 ### Multiple paths
 If you need multiple paths use the npm package `glob-all` instead of `glob`, then you can use this syntax:
-```javascript
+
+```js
 new PurgecssPlugin({
   paths: glob.sync([
     // ...
@@ -122,6 +123,7 @@ new PurgecssPlugin({
 ```
 
 If you want to regenerate the list of paths on every compilation (e.g. when using `--watch`), then you can also pass a function to the `paths` option as in the following example:
+
 ```js
 new PurgecssPlugin({
   paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true })

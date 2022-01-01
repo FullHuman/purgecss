@@ -26,7 +26,7 @@ meta:
 
 ## Installation
 
-```
+```sh
 npm i -D gulp-purgecss
 npm install --save-dev gulp-purgecss
 ```

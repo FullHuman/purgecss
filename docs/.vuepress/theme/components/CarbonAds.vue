@@ -1,10 +1,9 @@
+<template>
+  <div class="carbon-ads"></div>
+</template>
 <script>
 export default {
   name: 'CarbonAds',
-
-  render (h) {
-    return h('div', { class: 'carbon-ads' })
-  },
   mounted () {
     this.load()
   },
@@ -33,30 +32,38 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-.carbon-ads
-  min-height 102px
-  padding 1.5rem 1.5rem 0
-  margin-bottom -0.5rem
-  font-size 0.75rem
-  a
-    color #444
-    font-weight normal
-    display inline
-  .carbon-img
-    float left
-    margin-right 1rem
-    border 1px solid $borderColor
-    img
-      display block
-  .carbon-poweredby
-    color #999
-    display block
-    margin-top 0.5em
+<style scoped lang="scss">
+.carbon-ads {
+  min-height: 102px;
+  padding: 1.5rem 1.5rem 0;
+  margin-bottom: -0.5rem;
+  font-size: 0.75rem;
+}
+a {
+    color: #444;
+    font-weight: normal;
+    display: inline;
+}
+.carbon-img {
+  float: left;
+  margin-right: 1rem;
+  border: 1px solid black;
+}
+img {
+  display: block;
+}
+.carbon-poweredby {
+  color: #999;
+  display: block;
+  margin-top: 0.5em;
+}
 
-@media (max-width: $MQMobile)
-  .carbon-ads
-    .carbon-img img
-      width 100px
-      height 77px
+$MQMobile: 719px !default;
+
+@media (max-width: $MQMobile) {
+    .carbon-img img {
+      width: 100px;
+      height: 77px;
+    }
+}
 </style>

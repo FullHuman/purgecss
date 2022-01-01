@@ -34,7 +34,7 @@ If you haven't yet installed vue-cli 3, first follow the install instructions he
 
 Generate a project using vue-cli 3.0:
 
-```bash
+```sh
 vue create my-app
 ```
 
@@ -42,7 +42,7 @@ Before installing the PurgeCSS plugin, make sure to commit or stash your changes
 
 To install the PurgeCSS plugin simply navigate to your application folder and add PurgeCSS.
 
-```bash
+```sh
 cd my-app
 
 vue add @fullhuman/purgecss

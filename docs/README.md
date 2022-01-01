@@ -1,4 +1,5 @@
 ---
+home: true
 title: PurgeCSS - Remove unused CSS
 lang: en-US
 meta:
@@ -7,7 +8,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
   - property: og:url
-    content:  https://purgecss.com
+    content: https://purgecss.com
   - property: og:site_name
     content: purgecss.com
   - property: og:type
@@ -21,19 +22,16 @@ meta:
   - property: og:description
     content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
 
-  
+heroImage: https://i.imgur.com/UEiUiJ0.png
+actions:
+  - text: Get Started
+    link: /getting-started
+    type: primary
+  - text: Introduction
+    link: /introduction
+    type: secondary
+footer: MIT Licensed | Copyright © 2018-present Full Human LTD
 ---
-
-::: tip
-The documentation is for PurgeCSS 3.0 and above. To see the documentation for PurgeCSS 2.x, click [here](https://github.com/FullHuman/purgecss/tree/5314e41edf328e2ad2639549e1587b82a964a42e/docs)
-:::
-
-# About PurgeCSS
-
-PurgeCSS is a tool to remove unused CSS. It can be part of your development workflow.  
-When you are building a website, you might decide to use a CSS framework like TailwindCSS, Bootstrap, MaterializeCSS, Foundation, etc... But you will only use a small set of the framework, and a lot of unused CSS styles will be included.
-
-This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your CSS files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your CSS, resulting in smaller CSS files.
 
 ## Sponsors 🥰
 

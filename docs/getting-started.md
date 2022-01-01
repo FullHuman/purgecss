@@ -1,0 +1,62 @@
+---
+title: Getting Started | PurgeCSS
+lang: en-US
+meta:
+  - name: description
+    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+  - itemprop: description
+    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+  - property: og:url
+    content: https://purgecss.com
+  - property: og:site_name
+    content: purgecss.com
+  - property: og:type
+    content: website
+  - property: og:image
+    content: https://i.imgur.com/UEiUiJ0.png
+  - property: og:locale
+    content: en_US
+  - property: og:title
+    content: Remove unused CSS - PurgeCSS
+  - property: og:description
+    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
+---
+
+# Getting Started
+
+Most bundlers and frameworks to build websites are using PostCSS. The easiest way to configure PurgeCSS is with its PostCSS plugin.
+
+Install the PostCSS plugin:
+
+:::: code-group
+::: code-group-item NPM
+```sh
+npm i -D @fullhuman/postcss-purgecss
+```
+:::
+::: code-group-item YARN
+```sh
+yarn add @fullhuman/postcss-purgecss --dev
+```
+:::
+::::
+
+and add the PurgeCSS plugin to the PostCSS configuration:
+
+```js{1,5-7}
+const purgecss = require('@fullhuman/postcss-purgecss')
+
+module.exports = {
+  plugins: [
+    purgecss({
+      content: ['./**/*.html']
+    })
+  ]
+}
+```
+
+PurgeCSS will remove the CSS that is not in the files specified in the `content` option.
+
+You can find more information about PostCSS plugin and the configuration options on the following pages:
+- [PostCSS plugin](/plugins/postcss)
+- [Configuration](/configuration)

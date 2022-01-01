@@ -42,7 +42,7 @@ Using a specific extractor for an extension should provide you with the best acc
 
 You can use an extractor by settings the extractors option in the PurgeCSS config file.
 
-```javascript
+```js
 import purgeJs from 'purgecss-from-js'
 import purgeHtml from 'purgecss-from-html'
 
@@ -67,7 +67,7 @@ export default options
 
 An extractor is a simple function that takes the content of a file as a string and returns an array of selectors. By convention, the name of the npm package is `purge-from-[typefile]` \(e.g. purge-from-pug\). Using this convention will allow users to look at the list of extractor on npm by searching `purge-from`.
 
-```javascript
+```js
 const purgeFromJs = (content) => {
   // return array of css selectors
 }
@@ -81,7 +81,6 @@ It is not encouraged to use them in production yet.
 :::
 
 - [purgecss-from-html](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-html): HTML files (.html)
-- [purgecss-from-js](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-js): JS files
+- [purgecss-from-jsx](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-jsx): JSX files
 - [purgecss-from-pug](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-pug): Pug files (.pug)
-- [purgecss-from-twig](): Twig files
-- [purgecss-from-blade](): Blade files
+- [purgecss-from-twig](https://github.com/FullHuman/purgecss/tree/main/packages/purgecss-from-twig): Twig files

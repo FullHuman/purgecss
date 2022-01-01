@@ -1,18 +1,18 @@
 <template>
-  <ParentLayout>
+  <Layout>
     <template #sidebar-top>
       <CarbonAds/>
     </template>
-  </ParentLayout>
+  </Layout>
 </template>
 
 <script>
-import ParentLayout from '@parent-theme/layouts/Layout.vue'
-import CarbonAds from '@theme/components/CarbonAds.vue'
+import Layout from '@vuepress/theme-default/lib/client/layouts/Layout.vue'
+import CarbonAds from './../components/CarbonAds.vue'
 
 export default {
   components: {
-    ParentLayout,
+    Layout,
     CarbonAds
   }
 }

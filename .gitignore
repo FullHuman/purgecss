@@ -72,3 +72,5 @@ typings/
 .env
 
 packages/purgecss/bin/purgecss.d.ts
+.temp
+.cache

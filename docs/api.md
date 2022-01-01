@@ -24,9 +24,18 @@ meta:
 
 Start by installing PurgeCSS as a dev dependency.
 
-```text
-npm i -D purgecss
+:::: code-group
+::: code-group-item NPM
+```sh
+npm install purgecss --save-dev
 ```
+:::
+::: code-group-item YARN
+```sh
+yarn add purgecss --dev
+```
+:::
+::::
 
 You can now use PurgeCSS inside a JavaScript file.
 
@@ -35,7 +44,7 @@ In the following examples, the options passed to PurgeCSS are the same as the on
 ## Usage
 
 ### ES Module Import Syntax
-```javascript
+```js
 import { PurgeCSS } from 'purgecss'
 const purgeCSSResult = await new PurgeCSS().purge({
   content: ['**/*.html'],
@@ -44,7 +53,7 @@ const purgeCSSResult = await new PurgeCSS().purge({
 ```
 
 ### CommonJS Syntax
-```javascript
+```js
 const { PurgeCSS } = require('purgecss')
 const purgeCSSResult = await new PurgeCSS().purge({
   content: ['**/*.html'],
@@ -54,7 +63,7 @@ const purgeCSSResult = await new PurgeCSS().purge({
 
 The format of purgeCSSResult is
 
-```javascript
+```js
 [
     {
         file: 'main.css',
