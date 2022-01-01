@@ -36,7 +36,7 @@ describe("gulp-purgecss with stream", () => {
     myGulpPurgecss.write(fileTest);
     myGulpPurgecss.on("data", (file: File.StreamFile) => {
       file.contents.pipe(
-        es.wait((_err: any, data: string) => {
+        es.wait((_err: unknown, data: string) => {
           expect(data.includes("used")).toBe(true);
           expect(data.includes("unused")).toBe(false);
           expect(data.includes("a")).toBe(true);

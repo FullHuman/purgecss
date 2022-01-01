@@ -66,8 +66,8 @@ export default defineUserConfig<DefaultThemeOptions>({
       "script",
       {
         async: true,
-        src: "https://www.googletagmanager.com/gtag/js?id=G-G2R9DBD8HD"
-      }
+        src: "https://www.googletagmanager.com/gtag/js?id=G-G2R9DBD8HD",
+      },
     ],
     [
       "script",
@@ -78,8 +78,8 @@ export default defineUserConfig<DefaultThemeOptions>({
       gtag('js', new Date());
     
       gtag('config', 'G-G2R9DBD8HD');
-      `
-    ]
+      `,
+    ],
   ],
   theme: path.resolve(__dirname, "./theme/index.ts"),
   themeConfig: {
