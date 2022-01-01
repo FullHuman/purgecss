@@ -1,0 +1,62 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: [bug]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Please, search if a similar issue has not been posted before submitting a new one.
+  - type: textarea
+    id: describe-the-bug
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is
+      placeholder: Unexpected behavior...
+      value: "A bug"
+    validations:
+      required: true
+  - type: textarea
+    id: to-reproduce
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior or a minimal repository
+      placeholder: 1. Go to '...', 2. Click on '...'
+      value: "steps"
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen
+      placeholder: "Expecting..."
+      value: "expected behavior"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: "Add information about OS, Package, Version"
+      placeholder: "OS: macOS, Package: postcss-purgecss, Version: 4.0.1"
+      value: "environment"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Add any other context about the problem here
+      description: Additional context
+      value: "context"
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/FullHuman/purgecss/blob/main/.github/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
