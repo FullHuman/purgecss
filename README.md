@@ -55,18 +55,9 @@ You can find the PurgeCSS documentation on [this website](https://purgecss.com).
 
 #### Installation
 
-:::: code-group
-::: code-group-item NPM
 ```sh
 npm install purgecss --save-dev
 ```
-:::
-::: code-group-item YARN
-```sh
-yarn add purgecss --dev
-```
-:::
-::::
 
 ## Usage
 
