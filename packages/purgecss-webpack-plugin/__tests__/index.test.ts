@@ -38,6 +38,7 @@ describe("Webpack integration", () => {
     "path-and-safelist-functions",
     "simple",
     "simple-with-exclusion",
+    "rejected-css",
   ];
 
   for (const testCase of cases) {
