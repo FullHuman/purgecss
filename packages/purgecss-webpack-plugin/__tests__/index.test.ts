@@ -39,6 +39,7 @@ describe("Webpack integration", () => {
     "simple",
     "simple-with-exclusion",
     "rejected-css",
+    "rejected-css-template-name",
   ];
 
   for (const testCase of cases) {

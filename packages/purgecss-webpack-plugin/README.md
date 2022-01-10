@@ -138,7 +138,20 @@ If `true` all removed selectors are added to the [Stats Data](https://webpack.js
 
 * #### rejectedCss
 
-If `true` generate another output file based on output name containing rejected css.<br> For an entry point named `foo`, the purged file will be named `foo.css` and the rejected one `foo-rejected.css`  
+```ts
+// Output the rejected css as `[base]-rejected.[ext]`
+new PurgeCSSPlugin({
+  rejectedCss: true,
+});
+
+// or use a custom output path
+new PurgeCSSPlugin({
+  rejectedCss: '[base].rejected.css',
+});
+```
+Generate an output file containing the rejected css.  
+If the value is a string it will be used as a Webpack [template string](https://webpack.js.org/configuration/output/#template-strings) to generate the filename.
+If `true` the template path will default to `[base]-rejected.[ext]`. So for an entry point named `foo`, the purged file will be named `foo.css` and the rejected one `foo-rejected.css`  
 
 ## Contributing
 
