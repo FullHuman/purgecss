@@ -131,7 +131,7 @@ export default class PurgeCSSPlugin {
         compilation.updateAsset(name, new ConcatSource(purged.css));
         if (purged.rejectedCss !== undefined) {
           const rejectedCssSource = new ConcatSource(purged.rejectedCss);
-          const rejectedNameTemplate = typeof options.rejectedCss === "boolean" ? "[base]-rejected.[ext]" : options.rejectedCss;
+          const rejectedNameTemplate = typeof options.rejectedCss === "string" ? options.rejectedCss : "[base]-rejected.[ext]";
           const rejectedName = compilation.getPath(rejectedNameTemplate, {
             basename: path.basename(name, path.extname(name)),
             filename: name,
