@@ -85,6 +85,12 @@ export default defineUserConfig<DefaultThemeOptions>({
   themeConfig: {
     logo: "https://i.imgur.com/UEiUiJ0.png",
     repo: "FullHuman/purgecss",
+    navbar: [
+      {
+        text: "API Reference",
+        link: "/api-reference/",
+      },
+    ],
     sidebar: {
       "/": [
         {

@@ -1,3 +1,4 @@
+docs/api-reference/
 packages/*/lib/*
 packages/grunt-purgecss/tasks/purgecss.js
 docs/.vuepress/dist/
