@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "baseUrl": ".",
-    "sourceMap": false,
+    "sourceMap": true,
     "target": "es2019",
     "module": "esnext",
     "moduleResolution": "node",
