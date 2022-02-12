@@ -1,5 +1,5 @@
 import { program } from "commander";
-import fs from "fs";
+import * as fs from "fs";
 import packageJson from "./../package.json";
 import {
   defaultOptions,
@@ -11,7 +11,8 @@ import {
 async function writeCSSToFile(filePath: string, css: string) {
   try {
     await fs.promises.writeFile(filePath, css);
-  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     console.error(err.message);
   }
 }
@@ -128,7 +129,8 @@ async function run() {
 
 try {
   run();
-} catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} catch (error: any) {
   console.error(error.message);
   process.exit(1);
 }

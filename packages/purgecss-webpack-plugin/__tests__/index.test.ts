@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
 import webpack, { Configuration } from "webpack";

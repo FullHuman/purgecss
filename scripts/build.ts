@@ -1,5 +1,5 @@
 import json from "@rollup/plugin-json";
-import path from "path";
+import * as path from "path";
 import { rollup } from "rollup";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-ts";
@@ -56,7 +56,7 @@ async function build(): Promise<void> {
   for (const pkg of packages) {
     const bundle = await rollup({
       input: path.resolve(packagesDirectory, `./${pkg.name}/src/index.ts`),
-      plugins: [typescript({}), terser()],
+      plugins: [typescript(), terser()],
       external: pkg.external,
     });
 
@@ -79,7 +79,7 @@ async function build(): Promise<void> {
   // grunt plugin
   const gruntBundle = await rollup({
     input: path.resolve(packagesDirectory, "./grunt-purgecss/src/index.ts"),
-    plugins: [typescript({}), terser()],
+    plugins: [typescript(), terser()],
     external: ["purgecss"],
   });
   await gruntBundle.write({

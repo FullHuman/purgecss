@@ -1,9 +1,9 @@
-import glob from "glob";
+import * as glob from "glob";
 import PluginError from "plugin-error";
-import PurgeCSS from "purgecss";
-import internal from "stream";
+import { PurgeCSS } from "purgecss";
+import * as internal from "stream";
 import through from "through2";
-import * as VinylFile from "vinyl";
+import VinylFile from "vinyl";
 import { UserDefinedOptions } from "./types";
 
 const PLUGIN_NAME = "gulp-purgecss";

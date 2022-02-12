@@ -1,6 +1,6 @@
 import purgecssFromHtml from "@fullhuman/purgecss-from-html";
 import { ExtractorResult } from "../src/types";
-import PurgeCSS from "./../src/index";
+import { PurgeCSS } from "./../src/index";
 import { notFindInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("purgecss with config file", () => {

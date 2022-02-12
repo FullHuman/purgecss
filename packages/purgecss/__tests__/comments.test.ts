@@ -1,4 +1,4 @@
-import PurgeCSS from "./../src/index";
+import { PurgeCSS } from "./../src/index";
 import { findInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("ignore comment", () => {

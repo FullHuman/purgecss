@@ -1,4 +1,4 @@
-import PurgeCSS from "../src/index";
+import { PurgeCSS } from "../src/index";
 
 describe("performance", () => {
   it("should not suffer from tons of content and css", function () {

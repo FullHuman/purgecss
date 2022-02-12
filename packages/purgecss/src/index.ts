@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import glob from "glob";
-import path from "path";
+import * as glob from "glob";
+import * as path from "path";
 import * as postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { promisify } from "util";
@@ -42,6 +42,14 @@ const asyncFs = {
   readFile: promisify(fs.readFile),
 };
 
+/**
+ * Format the user defined safelist into a standardized safelist object
+ *
+ * @param userDefinedSafelist - the user defined safelist
+ * @returns the formatted safelist object that can be used in the PurgeCSS options
+ *
+ * @public
+ */
 export function standardizeSafelist(
   userDefinedSafelist: UserDefinedSafelist = []
 ): Required<ComplexSafelist> {
@@ -59,7 +67,14 @@ export function standardizeSafelist(
 
 /**
  * Load the configuration file from the path
- * @param configFile Path of the config file
+ *
+ * @param configFile - Path of the config file
+ * @returns The options from the configuration file
+ *
+ * @throws Error
+ * This exception is thrown if the configuration file was not imported
+ *
+ * @public
  */
 export async function setOptions(
   configFile: string = CONFIG_FILENAME
@@ -81,8 +96,10 @@ export async function setOptions(
 
 /**
  * Use the extract function to get the list of selectors
- * @param content content (e.g. html file)
- * @param extractor PurgeCSS extractor used to extract the selectors
+ *
+ * @param content - content (e.g. html file)
+ * @param extractor - PurgeCSS extractor used to extract the selectors
+ * @returns the sets containing the result of the extractor function
  */
 async function extractSelectors(
   content: string,
@@ -93,8 +110,10 @@ async function extractSelectors(
 
 /**
  * Check if the node is a css comment indication to ignore the selector rule
- * @param node node of postcss AST
- * @param type type of css comment
+ *
+ * @param node - node of postcss AST
+ * @param type - type of css comment
+ * @returns true if the node is a PurgeCSS ignore comment
  */
 function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
   switch (type) {
@@ -109,7 +128,9 @@ function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
 
 /**
  * Check if the node correspond to an empty css rule
- * @param node node of postcss AST
+ *
+ * @param node - node of postcss AST
+ * @returns true if the rule is empty
  */
 function isRuleEmpty(node?: postcss.Container): boolean {
   if (
@@ -126,7 +147,8 @@ function isRuleEmpty(node?: postcss.Container): boolean {
 
 /**
  * Check if the node has a css comment indicating to ignore the current selector rule
- * @param rule rule of postcss AST
+ *
+ * @param rule - rule of postcss AST
  */
 function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
   let found = false;
@@ -145,8 +167,12 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
 
 /**
  * Merge two extractor selectors
- * @param extractorSelectorsA extractor selectors A
- * @param extractorSelectorsB extractor selectors B
+ *
+ * @param extractorSelectorsA - extractor selectors A
+ * @param extractorSelectorsB - extractor selectors B
+ * @returns  the merged extractor result sets
+ *
+ * @public
  */
 export function mergeExtractorSelectors(
   ...extractors: (ExtractorResultDetailed | ExtractorResultSets)[]
@@ -158,7 +184,8 @@ export function mergeExtractorSelectors(
 
 /**
  * Strips quotes of a string
- * @param str string to be stripped
+ *
+ * @param str - string to be stripped
  */
 function stripQuotes(str: string): string {
   return str.replace(/(^["'])|(["']$)/g, "");
@@ -166,8 +193,9 @@ function stripQuotes(str: string): string {
 
 /**
  * Returns true if the attribute is found in the extractor selectors
- * @param attributeNode node of type `attribute`
- * @param selectors extractor selectors
+ *
+ * @param attributeNode - node of type `attribute`
+ * @param selectors - extractor selectors
  */
 function isAttributeFound(
   attributeNode: selectorParser.Attribute,
@@ -199,8 +227,9 @@ function isAttributeFound(
 
 /**
  * Returns true if the class is found in the extractor selectors
- * @param classNode node of type `class`
- * @param selectors extractor selectors
+ *
+ * @param classNode - node of type `class`
+ * @param selectors - extractor selectors
  */
 function isClassFound(
   classNode: selectorParser.ClassName,
@@ -211,8 +240,9 @@ function isClassFound(
 
 /**
  * Returns true if the identifier is found in the extractor selectors
- * @param identifierNode node of type `identifier`
- * @param selectors extractor selectors
+ *
+ * @param identifierNode - node of type `identifier`
+ * @param selectors - extractor selectors
  */
 function isIdentifierFound(
   identifierNode: selectorParser.Identifier,
@@ -223,8 +253,9 @@ function isIdentifierFound(
 
 /**
  * Returns true if the tag is found in the extractor selectors
- * @param tagNode node of type `tag`
- * @param selectors extractor selectors
+ *
+ * @param tagNode - node of type `tag`
+ * @param selectors - extractor selectors
  */
 function isTagFound(
   tagNode: selectorParser.Tag,
@@ -236,7 +267,8 @@ function isTagFound(
 /**
  * Returns true if the selector is inside a pseudo class
  * (e.g. :nth-child, :nth-of-type, :only-child, :not)
- * @param selector selector
+ *
+ * @param selector - selector
  */
 function isInPseudoClass(selector: selectorParser.Node): boolean {
   return (
@@ -259,6 +291,20 @@ function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
   return node?.type === "comment";
 }
 
+/**
+ * Class used to instantiate PurgeCSS and can then be used
+ * to purge CSS files.
+ *
+ * @example
+ * ```ts
+ * await new PurgeCSS().purge({
+ *    content: ['index.html'],
+ *    css: ['css/app.css']
+ * })
+ * ```
+ *
+ * @public
+ */
 class PurgeCSS {
   private ignore = false;
   private atRules: AtRules = {
@@ -325,8 +371,8 @@ class PurgeCSS {
 
   /**
    * Get the extractor corresponding to the extension file
-   * @param filename Name of the file
-   * @param extractors Array of extractors definition
+   * @param filename - Name of the file
+   * @param extractors - Array of extractors definition
    */
   private getFileExtractor(
     filename: string,
@@ -342,23 +388,24 @@ class PurgeCSS {
   }
 
   /**
-   * Extract the selectors present in the files using a purgecss extractor
-   * @param files Array of files path or glob pattern
-   * @param extractors Array of extractors
+   * Extract the selectors present in the files using a PurgeCSS extractor
+   *
+   * @param files - Array of files path or glob pattern
+   * @param extractors - Array of extractors
    */
   public async extractSelectorsFromFiles(
     files: string[],
     extractors: Extractors[]
   ): Promise<ExtractorResultSets> {
     const selectors = new ExtractorResultSets([]);
-    for (const globfile of files) {
+    for (const globFile of files) {
       let filesNames: string[] = [];
 
       try {
-        await asyncFs.access(globfile, fs.constants.F_OK);
-        filesNames.push(globfile);
+        await asyncFs.access(globFile, fs.constants.F_OK);
+        filesNames.push(globFile);
       } catch (err) {
-        filesNames = glob.sync(globfile, {
+        filesNames = glob.sync(globFile, {
           nodir: true,
           ignore: this.options.skippedContentGlobs,
         });
@@ -375,8 +422,9 @@ class PurgeCSS {
 
   /**
    * Extract the selectors present in the passed string using a PurgeCSS extractor
-   * @param content Array of content
-   * @param extractors Array of extractors
+   *
+   * @param content - Array of content
+   * @param extractors - Array of extractors
    */
   public async extractSelectorsFromString(
     content: RawContent[],
@@ -393,7 +441,7 @@ class PurgeCSS {
 
   /**
    * Evaluate at-rule and register it for future reference
-   * @param node node of postcss AST
+   * @param node - node of postcss AST
    */
   private evaluateAtRule(node: postcss.AtRule): void {
     // keyframes
@@ -403,10 +451,10 @@ class PurgeCSS {
     }
     // font-face
     if (this.options.fontFace && node.name === "font-face" && node.nodes) {
-      for (const childnode of node.nodes) {
-        if (childnode.type === "decl" && childnode.prop === "font-family") {
+      for (const childNode of node.nodes) {
+        if (childNode.type === "decl" && childNode.prop === "font-family") {
           this.atRules.fontFace.push({
-            name: stripQuotes(childnode.value),
+            name: stripQuotes(childNode.value),
             node,
           });
         }
@@ -416,8 +464,9 @@ class PurgeCSS {
 
   /**
    * Evaluate css selector and decide if it should be removed or not
-   * @param node node of postcss AST
-   * @param selectors selectors used in content files
+   *
+   * @param node - node of postcss AST
+   * @param selectors - selectors used in content files
    */
   private evaluateRule(
     node: postcss.Node,
@@ -508,8 +557,9 @@ class PurgeCSS {
 
   /**
    * Get the purged version of the css based on the files
-   * @param cssOptions css options, files or raw strings
-   * @param selectors set of extracted css selectors
+   *
+   * @param cssOptions - css options, files or raw strings
+   * @param selectors - set of extracted css selectors
    */
   public async getPurgedCSS(
     cssOptions: Array<string | RawCSS>,
@@ -571,7 +621,8 @@ class PurgeCSS {
 
   /**
    * Check if the keyframe is safelisted with the option safelist keyframes
-   * @param keyframesName name of the keyframe animation
+   *
+   * @param keyframesName - name of the keyframe animation
    */
   private isKeyframesSafelisted(keyframesName: string): boolean {
     return this.options.safelist.keyframes.some((safelistItem) => {
@@ -583,7 +634,8 @@ class PurgeCSS {
 
   /**
    * Check if the selector is blocklisted with the option blocklist
-   * @param selector css selector
+   *
+   * @param selector - css selector
    */
   private isSelectorBlocklisted(selector: string): boolean {
     return this.options.blocklist.some((blocklistItem) => {
@@ -595,7 +647,8 @@ class PurgeCSS {
 
   /**
    * Check if the selector is safelisted with the option safelist standard
-   * @param selector css selector
+   *
+   * @param selector - css selector
    */
   private isSelectorSafelisted(selector: string): boolean {
     const isSafelisted = this.options.safelist.standard.some((safelistItem) => {
@@ -609,7 +662,8 @@ class PurgeCSS {
 
   /**
    * Check if the selector is safelisted with the option safelist deep
-   * @param selector selector
+   *
+   * @param selector - selector
    */
   private isSelectorSafelistedDeep(selector: string): boolean {
     return this.options.safelist.deep.some((safelistItem) =>
@@ -619,7 +673,8 @@ class PurgeCSS {
 
   /**
    * Check if the selector is safelisted with the option safelist greedy
-   * @param selector selector
+   *
+   * @param selector - selector
    */
   private isSelectorSafelistedGreedy(selector: string): boolean {
     return this.options.safelist.greedy.some((safelistItem) =>
@@ -628,8 +683,28 @@ class PurgeCSS {
   }
 
   /**
-   * Remove unused css
-   * @param userOptions PurgeCSS options
+   * Remove unused CSS
+   *
+   * @param userOptions - PurgeCSS options or path to the configuration file
+   * @returns
+   *
+   * @example Using a configuration file named purgecss.config.js
+   * ```ts
+   * const purgeCSSResults = await new PurgeCSS().purge()
+   * ```
+   *
+   * @example Using a custom path to the configuration file
+   * ```ts
+   * const purgeCSSResults = await new PurgeCSS().purge('./purgecss.config.js')
+   * ```
+   *
+   * @example Using the PurgeCSS options
+   * ```ts
+   * const purgeCSSResults = await new PurgeCSS().purge({
+   *    content: ['index.html', '**\/*.js', '**\/*.html', '**\/*.vue'],
+   *    css: ['css/app.css']
+   * })
+   * ```
    */
   public async purge(
     userOptions: UserDefinedOptions | string | undefined
@@ -713,8 +788,11 @@ class PurgeCSS {
 
   /**
    * Determine if the selector should be kept, based on the selectors found in the files
-   * @param selector set of css selectors found in the content files or string
-   * @param selectorsFromExtractor selectors in the css rule
+   *
+   * @param selector - set of css selectors found in the content files or string
+   * @param selectorsFromExtractor - selectors in the css rule
+   *
+   * @returns true if the selector should be kept in the processed CSS
    */
   private shouldKeepSelector(
     selector: selectorParser.Selector,
@@ -803,8 +881,9 @@ class PurgeCSS {
 
   /**
    * Walk through the CSS AST and remove unused CSS
-   * @param root root node of the postcss AST
-   * @param selectors selectors used in content files
+   *
+   * @param root - root node of the postcss AST
+   * @param selectors - selectors used in content files
    */
   public walkThroughCSS(
     root: PostCSSRoot,
@@ -831,5 +910,3 @@ class PurgeCSS {
     });
   }
 }
-
-export default PurgeCSS;

@@ -1,4 +1,4 @@
-import PurgeCSS, { defaultOptions } from "purgecss";
+import { PurgeCSS, defaultOptions } from "purgecss";
 import { UserDefinedOptions } from "./../../purgecss/src/types/index";
 
 function getAvailableFiles(

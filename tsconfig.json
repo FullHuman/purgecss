@@ -2,10 +2,9 @@
   "compilerOptions": {
     "declaration": true,
     "baseUrl": ".",
-    "outDir": "dist",
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "es2019",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "allowJs": false,
@@ -29,5 +28,10 @@
   "include": [
     "packages/*/src",
     "packages/*/__tests__"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
 }

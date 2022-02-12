@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 
 describe("Purgecss grunt plugin", () => {
   const cwd = process.cwd();

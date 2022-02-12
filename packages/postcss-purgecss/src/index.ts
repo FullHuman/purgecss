@@ -1,5 +1,6 @@
 import * as postcss from "postcss";
-import PurgeCSS, {
+import {
+  PurgeCSS,
   defaultOptions,
   mergeExtractorSelectors,
   standardizeSafelist,

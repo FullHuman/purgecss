@@ -1,6 +1,6 @@
 import * as fs from "fs";
-import path from "path";
-import PurgeCSS, { defaultOptions } from "purgecss";
+import * as path from "path";
+import { PurgeCSS, defaultOptions } from "purgecss";
 import { Compilation, Compiler } from "webpack";
 import { ConcatSource } from "webpack-sources";
 import { PurgedStats, UserDefinedOptions } from "./types";
@@ -10,7 +10,7 @@ const pluginName = "PurgeCSS";
 
 /**
  * Get the filename without ?hash
- * @param fileName file name
+ * @param fileName - file name
  */
 function getFormattedFilename(fileName: string): string {
   if (fileName.includes("?")) {
@@ -21,8 +21,8 @@ function getFormattedFilename(fileName: string): string {
 
 /**
  * Returns true if the filename is of types of one of the specified extensions
- * @param filename file name
- * @param extensions extensions
+ * @param filename - file name
+ * @param extensions - extensions
  */
 function isFileOfTypes(filename: string, extensions: string[]): boolean {
   const extension = path.extname(getFormattedFilename(filename));
@@ -132,5 +132,3 @@ export class PurgeCSSPlugin {
     }
   }
 }
-
-export default PurgeCSSPlugin;

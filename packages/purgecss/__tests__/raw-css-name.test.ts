@@ -1,4 +1,4 @@
-import PurgeCSS from "../src/index";
+import { PurgeCSS } from "../src/index";
 
 describe("Raw CSS optional filename", () => {
   it("Should return the `name` in the result's `file` property when provided for raw CSS option", async () => {

@@ -73,8 +73,21 @@ export interface UserDefinedOptions {
   dynamicAttributes?: string[];
 }
 
+/**
+ * Options used by PurgeCSS to remove unused CSS
+ * Those options are used internally
+ * @see {@link UserDefinedOptions} for the options defined by the user
+ */
 export interface Options {
+  /**
+   * You can specify content that should be analyzed by PurgeCSS with an
+   * array of filenames or globs. The files can be HTML, Pug, Blade, etc.
+   */
   content: Array<string | RawContent>;
+  /**
+   * Similar to content, you can specify css that should be processed by
+   * PurgeCSS with an array of filenames or globs
+   */
   css: Array<string | RawCSS>;
   defaultExtractor: ExtractorFunction;
   extractors: Array<Extractors>;
@@ -86,9 +99,28 @@ export interface Options {
   stdin: boolean;
   stdout: boolean;
   variables: boolean;
+  /**
+   * You can indicate which selectors are safe to leave in the final CSS.
+   * This can be accomplished with the option safelist.
+   */
   safelist: Required<ComplexSafelist>;
+  /**
+   * Blocklist will block the CSS selectors from appearing in the final
+   * output CSS. The selectors will be removed even when they are seen
+   * as used by PurgeCSS.
+   */
   blocklist: StringRegExpArray;
+  /**
+   * If you provide globs for the content parameter, you can use this option
+   * to exclude certain files or folders that would otherwise be scanned.
+   * Pass an array of globs matching items that should be excluded.
+   * (Note: this option has no effect if content is not globs.)
+   */
   skippedContentGlobs: Array<string>;
+  /**
+   * Option to add custom CSS attribute selectors like "aria-selected",
+   * "data-selected", ...etc.
+   */
   dynamicAttributes: string[];
 }
 

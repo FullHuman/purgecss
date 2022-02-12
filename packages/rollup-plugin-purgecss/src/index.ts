@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 import { PurgeCSS } from "purgecss";
 import { Plugin } from "rollup";
 import { createFilter } from "rollup-pluginutils";
