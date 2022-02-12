@@ -1,7 +1,7 @@
 const path = require("path");
 const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const PurgecssPlugin = require("../../../src/").default;
+const { PurgeCSSPlugin } = require("../../../src/");
 
 const customExtractor = (content) => {
   const res = content.match(/[A-z0-9-:/]+/g) || [];
@@ -40,7 +40,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new PurgecssPlugin({
+    new PurgeCSSPlugin({
       paths: glob.sync(`${PATHS.src}/*`),
       safelist: ["safelisted"],
       extractors: [
