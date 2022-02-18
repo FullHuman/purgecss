@@ -1,5 +1,5 @@
 ---
-title: Vue | PurgeCSS
+title: Vue
 lang: en-US
 meta:
   - name: description

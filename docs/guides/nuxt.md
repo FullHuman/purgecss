@@ -1,5 +1,5 @@
 ---
-title: Nuxt.js | PurgeCSS
+title: Nuxt.js
 lang: en-US
 meta:
   - name: description

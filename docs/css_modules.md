@@ -1,5 +1,5 @@
 ---
-title: CSS modules | PurgeCSS
+title: CSS modules
 lang: en-US
 meta:
   - name: description

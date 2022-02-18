@@ -1,5 +1,5 @@
 ---
-title: PostCSS | PurgeCSS
+title: PostCSS
 lang: en-US
 meta:
   - name: description

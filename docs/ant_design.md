@@ -1,5 +1,5 @@
 ---
-title: Ant Design | PurgeCSS
+title: Ant Design
 lang: en-US
 meta:
   - name: description

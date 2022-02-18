@@ -1,5 +1,5 @@
 ---
-title: Introduction | PurgeCSS
+title: Introduction
 lang: en-US
 meta:
   - name: description

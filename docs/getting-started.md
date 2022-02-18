@@ -1,5 +1,5 @@
 ---
-title: Getting Started | PurgeCSS
+title: Getting Started
 lang: en-US
 meta:
   - name: description

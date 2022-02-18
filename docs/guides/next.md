@@ -1,5 +1,5 @@
 ---
-title: Next.js | PurgeCSS
+title: Next.js
 lang: en-US
 meta:
   - name: description

@@ -1,5 +1,5 @@
 ---
-title: React | PurgeCSS
+title: React
 lang: en-US
 meta:
   - name: description

@@ -1,5 +1,5 @@
 ---
-title: Gatsby | PurgeCSS
+title: Gatsby
 lang: en-US
 meta:
   - name: description

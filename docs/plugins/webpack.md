@@ -1,5 +1,5 @@
 ---
-title: Webpack | PurgeCSS
+title: Webpack
 lang: en-US
 meta:
   - name: description

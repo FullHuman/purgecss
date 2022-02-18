@@ -1,5 +1,5 @@
 ---
-title: Extractors | PurgeCSS
+title: Extractors
 lang: en-US
 meta:
   - name: description

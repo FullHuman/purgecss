@@ -1,5 +1,5 @@
 ---
-title: Configuration | PurgeCSS
+title: Configuration
 lang: en-US
 meta:
   - name: description

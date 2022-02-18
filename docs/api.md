@@ -1,5 +1,5 @@
 ---
-title: Programmatic API | PurgeCSS
+title: Programmatic API
 lang: en-US
 meta:
   - name: description

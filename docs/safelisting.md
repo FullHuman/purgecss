@@ -1,5 +1,5 @@
 ---
-title: Safelisting | PurgeCSS
+title: Safelisting
 lang: en-US
 meta:
   - name: description

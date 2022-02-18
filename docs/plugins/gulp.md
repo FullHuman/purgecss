@@ -1,5 +1,5 @@
 ---
-title: Gulp | PurgeCSS
+title: Gulp
 lang: en-US
 meta:
   - name: description

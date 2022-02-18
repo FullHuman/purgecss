@@ -1,5 +1,5 @@
 ---
-title: Grunt | PurgeCSS
+title: Grunt
 lang: en-US
 meta:
   - name: description

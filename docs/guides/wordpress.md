@@ -1,5 +1,5 @@
 ---
-title: WordPress | PurgeCSS
+title: WordPress
 lang: en-US
 meta:
   - name: description

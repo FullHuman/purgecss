@@ -1,5 +1,5 @@
 ---
-title: CLI | PurgeCSS
+title: CLI
 lang: en-US
 meta:
   - name: description

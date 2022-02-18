@@ -1,5 +1,5 @@
 ---
-title: Comparison | PurgeCSS
+title: Comparison
 lang: en-US
 meta:
   - name: description

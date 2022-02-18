@@ -1,5 +1,5 @@
 ---
-title: Razzle | PurgeCSS
+title: Razzle
 lang: en-US
 meta:
   - name: description
