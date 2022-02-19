@@ -13,7 +13,6 @@
     "esModuleInterop": true,
     "removeComments": false,
     "lib": ["esnext", "dom"],
-    // "types": ["jest", "@types/node"],
-    "typeRoots": ["types/"]
+    "types": ["jest"]
   }
 }

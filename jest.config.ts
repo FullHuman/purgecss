@@ -1,22 +1,33 @@
-import type { InitialOptionsTsJest } from 'ts-jest'
+import type { InitialOptionsTsJest } from "ts-jest";
 
 const config: InitialOptionsTsJest = {
   preset: "ts-jest",
   coverageDirectory: "coverage",
   coverageReporters: ["html", "lcov", "text"],
-  collectCoverageFrom: ["packages/*/src/**/*.ts", "!packages/grunt-purgecss/**/*.ts"],
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
   moduleNameMapper: {
-    "^purgecss$": "<rootDir>/packages/purgecss/src",
-    "^@fullhuman/purgecss-from-html$": "<rootDir>/packages/purgecss-from-html/src",
+    "^purgecss-from-html$": "<rootDir>/../purgecss-from-html/src",
   },
-  rootDir: __dirname,
-  testMatch: ["<rootDir>/packages/**/__tests__/**/*test.ts"],
+  testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.test.json"
-    }
-  }
+      tsconfig: {
+        types: ["jest"],
+      },
+    },
+  },
+};
+
+export function createConfig(
+  rootDir: string,
+  displayName: string
+): InitialOptionsTsJest {
+  return {
+    ...config,
+    rootDir,
+    displayName,
+  };
 }
 
 export default config;

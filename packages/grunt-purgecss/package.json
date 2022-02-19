@@ -29,7 +29,7 @@
   "scripts": {
     "build": "npm run clean && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "clean": "rm -rf ./tasks",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "jest"
   },
   "dependencies": {
     "purgecss": "^4.1.3"

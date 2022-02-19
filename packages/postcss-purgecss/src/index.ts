@@ -7,7 +7,7 @@ import {
 } from "purgecss";
 import { RawContent, UserDefinedOptions } from "./types";
 
-export * from './types';
+export * from "./types";
 
 const PLUGIN_NAME = "postcss-purgecss";
 

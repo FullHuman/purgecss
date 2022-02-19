@@ -1,7 +1,4 @@
-import {
-  ComplexSafelist,
-  StringRegExpArray,
-} from "purgecss";
+import { ComplexSafelist, StringRegExpArray } from "purgecss";
 
 export interface RawContent<T = string> {
   extension: string;

@@ -12,7 +12,7 @@ const purgeFromPug = (content: string): string[] => {
         break;
       case "attribute":
         if (token.name === "class" || token.name === "id") {
-          if (typeof token.val !== 'string') continue;
+          if (typeof token.val !== "string") continue;
           selectors.push(
             ...(token.mustEscape
               ? token.val.replace(/"/g, "")

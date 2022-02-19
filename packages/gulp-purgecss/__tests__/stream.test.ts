@@ -18,7 +18,7 @@ describe("gulp-purgecss with stream", () => {
       contents: fakeStream,
     });
     myGulpPurgecss = gulpPurgecss({
-      content: ["./packages/gulp-purgecss/__tests__/test.html"],
+      content: ["./__tests__/test.html"],
     });
   });
 

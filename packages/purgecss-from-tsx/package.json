@@ -23,7 +23,7 @@
     "api-extractor": "api-extractor run && rm -rf lib/.temp",
     "build": "npm run clean && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript && npm run api-extractor",
     "clean": "rm -rf ./lib",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
@@ -31,7 +31,7 @@
   "dependencies": {
     "@fullhuman/purgecss-from-jsx": "^4.1.0",
     "acorn": "^7.4.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.5.3"
   },
   "publishConfig": {
     "access": "public",

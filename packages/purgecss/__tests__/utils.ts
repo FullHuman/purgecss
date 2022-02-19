@@ -1,5 +1,4 @@
-export const ROOT_TEST_EXAMPLES =
-  "./packages/purgecss/__tests__/test_examples/";
+export const ROOT_TEST_EXAMPLES = "./__tests__/test_examples/";
 
 export function findInCSS(
   expect: jest.Expect,

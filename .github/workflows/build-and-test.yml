@@ -19,10 +19,9 @@ jobs:
     - name: npm install, lerna bootstrap, run build and test
       run: |
         npm i
-        npm run bootstrap
         npm run build --if-present
         npm run lint
-        npm test -- --coverage
+        npm run test -- -- -- --coverage
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@1.1.3
       with:

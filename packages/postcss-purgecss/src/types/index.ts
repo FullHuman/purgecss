@@ -1,7 +1,4 @@
-import {
-  StringRegExpArray,
-  UserDefinedSafelist,
-} from "purgecss";
+import { StringRegExpArray, UserDefinedSafelist } from "purgecss";
 
 export interface RawContent<T = string> {
   extension: string;

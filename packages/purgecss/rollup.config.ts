@@ -30,7 +30,7 @@ const purgeCSSBundle: RollupOptions = {
     typescript({
       tsconfig: "./tsconfig.json",
       sourceMap: false,
-      outputToFilesystem: false
+      outputToFilesystem: false,
     }),
     terser(),
   ],

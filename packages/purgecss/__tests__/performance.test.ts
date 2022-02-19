@@ -8,8 +8,8 @@ describe("performance", () => {
         // Use all of the .js files in node_modules to purge all of the .css
         // files in __tests__/test_examples, including tailwind.css, which is
         // a whopping 908KB of CSS before purging.
-        content: ["./packages/purgecss/node_modules/**/*.js"],
-        css: ["./packages/purgecss/__tests__/test_examples/*/*.css"],
+        content: ["./node_modules/**/*.js"],
+        css: ["./__tests__/test_examples/*/*.css"],
       })
       .then((results) => {
         expect(results.length).toBeGreaterThanOrEqual(1);

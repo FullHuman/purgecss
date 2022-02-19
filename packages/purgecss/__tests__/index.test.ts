@@ -1,4 +1,4 @@
-import purgecssFromHtml from "@fullhuman/purgecss-from-html";
+import purgecssFromHtml from "purgecss-from-html";
 import { ExtractorResult } from "../src/types";
 import { PurgeCSS } from "./../src/index";
 import { notFindInCSS, ROOT_TEST_EXAMPLES } from "./utils";
@@ -6,18 +6,14 @@ import { notFindInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 describe("purgecss with config file", () => {
   it("initialize without error with a config file specified", () => {
     expect(async () => {
-      await new PurgeCSS().purge(
-        "./packages/purgecss/__tests__/purgecss.config.js"
-      );
+      await new PurgeCSS().purge("./__tests__/purgecss.config.js");
     }).not.toThrow();
   });
 
   it("throws an error if config file is not found", async () => {
     expect.assertions(1);
     await expect(
-      new PurgeCSS().purge(
-        "./packages/purgecss/__tests__/purgecss_wrong_path.config.js"
-      )
+      new PurgeCSS().purge("./__tests__/purgecss_wrong_path.config.js")
     ).rejects.toThrow();
   });
 });

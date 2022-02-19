@@ -11,7 +11,7 @@ describe("gulp-purgecss with buffer", () => {
     });
 
     myGulpPurgecss = gulpPurgecss({
-      content: ["./packages/gulp-purgecss/__tests__/test.html"],
+      content: ["./__tests__/test.html"],
     });
   });
 

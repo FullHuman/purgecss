@@ -4,7 +4,7 @@ import { Plugin } from "rollup";
 import { createFilter } from "rollup-pluginutils";
 import { UserDefinedOptions } from "./types";
 
-export * from './types';
+export * from "./types";
 
 function pluginPurgeCSS(options: UserDefinedOptions): Plugin {
   const filter = createFilter(

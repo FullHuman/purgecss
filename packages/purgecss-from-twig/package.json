@@ -17,9 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
   },

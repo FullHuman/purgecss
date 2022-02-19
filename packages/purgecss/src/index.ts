@@ -34,11 +34,7 @@ import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
 
 export * from "./types";
-export {
-  defaultOptions,
-  ExtractorResultSets,
-  PurgeCSS
-};
+export { defaultOptions, ExtractorResultSets, PurgeCSS };
 
 const asyncFs = {
   access: promisify(fs.access),
