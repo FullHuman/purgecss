@@ -1,4 +1,4 @@
-import { UserDefinedOptions as PurgeCSSUserDefinedOptions } from "../../../purgecss/src/types/index";
+import { UserDefinedOptions as PurgeCSSUserDefinedOptions } from "purgecss";
 
 export interface UserDefinedOptions
   extends Omit<PurgeCSSUserDefinedOptions, "css" | "content"> {

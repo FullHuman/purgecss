@@ -1,7 +1,7 @@
 import {
   ComplexSafelist,
   StringRegExpArray,
-} from "./../../../purgecss/src/types/index";
+} from "purgecss";
 
 export interface RawContent<T = string> {
   extension: string;
@@ -10,15 +10,15 @@ export interface RawContent<T = string> {
 export interface RawCSS {
   raw: string;
 }
-type ExtractorFunction<T = string> = (content: T) => string[];
+export type ExtractorFunction<T = string> = (content: T) => string[];
 export interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
 }
 
-type PathFunction = () => string[];
-type SafelistFunction = () => ComplexSafelist;
-type BlocklistFunction = () => StringRegExpArray;
+export type PathFunction = () => string[];
+export type SafelistFunction = () => ComplexSafelist;
+export type BlocklistFunction = () => StringRegExpArray;
 
 export interface UserDefinedOptions {
   paths: string[] | PathFunction;

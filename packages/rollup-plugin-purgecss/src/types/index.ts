@@ -1,7 +1,7 @@
 import {
   StringRegExpArray,
   UserDefinedSafelist,
-} from "../../../purgecss/src/types/index";
+} from "purgecss";
 
 export interface RawContent<T = string> {
   extension: string;
@@ -10,13 +10,13 @@ export interface RawContent<T = string> {
 export interface RawCSS {
   raw: string;
 }
-type ExtractorFunction<T = string> = (content: T) => string[];
+export type ExtractorFunction<T = string> = (content: T) => string[];
 export interface Extractors {
   extensions: string[];
   extractor: ExtractorFunction;
 }
 
-type OutputFunction = (css: string, styles: string[]) => void;
+export type OutputFunction = (css: string, styles: string[]) => void;
 
 export interface UserDefinedOptions {
   content: Array<string | RawContent>;

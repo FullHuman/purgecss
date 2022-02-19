@@ -18,6 +18,7 @@
     "@microsoft/api-documenter": "^7.15.3",
     "@microsoft/api-extractor": "^7.19.4",
     "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-typescript": "^8.3.0",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
@@ -42,15 +43,14 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "ts-node scripts/build.ts",
+    "build": "lerna run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:deploy": "firebase deploy",
+    "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
+    "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "jest",
-    "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
-    "generate-api-reference": "api-extractor run --local && api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/"
+    "test": "jest"
   },
   "husky": {
     "hooks": {

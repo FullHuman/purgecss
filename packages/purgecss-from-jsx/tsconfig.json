@@ -1,0 +1,13 @@
+{
+  "extends": "./../../tsconfig.json",
+  "compilerOptions": {
+      "declaration": true,
+      "outDir": "./lib",
+      "declarationDir": "./.temp/",
+      "baseUrl": ".",
+      "rootDir": "./../../",
+      "typeRoots": ["./../../types"]
+  },
+  "include": ["./src/**/*", "./rollup.config.ts", "./../../types/**/*"],
+  "exclude": ["./lib"]
+}

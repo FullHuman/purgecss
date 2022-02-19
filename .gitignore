@@ -1,6 +1,7 @@
 docs/api-reference/
-packages/*/lib/*
-packages/grunt-purgecss/tasks/purgecss.js
+packages/*/lib/
+packages/purgecss/bin/
+packages/grunt-purgecss/tasks/
 docs/.vuepress/dist/
 .firebase/
 .firebaserc

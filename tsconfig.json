@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "baseUrl": ".",
     "sourceMap": true,
     "target": "es2019",
     "module": "esnext",
@@ -14,24 +13,7 @@
     "esModuleInterop": true,
     "removeComments": false,
     "lib": ["esnext", "dom"],
-    "types": ["jest", "@types/node"],
-    "rootDir": ".",
-    "paths": {
-      "*" : ["types/*"],
-      "purgecss": ["packages/purgecss/src"],
-      "@fullhuman/purgecss-from-html": ["packages/purgecss-from-html/src"],
-      "@fullhuman/purgecss-from-pug": ["packages/purgecss-from-pug/src"],
-      "@fullhuman/purgecss-from-jsx": ["packages/purgecss-from-jsx/src"],
-      "@fullhuman/purgecss-from-tsx": ["packages/purgecss-from-tsx/src"]
-    }
-  },
-  "include": [
-    "packages/*/src",
-    "packages/*/__tests__"
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
+    // "types": ["jest", "@types/node"],
+    "typeRoots": ["types/"]
   }
 }

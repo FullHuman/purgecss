@@ -1,6 +1,5 @@
-import { Node, Parser } from "acorn";
-
 declare module "acorn-jsx" {
+  import { Node, Parser } from "acorn";
   export interface JSXAttribute extends Node {
     type: "JSXAttribute";
     elements?: Expression[];

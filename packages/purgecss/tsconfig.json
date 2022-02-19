@@ -1,0 +1,11 @@
+{
+    "extends": "./../../tsconfig.json",
+    "compilerOptions": {
+        "declaration": true,
+        "outDir": "./lib",
+        "declarationDir": ".temp/",
+        "rootDir": "."
+    },
+    "include": ["src/**/*", "rollup.config.ts", "package.json"],
+    "exclude": ["lib"]
+}

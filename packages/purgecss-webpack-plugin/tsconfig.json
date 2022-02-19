@@ -1,0 +1,15 @@
+{
+  "extends": "./../../tsconfig.json",
+  "compilerOptions": {
+      "declaration": true,
+      "outDir": "./lib",
+      "declarationDir": "./.temp/",
+      "baseUrl": ".",
+      "rootDir": "./../",
+      "paths": {
+        "purgecss": ["../purgecss/src"],
+      }
+  },
+  "include": ["./src/**/*", "./rollup.config.ts", "./../purgecss/src/*"],
+  "exclude": ["./lib"]
+}

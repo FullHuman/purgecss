@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
-  "mainEntryPointFilePath": "<projectFolder>/packages/purgecss/lib/purgecss.d.ts",
+  "mainEntryPointFilePath": "<projectFolder>/lib/.temp/postcss-purgecss/src/index.d.ts",
   "bundledPackages": [],
   "compiler": {},
   "apiReport": {
@@ -8,10 +8,12 @@
   },
   "docModel": {
     "enabled": true,
-    "apiJsonFilePath": "<projectFolder>/docs/.vuepress/.temp/api-reference/<unscopedPackageName>.api.json"
+    "apiJsonFilePath": "<projectFolder>/../../docs/.vuepress/.temp/api-reference/<unscopedPackageName>.api.json"
   },
   "dtsRollup": {
-    "enabled": false
+    "enabled": true,
+    "untrimmedFilePath": "",
+    "publicTrimmedFilePath": "<projectFolder>/lib/<unscopedPackageName>.d.ts"
   },
   "tsdocMetadata": {
     "enabled": false

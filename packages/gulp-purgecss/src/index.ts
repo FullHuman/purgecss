@@ -6,6 +6,8 @@ import through from "through2";
 import VinylFile from "vinyl";
 import { UserDefinedOptions } from "./types";
 
+export { UserDefinedOptions };
+
 const PLUGIN_NAME = "gulp-purgecss";
 
 function getFiles(contentArray: string[]): string[] {

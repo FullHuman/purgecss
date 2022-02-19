@@ -1,5 +1,4 @@
-import { PurgeCSS, defaultOptions } from "purgecss";
-import { UserDefinedOptions } from "./../../purgecss/src/types/index";
+import { PurgeCSS, defaultOptions, UserDefinedOptions } from "purgecss";
 
 function getAvailableFiles(
   grunt: IGrunt,

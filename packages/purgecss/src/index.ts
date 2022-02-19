@@ -33,9 +33,12 @@ import {
 import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
 
-export { defaultOptions } from "./options";
 export * from "./types";
-export { PurgeCSS };
+export {
+  defaultOptions,
+  ExtractorResultSets,
+  PurgeCSS
+};
 
 const asyncFs = {
   access: promisify(fs.access),
@@ -686,7 +689,7 @@ class PurgeCSS {
    * Remove unused CSS
    *
    * @param userOptions - PurgeCSS options or path to the configuration file
-   * @returns
+   * @returns an array of object containing the filename and the associated CSS
    *
    * @example Using a configuration file named purgecss.config.js
    * ```ts

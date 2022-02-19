@@ -1,4 +1,6 @@
-module.exports = {
+import type { InitialOptionsTsJest } from 'ts-jest'
+
+const config: InitialOptionsTsJest = {
   preset: "ts-jest",
   coverageDirectory: "coverage",
   coverageReporters: ["html", "lcov", "text"],
@@ -10,4 +12,11 @@ module.exports = {
   },
   rootDir: __dirname,
   testMatch: ["<rootDir>/packages/**/__tests__/**/*test.ts"],
-};
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.test.json"
+    }
+  }
+}
+
+export default config;

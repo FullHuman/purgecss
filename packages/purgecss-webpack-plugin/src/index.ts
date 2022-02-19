@@ -5,6 +5,8 @@ import { Compilation, Compiler } from "webpack";
 import { ConcatSource } from "webpack-sources";
 import { PurgedStats, UserDefinedOptions } from "./types";
 
+export * from "./types";
+
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";
 

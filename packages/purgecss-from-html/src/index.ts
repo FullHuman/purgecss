@@ -1,7 +1,7 @@
 import parse5 from "parse5";
 import * as htmlparser2 from "parse5-htmlparser2-tree-adapter";
 
-type ExtractorResultDetailed = {
+export type ExtractorResultDetailed = {
   attributes: {
     names: string[];
     values: string[];
