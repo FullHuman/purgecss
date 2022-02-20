@@ -5,7 +5,6 @@
       "outDir": "./lib",
       "declarationDir": "./.temp/",
       "baseUrl": ".",
-      "rootDir": "./../",
       "paths": {
         "purgecss": ["../purgecss/src"],
       }

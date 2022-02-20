@@ -5,9 +5,8 @@
       "outDir": "./lib",
       "declarationDir": "./.temp/",
       "baseUrl": ".",
-      "rootDir": "./../../",
       "typeRoots": ["./../../types", "./../../node_modules/@types"]
   },
-  "include": ["./src/**/*", "./rollup.config.ts", "./../../types/**/*"],
+  "include": ["src", "./../../types/**/*"],
   "exclude": ["./lib"]
 }

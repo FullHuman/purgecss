@@ -43,7 +43,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
-    "build": "lerna run build",
+    "build": "lerna run --stream build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
@@ -51,7 +51,7 @@
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "postinstall": "npm run bootstrap",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "lerna run test"
+    "test": "lerna run --stream test"
   },
   "husky": {
     "hooks": {

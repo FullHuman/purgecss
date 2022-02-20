@@ -11,6 +11,9 @@ docs/.vuepress/dist/
 packages/purgecss-webpack-plugin/__tests__/js
 packages/grunt-purgecss/__tests__/tmp
 
+.temp
+.cache
+
 npm-shrinkwrap.json
 yarn.lock
 
@@ -72,7 +75,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-packages/purgecss/bin/purgecss.d.ts
-.temp
-.cache

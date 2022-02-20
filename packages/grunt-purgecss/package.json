@@ -27,8 +27,7 @@
     "directory": "packages/grunt-purgecss"
   },
   "scripts": {
-    "build": "npm run clean && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "clean": "rm -rf ./tasks",
+    "build": "ts-node build.ts",
     "test": "jest"
   },
   "dependencies": {

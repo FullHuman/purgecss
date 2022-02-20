@@ -4,12 +4,11 @@
         "declaration": true,
         "outDir": "./lib",
         "declarationDir": ".temp/",
-        "rootDir": ".",
         "baseUrl": ".",
         "paths": {
             "purgecss-from-html": ["../purgecss-from-html/src"],
           }
     },
-    "include": ["src", "rollup.config.ts", "package.json", "__tests__"],
+    "include": ["src", "package.json", "__tests__"],
     "exclude": ["lib"]
 }

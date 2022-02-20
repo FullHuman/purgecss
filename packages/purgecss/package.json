@@ -36,9 +36,7 @@
     "url": "git+https://github.com/FullHuman/purgecss.git"
   },
   "scripts": {
-    "api-extractor": "api-extractor run && rm -rf ./lib/.temp",
-    "build": "npm run clean && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript && npm run api-extractor",
-    "clean": "rm -rf ./lib ./bin",
+    "build": "ts-node build.ts",
     "test": "jest"
   },
   "dependencies": {

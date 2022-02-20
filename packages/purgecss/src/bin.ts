@@ -1,4 +1,4 @@
-import { program } from "commander";
+import type { Command } from "commander";
 import * as fs from "fs";
 import packageJson from "./../package.json";
 import {
@@ -7,6 +7,7 @@ import {
   setOptions,
   standardizeSafelist,
 } from "./index";
+import { Options } from "./types";
 
 async function writeCSSToFile(filePath: string, css: string) {
   try {
@@ -32,7 +33,7 @@ type CommandOptions = {
   skippedContentGlobs: string[];
 };
 
-function parseCommandOptions() {
+export function parseCommandOptions(program: Command): Command {
   program
     .description(packageJson.description)
     .version(packageJson.version)
@@ -64,13 +65,10 @@ function parseCommandOptions() {
       "list of glob patterns for folders/files that should not be scanned"
     );
 
-  program.parse(process.argv);
+  return program;
 }
 
-async function run() {
-  parseCommandOptions();
-  // config file is not specified or the content and css are not,
-  // PurgeCSS will not run
+export async function getOptions(program: Command): Promise<Options> {
   const {
     config,
     css,
@@ -85,7 +83,6 @@ async function run() {
     blocklist,
     skippedContentGlobs,
   } = program.opts<CommandOptions>();
-
   // config file is not specified or the content and css are not,
   // PurgeCSS will not run
   if (!config && !(content && css)) {
@@ -108,29 +105,37 @@ async function run() {
   if (safelist) options.safelist = standardizeSafelist(safelist);
   if (blocklist) options.blocklist = blocklist;
   if (skippedContentGlobs) options.skippedContentGlobs = skippedContentGlobs;
+  if (output) options.output = output;
+  
+  return options
+}
 
+export async function run(program: Command) {
+  const options = await getOptions(program);
   const purged = await new PurgeCSS().purge(options);
-  const resultOutput = options.output || output;
+
   // output results in specified directory
-  if (resultOutput) {
-    if (purged.length === 1 && resultOutput.endsWith(".css")) {
-      await writeCSSToFile(resultOutput, purged[0].css);
+  if (options.output) {
+    if (purged.length === 1 && options.output.endsWith(".css")) {
+      await writeCSSToFile(options.output, purged[0].css);
       return;
     }
 
     for (const purgedResult of purged) {
       const fileName = purgedResult?.file?.split("/").pop();
-      await writeCSSToFile(`${resultOutput}/${fileName}`, purgedResult.css);
+      await writeCSSToFile(`${options.output}/${fileName}`, purgedResult.css);
     }
   } else {
     console.log(JSON.stringify(purged));
   }
 }
 
-try {
-  run();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} catch (error: any) {
-  console.error(error.message);
-  process.exit(1);
-}
+// try {
+//   const program = parseCommandOptions(new Command());
+//   program.parse(process.argv);
+//   run(program);
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// } catch (error: any) {
+//   console.error(error.message);
+//   process.exit(1);
+// }

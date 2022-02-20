@@ -5,8 +5,7 @@
       "outDir": "./lib",
       "declarationDir": "./.temp/",
       "baseUrl": ".",
-      "rootDir": "."
   },
-  "include": ["./src/**/*", "./rollup.config.ts"],
+  "include": ["src"],
   "exclude": ["./lib"]
 }
