@@ -11,7 +11,12 @@ import * as path from "path";
     recursive: true,
     force: true,
   });
-  const rollupConfig = createRollupConfig("purgecss-from-jsx", ["acorn", "acorn-walk", "acorn-jsx", "acorn-jsx-walk"]);
+  const rollupConfig = createRollupConfig("purgecss-from-jsx", [
+    "acorn",
+    "acorn-walk",
+    "acorn-jsx",
+    "acorn-jsx-walk",
+  ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);
   await asyncFs.rm(path.resolve(__dirname, "lib", ".temp"), {

@@ -1,4 +1,4 @@
-import type { Command } from "commander";
+import { Command } from "commander";
 import * as fs from "fs";
 import packageJson from "./../package.json";
 import {
@@ -106,8 +106,8 @@ export async function getOptions(program: Command): Promise<Options> {
   if (blocklist) options.blocklist = blocklist;
   if (skippedContentGlobs) options.skippedContentGlobs = skippedContentGlobs;
   if (output) options.output = output;
-  
-  return options
+
+  return options;
 }
 
 export async function run(program: Command) {
@@ -130,12 +130,14 @@ export async function run(program: Command) {
   }
 }
 
-// try {
-//   const program = parseCommandOptions(new Command());
-//   program.parse(process.argv);
-//   run(program);
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// } catch (error: any) {
-//   console.error(error.message);
-//   process.exit(1);
-// }
+export async function main() {
+  try {
+    const program = parseCommandOptions(new Command());
+    program.parse(process.argv);
+    run(program);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error(error.message);
+    process.exit(1);
+  }
+}

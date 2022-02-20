@@ -11,7 +11,11 @@ import * as path from "path";
     recursive: true,
     force: true,
   });
-  const rollupConfig = createRollupConfig("purgecss-from-tsx", ["acorn", "@fullhuman/purgecss-from-jsx", "typescript"]);
+  const rollupConfig = createRollupConfig("purgecss-from-tsx", [
+    "acorn",
+    "@fullhuman/purgecss-from-jsx",
+    "typescript",
+  ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);
   await asyncFs.rm(path.resolve(__dirname, "lib", ".temp"), {

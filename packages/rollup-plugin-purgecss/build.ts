@@ -11,7 +11,11 @@ import * as path from "path";
     recursive: true,
     force: true,
   });
-  const rollupConfig = createRollupConfig("rollup-plugin-purgecss", ["fs", "rollup-pluginutils", "purgecss"]);
+  const rollupConfig = createRollupConfig("rollup-plugin-purgecss", [
+    "fs",
+    "rollup-pluginutils",
+    "purgecss",
+  ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);
   await asyncFs.rm(path.resolve(__dirname, "lib", ".temp"), {

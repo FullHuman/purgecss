@@ -12,7 +12,10 @@ import * as path from "path";
     force: true,
   });
   const rollupConfig = createRollupConfig("gulp-purgecss", [
-    "through2", "plugin-error", "purgecss", "glob"
+    "through2",
+    "plugin-error",
+    "purgecss",
+    "glob",
   ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);

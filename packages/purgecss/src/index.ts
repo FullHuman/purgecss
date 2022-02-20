@@ -1,3 +1,11 @@
+/**
+ * Core package of PurgeCSS
+ *
+ * Contains the core methods to analyze the files, remove unused CSS.
+ *
+ * @packageDocumentation
+ */
+
 import * as fs from "fs";
 import * as glob from "glob";
 import * as path from "path";

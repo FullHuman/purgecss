@@ -25,6 +25,7 @@ const cliBundle: RollupOptions = {
   output: {
     banner: "#!/usr/bin/env node",
     file: "./bin/purgecss.js",
+    footer: "main();",
     format: "cjs",
   },
   plugins: [

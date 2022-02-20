@@ -11,15 +11,16 @@ describe("PurgeCSS CLI console output", () => {
     program.parse([
       "purgecss",
       "",
-      "--content", 
+      "--content",
       `${CLI_TEST_FOLDER}/src/content.html`,
       `${CLI_TEST_FOLDER}/src/*.js`,
       "--css",
       `${CLI_TEST_FOLDER}/src/style.css`,
     ]);
     await run(program);
-    expect(console.log).toHaveBeenCalledWith(`[{"css":".hello {\\n  color: red;\\n}\\n","file":"${CLI_TEST_FOLDER}/src/style.css"}]`);
+    expect(console.log).toHaveBeenCalledWith(
+      `[{"css":".hello {\\n  color: red;\\n}\\n","file":"${CLI_TEST_FOLDER}/src/style.css"}]`
+    );
     console.log = originalConsoleLog;
-  })
-})
-
+  });
+});

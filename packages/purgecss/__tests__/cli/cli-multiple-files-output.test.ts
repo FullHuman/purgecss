@@ -10,7 +10,7 @@ describe("PurgeCSS CLI file output", () => {
     program.parse([
       "purgecss",
       "",
-      "--content", 
+      "--content",
       `${CLI_TEST_FOLDER}/src/content.html`,
       `${CLI_TEST_FOLDER}/src/*.js`,
       "--css",
@@ -20,11 +20,13 @@ describe("PurgeCSS CLI file output", () => {
       `${CLI_TEST_FOLDER}/.temp`,
     ]);
     await run(program);
-    const outputStyle = (await asyncFs.readFile(`${CLI_TEST_FOLDER}/.temp/style.css`)).toString();
-    const outputStyle2 = (await asyncFs.readFile(`${CLI_TEST_FOLDER}/.temp/style2.css`)).toString();
+    const outputStyle = (
+      await asyncFs.readFile(`${CLI_TEST_FOLDER}/.temp/style.css`)
+    ).toString();
+    const outputStyle2 = (
+      await asyncFs.readFile(`${CLI_TEST_FOLDER}/.temp/style2.css`)
+    ).toString();
     expect(outputStyle).toBe(".hello {\n  color: red;\n}\n");
     expect(outputStyle2).toBe(".world {\n  color: green;\n}\n");
   });
-
-})
-
+});

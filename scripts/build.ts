@@ -66,7 +66,7 @@ const extractorAPIBaseConfig: IExtractorConfigPrepareOptions = {
       "<projectFolder>/lib/.temp/packages/<unscopedPackageName>/src/index.d.ts",
     apiReport: {
       enabled: false,
-      reportFileName: "<unscopedPackageName>.api.md"
+      reportFileName: "<unscopedPackageName>.api.md",
     },
     docModel: {
       enabled: true,

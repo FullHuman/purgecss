@@ -9,7 +9,7 @@ describe("PurgeCSS CLI options", () => {
     program.parse([
       "purgecss",
       "",
-      "--content", 
+      "--content",
       `expected-content`,
       "--css",
       `expected-css`,
@@ -41,10 +41,8 @@ describe("PurgeCSS CLI options", () => {
       stdin: false,
       variables: true,
       safelist: standardizeSafelist(["expected-safelist"]),
-      blocklist: ["expected-blocklist"]
+      blocklist: ["expected-blocklist"],
     };
     expect(options).toEqual(expectedOptions);
   });
-
-})
-
+});
