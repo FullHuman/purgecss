@@ -18,7 +18,7 @@ import {
   IGNORE_ANNOTATION_CURRENT,
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START,
+  IGNORE_ANNOTATION_START
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST } from "./internal-safelist";
@@ -36,7 +36,7 @@ import {
   RawCSS,
   ResultPurge,
   UserDefinedOptions,
-  UserDefinedSafelist,
+  UserDefinedSafelist
 } from "./types";
 import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
@@ -596,7 +596,8 @@ class PurgeCSS {
             ? option
             : await asyncFs.readFile(option, "utf-8")
           : option.raw;
-      const root = postcss.parse(cssContent);
+      const isFromFile = typeof option === "string" && !this.options.stdin
+      const root = postcss.parse(cssContent, { from: isFromFile ? option : undefined });
 
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
@@ -605,10 +606,15 @@ class PurgeCSS {
       if (this.options.keyframes) this.removeUnusedKeyframes();
       if (this.options.variables) this.removeUnusedCSSVariables();
 
+      const postCSSResult = root.toResult({ map: this.options.sourceMap });
       const result: ResultPurge = {
-        css: root.toString(),
+        css: postCSSResult.toString(),
         file: typeof option === "string" ? option : option.name,
       };
+
+      if (this.options.sourceMap) {
+        result.sourceMap = postCSSResult.map?.toString();
+      }
 
       if (this.options.rejected) {
         result.rejected = Array.from(this.selectorsRemoved);
@@ -620,6 +626,7 @@ class PurgeCSS {
           .root({ nodes: this.removedNodes })
           .toString();
       }
+
 
       sources.push(result);
     }

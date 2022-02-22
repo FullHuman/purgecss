@@ -1,5 +1,8 @@
 import { ExtractorResult, Options } from "./types/";
 
+/**
+ * @public
+ */
 export const defaultOptions: Options = {
   css: [],
   content: [],
@@ -10,6 +13,7 @@ export const defaultOptions: Options = {
   keyframes: false,
   rejected: false,
   rejectedCss: false,
+  sourceMap: false,
   stdin: false,
   stdout: false,
   variables: false,
