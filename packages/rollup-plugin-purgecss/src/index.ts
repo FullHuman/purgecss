@@ -6,6 +6,13 @@ import { UserDefinedOptions } from "./types";
 
 export * from "./types";
 
+/**
+ * 
+ * @param options - options
+ * @returns 
+ * 
+ * @public
+ */
 function pluginPurgeCSS(options: UserDefinedOptions): Plugin {
   const filter = createFilter(
     options.include || ["**/*.css"],

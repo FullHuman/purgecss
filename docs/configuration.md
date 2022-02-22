@@ -277,8 +277,8 @@ e.g:
 
 ```js
 const purgecss = await new PurgeCSS().purge({
-  content: [], // content
-  css: [], // css
+  content: [],
+  css: [],
   safelist: ['random', 'yep', 'button']
 })
 ```
@@ -287,8 +287,8 @@ In this example, the selectors `.random`, `#yep`, `button` will be left in the f
 
 ```js
 const purgecss = await new PurgeCSS().purge({
-  content: [], // content
-  css: [], // css
+  content: [],
+  css: [],
   safelist: [/red$/]
 })
 ```
@@ -301,8 +301,8 @@ You can safelist selectors and their children based on a regular expression with
 
 ```js
 const purgecss = await new PurgeCSS().purge({
-  content: [], // content
-  css: [], // css
+  content: [],
+  css: [],
   safelist: {
     deep: [/red$/]
   }
@@ -317,8 +317,8 @@ Finally, you can safelist whole selectors if any part of that selector matches a
 
 ```js
 const purgecss = await new PurgeCSS().purge({
-  content: [], // content
-  css: [], // css
+  content: [],
+  css: [],
   safelist: {
     greedy: [/red$/]
   }

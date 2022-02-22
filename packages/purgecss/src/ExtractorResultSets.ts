@@ -6,6 +6,9 @@ function mergeSets(into: Set<string>, from?: string[] | Set<string>): void {
   }
 }
 
+/**
+ * @public
+ */
 class ExtractorResultSets {
   private undetermined = new Set<string>();
   private attrNames = new Set<string>();

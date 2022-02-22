@@ -31,6 +31,9 @@ function isFileOfTypes(filename: string, extensions: string[]): boolean {
   return extensions.includes(extension);
 }
 
+/**
+ * @public
+ */
 export class PurgeCSSPlugin {
   options: UserDefinedOptions;
   purgedStats: PurgedStats = {};
@@ -101,6 +104,7 @@ export class PurgeCSSPlugin {
         };
 
         if (typeof options.safelist === "function") {
+          options.safelist
           options.safelist = options.safelist();
         }
 

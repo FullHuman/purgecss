@@ -4,8 +4,9 @@ import {
   defaultOptions,
   mergeExtractorSelectors,
   standardizeSafelist,
+  RawContent,
 } from "purgecss";
-import { RawContent, UserDefinedOptions } from "./types";
+import { UserDefinedOptions } from "./types";
 
 export * from "./types";
 
@@ -71,6 +72,13 @@ async function purgeCSS(
   }
 }
 
+/**
+ * 
+ * @param opts - opts
+ * @returns 
+ * 
+ * @public
+ */
 const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = function (
   opts
 ) {

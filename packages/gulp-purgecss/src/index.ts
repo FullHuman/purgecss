@@ -16,6 +16,13 @@ function getFiles(contentArray: string[]): string[] {
   }, []);
 }
 
+/**
+ * 
+ * @param options - options
+ * @returns 
+ * 
+ * @public
+ */
 function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
   return through.obj(async function (file: VinylFile, _encoding, callback) {
     // empty
