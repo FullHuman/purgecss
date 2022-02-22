@@ -16,7 +16,9 @@ const rollupBaseConfig: RollupOptions = {
       tsconfig: "./tsconfig.json",
       sourceMap: false,
     }),
-    terser(),
+    terser({
+      keep_classnames: true,
+    }),
   ],
 };
 
@@ -91,9 +93,9 @@ const extractorAPIBaseConfig: IExtractorConfigPrepareOptions = {
         default: {
           logLevel: ExtractorLogLevel.Warning,
         },
-        "ae-missing-release-tag": {
-          logLevel: ExtractorLogLevel.Warning,
-        },
+        "ae-internal-missing-underscore": {
+          logLevel: ExtractorLogLevel.None,
+        }
       },
       tsdocMessageReporting: {
         default: {
