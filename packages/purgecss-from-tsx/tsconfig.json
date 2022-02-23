@@ -10,6 +10,6 @@
         "@fullhuman/purgecss-from-jsx": ["../purgecss-from-jsx/src"]
       }
   },
-  "include": ["./src/**/*", "./rollup.config.ts", "./../../types/**/*"],
+  "include": ["src", "../purgecss-from-jsx/src", "./../../types/**/*"],
   "exclude": ["./lib"]
 }

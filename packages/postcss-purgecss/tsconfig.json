@@ -9,6 +9,6 @@
         "purgecss": ["../purgecss/src"],
       }
   },
-  "include": ["./src/**/*", "./rollup.config.ts", "./../purgecss/src/*"],
+  "include": ["src", "./../purgecss/src/*"],
   "exclude": ["./lib"]
 }
