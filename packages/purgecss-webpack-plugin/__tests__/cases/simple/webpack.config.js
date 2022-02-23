@@ -14,6 +14,7 @@ const PATHS = {
 
 module.exports = {
   mode: "development",
+  devtool: "source-map",
   optimization: {
     splitChunks: {
       cacheGroups: {

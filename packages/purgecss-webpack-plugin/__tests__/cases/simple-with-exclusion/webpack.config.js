@@ -11,6 +11,7 @@ const PATHS = {
 
 module.exports = {
   mode: "development",
+  devtool: false,
   entry: {
     bundle: "./src/index.js",
     legacy: "./src/legacy.js",

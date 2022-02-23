@@ -1,8 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
-import { PurgeCSS, defaultOptions } from "purgecss";
-import { Compilation, Compiler } from "webpack";
-import { ConcatSource } from "webpack-sources";
+import {
+  PurgeCSS,
+  defaultOptions,
+  ResultPurge,
+  UserDefinedOptions as PurgeCSSUserDefinedOptions,
+} from "purgecss";
+import { Compilation, Compiler, sources } from "webpack";
 import { PurgedStats, UserDefinedOptions } from "./types";
 
 export * from "./types";
@@ -12,6 +16,7 @@ const pluginName = "PurgeCSS";
 
 /**
  * Get the filename without ?hash
+ *
  * @param fileName - file name
  */
 function getFormattedFilename(fileName: string): string {
@@ -23,12 +28,85 @@ function getFormattedFilename(fileName: string): string {
 
 /**
  * Returns true if the filename is of types of one of the specified extensions
+ *
  * @param filename - file name
  * @param extensions - extensions
  */
 function isFileOfTypes(filename: string, extensions: string[]): boolean {
   const extension = path.extname(getFormattedFilename(filename));
   return extensions.includes(extension);
+}
+
+function getPurgeCSSOptions(
+  pluginOptions: UserDefinedOptions,
+  filesToSearch: string[],
+  asset: sources.Source,
+  fileName: string,
+  sourceMap: boolean
+): PurgeCSSUserDefinedOptions {
+  const options = {
+    ...defaultOptions,
+    ...pluginOptions,
+    content: filesToSearch,
+    css: [
+      {
+        raw: asset.source().toString(),
+      },
+    ],
+  };
+
+  if (typeof options.safelist === "function") {
+    options.safelist = options.safelist();
+  }
+
+  if (typeof options.blocklist === "function") {
+    options.blocklist = options.blocklist();
+  }
+
+  return {
+    content: options.content,
+    css: options.css,
+    defaultExtractor: options.defaultExtractor,
+    extractors: options.extractors,
+    fontFace: options.fontFace,
+    keyframes: options.keyframes,
+    output: options.output,
+    rejected: options.rejected,
+    variables: options.variables,
+    safelist: options.safelist,
+    blocklist: options.blocklist,
+    sourceMap: sourceMap ? { inline: false, to: fileName } : false,
+  };
+}
+
+/**
+ * Create the Source instance result of PurgeCSS
+ *
+ * @param name - asset name
+ * @param asset - webpack asset
+ * @param purgeResult - result of PurgeCSS purge method
+ * @param sourceMap - wether sourceMap is enabled
+ * @returns the new Source
+ */
+function createSource(
+  name: string,
+  asset: sources.Source,
+  purgeResult: ResultPurge,
+  sourceMap: boolean
+): sources.Source {
+  if (!sourceMap || !purgeResult.sourceMap) {
+    return new sources.RawSource(purgeResult.css);
+  }
+  const { source, map } = asset.sourceAndMap();
+
+  return new sources.SourceMapSource(
+    purgeResult.css,
+    name,
+    purgeResult.sourceMap,
+    source.toString(),
+    map,
+    false
+  );
 }
 
 /**
@@ -80,9 +158,7 @@ export class PurgeCSSPlugin {
           return this.options.only.some((only) => name.includes(only));
         }
 
-        return Array.isArray(chunk.files)
-          ? chunk.files.includes(name)
-          : chunk.files.has(name);
+        return chunk.files.has(name);
       });
 
       for (const [name, asset] of assetsToPurge) {
@@ -90,50 +166,26 @@ export class PurgeCSSPlugin {
           (v) => !styleExtensions.some((ext) => v.endsWith(ext))
         );
 
-        // Compile through Purgecss and attach to output.
-        // This loses sourcemaps should there be any!
-        const options = {
-          ...defaultOptions,
-          ...this.options,
-          content: filesToSearch,
-          css: [
-            {
-              raw: asset.source().toString(),
-            },
-          ],
-        };
+        const sourceMapEnabled = !!compilation.compiler.options.devtool;
+        const purgeCSSOptions = getPurgeCSSOptions(
+          this.options,
+          filesToSearch,
+          asset,
+          name,
+          sourceMapEnabled
+        );
 
-        if (typeof options.safelist === "function") {
-          options.safelist
-          options.safelist = options.safelist();
-        }
-
-        if (typeof options.blocklist === "function") {
-          options.blocklist = options.blocklist();
-        }
-
-        const purgecss = await new PurgeCSS().purge({
-          content: options.content,
-          css: options.css,
-          defaultExtractor: options.defaultExtractor,
-          extractors: options.extractors,
-          fontFace: options.fontFace,
-          keyframes: options.keyframes,
-          output: options.output,
-          rejected: options.rejected,
-          variables: options.variables,
-          safelist: options.safelist,
-          blocklist: options.blocklist,
-        });
+        const purgecss = await new PurgeCSS().purge(purgeCSSOptions);
         const purged = purgecss[0];
 
         if (purged.rejected) {
           this.purgedStats[name] = purged.rejected;
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        compilation.updateAsset(name, new ConcatSource(purged.css));
+        compilation.updateAsset(
+          name,
+          createSource(name, asset, purged, sourceMapEnabled)
+        );
       }
     }
   }

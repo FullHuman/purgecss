@@ -11,6 +11,7 @@ const PATHS = {
 
 module.exports = {
   mode: "development",
+  devtool: false,
   entry: "./src/index.js",
   context: path.resolve(__dirname),
   optimization: {

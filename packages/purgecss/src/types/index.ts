@@ -136,7 +136,7 @@ export interface UserDefinedOptions {
   /** {@inheritDoc Options.rejectedCss} */
   rejectedCss?: boolean;
   /** {@inheritDoc Options.sourceMap } */
-  sourceMap?: boolean | postcss.SourceMapOptions
+  sourceMap?: boolean | postcss.SourceMapOptions & { to?: string }
   /** {@inheritDoc Options.stdin} */
   stdin?: boolean;
   /** {@inheritDoc Options.stdout} */
@@ -229,7 +229,7 @@ export interface Options {
   rejected: boolean;
   rejectedCss: boolean;
   /** {@inheritDoc postcss#SourceMapOptions} */
-  sourceMap: boolean | postcss.SourceMapOptions
+  sourceMap: boolean | postcss.SourceMapOptions & { to?: string }
   stdin: boolean;
   stdout: boolean;
   variables: boolean;

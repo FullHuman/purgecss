@@ -28,7 +28,7 @@ export type PurgedStats = {
 /**
  * @public
  */
-export type UserDefinedOptions = Omit<PurgeCSSUserDefinedOptions, "css" | "content" | "safelist" | "blocklist"> & {
+export type UserDefinedOptions = Omit<PurgeCSSUserDefinedOptions, "css" | "content" | "safelist" | "blocklist" | "sourceMap"> & {
   paths: string[] | PathFunction;
   moduleExtensions?: string[];
   verbose?: boolean;

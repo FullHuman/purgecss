@@ -606,7 +606,10 @@ class PurgeCSS {
       if (this.options.keyframes) this.removeUnusedKeyframes();
       if (this.options.variables) this.removeUnusedCSSVariables();
 
-      const postCSSResult = root.toResult({ map: this.options.sourceMap });
+      const postCSSResult = root.toResult({
+        map: this.options.sourceMap,
+        to: typeof this.options.sourceMap === 'object' ? this.options.sourceMap.to : undefined
+      });
       const result: ResultPurge = {
         css: postCSSResult.toString(),
         file: typeof option === "string" ? option : option.name,

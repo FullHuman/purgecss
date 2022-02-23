@@ -9,6 +9,7 @@ import {
  * 
  * @public
  */
-export interface UserDefinedOptions extends Omit<PurgeCSSUserDefinedOptions, "css"> {
+export interface UserDefinedOptions extends Omit<PurgeCSSUserDefinedOptions,"content" | "css"> {
+  content?: PurgeCSSUserDefinedOptions['content'];
   contentFunction?: (sourceFile: string) => Array<string | RawContent>;
 }
