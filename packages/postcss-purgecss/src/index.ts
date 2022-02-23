@@ -32,6 +32,10 @@ async function purgeCSS(
 
   purgeCSS.options = options;
 
+  if (options.variables) {
+    purgeCSS.variablesStructure.safelist = options.safelist.variables || [];
+  }
+
   const { content, extractors } = options;
 
   const fileFormatContents = content.filter(
