@@ -4,6 +4,7 @@ import { PurgeCSS } from "purgecss";
 import * as internal from "stream";
 import through from "through2";
 import VinylFile from "vinyl";
+import applySourceMap from "vinyl-sourcemaps-apply";
 import { UserDefinedOptions } from "./types";
 
 export { UserDefinedOptions };
@@ -17,10 +18,10 @@ function getFiles(contentArray: string[]): string[] {
 }
 
 /**
- * 
+ *
  * @param options - options
- * @returns 
- * 
+ * @returns
+ *
  * @public
  */
 function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
@@ -39,6 +40,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             },
           ],
           stdin: true,
+          sourceMap: !!file.sourceMap
         };
         const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
         const purge = purgedCSSResults[0];
@@ -47,6 +49,11 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             ? purge.rejected.join(" {}\n") + " {}"
             : purge.css;
         file.contents = Buffer.from(result, "utf-8");
+
+        // apply source map to the chain
+        if (file.sourceMap) {
+          applySourceMap(file, purge.sourceMap);
+        }
         callback(null, file);
       } catch (e: unknown) {
         if (e instanceof Error) {
@@ -70,6 +77,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
                   raw: css,
                 },
               ],
+              sourceMap: !!file.sourceMap
             };
 
             const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
@@ -82,6 +90,10 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             const streamResult = through();
             streamResult.write(Buffer.from(result, "utf-8"));
             file.contents = file.contents.pipe(streamResult);
+            // apply source map to the chain
+            if (file.sourceMap) {
+              applySourceMap(file, purge.sourceMap);
+            }
             callback(null, file);
           } catch (e: unknown) {
             if (e instanceof Error) {
