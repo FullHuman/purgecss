@@ -73,10 +73,10 @@ async function purgeCSS(
 }
 
 /**
- * 
+ *
  * @param opts - opts
- * @returns 
- * 
+ * @returns
+ *
  * @public
  */
 const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = function (

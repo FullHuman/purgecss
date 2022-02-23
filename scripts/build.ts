@@ -7,7 +7,7 @@ import {
 } from "@microsoft/api-extractor";
 import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
-import path from "path/posix";
+import * as path from "path";
 
 const rollupBaseConfig: RollupOptions = {
   input: "./src/index.ts",
@@ -95,7 +95,7 @@ const extractorAPIBaseConfig: IExtractorConfigPrepareOptions = {
         },
         "ae-internal-missing-underscore": {
           logLevel: ExtractorLogLevel.None,
-        }
+        },
       },
       tsdocMessageReporting: {
         default: {

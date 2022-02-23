@@ -1,12 +1,11 @@
 import type {
   ComplexSafelist,
   StringRegExpArray,
-  UserDefinedOptions as PurgeCSSUserDefinedOptions
+  UserDefinedOptions as PurgeCSSUserDefinedOptions,
 } from "purgecss";
 
-
 /**
- * @public 
+ * @public
  */
 export type PathFunction = () => string[];
 /**
@@ -28,11 +27,14 @@ export type PurgedStats = {
 /**
  * @public
  */
-export type UserDefinedOptions = Omit<PurgeCSSUserDefinedOptions, "css" | "content" | "safelist" | "blocklist" | "sourceMap"> & {
+export type UserDefinedOptions = Omit<
+  PurgeCSSUserDefinedOptions,
+  "css" | "content" | "safelist" | "blocklist" | "sourceMap"
+> & {
   paths: string[] | PathFunction;
   moduleExtensions?: string[];
   verbose?: boolean;
-  safelist: PurgeCSSUserDefinedOptions['safelist'] | SafelistFunction;
-  blocklist: PurgeCSSUserDefinedOptions['blocklist'] | BlocklistFunction;
+  safelist: PurgeCSSUserDefinedOptions["safelist"] | SafelistFunction;
+  blocklist: PurgeCSSUserDefinedOptions["blocklist"] | BlocklistFunction;
   only?: string[];
-}
+};

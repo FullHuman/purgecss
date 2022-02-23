@@ -2,10 +2,10 @@ import lex from "pug-lexer";
 
 /**
  * Get the potential selectors from Pug code
- * 
+ *
  * @param content - Pug code
  * @returns the attributes, classes, ids, and tags from the Pug code
- * 
+ *
  * @public
  */
 const purgeFromPug = (content: string): string[] => {

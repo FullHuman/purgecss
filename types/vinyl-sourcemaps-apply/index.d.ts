@@ -1,1 +1,1 @@
-declare module 'vinyl-sourcemaps-apply';
+declare module "vinyl-sourcemaps-apply";

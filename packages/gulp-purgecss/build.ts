@@ -16,6 +16,7 @@ import * as path from "path";
     "plugin-error",
     "purgecss",
     "glob",
+    "vinyl-sourcemaps-apply",
   ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);

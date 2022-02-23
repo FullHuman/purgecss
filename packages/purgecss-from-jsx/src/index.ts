@@ -18,10 +18,10 @@ extend<NodeState>(walk.base);
 
 /**
  * Create function to extract selectors from jsx code
- * 
+ *
  * @param options - acorn options
  * @returns function to extract selectors from jsx code
- * 
+ *
  * @public
  */
 function purgeFromJsx(options?: acorn.Options) {

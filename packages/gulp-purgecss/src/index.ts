@@ -40,7 +40,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             },
           ],
           stdin: true,
-          sourceMap: !!file.sourceMap
+          sourceMap: !!file.sourceMap,
         };
         const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
         const purge = purgedCSSResults[0];
@@ -77,7 +77,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
                   raw: css,
                 },
               ],
-              sourceMap: !!file.sourceMap
+              sourceMap: !!file.sourceMap,
             };
 
             const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);

@@ -7,10 +7,10 @@ import { UserDefinedOptions } from "./types";
 export * from "./types";
 
 /**
- * 
+ *
  * @param options - options
- * @returns 
- * 
+ * @returns
+ *
  * @public
  */
 function pluginPurgeCSS(options: UserDefinedOptions): Plugin {

@@ -95,10 +95,10 @@ const getSelectorsInNodes = (
 
 /**
  * Get the potential selectors from HTML code
- * 
+ *
  * @param content - HTML code
  * @returns the attributes, classes, ids, and tags from the HTML code
- * 
+ *
  * @public
  */
 const purgecssFromHtml = (content: string): ExtractorResultDetailed => {

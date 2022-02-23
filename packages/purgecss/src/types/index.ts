@@ -83,9 +83,9 @@ export type ComplexSafelist = {
   /**
    * You can safelist selectors and their children based on a regular
    * expression with `safelist.deep`
-   * 
+   *
    * @example
-   * 
+   *
    * ```ts
    * const purgecss = await new PurgeCSS().purge({
    *   content: [],
@@ -95,10 +95,10 @@ export type ComplexSafelist = {
    *   }
    * })
    * ```
-   * 
-   * In this example, selectors such as `.bg-red .child-of-bg` will be left 
+   *
+   * In this example, selectors such as `.bg-red .child-of-bg` will be left
    * in the final CSS, even if `child-of-bg` is not found.
-   * 
+   *
    */
   deep?: RegExp[];
   greedy?: RegExp[];
@@ -113,7 +113,7 @@ export type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 
 /**
  * Options used by PurgeCSS to remove unused CSS
- * 
+ *
  * @public
  */
 export interface UserDefinedOptions {
@@ -136,7 +136,7 @@ export interface UserDefinedOptions {
   /** {@inheritDoc Options.rejectedCss} */
   rejectedCss?: boolean;
   /** {@inheritDoc Options.sourceMap } */
-  sourceMap?: boolean | postcss.SourceMapOptions & { to?: string }
+  sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
   /** {@inheritDoc Options.stdin} */
   stdin?: boolean;
   /** {@inheritDoc Options.stdout} */
@@ -157,29 +157,29 @@ export interface UserDefinedOptions {
  * Options used by PurgeCSS to remove unused CSS
  * Those options are used internally
  * @see {@link UserDefinedOptions} for the options defined by the user
- * 
+ *
  * @public
  */
 export interface Options {
   /**
    * You can specify content that should be analyzed by PurgeCSS with an
    * array of filenames or globs. The files can be HTML, Pug, Blade, etc.
-   * 
+   *
    * @example
-   * 
+   *
    * ```ts
    * await new PurgeCSS().purge({
    *   content: ['index.html', '*.js', '*.html', '*.vue'],
    *   css: ['css/app.css']
    * })
    * ```
-   * 
+   *
    * @example
    * PurgeCSS also works with raw content. To do this, you need to pass an
    * object with the `raw` property instead of a filename. To work properly
    * with custom extractors you need to pass the `extension` property along
    * with the raw content.
-   * 
+   *
    * ```ts
    * await new PurgeCSS().purge({
    *   content: [
@@ -211,9 +211,9 @@ export interface Options {
   /**
    * If there are any unused \@font-face rules in your css, you can remove
    * them by setting the `fontFace` option to `true`.
-   * 
+   *
    * @defaultValue `false`
-   * 
+   *
    * @example
    * ```ts
    * await new PurgeCSS().purge({
@@ -229,7 +229,7 @@ export interface Options {
   rejected: boolean;
   rejectedCss: boolean;
   /** {@inheritDoc postcss#SourceMapOptions} */
-  sourceMap: boolean | postcss.SourceMapOptions & { to?: string }
+  sourceMap: boolean | (postcss.SourceMapOptions & { to?: string });
   stdin: boolean;
   stdout: boolean;
   variables: boolean;
