@@ -11,9 +11,9 @@ export { UserDefinedOptions };
 
 const PLUGIN_NAME = "gulp-purgecss";
 
-function getFiles(contentArray: string[]): string[] {
+function getFiles(contentArray: string[], ignore?: string[]): string[] {
   return contentArray.reduce((acc: string[], content) => {
-    return [...acc, ...glob.sync(content)];
+    return [...acc, ...glob.sync(content, { ignore })];
   }, []);
 }
 
@@ -33,7 +33,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
       try {
         const optionsGulp = {
           ...options,
-          content: getFiles(options.content),
+          content: getFiles(options.content, options.skippedContentGlobs),
           css: [
             {
               raw: file.contents.toString(),
