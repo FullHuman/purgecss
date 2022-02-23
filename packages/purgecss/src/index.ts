@@ -18,7 +18,7 @@ import {
   IGNORE_ANNOTATION_CURRENT,
   IGNORE_ANNOTATION_END,
   IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START
+  IGNORE_ANNOTATION_START,
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST } from "./internal-safelist";
@@ -36,7 +36,7 @@ import {
   RawCSS,
   ResultPurge,
   UserDefinedOptions,
-  UserDefinedSafelist
+  UserDefinedSafelist,
 } from "./types";
 import { matchAll } from "./utils";
 import VariablesStructure from "./VariablesStructure";
@@ -323,7 +323,7 @@ class PurgeCSS {
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
   public removedNodes: postcss.Node[] = [];
-  private variablesStructure: VariablesStructure = new VariablesStructure();
+  public variablesStructure: VariablesStructure = new VariablesStructure();
 
   public options: Options = defaultOptions;
 
@@ -596,8 +596,10 @@ class PurgeCSS {
             ? option
             : await asyncFs.readFile(option, "utf-8")
           : option.raw;
-      const isFromFile = typeof option === "string" && !this.options.stdin
-      const root = postcss.parse(cssContent, { from: isFromFile ? option : undefined });
+      const isFromFile = typeof option === "string" && !this.options.stdin;
+      const root = postcss.parse(cssContent, {
+        from: isFromFile ? option : undefined,
+      });
 
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
@@ -608,7 +610,10 @@ class PurgeCSS {
 
       const postCSSResult = root.toResult({
         map: this.options.sourceMap,
-        to: typeof this.options.sourceMap === 'object' ? this.options.sourceMap.to : undefined
+        to:
+          typeof this.options.sourceMap === "object"
+            ? this.options.sourceMap.to
+            : undefined,
       });
       const result: ResultPurge = {
         css: postCSSResult.toString(),
@@ -629,7 +634,6 @@ class PurgeCSS {
           .root({ nodes: this.removedNodes })
           .toString();
       }
-
 
       sources.push(result);
     }
