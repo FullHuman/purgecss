@@ -1,16 +1,5 @@
-const path = require("path");
-const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { PurgeCSSPlugin } = require("../../../src/");
-
-const customExtractor = (content) => {
-  const res = content.match(/[A-z0-9-:/]+/g) || [];
-  return res;
-};
-
-const PATHS = {
-  src: path.join(__dirname, "src"),
-};
 
 module.exports = {
   mode: "development",
@@ -41,15 +30,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new PurgeCSSPlugin({
-      paths: glob.sync(`${PATHS.src}/*`),
-      safelist: ["safelisted"],
-      extractors: [
-        {
-          extractor: customExtractor,
-          extensions: ["html", "js"],
-        },
-      ],
-    }),
+    new PurgeCSSPlugin({}),
   ],
 };

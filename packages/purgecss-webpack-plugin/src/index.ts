@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import {
   PurgeCSS,
-  defaultOptions,
   ResultPurge,
   UserDefinedOptions as PurgeCSSUserDefinedOptions,
+  defaultOptions,
 } from "purgecss";
 import { Compilation, Compiler, sources } from "webpack";
 import { PurgedStats, UserDefinedOptions } from "./types";
@@ -128,7 +128,19 @@ export class PurgeCSSPlugin {
   }
 
   initializePlugin(compilation: Compilation): void {
-    compilation.hooks.additionalAssets.tapPromise(pluginName, () => {
+    compilation.hooks.additionalAssets.tapPromise(pluginName, async () => {
+      let configFileOptions: UserDefinedOptions | undefined;
+      try {
+        const t = path.resolve(process.cwd(), "purgecss.config.js");
+        configFileOptions = await import(t);
+      } catch {
+        // no config file present
+      }
+      this.options = {
+        ...(configFileOptions ? configFileOptions : {}),
+        ...this.options,
+      };
+
       const entryPaths =
         typeof this.options.paths === "function"
           ? this.options.paths()
