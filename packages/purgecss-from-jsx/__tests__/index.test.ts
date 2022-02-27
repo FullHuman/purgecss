@@ -2,7 +2,10 @@ import purgeJsx from "../src/index";
 
 import { TEST_1_CONTENT, TEST_1_TAG, TEST_1_CLASS, TEST_1_ID } from "./data";
 
-const plugin = purgeJsx({ sourceType: "module" });
+const plugin = purgeJsx({
+  ecmaVersion: 'latest',
+  sourceType: "module"
+});
 
 describe("purgePug", () => {
   describe("from a normal html document", () => {

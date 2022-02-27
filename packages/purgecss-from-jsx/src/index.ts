@@ -33,7 +33,7 @@ function purgeFromJsx(options?: acorn.Options) {
     walk.recursive<NodeState>(
       acorn.Parser.extend(
         jsx() as (BaseParser: typeof acorn.Parser) => typeof acorn.Parser
-      ).parse(content, options),
+      ).parse(content, options || { ecmaVersion: "latest" }),
       state,
       {
         JSXOpeningElement(acornNode, state, callback) {
