@@ -5,82 +5,71 @@ import purgeCSSPlugin from "../src/";
 
 describe("Purgecss postcss plugin", () => {
   const files = ["simple", "font-keyframes"];
-
-  for (const file of files) {
-    it(`remove unused css with content option successfully: ${file}`, async () => {
-      const input = fs
+  const fileContents = files.map((file) => {
+    return {
+      name: file,
+      input: fs
         .readFileSync(`${__dirname}/fixtures/src/${file}/${file}.css`)
-        .toString();
-      const expected = fs
+        .toString(),
+      output: fs
         .readFileSync(`${__dirname}/fixtures/expected/${file}.css`)
-        .toString();
+        .toString(),
+    };
+  });
+
+  it.each(fileContents)(
+    "remove unused css with content option successfully: $name",
+    async ({ name, input, output }) => {
       const result = await postcss([
         purgeCSSPlugin({
-          content: [`${__dirname}/fixtures/src/${file}/${file}.html`],
+          content: [`${__dirname}/fixtures/src/${name}/${name}.html`],
           fontFace: true,
           keyframes: true,
         }),
       ]).process(input, { from: undefined });
 
-      expect(result.css).toBe(expected);
+      expect(result.css).toBe(output);
       expect(result.warnings().length).toBe(0);
-    });
-  }
+    }
+  );
 
-  for (const file of files) {
-    it(`remove unused css with contentFunction option successfully: ${file}`, (done) => {
-      const input = fs
-        .readFileSync(`${__dirname}/fixtures/src/${file}/${file}.css`)
-        .toString();
-      const expected = fs
-        .readFileSync(`${__dirname}/fixtures/expected/${file}.css`)
-        .toString();
-
-      const sourceFileName = `src/${file}/${file}.css`;
+  it.each(fileContents)(
+    "remove unused css with contentFunction option successfully: $name",
+    async ({ name, input, output }) => {
+      const sourceFileName = `src/${name}/${name}.css`;
       const contentFunction = jest
         .fn()
-        .mockReturnValue([`${__dirname}/fixtures/src/${file}/${file}.html`]);
+        .mockReturnValue([`${__dirname}/fixtures/src/${name}/${name}.html`]);
 
-      postcss([
+      const result = await postcss([
         purgeCSSPlugin({
           contentFunction,
           fontFace: true,
           keyframes: true,
         }),
-      ])
-        .process(input, { from: sourceFileName })
-        .then((result) => {
-          expect(result.css).toBe(expected);
-          expect(result.warnings().length).toBe(0);
-          expect(contentFunction).toHaveBeenCalledTimes(1);
-          expect(contentFunction.mock.calls[0][0]).toContain(sourceFileName);
-          done();
-        });
-    });
-  }
+      ]).process(input, { from: sourceFileName });
 
-  it(`queues messages when using reject flag: simple`, (done) => {
-    const input = fs
-      .readFileSync(`${__dirname}/fixtures/src/simple/simple.css`)
-      .toString();
-    const expected = fs
-      .readFileSync(`${__dirname}/fixtures/expected/simple.css`)
-      .toString();
-    postcss([
+      expect(result.css).toBe(output);
+      expect(result.warnings().length).toBe(0);
+      expect(contentFunction).toHaveBeenCalledTimes(1);
+      expect(contentFunction.mock.calls[0][0]).toContain(sourceFileName);
+    }
+  );
+
+  it(`queues messages when using reject flag: simple`, async () => {
+    const result = await postcss([
       purgeCSSPlugin({
         content: [`${__dirname}/fixtures/src/simple/simple.html`],
         rejected: true,
       }),
     ])
-      .process(input, { from: undefined })
-      .then((result) => {
-        expect(result.css).toBe(expected);
-        expect(result.warnings().length).toBe(0);
-        expect(result.messages.length).toBeGreaterThan(0);
-        expect(result.messages[0].text).toMatch(/unused-class/);
-        expect(result.messages[0].text).toMatch(/another-one-not-found/);
-        done();
-      });
+      .process(fileContents[0].input, { from: undefined });
+
+      expect(result.css).toBe(fileContents[0].output);
+      expect(result.warnings().length).toBe(0);
+      expect(result.messages.length).toBeGreaterThan(0);
+      expect(result.messages[0].text).toMatch(/unused-class/);
+      expect(result.messages[0].text).toMatch(/another-one-not-found/);
   });
 
   it(`lets other plugins transform selectors before purging`, async () => {
@@ -109,4 +98,28 @@ describe("Purgecss postcss plugin", () => {
     expect(result.css).toBe(expected);
     expect(result.warnings().length).toBe(0);
   });
+
+  it('should work with a purgecss config file', async () => {
+    const cwd = process.cwd();
+    const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
+    process.chdir(configTestDirectory);
+
+    const input = fs
+      .readFileSync(`${configTestDirectory}index.css`)
+      .toString();
+    const output = fs
+      .readFileSync(`${configTestDirectory}expected.css`)
+      .toString();
+
+    const result = await postcss([
+      purgeCSSPlugin({
+        keyframes: true,
+      }),
+    ]).process(input, { from: undefined });
+
+    expect(result.css).toBe(output);
+    expect(result.warnings().length).toBe(0);
+
+    process.chdir(cwd);
+  })
 });
