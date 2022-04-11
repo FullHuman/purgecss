@@ -29,6 +29,7 @@ export interface UserDefinedOptions {
   moduleExtensions?: string[];
   output?: string;
   rejected?: boolean;
+  rejectedCss?: boolean | string;
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;

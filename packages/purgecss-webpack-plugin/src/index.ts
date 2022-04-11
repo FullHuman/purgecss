@@ -115,7 +115,7 @@ export default class PurgeCSSPlugin {
           keyframes: options.keyframes,
           output: options.output,
           rejected: options.rejected,
-          rejectedCss: options.rejectedCss,
+          rejectedCss: !!options.rejectedCss,
           variables: options.variables,
           safelist: options.safelist,
           blocklist: options.blocklist,
@@ -128,15 +128,22 @@ export default class PurgeCSSPlugin {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        let source: Source = new ConcatSource(purged.css)
-        compilation.updateAsset(name, source);
+        compilation.updateAsset(name, new ConcatSource(purged.css));
         if (purged.rejectedCss !== undefined) {
-          source = new ConcatSource(purged.rejectedCss)
-          const rejectedName: string = path.dirname(name) + '/' + path.basename(name, '.css') + '-rejected' + path.extname(name)
+          const rejectedCssSource = new ConcatSource(purged.rejectedCss);
+          const rejectedNameTemplate = typeof options.rejectedCss === "string" ? options.rejectedCss : "[base]-rejected.[ext]";
+          const rejectedName = compilation.getPath(rejectedNameTemplate, {
+            basename: path.basename(name, path.extname(name)),
+            filename: name,
+          });
           if (compilation.getAsset(rejectedName) === undefined) {
-            compilation.emitAsset(rejectedName, source);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            compilation.emitAsset(rejectedName, rejectedCssSource);
           } else {
-            compilation.updateAsset(rejectedName, source);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            compilation.updateAsset(rejectedName, rejectedCssSource);
           }
         }
       }

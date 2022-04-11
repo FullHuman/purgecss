@@ -38,6 +38,8 @@ describe("Webpack integration", () => {
     "path-and-safelist-functions",
     "simple",
     "simple-with-exclusion",
+    "rejected-css",
+    "rejected-css-template-name",
   ];
 
   for (const testCase of cases) {
