@@ -32,7 +32,7 @@ You can use PurgeCSS with Next.js by using the postCSS plugin in the Next.js con
 
 To customize the PostCSS configuration, create a postcss.config.js file in the root of your project.
 
-> Warning: When you define a custom PostCSS configuration file, Next.js completely disables the default behavior. Be sure to manually configure all the features you need compiled, including [Autoprefixer](https://github.com/postcss/autoprefixer). You also need to install any plugins included in your custom configuration manually, i.e. `npm install postcss-flexbugs-fixes postcss-preset-env`.
+> Warning: When you define a custom PostCSS configuration file, Next.js completely disables the default behavior. Be sure to manually configure all the features you need compiled, including [Autoprefixer](https://github.com/postcss/autoprefixer), autoprefixer has an [online version](https://goonlinetools.com/autoprefixer/) that allows you to enter your non-prefixed CSS and gives you a prefix-added CSS. You also need to install any plugins included in your custom configuration manually, i.e. `npm install postcss-flexbugs-fixes postcss-preset-env`.
 
 > By default, the outer document containing `html` and `body` is inside nextjs node module. Add `safelist:["html", "body"]` to make sure PurgeCSS does not remove those style.
 
