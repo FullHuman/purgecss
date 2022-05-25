@@ -50,6 +50,7 @@ You can find the PurgeCSS documentation on [this website](https://purgecss.com).
 - [React.js](https://purgecss.com/guides/react.html)
 - [Next.js](https://purgecss.com/guides/next.html)
 - [Razzle](https://purgecss.com/guides/razzle.html)
+- [Hugo](https://purgecss.com/guides/hugo.html)
 
 ## Getting Started
 

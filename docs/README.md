@@ -65,6 +65,7 @@ footer: MIT Licensed | Copyright © 2018-present Full Human LTD
 - [Next.js](guides/next.md)
 - [Razzle](guides/razzle.md)
 - [WordPress](guides/wordpress.md)
+- [Hugo](guides/hugo.md)
 
 ### Common Questions
 
