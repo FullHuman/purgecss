@@ -51,22 +51,11 @@
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "postinstall": "npm run bootstrap",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "lerna run --stream test"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "ts-node scripts/verify-commit.ts"
-    }
+    "test": "lerna run --stream test",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write --ignore-path .gitignore",
-      "git add"
-    ],
-    "*.ts": [
-      "npm run prettier",
-      "git add"
-    ]
+    "*.ts": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }
