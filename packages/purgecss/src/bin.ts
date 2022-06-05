@@ -12,10 +12,17 @@ import { Options } from "./types";
 async function writeCSSToFile(filePath: string, css: string) {
   try {
     await fs.promises.writeFile(filePath, css);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    console.error(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
   }
+}
+
+async function read(stream: NodeJS.ReadStream) {
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  return Buffer.concat(chunks).toString("utf8");
 }
 
 type CommandOptions = {
@@ -95,8 +102,29 @@ export async function getOptions(program: Command): Promise<Options> {
   if (config) {
     options = await setOptions(config);
   }
-  if (content) options.content = content;
-  if (css) options.css = css;
+  if (content) {
+    if (content.length === 1 && content[0] === "-") {
+      options.content = [
+        {
+          raw: await read(process.stdin),
+          extension: "",
+        },
+      ];
+    } else {
+      options.content = content;
+    }
+  }
+  if (css) {
+    if (css.length === 1 && css[0] === "-") {
+      options.css = [
+        {
+          raw: await read(process.stdin),
+        },
+      ];
+    } else {
+      options.css = css;
+    }
+  }
   if (fontFace) options.fontFace = fontFace;
   if (keyframes) options.keyframes = keyframes;
   if (rejected) options.rejected = rejected;
@@ -106,7 +134,6 @@ export async function getOptions(program: Command): Promise<Options> {
   if (blocklist) options.blocklist = blocklist;
   if (skippedContentGlobs) options.skippedContentGlobs = skippedContentGlobs;
   if (output) options.output = output;
-
   return options;
 }
 
@@ -135,9 +162,10 @@ export async function main() {
     const program = parseCommandOptions(new Command());
     program.parse(process.argv);
     run(program);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
     process.exit(1);
   }
 }

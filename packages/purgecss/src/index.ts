@@ -90,9 +90,11 @@ export async function setOptions(
   try {
     const t = path.resolve(process.cwd(), configFile);
     options = await import(t);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
+    }
+    throw new Error();
   }
   return {
     ...defaultOptions,
