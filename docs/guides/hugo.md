@@ -30,8 +30,8 @@ PurgeCSS can be used with [Hugo](https://gohugo.io/) via Hugo Pipes asset proces
 
 ## Tooling
 
-1. Install Hugo
-1. Install Node.js
+1. Install [Hugo](https://gohugo.io/getting-started/installing/)
+1. Install [Node.js](https://nodejs.org/en/download/)
 
 ## Write Stats
 
