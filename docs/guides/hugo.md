@@ -68,39 +68,29 @@ If it's not already there, add `node_modules/` to your `.gitignore` file.
 Create a `postcss.config.js` file at the project root with these contents:
 
 ```js
-const postCssPurgeCss = require('@fullhuman/postcss-purgecss');
-const fs = require('fs');
-
-const hugoStats = fs.readFileSync('./hugo_stats.json').toString();
-const htmlElements = JSON.parse(hugoStats).htmlElements;
-
-const purgeCss = postCssPurgeCss({
-  content: [],
+const purgecss = require('@fullhuman/postcss-purgecss')({
+  content: ['./hugo_stats.json'],
   defaultExtractor: content => {
-    return {
-      tags: htmlElements.tags || [],
-      classes: htmlElements.classes || [],
-      ids: htmlElements.ids || [],
-      undetermined: content.match(/[A-Za-z0-9_-]+/g) || [],
-      attributes: {}
-    };
+    const els = JSON.parse(content).htmlElements;
+    return [
+      ...(els.tags || []),
+      ...(els.classes || []),
+      ...(els.ids || []),
+    ];
   },
   safelist: []
 });
 
 module.exports = {
   plugins: [
-    ...(process.env.HUGO_ENVIRONMENT === 'production' ? [purgeCss] : [])
+    ...(process.env.HUGO_ENVIRONMENT === 'production' ? [purgecss] : [])
   ]
 };
 ```
 
 See the [PurgeCSS configuration docs](https://purgecss.com/configuration.html) for details on each option.
 
-**Notes:**
-
-- `content` is an empty array (for now). You can _optionally_ give it paths to your JS files
-- `safelist` is an empty array (for now). Try the `content` property first. If PurgeCSS is still too eager, you can safelist elements here
+**Note:** `safelist` is an empty array (for now). Remember, only elements from your HTML templates are extracted. So, if your JS adds elements, you'll need to safelist them.
 
 ## HTML Template
 
