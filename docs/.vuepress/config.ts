@@ -178,6 +178,10 @@ export default defineUserConfig<DefaultThemeOptions>({
               text: "WordPress",
               link: "/guides/wordpress",
             },
+            {
+              text: "Hugo",
+              link: "/guides/hugo",
+            },
           ],
         },
         {
