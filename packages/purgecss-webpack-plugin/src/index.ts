@@ -167,7 +167,9 @@ export class PurgeCSSPlugin {
     for (const chunk of compilation.chunks) {
       const assetsToPurge = assetsFromCompilation.filter(([name]) => {
         if (this.options.only) {
-          return this.options.only.some((only) => name.includes(only));
+          if (!(this.options.only.some((only) => name.includes(only)))) {
+            return false;
+          }
         }
 
         return chunk.files.has(name);
