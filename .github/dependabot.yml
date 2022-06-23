@@ -18,3 +18,7 @@ updates:
   - dependency-name: "@typescript-eslint/parser"
     versions:
     - 4.14.1
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: monthly
