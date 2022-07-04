@@ -1,9 +1,9 @@
 /**
  * PostCSS Plugin for PurgeCSS
- * 
+ *
  * Most bundlers and frameworks to build websites are using PostCSS.
  * The easiest way to configure PurgeCSS is with its PostCSS plugin.
- * 
+ *
  * @packageDocumentation
  */
 
@@ -24,7 +24,7 @@ const PLUGIN_NAME = "postcss-purgecss";
 
 /**
  * Execute PurgeCSS process on the postCSS root node
- * 
+ *
  * @param opts - PurgeCSS options
  * @param root - root node of postCSS
  * @param helpers - postCSS helpers
@@ -48,7 +48,9 @@ async function purgeCSS(
     ...defaultOptions,
     ...configFileOptions,
     ...opts,
-    safelist: standardizeSafelist(opts?.safelist || configFileOptions?.safelist),
+    safelist: standardizeSafelist(
+      opts?.safelist || configFileOptions?.safelist
+    ),
   };
 
   if (opts && typeof opts.contentFunction === "function") {
@@ -105,7 +107,7 @@ async function purgeCSS(
 
 /**
  * PostCSS Plugin for PurgeCSS
- * 
+ *
  * @param opts - PurgeCSS Options
  * @returns the postCSS plugin
  *

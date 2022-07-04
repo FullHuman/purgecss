@@ -62,14 +62,13 @@ describe("Purgecss postcss plugin", () => {
         content: [`${__dirname}/fixtures/src/simple/simple.html`],
         rejected: true,
       }),
-    ])
-      .process(fileContents[0].input, { from: undefined });
+    ]).process(fileContents[0].input, { from: undefined });
 
-      expect(result.css).toBe(fileContents[0].output);
-      expect(result.warnings().length).toBe(0);
-      expect(result.messages.length).toBeGreaterThan(0);
-      expect(result.messages[0].text).toMatch(/unused-class/);
-      expect(result.messages[0].text).toMatch(/another-one-not-found/);
+    expect(result.css).toBe(fileContents[0].output);
+    expect(result.warnings().length).toBe(0);
+    expect(result.messages.length).toBeGreaterThan(0);
+    expect(result.messages[0].text).toMatch(/unused-class/);
+    expect(result.messages[0].text).toMatch(/another-one-not-found/);
   });
 
   it(`lets other plugins transform selectors before purging`, async () => {
@@ -99,14 +98,12 @@ describe("Purgecss postcss plugin", () => {
     expect(result.warnings().length).toBe(0);
   });
 
-  it('should work with a purgecss config file', async () => {
+  it("should work with a purgecss config file", async () => {
     const cwd = process.cwd();
     const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
     process.chdir(configTestDirectory);
 
-    const input = fs
-      .readFileSync(`${configTestDirectory}index.css`)
-      .toString();
+    const input = fs.readFileSync(`${configTestDirectory}index.css`).toString();
     const output = fs
       .readFileSync(`${configTestDirectory}expected.css`)
       .toString();
@@ -121,5 +118,5 @@ describe("Purgecss postcss plugin", () => {
     expect(result.warnings().length).toBe(0);
 
     process.chdir(cwd);
-  })
+  });
 });
