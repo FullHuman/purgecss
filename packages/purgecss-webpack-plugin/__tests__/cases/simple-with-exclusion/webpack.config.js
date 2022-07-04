@@ -1,7 +1,7 @@
 const path = require("path");
 const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const {PurgeCSSPlugin} = require("../../../src/");
+const { PurgeCSSPlugin } = require("../../../src/");
 
 const customExtractor = (content) => content.match(/[A-z0-9-:/]+/g) || [];
 
@@ -17,17 +17,7 @@ module.exports = {
     legacy: "./src/legacy.js",
   },
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: "styles",
-          type: "css/mini-extract",
-          test: /\.css$/,
-          chunks: "all",
-          enforce: true,
-        },
-      },
-    },
+    splitChunks: { chunks: "all" },
   },
   module: {
     rules: [

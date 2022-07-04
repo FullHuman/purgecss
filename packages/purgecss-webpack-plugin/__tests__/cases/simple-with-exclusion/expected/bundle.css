@@ -5,10 +5,6 @@
   color: red;
 }
 
-.unused {
-  color: blue;
-}
-
 .safelisted {
   color: green;
 }
@@ -16,19 +12,3 @@
 md\:w-2\/3 {
   color: red;
 }
-
-/*!******************************************************************************!*\
-  !*** css ../../../../../node_modules/css-loader/dist/cjs.js!./src/style.css ***!
-  \******************************************************************************/
-.legacy-unused-class {
-  color: red;
-}
-
-.unused-too {
-  color: blue;
-}
-
-.hello {
-  color: red;
-}
-
