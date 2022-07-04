@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS can be used with Hugo via Hugo Pipes asset processing
   - property: og:url
-    content:  https://purgecss.com/guides/hugo
+    content: https://purgecss.com/guides/hugo
   - property: og:site_name
     content: purgecss.com
   - property: og:type
@@ -68,27 +68,23 @@ If it's not already there, add `node_modules/` to your `.gitignore` file.
 Create a `postcss.config.js` file at the project root with these contents:
 
 ```js
-const purgecss = require('@fullhuman/postcss-purgecss')({
-  content: ['./hugo_stats.json'],
-  defaultExtractor: content => {
+const purgecss = require("@fullhuman/postcss-purgecss")({
+  content: ["./hugo_stats.json"],
+  defaultExtractor: (content) => {
     const els = JSON.parse(content).htmlElements;
-    return [
-      ...(els.tags || []),
-      ...(els.classes || []),
-      ...(els.ids || []),
-    ];
+    return [...(els.tags || []), ...(els.classes || []), ...(els.ids || [])];
   },
-  safelist: []
+  safelist: [],
 });
 
 module.exports = {
   plugins: [
-    ...(process.env.HUGO_ENVIRONMENT === 'production' ? [purgecss] : [])
-  ]
+    ...(process.env.HUGO_ENVIRONMENT === "production" ? [purgecss] : []),
+  ],
 };
 ```
 
-See the [PurgeCSS configuration docs](https://purgecss.com/configuration.html) for details on each option.
+See the [PurgeCSS configuration docs](../configuration.md) for details on each option.
 
 **Note:** `safelist` is an empty array (for now). Remember, only elements from your HTML templates are extracted. So, if your JS adds elements, you'll need to safelist them.
 
@@ -97,17 +93,15 @@ See the [PurgeCSS configuration docs](https://purgecss.com/configuration.html) f
 In the HTML Template for your `<head>`, add this:
 
 ```html
-{{ $css := resources.Get "css/style.css" | resources.PostCSS }}
-
-{{ if hugo.IsProduction }}
-  {{ $css = $css | minify | fingerprint | resources.PostProcess }}
-{{ end }}
+{{ $css := resources.Get "css/style.css" | resources.PostCSS }} {{ if
+hugo.IsProduction }} {{ $css = $css | minify | fingerprint |
+resources.PostProcess }} {{ end }}
 
 <link
   rel="stylesheet"
   href="{{ $css.RelPermalink }}"
   integrity="{{ $css.Data.Integrity }}"
->
+/>
 ```
 
 This assumes:
