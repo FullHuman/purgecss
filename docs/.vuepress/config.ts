@@ -1,8 +1,8 @@
 import { defineUserConfig } from "vuepress";
-import { path } from "@vuepress/utils";
-import type { DefaultThemeOptions } from "vuepress";
+import localTheme from "./theme/index";
+import { searchPlugin } from "@vuepress/plugin-search";
 
-export default defineUserConfig<DefaultThemeOptions>({
+export default defineUserConfig({
   lang: "en-US",
   title: "PurgeCSS",
   description: "PurgeCSS is a tool to remove unused CSS from your project",
@@ -81,8 +81,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       `,
     ],
   ],
-  theme: path.resolve(__dirname, "./theme/index.ts"),
-  themeConfig: {
+  theme: localTheme({
     logo: "https://i.imgur.com/UEiUiJ0.png",
     repo: "FullHuman/purgecss",
     navbar: [
@@ -203,6 +202,6 @@ export default defineUserConfig<DefaultThemeOptions>({
         },
       ],
     },
-  },
-  plugins: ["@vuepress/plugin-search"],
+  }),
+  plugins: [searchPlugin()],
 });
