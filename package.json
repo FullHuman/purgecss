@@ -29,7 +29,7 @@
     "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^8.0.1",
     "jest": "^27.4.4",
-    "lerna": "^4.0.0",
+    "lerna": "^5.1.6",
     "lint-staged": "^13.0.0",
     "prettier": "^2.5.1",
     "rollup": "^2.61.0",
