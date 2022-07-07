@@ -24,23 +24,23 @@ meta:
 
 # Vue
 
-## Use the vue CLI plugin
+## 通过 vue CLI 来安装
 
 ![vue cli plugin purgecss](https://i.imgur.com/ZYnJSin.png)
 
-### Install
+### 安装
 
-If you haven't yet installed vue-cli 3, first follow the install instructions here: https://github.com/vuejs/vue-cli
+如果你还没有安装 vue-cli 3, 首先，请按照此处的安装说明进行操作: https://github.com/vuejs/vue-cli
 
-Generate a project using vue-cli 3.0:
+用 vue-cli 3.0 来生成一个项目:
 
 ```sh
 vue create my-app
 ```
 
-Before installing the PurgeCSS plugin, make sure to commit or stash your changes in case you need to revert the changes.
+在安装 PurgeCSS 之前, 请你先提交或保存你已经更改的文件， 以防后续需要恢复.
 
-To install the PurgeCSS plugin simply navigate to your application folder and add PurgeCSS.
+安装 PurgeCSS 只需要用命令行工具打开你项目的文件夹，然后安装 PurgeCSS.
 
 ```sh
 cd my-app
@@ -48,9 +48,9 @@ cd my-app
 vue add @fullhuman/purgecss
 ```
 
-### Usage
+### 用法
 
-Below are the PurgeCSS options set by this plugin:
+下面是 PurgeCSS 在Vue项目中的配置:
 
 ```js
 {
