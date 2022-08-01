@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/parse5": "^6.0.0",
-    "@types/parse5-htmlparser2-tree-adapter": "^6.0.0"
+    "@types/parse5-htmlparser2-tree-adapter": "^7.0.0"
   },
   "publishConfig": {
     "access": "public",
