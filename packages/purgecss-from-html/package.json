@@ -1,6 +1,6 @@
 {
   "name": "purgecss-from-html",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "HTML extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
