@@ -4,6 +4,19 @@ import type {
   UserDefinedOptions as PurgeCSSUserDefinedOptions,
 } from "purgecss";
 
+export {
+  ComplexSafelist,
+  StringRegExpArray,
+  UserDefinedOptions as PurgeCSSUserDefinedOptions,
+  RawContent,
+  RawCSS,
+  ExtractorFunction,
+  Extractors,
+  ExtractorResult,
+  ExtractorResultDetailed,
+  UserDefinedSafelist
+} from "purgecss";
+
 /**
  * @public
  */

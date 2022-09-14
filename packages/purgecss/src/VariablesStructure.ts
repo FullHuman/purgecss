@@ -2,7 +2,10 @@ import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
 import { matchAll } from "./utils";
 
-class VariableNode {
+/**
+ * @public
+ */
+export class VariableNode {
   public nodes: VariableNode[] = [];
   public value: postcss.Declaration;
   public isUsed = false;
@@ -12,7 +15,10 @@ class VariableNode {
   }
 }
 
-class VariablesStructure {
+/**
+ * @public
+ */
+export class VariablesStructure {
   public nodes: Map<string, VariableNode[]> = new Map();
   public usedVariables: Set<string> = new Set();
   public safelist: StringRegExpArray = [];
@@ -111,5 +117,3 @@ class VariablesStructure {
     });
   }
 }
-
-export default VariablesStructure;

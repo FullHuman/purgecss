@@ -39,10 +39,11 @@ import {
   UserDefinedSafelist,
 } from "./types";
 import { matchAll } from "./utils";
-import VariablesStructure from "./VariablesStructure";
+import { VariablesStructure } from "./VariablesStructure";
 
 export * from "./types";
-export { defaultOptions, ExtractorResultSets, PurgeCSS };
+export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
+export * from "./VariablesStructure";
 
 const asyncFs = {
   access: promisify(fs.access),

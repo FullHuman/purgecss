@@ -117,39 +117,39 @@ export type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
  * @public
  */
 export interface UserDefinedOptions {
-  /** {@inheritDoc Options.content} */
+  /** {@inheritDoc purgecss#Options.content} */
   content: Array<string | RawContent>;
-  /** {@inheritDoc Options.css} */
+  /** {@inheritDoc purgecss#Options.css} */
   css: Array<string | RawCSS>;
-  /** {@inheritDoc Options.defaultExtractor} */
+  /** {@inheritDoc purgecss#Options.defaultExtractor} */
   defaultExtractor?: ExtractorFunction;
-  /** {@inheritDoc Options.extractors} */
+  /** {@inheritDoc purgecss#Options.extractors} */
   extractors?: Array<Extractors>;
-  /** {@inheritDoc Options.fontFace} */
+  /** {@inheritDoc purgecss#Options.fontFace} */
   fontFace?: boolean;
-  /** {@inheritDoc Options.keyframes} */
+  /** {@inheritDoc purgecss#Options.keyframes} */
   keyframes?: boolean;
-  /** {@inheritDoc Options.output} */
+  /** {@inheritDoc purgecss#Options.output} */
   output?: string;
-  /** {@inheritDoc Options.rejected} */
+  /** {@inheritDoc purgecss#Options.rejected} */
   rejected?: boolean;
-  /** {@inheritDoc Options.rejectedCss} */
+  /** {@inheritDoc purgecss#Options.rejectedCss} */
   rejectedCss?: boolean;
-  /** {@inheritDoc Options.sourceMap } */
+  /** {@inheritDoc purgecss#Options.sourceMap } */
   sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
-  /** {@inheritDoc Options.stdin} */
+  /** {@inheritDoc purgecss#Options.stdin} */
   stdin?: boolean;
-  /** {@inheritDoc Options.stdout} */
+  /** {@inheritDoc purgecss#Options.stdout} */
   stdout?: boolean;
-  /** {@inheritDoc Options.variables} */
+  /** {@inheritDoc purgecss#Options.variables} */
   variables?: boolean;
-  /** {@inheritDoc Options.safelist} */
+  /** {@inheritDoc purgecss#Options.safelist} */
   safelist?: UserDefinedSafelist;
-  /** {@inheritDoc Options.blocklist} */
+  /** {@inheritDoc purgecss#Options.blocklist} */
   blocklist?: StringRegExpArray;
-  /** {@inheritDoc Options.skippedContentGlobs} */
+  /** {@inheritDoc purgecss#Options.skippedContentGlobs} */
   skippedContentGlobs?: Array<string>;
-  /** {@inheritDoc Options.dynamicAttributes} */
+  /** {@inheritDoc purgecss#Options.dynamicAttributes} */
   dynamicAttributes?: string[];
 }
 

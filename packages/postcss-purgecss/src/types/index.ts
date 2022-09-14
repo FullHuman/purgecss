@@ -3,6 +3,19 @@ import {
   RawContent,
 } from "purgecss";
 
+export {
+  UserDefinedOptions as PurgeCSSUserDefinedOptions,
+  RawContent,
+  UserDefinedSafelist,
+  ComplexSafelist,
+  ExtractorFunction,
+  ExtractorResult,
+  StringRegExpArray,
+  RawCSS,
+  Extractors,
+  ExtractorResultDetailed,
+} from "purgecss";
+
 /**
  * {@inheritDoc purgecss#UserDefinedOptions}
  *
