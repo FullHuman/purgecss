@@ -14,7 +14,7 @@ export {
   Extractors,
   ExtractorResult,
   ExtractorResultDetailed,
-  UserDefinedSafelist
+  UserDefinedSafelist,
 } from "purgecss";
 
 /**
