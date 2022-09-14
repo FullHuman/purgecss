@@ -42,7 +42,7 @@ npm i purgecss-webpack-plugin -D
 const path = require("path");
 const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const PurgecssPlugin = require("purgecss-webpack-plugin");
+const { PurgecssPlugin } = require("purgecss-webpack-plugin");
 
 const PATHS = {
   src: path.join(__dirname, "src"),
@@ -110,7 +110,7 @@ With the webpack plugin, you can specify the content that should be analyzed by 
 > You likely need to pass `{ noDir: true }` as an option to `glob.sync()` as `glob.sync` is matching a dir which the plugin can't operate on.
 
 ```js
-const PurgecssPlugin = require("purgecss-webpack-plugin");
+const { PurgecssPlugin } = require("purgecss-webpack-plugin");
 const glob = require("glob");
 const PATHS = {
   src: path.join(__dirname, "src"),

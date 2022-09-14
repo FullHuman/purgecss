@@ -6,6 +6,7 @@
 [Webpack](https://github.com/webpack/webpack) plugin to remove unused css.
 
 ## Install
+
 ```sh
 npm i purgecss-webpack-plugin -D
 ```
@@ -15,56 +16,56 @@ npm i purgecss-webpack-plugin -D
 ### With mini-css-extract-plugin
 
 ```js
-const path = require('path')
-const glob = require('glob')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PurgeCSSPlugin = require('purgecss-webpack-plugin')
+const path = require("path");
+const glob = require("glob");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 
 const PATHS = {
-  src: path.join(__dirname, 'src')
-}
+  src: path.join(__dirname, "src"),
+};
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   output: {
-    filename: 'bundle.js',
-    path: path.join(__dirname, 'dist')
+    filename: "bundle.js",
+    path: path.join(__dirname, "dist"),
   },
   optimization: {
     splitChunks: {
       cacheGroups: {
         styles: {
-          name: 'styles',
+          name: "styles",
           test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    },
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ]
-      }
-    ]
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
     new PurgeCSSPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
     }),
-  ]
-}
+  ],
+};
 ```
+
 ### Multiple paths
+
 If you need multiple paths use the npm package `glob-all` instead of `glob`, then you can use this syntax:
+
 ```javascript
 new PurgeCSSPlugin({
   paths: glob.sync([
@@ -72,67 +73,69 @@ new PurgeCSSPlugin({
   ])
 }),
 ```
+
 to filter out directories see the glob-all documentation [here](https://www.npmjs.com/package/glob-all#filtering-out-directories).
 
 ### Options
 
 The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also available in the webpack plugin with the exception of css and content.
 
-* #### paths
+- #### paths
 
 With the webpack plugin, you can specify the content that should be analyzed by purgecss with an array of filename. It can be html, pug, blade, ... files. You can use a module like `glob` or `glob-all` to easily get a list of files.
 
 ```js
-const PurgeCSSPlugin = require('purgecss-webpack-plugin')
-const glob = require('glob')
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
+const glob = require("glob");
 const PATHS = {
-  src: path.join(__dirname, 'src')
-}
+  src: path.join(__dirname, "src"),
+};
 
 // In the webpack configuration
 new PurgeCSSPlugin({
-  paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
-})
+  paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+});
 ```
 
 If you want to regenerate the paths list on every compilation (e.g. with `--watch`), then you can also pass a function:
+
 ```js
 new PurgeCSSPlugin({
-  paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true })
-})
+  paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+});
 ```
 
-* #### only
+- #### only
 
 You can specify entrypoints to the purgecss-webpack-plugin with the option only:
 
 ```js
 new PurgeCSSPlugin({
   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-  only: ['bundle', 'vendor']
-})
+  only: ["bundle", "vendor"],
+});
 ```
 
-* #### safelist
+- #### safelist
 
 Similar as for the `paths` option, you also can define a function for this option:
 
 ```js
 function collectSafelist() {
   return {
-    standard: ['safelisted', /^safelisted-/],
+    standard: ["safelisted", /^safelisted-/],
     deep: [/^safelisted-deep-/],
-    greedy: [/^safelisted-greedy/]
-  }
+    greedy: [/^safelisted-greedy/],
+  };
 }
 
 // In the webpack configuration
 new PurgeCSSPlugin({
-  safelist: collectSafelist
-})
+  safelist: collectSafelist,
+});
 ```
 
-* #### rejected
+- #### rejected
 
 If `true` all removed selectors are added to the [Stats Data](https://webpack.js.org/api/stats/) as `purged`.
 
