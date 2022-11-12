@@ -47,7 +47,7 @@
     "@types/through2": "^2.0.34",
     "@types/vinyl": "^2.0.4",
     "event-stream": "^4.0.1",
-    "vinyl": "^2.2.0",
+    "vinyl": "^3.0.0",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "bugs": {
