@@ -93,14 +93,17 @@ See the [PurgeCSS configuration docs](../configuration.md) for details on each o
 In the HTML Template for your `<head>`, add this:
 
 ```html
-{{ $css := resources.Get "css/style.css" | resources.PostCSS }} {{ if
-hugo.IsProduction }} {{ $css = $css | minify | fingerprint |
-resources.PostProcess }} {{ end }}
+{{ $css := resources.Get "css/style.css" | resources.PostCSS }} 
+{{ if hugo.IsProduction }} 
+    {{ $css = $css | minify | fingerprint | resources.PostProcess }} 
+{{ end }}
 
 <link
   rel="stylesheet"
   href="{{ $css.RelPermalink }}"
-  integrity="{{ $css.Data.Integrity }}"
+  {{ if hugo.IsProduction -}} 
+    integrity="{{ $css.Data.Integrity }}"
+  {{- end }}
 />
 ```
 

@@ -42,7 +42,7 @@ npm i purgecss-webpack-plugin -D
 const path = require("path");
 const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { PurgecssPlugin } = require("purgecss-webpack-plugin");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 
 const PATHS = {
   src: path.join(__dirname, "src"),
@@ -78,7 +78,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
-    new PurgecssPlugin({
+    new PurgeCSSPlugin({
       paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
     }),
   ],
@@ -90,7 +90,7 @@ module.exports = {
 If you need multiple paths use the npm package `glob-all` instead of `glob`, then you can use this syntax:
 
 ```js
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync([
     // ...
   ])
@@ -110,14 +110,14 @@ With the webpack plugin, you can specify the content that should be analyzed by 
 > You likely need to pass `{ noDir: true }` as an option to `glob.sync()` as `glob.sync` is matching a dir which the plugin can't operate on.
 
 ```js
-const { PurgecssPlugin } = require("purgecss-webpack-plugin");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 const glob = require("glob");
 const PATHS = {
   src: path.join(__dirname, "src"),
 };
 
 // In the webpack configuration
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
 });
 ```
@@ -125,7 +125,7 @@ new PurgecssPlugin({
 If you want to regenerate the list of paths on every compilation (e.g. when using `--watch`), then you can also pass a function to the `paths` option as in the following example:
 
 ```js
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: () => glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
 });
 ```
@@ -135,7 +135,7 @@ new PurgecssPlugin({
 You can specify chunk names to the purgecss-webpack-plugin with the option `only`:
 
 ```js
-new PurgecssPlugin({
+new PurgeCSSPlugin({
   paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
   only: ["bundle", "vendor"],
 });
