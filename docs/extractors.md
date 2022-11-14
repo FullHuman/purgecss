@@ -38,7 +38,7 @@ The default extractor considers every word of a file as a selector. The default 
 
 Using an extractor can be useful if you notice that PurgeCSS does not remove enough unused css or removes used ones.
 
-Using a specific extractor for an extension should provide you with the best accuracy. If you want to purge exclusively html files you might want to consider the `purge-from-html` extractor.
+Using a specific extractor for an extension should provide you with the best accuracy. If you want to purge exclusively html files you might want to consider the `purgecss-from-html` extractor.
 
 You can use an extractor by settings the extractors option in the PurgeCSS config file.
 
@@ -65,7 +65,7 @@ export default options
 
 ## Creating an extractor
 
-An extractor is a simple function that takes the content of a file as a string and returns an array of selectors. By convention, the name of the npm package is `purge-from-[typefile]` \(e.g. purge-from-pug\). Using this convention will allow users to look at the list of extractor on npm by searching `purge-from`.
+An extractor is a simple function that takes the content of a file as a string and returns an array of selectors. By convention, the name of the npm package is `purgecss-from-[typefile]` \(e.g. purgecss-from-pug\). Using this convention will allow users to look at the list of extractor on npm by searching `purgecss-from`.
 
 ```js
 const purgeFromJs = (content) => {
