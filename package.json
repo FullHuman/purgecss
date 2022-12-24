@@ -29,7 +29,7 @@
     "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^8.0.1",
     "jest": "^27.4.4",
-    "lerna": "^5.1.6",
+    "lerna": "^6.1.0",
     "lint-staged": "^13.0.0",
     "prettier": "^2.5.1",
     "rollup": "^2.61.0",
@@ -43,7 +43,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
-    "build": "lerna run --stream build",
+    "build": "lerna run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
@@ -51,7 +51,7 @@
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
     "postinstall": "npm run bootstrap",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "lerna run --stream test",
+    "test": "lerna run test",
     "prepare": "husky install"
   },
   "lint-staged": {
