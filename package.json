@@ -11,7 +11,7 @@
     "packages/purgecss-from-twig",
     "packages/purgecss-from-tsx",
     "packages/purgecss-webpack-plugin",
-    "packages/purgecss-with-wordpress", 
+    "packages/purgecss-with-wordpress",
     "packages/vue-cli-plugin-purgecss"
   ],
   "devDependencies": {
@@ -38,7 +38,7 @@
     "rollup-plugin-ts": "^3.0.1",
     "ts-jest": "^27.1.1",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.3",
+    "typescript": "^4.9.4",
     "vuepress": "^2.0.0-beta.48"
   },
   "scripts": {

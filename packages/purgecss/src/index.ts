@@ -38,7 +38,7 @@ import {
   UserDefinedOptions,
   UserDefinedSafelist,
 } from "./types";
-import { matchAll } from "./utils";
+
 import { VariablesStructure } from "./VariablesStructure";
 
 export * from "./types";
@@ -335,25 +335,18 @@ class PurgeCSS {
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration = matchAll(
-        value,
-        /var\((.+?)[,)]/g
-      );
+      const usedVariablesMatchesInDeclaration =
+        value.matchAll(/var\((.+?)[,)]/g);
       if (prop.startsWith("--")) {
         this.variablesStructure.addVariable(declaration);
-
-        if (usedVariablesMatchesInDeclaration.length > 0) {
-          this.variablesStructure.addVariableUsage(
-            declaration,
-            usedVariablesMatchesInDeclaration
-          );
-        }
+        this.variablesStructure.addVariableUsage(
+          declaration,
+          usedVariablesMatchesInDeclaration
+        );
       } else {
-        if (usedVariablesMatchesInDeclaration.length > 0) {
-          this.variablesStructure.addVariableUsageInProperties(
-            usedVariablesMatchesInDeclaration
-          );
-        }
+        this.variablesStructure.addVariableUsageInProperties(
+          usedVariablesMatchesInDeclaration
+        );
       }
     }
 

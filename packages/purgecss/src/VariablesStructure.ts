@@ -1,6 +1,5 @@
 import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
-import { matchAll } from "./utils";
 
 /**
  * @public
@@ -37,7 +36,7 @@ export class VariablesStructure {
 
   addVariableUsage(
     declaration: postcss.Declaration,
-    matchedVariables: RegExpMatchArray[]
+    matchedVariables: IterableIterator<RegExpMatchArray>
   ): void {
     const { prop } = declaration;
     const nodes = this.nodes.get(prop);
@@ -55,7 +54,9 @@ export class VariablesStructure {
     }
   }
 
-  addVariableUsageInProperties(matchedVariables: RegExpMatchArray[]): void {
+  addVariableUsageInProperties(
+    matchedVariables: IterableIterator<RegExpMatchArray>
+  ): void {
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
@@ -83,15 +84,14 @@ export class VariablesStructure {
       const usedNodes = this.nodes.get(used);
       if (usedNodes) {
         for (const usedNode of usedNodes) {
-          const usedVariablesMatchesInDeclaration = matchAll(
-            usedNode.value.value,
-            /var\((.+?)[,)]/g
-          );
-          usedVariablesMatchesInDeclaration.forEach((usage) => {
+          const usedVariablesMatchesInDeclaration =
+            usedNode.value.value.matchAll(/var\((.+?)[,)]/g);
+
+          for (const usage of usedVariablesMatchesInDeclaration) {
             if (!this.usedVariables.has(usage[1])) {
               this.usedVariables.add(usage[1]);
             }
-          });
+          }
         }
       }
     }
