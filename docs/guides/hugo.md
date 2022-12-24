@@ -53,13 +53,21 @@ This tells Hugo to write a `hugo_stats.json` file to the project root as part of
 
 ## Node Packages
 
-Run this to install the necessary packages:
+If the `package.json` file at the project root doesn't exist yet (which tracks all your node dependancies), run this command from your project root directory to create it:
 
 ```
-npm install postcss postcss-cli @fullhuman/postcss-purgecss
+npm init
 ```
 
-If the `package.json` file at the project root doesn't exist yet, this will create it.
+You can enter as much or little information as you want. When the file is created, you can continue to install the packages.
+
+Run this from your project root to install the necessary packages:
+
+```
+npm install postcss postcss-cli @fullhuman/postcss-purgecss --save
+```
+
+The packages will install into a folder called `node_modules` and also be added to your `package.json` file.
 
 If it's not already there, add `node_modules/` to your `.gitignore` file.
 
