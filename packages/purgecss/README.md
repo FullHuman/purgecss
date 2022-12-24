@@ -19,7 +19,6 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 ## Sponsors 🥰
 
 [<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85" style="margin-right: 10px">](https://tailwindcss.com)
-[<img src="https://avatars.githubusercontent.com/u/6852555?&v=4" height="85">](https://vertistudio.com/)
 
 ## Documentation
 
@@ -63,11 +62,11 @@ npm i --save-dev purgecss
 ## Usage
 
 ```js
-import PurgeCSS from 'purgecss'
+import PurgeCSS from "purgecss";
 const purgeCSSResults = await new PurgeCSS().purge({
-  content: ['**/*.html'],
-  css: ['**/*.css']
-})
+  content: ["**/*.html"],
+  css: ["**/*.css"],
+});
 ```
 
 ## Contributing

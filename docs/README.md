@@ -36,7 +36,6 @@ footer: MIT Licensed | Copyright © 2018-present Full Human LTD
 ## Sponsors 🥰
 
 [<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85" style="margin-right: 10px">](https://tailwindcss.com)
-[<img src="https://avatars.githubusercontent.com/u/6852555?&v=4" height="85">](https://vertistudio.com/)
 
 ## Table of Contents
 
