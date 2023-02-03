@@ -23,7 +23,7 @@
     color: black;
 }
 
-.used {
+.used1 {
     color: red;
     font-family: 'Cerebri Sans';
 }
@@ -31,4 +31,10 @@
 .used2 {
   color: blue;
   font-family: Cerebri Bold, serif;
+}
+
+.used3,
+.unused1 {
+  color: green;
+  font-family: OtherFont, serif;
 }
