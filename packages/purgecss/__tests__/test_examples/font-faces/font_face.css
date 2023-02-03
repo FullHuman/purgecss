@@ -13,6 +13,13 @@
 }
 
 @font-face {
+    font-family: 'Cerebri Italic';
+    font-weight: 400;
+    font-style: normal;
+    src: url('../fonts/CerebriSans-Italic.eot?') format('eot'), url('../fonts/CerebriSans-Italic.otf') format('opentype'), url('../fonts/CerebriSans-Italic.svg#Cerebri_Sans') format('svg'), url('../fonts/CerebriSans-Italic.ttf') format('truetype'), url('../fonts/CerebriSans-Italic.woff') format('woff');
+}
+
+@font-face {
     font-family: 'OtherFont';
     font-weight: 400;
     font-style: normal;
@@ -28,13 +35,13 @@
     font-family: 'Cerebri Sans';
 }
 
+.used1,
+.unused {
+  color: green;
+  font-family: 'Cerebri Italic';
+}
+
 .used2 {
   color: blue;
   font-family: Cerebri Bold, serif;
-}
-
-.used3,
-.unused1 {
-  color: green;
-  font-family: OtherFont, serif;
 }

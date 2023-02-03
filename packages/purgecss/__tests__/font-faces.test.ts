@@ -21,6 +21,11 @@ describe("purge unused font-face", () => {
       purgedCSS.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`)
     ).toBe(true);
   });
+  it("keep @font-face 'Cerebri Italic'", () => {
+    expect(
+      purgedCSS.includes(`src: url('../fonts/CerebriSans-Italic.eot?')`)
+    ).toBe(true);
+  });
   it("remove @font-face 'OtherFont'", () => {
     expect(purgedCSS.includes(`src: url('xxx')`)).toBe(false);
   });
