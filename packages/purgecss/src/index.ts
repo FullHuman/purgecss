@@ -858,6 +858,28 @@ class PurgeCSS {
         return false;
       }
 
+      // The selector's parent is present and contains a comma
+      if (selector.parent && selector.parent.toString().indexOf(',') > -1) {
+        for (const parent of selector.parent.toString().split(',')) {
+          const parentSelector = parent.trim().replace(".", "");
+          // Handle cases where css is joined with a comma
+          switch (selectorNode.type) {
+            case "class":
+              if (selectorsFromExtractor.hasClass(parentSelector)) {
+                return true;
+              }
+              break;
+            case "id":
+              if (selectorsFromExtractor.hasId(parentSelector)) {
+                return true;
+              }
+              break;
+            default:
+              continue;
+            }
+          }
+        }
+
       switch (selectorNode.type) {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
