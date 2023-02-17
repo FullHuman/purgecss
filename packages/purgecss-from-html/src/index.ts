@@ -1,4 +1,4 @@
-import parse5 from "parse5";
+import * as parse5 from "parse5";
 import * as htmlparser2 from "parse5-htmlparser2-tree-adapter";
 
 /**
@@ -35,7 +35,7 @@ const mergedExtractorResults = (
 };
 
 const getSelectorsInElement = (
-  element: htmlparser2.Element
+  element: htmlparser2.Htmlparser2TreeAdapterMap['element']
 ): ExtractorResultDetailed => {
   const result: ExtractorResultDetailed = {
     attributes: {
@@ -63,7 +63,7 @@ const getSelectorsInElement = (
 };
 
 const getSelectorsInNodes = (
-  node: htmlparser2.Document | htmlparser2.Element
+  node: htmlparser2.Htmlparser2TreeAdapterMap['document'] | htmlparser2.Htmlparser2TreeAdapterMap['element']
 ): ExtractorResultDetailed => {
   let result: ExtractorResultDetailed = {
     attributes: {
@@ -76,8 +76,8 @@ const getSelectorsInNodes = (
     undetermined: [],
   };
 
-  for (const childNode of node.children) {
-    const element = childNode as htmlparser2.Element;
+  for (const childNode of node.childNodes) {
+    const element = childNode;
 
     switch (element.type) {
       case "tag":
@@ -103,8 +103,8 @@ const getSelectorsInNodes = (
  */
 const purgecssFromHtml = (content: string): ExtractorResultDetailed => {
   const tree = parse5.parse(content, {
-    treeAdapter: htmlparser2,
-  }) as htmlparser2.Document;
+    treeAdapter: htmlparser2.adapter
+  });
 
   return getSelectorsInNodes(tree);
 };
