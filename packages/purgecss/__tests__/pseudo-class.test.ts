@@ -100,3 +100,37 @@ describe("pseudo classes", () => {
     expect(purgedCSS.includes("row:after")).toBe(false);
   });
 });
+
+describe(":where pseudo class", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/where.html`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/where.css`],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("removes unused selectors", () => {
+    expect(purgedCSS.includes(".unused")).toBe(false);
+    expect(purgedCSS.includes(".root :where(.a) .c {")).toBe(true);
+    expect(purgedCSS.includes(".root:where(.a) .c {")).toBe(true);
+  });
+});
+
+describe(":is pseudo class", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}pseudo-class/is.html`],
+      css: [`${ROOT_TEST_EXAMPLES}pseudo-class/is.css`],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("removes unused selectors", () => {
+    expect(purgedCSS.includes(".unused")).toBe(false);
+    expect(purgedCSS.includes(".root :is(.a) .c {")).toBe(true);
+    expect(purgedCSS.includes(".root:is(.a) .c {")).toBe(true);
+  });
+});

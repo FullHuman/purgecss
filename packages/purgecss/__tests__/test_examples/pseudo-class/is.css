@@ -1,0 +1,24 @@
+.root :is(.a, .b) .unused {
+  color: red;
+}
+
+.root :is(.a, .unused) .c {
+  color: blue;
+}
+
+.root :is(.a, .b) .c :is(.unused, .unused2) {
+  color: green;
+}
+
+.root:is(.unused) .c {
+  color: rebeccapurple;
+}
+
+.root:is(.a) .c {
+  color: cyan;
+}
+
+.root :is(.unused) .c,
+.root :is(.a, .b) .c :is(.unused, .unused2) {
+  display: flex;
+}

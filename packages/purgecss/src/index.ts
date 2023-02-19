@@ -289,6 +289,20 @@ function isInPseudoClass(selector: selectorParser.Node): boolean {
   );
 }
 
+/**
+ * Returns true if the selector is inside the pseudo classes :where() or :is()
+ * @param selector - selector
+ */
+function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
+  return (
+    (selector.parent &&
+      selector.parent.type === "pseudo" &&
+      (selector.parent.value === ":where" ||
+        selector.parent.value === ":is")) ||
+    false
+  );
+}
+
 function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
   return node?.type === "atrule";
 }
@@ -511,6 +525,13 @@ class PurgeCSS {
 
     let keepSelector = true;
     const selectorsRemovedFromRule: string[] = [];
+
+    // selector transformer, walk over the list of the parsed selectors twice.
+    // First pass will remove the unused selectors. It goes through
+    // pseudo-classes like :where() and :is() and remove the unused
+    // selectors inside of them, but will not remove the pseudo-classes
+    // themselves. Second pass will remove selectors containing empty
+    // :where and :is.
     node.selector = selectorParser((selectorsParsed) => {
       selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
@@ -526,6 +547,19 @@ class PurgeCSS {
           if (this.options.rejectedCss) {
             selectorsRemovedFromRule.push(selector.toString());
           }
+          selector.remove();
+        }
+      });
+
+      selectorsParsed.walk((selector) => {
+        if (selector.type !== "selector") {
+          return;
+        }
+
+        if (
+          selector.toString() &&
+          /(:where$)|(:is$)|(:where[^(])|(:is[^(])/.test(selector.toString())
+        ) {
           selector.remove();
         }
       });
@@ -815,8 +849,10 @@ class PurgeCSS {
     selector: selectorParser.Selector,
     selectorsFromExtractor: ExtractorResultSets
   ): boolean {
-    // ignore the selector if it is inside a pseudo class
-    if (isInPseudoClass(selector)) return true;
+    // selectors in pseudo classes are ignored except :where() and :is(). For those pseudo-classes, we are treating the selectors inside the same way as they would be outside.
+    if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
+      return true;
+    }
 
     // if there is any greedy safelist pattern, run all the selector parts through them
     // if there is any match, return true

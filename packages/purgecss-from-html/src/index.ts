@@ -35,7 +35,7 @@ const mergedExtractorResults = (
 };
 
 const getSelectorsInElement = (
-  element: htmlparser2.Htmlparser2TreeAdapterMap['element']
+  element: htmlparser2.Htmlparser2TreeAdapterMap["element"]
 ): ExtractorResultDetailed => {
   const result: ExtractorResultDetailed = {
     attributes: {
@@ -63,7 +63,9 @@ const getSelectorsInElement = (
 };
 
 const getSelectorsInNodes = (
-  node: htmlparser2.Htmlparser2TreeAdapterMap['document'] | htmlparser2.Htmlparser2TreeAdapterMap['element']
+  node:
+    | htmlparser2.Htmlparser2TreeAdapterMap["document"]
+    | htmlparser2.Htmlparser2TreeAdapterMap["element"]
 ): ExtractorResultDetailed => {
   let result: ExtractorResultDetailed = {
     attributes: {
@@ -103,7 +105,7 @@ const getSelectorsInNodes = (
  */
 const purgecssFromHtml = (content: string): ExtractorResultDetailed => {
   const tree = parse5.parse(content, {
-    treeAdapter: htmlparser2.adapter
+    treeAdapter: htmlparser2.adapter,
   });
 
   return getSelectorsInNodes(tree);

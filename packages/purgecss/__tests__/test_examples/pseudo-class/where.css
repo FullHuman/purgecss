@@ -1,0 +1,24 @@
+.root :where(.a, .b) .unused {
+  color: red;
+}
+
+.root :where(.a, .unused) .c {
+  color: blue;
+}
+
+.root :where(.a, .b) .c :where(.unused, .unused2) {
+  color: green;
+}
+
+.root:where(.unused) .c {
+  color: rebeccapurple;
+}
+
+.root:where(.a) .c {
+  color: cyan;
+}
+
+.root :where(.unused) .c,
+.root :where(.a, .b) .c :where(.unused, .unused2) {
+  display: flex;
+}
