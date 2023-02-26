@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
   - property: og:url
-    content:  https://purgecss.com/guides/next
+    content: https://purgecss.com/guides/next
   - property: og:site_name
     content: purgecss.com
   - property: og:type
@@ -40,38 +40,38 @@ Add PurgeCSS to the default configuration:
 
 ```js
 module.exports = {
-  "plugins": [
+  plugins: [
     "postcss-flexbugs-fixes",
     [
       "postcss-preset-env",
       {
-        "autoprefixer": {
-          "flexbox": "no-2009"
+        autoprefixer: {
+          flexbox: "no-2009",
         },
-        "stage": 3,
-        "features": {
-          "custom-properties": false
-        }
-      }
+        stage: 3,
+        features: {
+          "custom-properties": false,
+        },
+      },
     ],
     [
-      '@fullhuman/postcss-purgecss',
+      "@fullhuman/postcss-purgecss",
       {
         content: [
-            './pages/**/*.{js,jsx,ts,tsx}',
-            './components/**/*.{js,jsx,ts,tsx}'
+          "./pages/**/*.{js,jsx,ts,tsx}",
+          "./components/**/*.{js,jsx,ts,tsx}",
         ],
-        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-        safelist: ["html", "body"]
-      }
+        defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+        safelist: ["html", "body"],
+      },
     ],
-  ]
-}
+  ],
+};
 ```
 
 ## Next.js plugin (Next.js < 9.3)
 
-### Intallation
+### Installation
 
 `next-purgecss` requires one of the following **css next plugins** :
 
@@ -85,14 +85,18 @@ For example, install `next-css` and `next-purgecss` :
 
 :::: code-group
 ::: code-group-item NPM
+
 ```sh
 npm install @zeit/next-css next-purgecss --save-dev
 ```
+
 :::
 ::: code-group-item YARN
+
 ```sh
 yarn add @zeit/next-css next-purgecss --dev
 ```
+
 :::
 ::::
 
