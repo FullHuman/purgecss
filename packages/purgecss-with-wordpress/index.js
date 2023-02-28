@@ -14,6 +14,8 @@ module.exports = {
     "alignnone",
     "alignright",
     "alignleft",
+    "alignwide",
+    "alignfull",
     "wp-caption",
     "wp-caption-text",
     "screen-reader-text",
