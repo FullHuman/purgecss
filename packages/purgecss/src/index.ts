@@ -415,24 +415,26 @@ class PurgeCSS {
     extractors: Extractors[]
   ): Promise<ExtractorResultSets> {
     const selectors = new ExtractorResultSets([]);
+    const filesNames: string[] = [];
     for (const globFile of files) {
-      let filesNames: string[] = [];
-
       try {
         await asyncFs.access(globFile, fs.constants.F_OK);
         filesNames.push(globFile);
       } catch (err) {
-        filesNames = glob.sync(globFile, {
+        filesNames.push(...glob.sync(globFile, {
           nodir: true,
           ignore: this.options.skippedContentGlobs,
-        });
+        }));
       }
-      for (const file of filesNames) {
-        const content = await asyncFs.readFile(file, "utf-8");
-        const extractor = this.getFileExtractor(file, extractors);
-        const extractedSelectors = await extractSelectors(content, extractor);
-        selectors.merge(extractedSelectors);
-      }
+    }
+    if (filesNames.length === 0) {
+      console.warn("No files found from the passed PurgeCSS option 'content'.")
+    }
+    for (const file of filesNames) {
+      const content = await asyncFs.readFile(file, "utf-8");
+      const extractor = this.getFileExtractor(file, extractors);
+      const extractedSelectors = await extractSelectors(content, extractor);
+      selectors.merge(extractedSelectors);
     }
     return selectors;
   }

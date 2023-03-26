@@ -91,3 +91,30 @@ describe("PurgeCSS with detailed extractor for html", () => {
     notFindInCSS(expect, ["parent3", "d33ef1", "parent2"], purgedCSS);
   });
 });
+
+describe("Warn if no files are found from the option 'content'", () => {
+  it("warns if no files are found", async () => {
+    const originalConsoleWarn = console.warn;
+    console.warn = jest.fn();
+    await new PurgeCSS().purge({
+      content: ["./__tests__/not-found.js", "./__tests__/not-found.html"],
+      css: [`${ROOT_TEST_EXAMPLES}others/remove_unused.css`]
+    });
+    expect(console.warn).toHaveBeenCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledWith(
+      "No files found from the passed PurgeCSS option 'content'.");
+      console.warn = originalConsoleWarn;
+  })
+
+  it("does not warn if files are found", async () => {
+    const originalConsoleWarn = console.warn;
+    console.warn = jest.fn();
+    await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}others/remove_unused.js`],
+      css: [`${ROOT_TEST_EXAMPLES}others/remove_unused.css`]
+    });
+    expect(console.warn).not.toHaveBeenCalled();
+    console.warn = originalConsoleWarn;
+  });
+
+})
