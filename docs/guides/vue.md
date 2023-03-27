@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS can be used with Vue with the webpack plugin.
   - property: og:url
-    content:  https://purgecss.com/guides/vue
+    content: https://purgecss.com/guides/vue
   - property: og:site_name
     content: purgecss.com
   - property: og:type
@@ -47,6 +47,8 @@ cd my-app
 
 vue add @fullhuman/purgecss
 ```
+
+The PurgeCSS plugin will generate a `postcss.config.js` file with PurgeCSS configured in it. You can then modify the PurgeCSS options.
 
 ### Usage
 
