@@ -8,7 +8,6 @@
     "packages/purgecss-from-html",
     "packages/purgecss-from-jsx",
     "packages/purgecss-from-pug",
-    "packages/purgecss-from-twig",
     "packages/purgecss-from-tsx",
     "packages/purgecss-webpack-plugin",
     "packages/purgecss-with-wordpress",
