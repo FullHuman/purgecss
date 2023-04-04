@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
   - property: og:url
-    content:  https://purgecss.com/extractors
+    content: https://purgecss.com/extractors
   - property: og:site_name
     content: purgecss.com
   - property: og:image
@@ -32,7 +32,7 @@ PurgeCSS provides a default extractor that is working with all types of files bu
 
 The default extractor considers every word of a file as a selector. The default extractor has a few limitations:
 
-* Does not consider special characters such as `@`, `:`, `/`
+- Does not consider special characters such as `@`, `:`, `/`
 
 ## Using an extractor
 
@@ -43,8 +43,8 @@ Using a specific extractor for an extension should provide you with the best acc
 You can use an extractor by settings the extractors option in the PurgeCSS config file.
 
 ```js
-import purgeJs from 'purgecss-from-js'
-import purgeHtml from 'purgecss-from-html'
+import purgeJs from "purgecss-from-js";
+import purgeHtml from "purgecss-from-html";
 
 const options = {
   content: [], // files to extract the selectors from
@@ -52,15 +52,15 @@ const options = {
   extractors: [
     {
       extractor: purgeJs,
-      extensions: ['js']
+      extensions: ["js"],
     },
     {
       extractor: purgeHtml,
-      extensions: ['html']
-    }
-  ]
-}
-export default options
+      extensions: ["html"],
+    },
+  ],
+};
+export default options;
 ```
 
 ## Creating an extractor
@@ -70,7 +70,7 @@ An extractor is a simple function that takes the content of a file as a string a
 ```js
 const purgeFromJs = (content) => {
   // return array of css selectors
-}
+};
 ```
 
 ## List of available extractors (in progress)
@@ -83,4 +83,3 @@ It is not encouraged to use them in production yet.
 - [purgecss-from-html](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-html): HTML files (.html)
 - [purgecss-from-jsx](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-jsx): JSX files
 - [purgecss-from-pug](https://github.com/FullHuman/purgecss/blob/main/packages/purgecss-from-pug): Pug files (.pug)
-- [purgecss-from-twig](https://github.com/FullHuman/purgecss/tree/main/packages/purgecss-from-twig): Twig files
