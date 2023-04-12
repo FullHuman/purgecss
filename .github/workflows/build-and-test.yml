@@ -27,7 +27,7 @@ jobs:
       uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./packages/purgecss/coverage/lcov.info
+        base-path: ./packages/purgecss
       env:
         CI: true
 
