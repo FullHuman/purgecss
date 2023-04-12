@@ -24,10 +24,10 @@ jobs:
         npm run lint
         npm run test -- -- --coverage
     - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1.2.4
+      uses: coverallsapp/github-action@v2.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./packages/purgecss/coverage/lcov.info
+        base-path: ./packages/purgecss
       env:
         CI: true
 
