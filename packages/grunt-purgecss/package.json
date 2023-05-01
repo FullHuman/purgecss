@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@types/grunt": "^0.4.25",
-    "grunt": "~1.5.3"
+    "grunt": "~1.6.1"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
