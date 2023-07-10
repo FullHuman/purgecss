@@ -53,10 +53,10 @@ const getSelectorsInElement = (
       result.classes.push(...value.split(" "));
     } else if (name === "id") {
       result.ids.push(...value.split(" "));
-    } else {
-      result.attributes.names.push(name);
-      result.attributes.values.push(...value.split(" "));
     }
+    // always add to attributes, to handle things like [class*=foo]
+    result.attributes.names.push(name);
+    result.attributes.values.push(...value.split(" "));
   }
 
   return mergedExtractorResults(getSelectorsInNodes(element), result);

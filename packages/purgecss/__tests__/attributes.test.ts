@@ -1,7 +1,20 @@
 import { PurgeCSS } from "./../src/index";
 import { ROOT_TEST_EXAMPLES } from "./utils";
+import purgecssFromHtml from "purgecss-from-html";
 
-describe("attributes", () => {
+// we run this  suite against both the default and HTML extractors, as the HTML
+// extractor's more granular attribute handling can cause bugs
+describe.each([
+  [[]],
+  [
+    [
+      {
+        extensions: ["html"],
+        extractor: purgecssFromHtml,
+      },
+    ],
+  ],
+])("attributes", (extractors) => {
   let purgedCSS: string;
 
   beforeAll(async () => {
@@ -9,6 +22,7 @@ describe("attributes", () => {
       content: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.html`],
       css: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.css`],
       dynamicAttributes: ["aria-selected"],
+      extractors
     });
     purgedCSS = resultsPurge[0].css;
   });
