@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "commander": "^10.0.0",
-    "glob": "^8.0.3",
+    "glob": "^10.3.4",
     "postcss": "^8.4.4",
     "postcss-selector-parser": "^6.0.7"
   },
