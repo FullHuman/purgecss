@@ -40,7 +40,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "commander": "^10.0.0",
+    "commander": "^11.0.0",
     "glob": "^8.0.3",
     "postcss": "^8.4.4",
     "postcss-selector-parser": "^6.0.7"
