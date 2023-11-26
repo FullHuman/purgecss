@@ -553,6 +553,7 @@ class PurgeCSS {
         }
       });
 
+      // removes selectors containing empty :where and :is
       selectorsParsed.walk((selector) => {
         if (selector.type !== "selector") {
           return;
@@ -560,9 +561,15 @@ class PurgeCSS {
 
         if (
           selector.toString() &&
-          /(:where$)|(:is$)|(:where[^(])|(:is[^(])/.test(selector.toString())
+          /(:where)|(:is)/.test(selector.toString())
         ) {
-          selector.remove();
+          selector.walk((node) => {
+            if (node.type !== "pseudo") return;
+            if (node.value !== ":where" && node.value !== ":is") return;
+            if (node.nodes.length === 0) {
+              selector.remove();
+            }
+          });
         }
       });
     }).processSync(node.selector);
