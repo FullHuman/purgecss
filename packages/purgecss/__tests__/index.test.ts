@@ -117,4 +117,15 @@ describe("Warn if no files are found from the option 'content'", () => {
     console.warn = originalConsoleWarn;
   });
 
+  it("does not warn if raw content is found", async () => {
+    const originalConsoleWarn = console.warn;
+    console.warn = jest.fn();
+    await new PurgeCSS().purge({
+      content: [{ raw: '<div class="a">test</div>', extension: 'html' }],
+      css: [`${ROOT_TEST_EXAMPLES}others/remove_unused.css`]
+    });
+    expect(console.warn).not.toHaveBeenCalled();
+    console.warn = originalConsoleWarn;
+  });
+
 })
