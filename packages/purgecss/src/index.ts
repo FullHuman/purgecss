@@ -427,7 +427,7 @@ class PurgeCSS {
         }));
       }
     }
-    if (filesNames.length === 0) {
+    if (files.length > 0 && filesNames.length === 0) {
       console.warn("No files found from the passed PurgeCSS option 'content'.")
     }
     for (const file of filesNames) {
