@@ -22,3 +22,7 @@
 .root :is(.a, .b) .c :is(.unused, .unused2) {
   display: flex;
 }
+
+.\[\&\:is\(\.a\)\]\:text-black:is(.a) {
+  color: black;
+}

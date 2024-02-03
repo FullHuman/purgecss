@@ -107,6 +107,9 @@ describe(":where pseudo class", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}pseudo-class/where.html`],
       css: [`${ROOT_TEST_EXAMPLES}pseudo-class/where.css`],
+      safelist: {
+        standard: ["[&:where(.a)]:text-black"],
+      }
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -115,6 +118,7 @@ describe(":where pseudo class", () => {
     expect(purgedCSS.includes(".unused")).toBe(false);
     expect(purgedCSS.includes(".root :where(.a) .c {")).toBe(true);
     expect(purgedCSS.includes(".root:where(.a) .c {")).toBe(true);
+    expect(purgedCSS.includes(".\\[\\&\\:where\\(\\.a\\)\\]\\:text-black:where(.a) {")).toBe(true);
   });
 });
 
@@ -124,6 +128,9 @@ describe(":is pseudo class", () => {
     const resultsPurge = await new PurgeCSS().purge({
       content: [`${ROOT_TEST_EXAMPLES}pseudo-class/is.html`],
       css: [`${ROOT_TEST_EXAMPLES}pseudo-class/is.css`],
+      safelist: {
+        standard: ["[&:is(.a)]:text-black"]
+      }
     });
     purgedCSS = resultsPurge[0].css;
   });
@@ -132,5 +139,6 @@ describe(":is pseudo class", () => {
     expect(purgedCSS.includes(".unused")).toBe(false);
     expect(purgedCSS.includes(".root :is(.a) .c {")).toBe(true);
     expect(purgedCSS.includes(".root:is(.a) .c {")).toBe(true);
+    expect(purgedCSS.includes(".\\[\\&\\:is\\(\\.a\\)\\]\\:text-black:is(.a) {")).toBe(true);
   });
 });

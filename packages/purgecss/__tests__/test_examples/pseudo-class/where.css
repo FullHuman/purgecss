@@ -22,3 +22,7 @@
 .root :where(.a, .b) .c :where(.unused, .unused2) {
   display: flex;
 }
+
+.\[\&\:where\(\.a\)\]\:text-black:where(.a) {
+  color: black;
+}
