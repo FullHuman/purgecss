@@ -1,6 +1,6 @@
 import purgehtml from "./../src/index";
 
-import { TEST_1_CONTENT, TEST_1_TAG, TEST_1_CLASS, TEST_1_ID } from "./data";
+import { TEST_1_CONTENT, TEST_1_TAG, TEST_1_CLASS, TEST_1_ID, TEST_1_ATTRIBUTES } from "./data";
 import { TEST_2_CONTENT, TEST_2_TAG, TEST_2_CLASS, TEST_2_ID } from "./data";
 
 describe("purgehtml", () => {
@@ -22,6 +22,18 @@ describe("purgehtml", () => {
     it("finds id selectors", () => {
       for (const item of TEST_1_ID) {
         expect(resultTest1.ids.includes(item)).toBe(true);
+      }
+    });
+
+    it("finds attributes names", () => {
+      for (const item of TEST_1_ATTRIBUTES.NAMES) {
+        expect(resultTest1.attributes.names.includes(item)).toBe(true);
+      }
+    });
+
+    it("finds attributes values", () => {
+      for (const item of TEST_1_ATTRIBUTES.VALUES) {
+        expect(resultTest1.attributes.values.includes(item)).toBe(true);
       }
     });
   });
