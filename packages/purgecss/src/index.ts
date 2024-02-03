@@ -423,7 +423,7 @@ class PurgeCSS {
       } catch (err) {
         filesNames.push(...glob.sync(globFile, {
           nodir: true,
-          ignore: this.options.skippedContentGlobs,
+          ignore: this.options.skippedContentGlobs.map(glob => glob.replace(/^\.\//, "")),
         }));
       }
     }
