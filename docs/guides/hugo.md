@@ -39,17 +39,34 @@ In your `config.toml` file, add this:
 
 ```toml
 [build]
-  writeStats = true
+  [build.buildStats]
+    enable = true
 ```
 
 Or, If using a `config.yaml` file, add this:
 
 ```yaml
 build:
-  writeStats: true
+  buildStats:
+    enable: true
 ```
 
 This tells Hugo to write a `hugo_stats.json` file to the project root as part of the build. It includes all tags, classes, and ids from your `*.html` templates.
+
+You should also add `hugo_stats.json` to Hugo's server watcher:
+
+```toml
+[module]
+  [module.hugoVersion]
+    extended = false
+    min      = "0.115.0"
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "hugo_stats.json"
+    target = "assets/watching/hugo_stats.json"
+```
 
 ## Node Packages
 
