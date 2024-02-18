@@ -7,6 +7,7 @@
   --used-color: rebeccapurple;
   --accent-color: orange;
   --wrong-order: yellow;
+  --outline-color: coral;
   --random: var(--not-existing);
 }
 
@@ -17,6 +18,10 @@
   background-color: var(--primary-color);
   color: var(--accent-color);
   border-color: var(--border-color);
+}
+
+.button, .unused-class {
+  outline-color: var(--outline-color);
 }
 
 .button:focus {
