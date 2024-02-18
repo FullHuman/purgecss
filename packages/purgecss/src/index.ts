@@ -525,7 +525,6 @@ class PurgeCSS {
       return;
     }
 
-    let keepSelector = true;
     const selectorsRemovedFromRule: string[] = [];
 
     // selector transformer, walk over the list of the parsed selectors twice.
@@ -540,7 +539,7 @@ class PurgeCSS {
           return;
         }
 
-        keepSelector = this.shouldKeepSelector(selector, selectors);
+        const keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
           if (this.options.rejected) {
@@ -575,7 +574,7 @@ class PurgeCSS {
     }).processSync(node.selector);
 
     // declarations
-    if (keepSelector && typeof node.nodes !== "undefined") {
+    if (node.selector && typeof node.nodes !== "undefined") {
       for (const childNode of node.nodes) {
         if (childNode.type !== "decl") continue;
         this.collectDeclarationsData(childNode);

@@ -27,4 +27,7 @@ describe("purge unused css variables", () => {
     expect(purgedCSS.includes("--color-first:")).toBe(true);
     expect(purgedCSS.includes("--wrong-order:")).toBe(true);
   });
+  it("keeps '--outline-color'", () => {
+    expect(purgedCSS.includes("--outline-color:")).toBe(true);
+  });
 });
