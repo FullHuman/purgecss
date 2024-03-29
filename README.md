@@ -18,6 +18,7 @@ This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your 
 ## Sponsors 🥰
 
 [<img src="https://avatars0.githubusercontent.com/u/67109815?v=4" height="85" style="margin-right: 10px">](https://tailwindcss.com)
+[<img src="https://avatars.githubusercontent.com/u/133211198?v=4" height="85" style="margin-right: 10px">](https://www.bairesdev.com/sponsoring-open-source-projects/)
 
 ## Documentation
 
@@ -80,7 +81,7 @@ This repository is a monorepo that we manage using [Lerna](https://github.com/le
 | [purgecss-webpack-plugin](/packages/purgecss-webpack-plugin) | ![npm](https://img.shields.io/npm/v/purgecss-webpack-plugin?style=flat-square)              | Webpack plugin for PurgeCSS                |
 | [gulp-purgecss](/packages/gulp-purgecss)                     | ![npm](https://img.shields.io/npm/v/gulp-purgecss?style=flat-square)                        | Gulp plugin for PurgeCSS                   |
 | [grunt-purgecss](/packages/grunt-purgecss)                   | ![npm](https://img.shields.io/npm/v/grunt-purgecss?style=flat-square)                       | Grunt plugin for PurgeCSS                  |
-| [rollup-plugin-purgecss](/packages/rollup-plugin-purgecss)   | ![npm](https://img.shields.io/npm/v/rollup-plugin-purgecss?style=flat-square)               | Rollup plugin for PurgeCSS                  |
+| [rollup-plugin-purgecss](/packages/rollup-plugin-purgecss)   | ![npm](https://img.shields.io/npm/v/rollup-plugin-purgecss?style=flat-square)               | Rollup plugin for PurgeCSS                 |
 | [purgecss-from-html](/packages/purgecss-from-html)           | ![npm](https://img.shields.io/npm/v/purgecss-from-html?style=flat-square)                   | Html extractor for PurgeCSS                |
 | [purgecss-from-pug](/packages/purgecss-from-pug)             | ![npm](https://img.shields.io/npm/v/purgecss-from-pug?style=flat-square)                    | Pug extractor for PurgeCSS                 |
 | [purgecss-with-wordpress](/packages/purgecss-with-wordpress) | ![npm](https://img.shields.io/npm/v/purgecss-with-wordpress?style=flat-square)              | Collection of safelist items for WordPress |
