@@ -52,7 +52,7 @@ export function parseCommandOptions(program: Command): Command {
     .option("-c, --config <path>", "path to the configuration file")
     .option(
       "-o, --output <path>",
-      "file path directory to write purged css files to"
+      "file path directory to write purged css files to",
     )
     .option("-font, --font-face", "option to remove unused font-faces")
     .option("-keyframes, --keyframes", "option to remove unused keyframes")
@@ -61,15 +61,15 @@ export function parseCommandOptions(program: Command): Command {
     .option("-rejected-css, --rejected-css", "option to output rejected css")
     .option(
       "-s, --safelist <list...>",
-      "list of classes that should not be removed"
+      "list of classes that should not be removed",
     )
     .option(
       "-b, --blocklist <list...>",
-      "list of selectors that should be removed"
+      "list of selectors that should be removed",
     )
     .option(
       "-k, --skippedContentGlobs <list...>",
-      "list of glob patterns for folders/files that should not be scanned"
+      "list of glob patterns for folders/files that should not be scanned",
     );
 
   return program;

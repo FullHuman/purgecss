@@ -36,7 +36,7 @@ export class VariablesStructure {
 
   addVariableUsage(
     declaration: postcss.Declaration,
-    matchedVariables: IterableIterator<RegExpMatchArray>
+    matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
     const { prop } = declaration;
     const nodes = this.nodes.get(prop);
@@ -47,7 +47,7 @@ export class VariablesStructure {
         const usedVariableNodes = this.nodes.get(variableName);
         nodes?.forEach((node) => {
           usedVariableNodes?.forEach((usedVariableNode) =>
-            node.nodes.push(usedVariableNode)
+            node.nodes.push(usedVariableNode),
           );
         });
       }
@@ -55,7 +55,7 @@ export class VariablesStructure {
   }
 
   addVariableUsageInProperties(
-    matchedVariables: IterableIterator<RegExpMatchArray>
+    matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1

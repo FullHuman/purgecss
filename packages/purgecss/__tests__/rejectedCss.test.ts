@@ -21,7 +21,7 @@ describe("rejectedCss", () => {
       rejectedCss: true,
     });
     expect(resultsPurge[0].rejectedCss?.trim()).toContain(
-      resultsPurge[0].rejected?.[0]
+      resultsPurge[0].rejected?.[0],
     );
   });
   /**

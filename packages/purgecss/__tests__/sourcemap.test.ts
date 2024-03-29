@@ -10,7 +10,7 @@ describe("source map option", () => {
     });
 
     expect(resultsPurge[0].css).toContain(
-      "sourceMappingURL=data:application/json;base64"
+      "sourceMappingURL=data:application/json;base64",
     );
   });
 
@@ -24,7 +24,7 @@ describe("source map option", () => {
     });
 
     expect(resultsPurge[0].sourceMap).toContain(
-      'sources":["__tests__/test_examples/others/remove_unused.css"]'
+      'sources":["__tests__/test_examples/others/remove_unused.css"]',
     );
   });
 });

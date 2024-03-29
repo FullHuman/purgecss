@@ -24,7 +24,7 @@ const rollupBaseConfig: RollupOptions = {
 
 export function createRollupConfig(
   packageName: string,
-  external: RollupOptions["external"]
+  external: RollupOptions["external"],
 ): RollupOptions {
   return {
     ...rollupBaseConfig,

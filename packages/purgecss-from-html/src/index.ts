@@ -17,7 +17,7 @@ export type ExtractorResultDetailed = {
 
 const mergedExtractorResults = (
   resultLeft: ExtractorResultDetailed,
-  resultRight: ExtractorResultDetailed
+  resultRight: ExtractorResultDetailed,
 ): ExtractorResultDetailed => {
   return {
     attributes: {
@@ -35,7 +35,7 @@ const mergedExtractorResults = (
 };
 
 const getSelectorsInElement = (
-  element: htmlparser2.Htmlparser2TreeAdapterMap["element"]
+  element: htmlparser2.Htmlparser2TreeAdapterMap["element"],
 ): ExtractorResultDetailed => {
   const result: ExtractorResultDetailed = {
     attributes: {
@@ -65,7 +65,7 @@ const getSelectorsInElement = (
 const getSelectorsInNodes = (
   node:
     | htmlparser2.Htmlparser2TreeAdapterMap["document"]
-    | htmlparser2.Htmlparser2TreeAdapterMap["element"]
+    | htmlparser2.Htmlparser2TreeAdapterMap["element"],
 ): ExtractorResultDetailed => {
   let result: ExtractorResultDetailed = {
     attributes: {

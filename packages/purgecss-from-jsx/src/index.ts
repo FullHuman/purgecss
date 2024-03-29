@@ -32,7 +32,7 @@ function purgeFromJsx(options?: acorn.Options) {
     // Parse and walk any JSXElement
     walk.recursive<NodeState>(
       acorn.Parser.extend(
-        jsx() as (BaseParser: typeof acorn.Parser) => typeof acorn.Parser
+        jsx() as (BaseParser: typeof acorn.Parser) => typeof acorn.Parser,
       ).parse(content, options || { ecmaVersion: "latest" }),
       state,
       {
@@ -94,7 +94,7 @@ function purgeFromJsx(options?: acorn.Options) {
           }
         },
       },
-      { ...walk.base }
+      { ...walk.base },
     );
 
     return state.selectors || [];

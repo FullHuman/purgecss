@@ -22,7 +22,7 @@ describe.each([
       content: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.html`],
       css: [`${ROOT_TEST_EXAMPLES}attributes/attribute_selector.css`],
       dynamicAttributes: ["aria-selected"],
-      extractors
+      extractors,
     });
     purgedCSS = resultsPurge[0].css;
   });

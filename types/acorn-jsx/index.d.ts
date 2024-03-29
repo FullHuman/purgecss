@@ -133,7 +133,7 @@ declare module "acorn-jsx" {
       {
         key: { name?: string; value?: string };
         value: Expression;
-      }
+      },
     ];
   }
 
@@ -183,7 +183,7 @@ declare module "acorn-jsx" {
     autoCloseVoidElements?: boolean;
   }
   export default function (
-    options?: PluginOptions
+    options?: PluginOptions,
   ): (BaseParser: typeof Parser) => typeof Parser;
 }
 /* eslint-enable no-use-before-define */

@@ -21,7 +21,7 @@ function purgeFromTsx(options?: {
           jsx: ts.JsxEmit.Preserve,
           ...options?.tsOptions,
         },
-      }).outputText
+      }).outputText,
     );
   };
 }

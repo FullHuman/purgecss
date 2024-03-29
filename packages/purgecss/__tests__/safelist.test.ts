@@ -59,7 +59,7 @@ describe("safelist option: standard", () => {
         ".nav-red",
         "[data-v-test]",
       ],
-      purgedCSS
+      purgedCSS,
     );
   });
 });
@@ -83,7 +83,7 @@ describe("safelist option: deep", () => {
     findInCSS(
       expect,
       [".card", ".card .content", ".btn", ".card .btn .yellow"],
-      purgedCSS
+      purgedCSS,
     );
   });
 
@@ -114,7 +114,7 @@ describe("safelist option: greedy", () => {
         ".card[data-v-test].card--large",
         ".card[data-v-test] .card-content",
       ],
-      purgedCSS
+      purgedCSS,
     );
   });
 
@@ -122,7 +122,7 @@ describe("safelist option: greedy", () => {
     notFindInCSS(
       expect,
       [".card.card--large", ".card .card-content"],
-      purgedCSS
+      purgedCSS,
     );
   });
 });
@@ -145,7 +145,7 @@ describe("safelist option: keyframes", () => {
     findInCSS(
       expect,
       ["@keyframes scale", "@keyframes scale-down", "@keyframes spin"],
-      purgedCSS
+      purgedCSS,
     );
   });
 
@@ -192,7 +192,7 @@ describe("blocklist option", () => {
     notFindInCSS(
       expect,
       ["h1", "yep", "button", "nav-blue", "nav-red"],
-      purgedCSS
+      purgedCSS,
     );
   });
 

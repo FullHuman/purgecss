@@ -42,7 +42,7 @@ function getPurgeCSSOptions(
   filesToSearch: string[],
   asset: sources.Source,
   fileName: string,
-  sourceMap: boolean
+  sourceMap: boolean,
 ): PurgeCSSUserDefinedOptions {
   const options = {
     ...defaultOptions,
@@ -92,7 +92,7 @@ function createSource(
   name: string,
   asset: sources.Source,
   purgeResult: ResultPurge,
-  sourceMap: boolean
+  sourceMap: boolean,
 ): sources.Source {
   if (!sourceMap || !purgeResult.sourceMap) {
     return new sources.RawSource(purgeResult.css);
@@ -105,7 +105,7 @@ function createSource(
     purgeResult.sourceMap,
     source.toString(),
     map,
-    false
+    false,
   );
 }
 
@@ -123,7 +123,7 @@ export class PurgeCSSPlugin {
   apply(compiler: Compiler): void {
     compiler.hooks.compilation.tap(
       pluginName,
-      this.initializePlugin.bind(this)
+      this.initializePlugin.bind(this),
     );
   }
 
@@ -156,12 +156,12 @@ export class PurgeCSSPlugin {
 
   async runPluginHook(
     compilation: Compilation,
-    entryPaths: string[]
+    entryPaths: string[],
   ): Promise<void> {
     const assetsFromCompilation = Object.entries(compilation.assets).filter(
       ([name]) => {
         return isFileOfTypes(name, [".css"]);
-      }
+      },
     );
 
     for (const chunk of compilation.chunks) {
@@ -177,7 +177,7 @@ export class PurgeCSSPlugin {
 
       for (const [name, asset] of assetsToPurge) {
         const filesToSearch = entryPaths.filter(
-          (v) => !styleExtensions.some((ext) => v.endsWith(ext))
+          (v) => !styleExtensions.some((ext) => v.endsWith(ext)),
         );
 
         const sourceMapEnabled = !!compilation.compiler.options.devtool;
@@ -186,7 +186,7 @@ export class PurgeCSSPlugin {
           filesToSearch,
           asset,
           name,
-          sourceMapEnabled
+          sourceMapEnabled,
         );
 
         const purgecss = await new PurgeCSS().purge(purgeCSSOptions);
@@ -198,7 +198,7 @@ export class PurgeCSSPlugin {
 
         compilation.updateAsset(
           name,
-          createSource(name, asset, purged, sourceMapEnabled)
+          createSource(name, asset, purged, sourceMapEnabled),
         );
       }
     }

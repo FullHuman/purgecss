@@ -8,7 +8,7 @@ const asyncFs = {
 };
 
 function runWebpack(
-  options: Configuration
+  options: Configuration,
 ): Promise<webpack.Stats | undefined> {
   const compiler = webpack(options);
   return new Promise((resolve, reject) => {

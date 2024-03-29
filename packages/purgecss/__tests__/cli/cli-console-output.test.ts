@@ -19,7 +19,7 @@ describe("PurgeCSS CLI console output", () => {
     ]);
     await run(program);
     expect(console.log).toHaveBeenCalledWith(
-      `[{"css":".hello {\\n  color: red;\\n}\\n","file":"${CLI_TEST_FOLDER}/src/style.css"}]`
+      `[{"css":".hello {\\n  color: red;\\n}\\n","file":"${CLI_TEST_FOLDER}/src/style.css"}]`,
     );
     console.log = originalConsoleLog;
   });

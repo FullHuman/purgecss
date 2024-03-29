@@ -30,7 +30,7 @@ describe("Purgecss postcss plugin", () => {
 
       expect(result.css).toBe(output);
       expect(result.warnings().length).toBe(0);
-    }
+    },
   );
 
   it.each(fileContents)(
@@ -53,7 +53,7 @@ describe("Purgecss postcss plugin", () => {
       expect(result.warnings().length).toBe(0);
       expect(contentFunction).toHaveBeenCalledTimes(1);
       expect(contentFunction.mock.calls[0][0]).toContain(sourceFileName);
-    }
+    },
   );
 
   it(`queues messages when using reject flag: simple`, async () => {

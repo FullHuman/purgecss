@@ -2,7 +2,7 @@ import { PurgeCSS, defaultOptions, UserDefinedOptions } from "purgecss";
 
 function getAvailableFiles(
   grunt: IGrunt,
-  files: string[] | undefined = []
+  files: string[] | undefined = [],
 ): string[] {
   return files.filter((filepath) => {
     // Warn on and remove invalid source files (if nonull was set).

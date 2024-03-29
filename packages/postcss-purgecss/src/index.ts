@@ -32,7 +32,7 @@ const PLUGIN_NAME = "postcss-purgecss";
 async function purgeCSS(
   opts: UserDefinedOptions,
   root: postcss.Root,
-  { result }: postcss.Helpers
+  { result }: postcss.Helpers,
 ): Promise<void> {
   const purgeCSS = new PurgeCSS();
 
@@ -49,13 +49,13 @@ async function purgeCSS(
     ...configFileOptions,
     ...opts,
     safelist: standardizeSafelist(
-      opts?.safelist || configFileOptions?.safelist
+      opts?.safelist || configFileOptions?.safelist,
     ),
   };
 
   if (opts && typeof opts.contentFunction === "function") {
     options.content = opts.contentFunction(
-      (root.source && root.source.input.file) || ""
+      (root.source && root.source.input.file) || "",
     );
   }
 
@@ -68,19 +68,19 @@ async function purgeCSS(
   const { content, extractors } = options;
 
   const fileFormatContents = content.filter(
-    (o) => typeof o === "string"
+    (o) => typeof o === "string",
   ) as string[];
   const rawFormatContents = content.filter(
-    (o) => typeof o === "object"
+    (o) => typeof o === "object",
   ) as RawContent[];
 
   const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
     fileFormatContents,
-    extractors
+    extractors,
   );
   const cssRawSelectors = await purgeCSS.extractSelectorsFromString(
     rawFormatContents,
-    extractors
+    extractors,
   );
 
   const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
@@ -114,7 +114,7 @@ async function purgeCSS(
  * @public
  */
 const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = function (
-  opts
+  opts,
 ) {
   if (typeof opts === "undefined")
     throw new Error("PurgeCSS plugin does not have the correct options");

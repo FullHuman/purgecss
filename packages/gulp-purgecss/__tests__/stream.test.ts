@@ -41,7 +41,7 @@ describe("gulp-purgecss with stream", () => {
           expect(data.includes("unused")).toBe(false);
           expect(data.includes("a")).toBe(true);
           done();
-        })
+        }),
       );
     });
   });

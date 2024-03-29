@@ -16,7 +16,7 @@ describe("performance", () => {
         expect(
           results.some((result) => {
             return result.file && result.file.endsWith("/tailwind.css");
-          })
+          }),
         ).toBe(true);
         results.forEach((result) => expect(typeof result.css).toBe("string"));
         console.log("performance test took", Date.now() - start, "ms");

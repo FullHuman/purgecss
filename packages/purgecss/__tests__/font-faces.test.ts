@@ -13,12 +13,12 @@ describe("purge unused font-face", () => {
   });
   it("keep @font-face 'Cerebri Bold'", () => {
     expect(
-      purgedCSS.includes(`src: url('../fonts/CerebriSans-Bold.eot?')`)
+      purgedCSS.includes(`src: url('../fonts/CerebriSans-Bold.eot?')`),
     ).toBe(true);
   });
   it("keep @font-face 'Cerebri Sans'", () => {
     expect(
-      purgedCSS.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`)
+      purgedCSS.includes(`src: url('../fonts/CerebriSans-Regular.eot?')`),
     ).toBe(true);
   });
   it("remove @font-face 'OtherFont'", () => {

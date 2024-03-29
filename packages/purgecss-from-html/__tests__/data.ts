@@ -28,9 +28,9 @@ export const TEST_1_CLASS = ["test-container", "test-footer", "a-link"];
 export const TEST_1_ID = ["a-link", "blo"];
 
 export const TEST_1_ATTRIBUTES = {
-    NAMES: ["href", "id", "class", "type", "disabled"],
-    VALUES: ["#", "a-link", "a-link", "text", ...TEST_1_CLASS, ...TEST_1_ID]
-}
+  NAMES: ["href", "id", "class", "type", "disabled"],
+  VALUES: ["#", "a-link", "a-link", "text", ...TEST_1_CLASS, ...TEST_1_ID],
+};
 
 export const TEST_2_CONTENT = `
 <template>

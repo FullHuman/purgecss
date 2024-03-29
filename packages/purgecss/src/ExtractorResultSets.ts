@@ -70,7 +70,7 @@ class ExtractorResultSets {
   hasAttrSubstr(substr: string): boolean {
     const wordSubstr = substr.trim().split(" ");
     return wordSubstr.every((word) =>
-      this.someAttrValue((value) => value.includes(word))
+      this.someAttrValue((value) => value.includes(word)),
     );
   }
 

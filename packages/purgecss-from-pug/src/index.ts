@@ -25,7 +25,7 @@ const purgeFromPug = (content: string): string[] => {
             ...(token.mustEscape
               ? token.val.replace(/"/g, "")
               : token.val
-            ).split(" ")
+            ).split(" "),
           );
         }
         break;

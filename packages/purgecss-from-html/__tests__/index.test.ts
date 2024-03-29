@@ -1,6 +1,12 @@
 import purgehtml from "./../src/index";
 
-import { TEST_1_CONTENT, TEST_1_TAG, TEST_1_CLASS, TEST_1_ID, TEST_1_ATTRIBUTES } from "./data";
+import {
+  TEST_1_CONTENT,
+  TEST_1_TAG,
+  TEST_1_CLASS,
+  TEST_1_ID,
+  TEST_1_ATTRIBUTES,
+} from "./data";
 import { TEST_2_CONTENT, TEST_2_TAG, TEST_2_CLASS, TEST_2_ID } from "./data";
 
 describe("purgehtml", () => {
@@ -67,7 +73,7 @@ describe("purgehtml", () => {
             ...resultTest2.classes,
             ...resultTest2.ids,
             ...resultTest2.tags,
-          ].includes(item)
+          ].includes(item),
         ).toBe(true);
       }
     });

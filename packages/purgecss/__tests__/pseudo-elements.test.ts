@@ -14,7 +14,7 @@ describe("pseudo elements", () => {
     expect(purgedCSS.includes("::-webkit-file-upload-button")).toBe(true);
     expect(purgedCSS.includes("::grammar-error")).toBe(true);
     expect(purgedCSS.includes("::-webkit-datetime-edit-fields-wrapper")).toBe(
-      true
+      true,
     );
     expect(purgedCSS.includes("::-moz-focus-inner")).toBe(true);
     expect(purgedCSS.includes("::file-selector-button")).toBe(true);

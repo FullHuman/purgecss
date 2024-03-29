@@ -17,7 +17,7 @@ describe("Raw CSS optional filename", () => {
         expect(
           results.some((result) => {
             return result.file && result.file.endsWith("test.css");
-          })
+          }),
         ).toBe(true);
         results.forEach((result) => expect(typeof result.css).toBe("string"));
       });

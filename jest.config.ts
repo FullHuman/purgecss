@@ -21,7 +21,7 @@ const config: InitialOptionsTsJest = {
 
 export function createConfig(
   rootDir: string,
-  displayName: string
+  displayName: string,
 ): InitialOptionsTsJest {
   return {
     ...config,

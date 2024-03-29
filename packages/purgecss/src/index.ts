@@ -59,7 +59,7 @@ const asyncFs = {
  * @public
  */
 export function standardizeSafelist(
-  userDefinedSafelist: UserDefinedSafelist = []
+  userDefinedSafelist: UserDefinedSafelist = [],
 ): Required<ComplexSafelist> {
   if (Array.isArray(userDefinedSafelist)) {
     return {
@@ -85,7 +85,7 @@ export function standardizeSafelist(
  * @public
  */
 export async function setOptions(
-  configFile: string = CONFIG_FILENAME
+  configFile: string = CONFIG_FILENAME,
 ): Promise<Options> {
   let options: Options;
   try {
@@ -113,7 +113,7 @@ export async function setOptions(
  */
 async function extractSelectors(
   content: string,
-  extractor: ExtractorFunction
+  extractor: ExtractorFunction,
 ): Promise<ExtractorResultSets> {
   return new ExtractorResultSets(await extractor(content));
 }
@@ -209,7 +209,7 @@ function stripQuotes(str: string): string {
  */
 function isAttributeFound(
   attributeNode: selectorParser.Attribute,
-  selectors: ExtractorResultSets
+  selectors: ExtractorResultSets,
 ): boolean {
   if (!selectors.hasAttrName(attributeNode.attribute)) {
     return false;
@@ -243,7 +243,7 @@ function isAttributeFound(
  */
 function isClassFound(
   classNode: selectorParser.ClassName,
-  selectors: ExtractorResultSets
+  selectors: ExtractorResultSets,
 ): boolean {
   return selectors.hasClass(classNode.value);
 }
@@ -256,7 +256,7 @@ function isClassFound(
  */
 function isIdentifierFound(
   identifierNode: selectorParser.Identifier,
-  selectors: ExtractorResultSets
+  selectors: ExtractorResultSets,
 ): boolean {
   return selectors.hasId(identifierNode.value);
 }
@@ -269,7 +269,7 @@ function isIdentifierFound(
  */
 function isTagFound(
   tagNode: selectorParser.Tag,
-  selectors: ExtractorResultSets
+  selectors: ExtractorResultSets,
 ): boolean {
   return selectors.hasTag(tagNode.value);
 }
@@ -355,11 +355,11 @@ class PurgeCSS {
         this.variablesStructure.addVariable(declaration);
         this.variablesStructure.addVariableUsage(
           declaration,
-          usedVariablesMatchesInDeclaration
+          usedVariablesMatchesInDeclaration,
         );
       } else {
         this.variablesStructure.addVariableUsageInProperties(
-          usedVariablesMatchesInDeclaration
+          usedVariablesMatchesInDeclaration,
         );
       }
     }
@@ -393,10 +393,10 @@ class PurgeCSS {
    */
   private getFileExtractor(
     filename: string,
-    extractors: Extractors[]
+    extractors: Extractors[],
   ): ExtractorFunction {
     const extractorObj = extractors.find((extractor) =>
-      extractor.extensions.find((ext) => filename.endsWith(ext))
+      extractor.extensions.find((ext) => filename.endsWith(ext)),
     );
 
     return typeof extractorObj === "undefined"
@@ -412,7 +412,7 @@ class PurgeCSS {
    */
   public async extractSelectorsFromFiles(
     files: string[],
-    extractors: Extractors[]
+    extractors: Extractors[],
   ): Promise<ExtractorResultSets> {
     const selectors = new ExtractorResultSets([]);
     const filesNames: string[] = [];
@@ -421,14 +421,18 @@ class PurgeCSS {
         await asyncFs.access(globFile, fs.constants.F_OK);
         filesNames.push(globFile);
       } catch (err) {
-        filesNames.push(...glob.sync(globFile, {
-          nodir: true,
-          ignore: this.options.skippedContentGlobs.map(glob => glob.replace(/^\.\//, "")),
-        }));
+        filesNames.push(
+          ...glob.sync(globFile, {
+            nodir: true,
+            ignore: this.options.skippedContentGlobs.map((glob) =>
+              glob.replace(/^\.\//, ""),
+            ),
+          }),
+        );
       }
     }
     if (files.length > 0 && filesNames.length === 0) {
-      console.warn("No files found from the passed PurgeCSS option 'content'.")
+      console.warn("No files found from the passed PurgeCSS option 'content'.");
     }
     for (const file of filesNames) {
       const content = await asyncFs.readFile(file, "utf-8");
@@ -447,7 +451,7 @@ class PurgeCSS {
    */
   public async extractSelectorsFromString(
     content: RawContent[],
-    extractors: Extractors[]
+    extractors: Extractors[],
   ): Promise<ExtractorResultSets> {
     const selectors = new ExtractorResultSets([]);
     for (const { raw, extension } of content) {
@@ -489,7 +493,7 @@ class PurgeCSS {
    */
   private evaluateRule(
     node: postcss.Node,
-    selectors: ExtractorResultSets
+    selectors: ExtractorResultSets,
   ): void {
     // exit if is in ignoring state activated by an ignore comment
     if (this.ignore) {
@@ -558,10 +562,7 @@ class PurgeCSS {
           return;
         }
 
-        if (
-          selector.toString() &&
-          /(:where)|(:is)/.test(selector.toString())
-        ) {
+        if (selector.toString() && /(:where)|(:is)/.test(selector.toString())) {
           selector.walk((node) => {
             if (node.type !== "pseudo") return;
             if (node.value !== ":where" && node.value !== ":is") return;
@@ -608,7 +609,7 @@ class PurgeCSS {
    */
   public async getPurgedCSS(
     cssOptions: Array<string | RawCSS>,
-    selectors: ExtractorResultSets
+    selectors: ExtractorResultSets,
   ): Promise<ResultPurge[]> {
     const sources = [];
 
@@ -620,7 +621,7 @@ class PurgeCSS {
           ...glob.sync(option, {
             nodir: true,
             ignore: this.options.skippedContentGlobs,
-          })
+          }),
         );
       } else {
         processedOptions.push(option);
@@ -726,7 +727,7 @@ class PurgeCSS {
    */
   private isSelectorSafelistedDeep(selector: string): boolean {
     return this.options.safelist.deep.some((safelistItem) =>
-      safelistItem.test(selector)
+      safelistItem.test(selector),
     );
   }
 
@@ -737,7 +738,7 @@ class PurgeCSS {
    */
   private isSelectorSafelistedGreedy(selector: string): boolean {
     return this.options.safelist.greedy.some((safelistItem) =>
-      safelistItem.test(selector)
+      safelistItem.test(selector),
     );
   }
 
@@ -766,7 +767,7 @@ class PurgeCSS {
    * ```
    */
   public async purge(
-    userOptions: UserDefinedOptions | string | undefined
+    userOptions: UserDefinedOptions | string | undefined,
   ): Promise<ResultPurge[]> {
     this.options =
       typeof userOptions !== "object"
@@ -783,24 +784,24 @@ class PurgeCSS {
     }
 
     const fileFormatContents = content.filter(
-      (o) => typeof o === "string"
+      (o) => typeof o === "string",
     ) as string[];
     const rawFormatContents = content.filter(
-      (o) => typeof o === "object"
+      (o) => typeof o === "object",
     ) as RawContent[];
 
     const cssFileSelectors = await this.extractSelectorsFromFiles(
       fileFormatContents,
-      extractors
+      extractors,
     );
     const cssRawSelectors = await this.extractSelectorsFromString(
       rawFormatContents,
-      extractors
+      extractors,
     );
 
     return this.getPurgedCSS(
       css,
-      mergeExtractorSelectors(cssFileSelectors, cssRawSelectors)
+      mergeExtractorSelectors(cssFileSelectors, cssRawSelectors),
     );
   }
 
@@ -855,7 +856,7 @@ class PurgeCSS {
    */
   private shouldKeepSelector(
     selector: selectorParser.Selector,
-    selectorsFromExtractor: ExtractorResultSets
+    selectorsFromExtractor: ExtractorResultSets,
   ): boolean {
     // selectors in pseudo classes are ignored except :where() and :is(). For those pseudo-classes, we are treating the selectors inside the same way as they would be outside.
     if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
@@ -869,7 +870,7 @@ class PurgeCSS {
       if (
         selectorParts.some(
           (selectorPart) =>
-            selectorPart && this.isSelectorSafelistedGreedy(selectorPart)
+            selectorPart && this.isSelectorSafelistedGreedy(selectorPart),
         )
       ) {
         return true;
@@ -948,7 +949,7 @@ class PurgeCSS {
    */
   public walkThroughCSS(
     root: PostCSSRoot,
-    selectors: ExtractorResultSets
+    selectors: ExtractorResultSets,
   ): void {
     root.walk((node) => {
       if (node.type === "rule") {

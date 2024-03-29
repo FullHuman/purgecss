@@ -16,7 +16,7 @@ export * from "./types";
 function pluginPurgeCSS(options: UserDefinedOptions): Plugin {
   const filter = createFilter(
     options.include || ["**/*.css"],
-    options.exclude || "node_modules/**"
+    options.exclude || "node_modules/**",
   );
 
   const styles: string[] = [];
