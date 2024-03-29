@@ -1,6 +1,6 @@
 {
   "name": "gulp-purgecss",
-  "version": "6.0.0-alpha.0",
+  "version": "6.0.0",
   "description": "Gulp plugin for purgecss",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -38,7 +38,7 @@
   "dependencies": {
     "glob": "^10.3.10",
     "plugin-error": "^2.0.0",
-    "purgecss": "^6.0.0-alpha.0",
+    "purgecss": "^6.0.0",
     "through2": "^4.0.1",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
