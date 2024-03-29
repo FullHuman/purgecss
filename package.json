@@ -1,18 +1,7 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": [
-    "packages/gulp-purgecss",
-    "packages/postcss-purgecss",
-    "packages/purgecss",
-    "packages/purgecss-from-html",
-    "packages/purgecss-from-jsx",
-    "packages/purgecss-from-pug",
-    "packages/purgecss-from-tsx",
-    "packages/purgecss-webpack-plugin",
-    "packages/purgecss-with-wordpress",
-    "packages/vue-cli-plugin-purgecss"
-  ],
+  "workspaces": ["packages/*"],
   "devDependencies": {
     "@microsoft/api-documenter": "^7.15.3",
     "@microsoft/api-extractor": "^7.31.0",
@@ -28,7 +17,7 @@
     "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^8.0.1",
     "jest": "^27.4.4",
-    "lerna": "^6.1.0",
+    "lerna": "^8.1.2",
     "lint-staged": "^15.2.1",
     "prettier": "^3.0.3",
     "rollup": "^2.61.0",
@@ -41,14 +30,12 @@
     "vuepress": "^2.0.0-beta.67"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
     "build": "lerna run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
     "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
     "lint": "eslint . --ext .ts --ignore-path .gitignore --fix",
-    "postinstall": "npm run bootstrap",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "lerna run test",
     "prepare": "husky install"
