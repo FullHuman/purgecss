@@ -1,3 +1,17 @@
+# [](https://github.com/FullHuman/purgecss/compare/v6.0.0...v) (2024-03-29)
+
+# [6.0.0](https://github.com/FullHuman/purgecss/compare/v5.0.0...v6.0.0) (2024-03-29)
+
+### Bug Fixes
+
+- collect of used variables for changed selector ([#1217](https://github.com/FullHuman/purgecss/issues/1217)) ([9fbb592](https://github.com/FullHuman/purgecss/commit/9fbb5920164d3ffd296c0eaab6a4d2b4477b418c))
+- **gulp-purgecss:** move vinyl-sourcemaps-apply to deps [#999](https://github.com/FullHuman/purgecss/issues/999) ([7858b7a](https://github.com/FullHuman/purgecss/commit/7858b7a910efda13162095d8f528fb9e668cc190))
+
+### Features
+
+- **purgecss:** add support for :where and :is [#978](https://github.com/FullHuman/purgecss/issues/978) ([bb5782b](https://github.com/FullHuman/purgecss/commit/bb5782bff296805f95c6bae0ce434be314bd1580))
+- warn if no files are found [#642](https://github.com/FullHuman/purgecss/issues/642) ([6188505](https://github.com/FullHuman/purgecss/commit/61885055f46bc36c839f77c07e7d680378083567))
+
 # [](https://github.com/FullHuman/purgecss/compare/v5.0.0...v) (2022-09-13)
 
 # [5.0.0](https://github.com/FullHuman/purgecss/compare/v4.1.3...v5.0.0) (2022-09-13)
