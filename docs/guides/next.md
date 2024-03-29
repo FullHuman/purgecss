@@ -71,7 +71,7 @@ module.exports = {
 
 ## Next.js plugin (Next.js < 9.3)
 
-### Intallation
+### Installation
 
 `next-purgecss` requires one of the following **css next plugins** :
 
