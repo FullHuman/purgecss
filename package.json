@@ -10,7 +10,7 @@
     "@types/jest": "^27.0.3",
     "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+    "@typescript-eslint/parser": "^7.11.0",
     "@vuepress/plugin-search": "^2.0.0-beta.67",
     "conventional-changelog-cli": "^4.1.0",
     "eslint": "^8.4.1",
