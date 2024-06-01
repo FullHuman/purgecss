@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/webpack-sources": "^3.2.0",
-    "css-loader": "^6.6.0",
+    "css-loader": "^7.1.2",
     "mini-css-extract-plugin": "^2.5.0"
   },
   "peerDependencies": {
