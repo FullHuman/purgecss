@@ -37,7 +37,7 @@
     "docs:build": "vuepress build docs",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
     "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
-    "lint": "eslint . --fix",
+    "lint": "eslint . --fix --ignore-pattern **/lib/** --ignore-pattern **/bin/**",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "lerna run test",
     "prepare": "husky install"
