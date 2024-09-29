@@ -128,3 +128,4 @@ const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = function (
 purgeCSSPlugin.postcss = true;
 
 export default purgeCSSPlugin;
+export { purgeCSSPlugin };
