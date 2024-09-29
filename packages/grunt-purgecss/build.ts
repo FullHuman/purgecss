@@ -1,3 +1,4 @@
+import typescript from "@rollup/plugin-typescript";
 import { buildRollup, createRollupConfig } from "../../scripts/build";
 import { promises as asyncFs } from "fs";
 import * as path from "path";
@@ -17,6 +18,11 @@ import { RollupOptions } from "rollup";
         format: "cjs",
       },
     ],
+    plugins: [
+      typescript({
+        outDir: "./tasks",
+      })
+    ]
   };
   await buildRollup(rollupConfig);
 })();

@@ -420,6 +420,7 @@ class PurgeCSS {
       try {
         await asyncFs.access(globFile, fs.constants.F_OK);
         filesNames.push(globFile);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         filesNames.push(
           ...glob.sync(globFile, {

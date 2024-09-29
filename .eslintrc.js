@@ -1,4 +1,5 @@
 module.exports = {
+  files: ["**/*.ts"],
   env: {
     jest: true,
     node: true,
@@ -13,5 +14,5 @@ module.exports = {
   ],
   rules: {
     "tsdoc/syntax": "warn",
-  }
+  },
 };

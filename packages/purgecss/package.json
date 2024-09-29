@@ -40,13 +40,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "commander": "^12.0.0",
-    "glob": "^10.3.10",
-    "postcss": "^8.4.4",
-    "postcss-selector-parser": "^6.0.7"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.0.0"
+    "commander": "^12.1.0",
+    "glob": "^11.0.0",
+    "postcss": "^8.4.47",
+    "postcss-selector-parser": "^6.1.2"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"

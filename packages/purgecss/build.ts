@@ -6,7 +6,7 @@ import {
 import { promises as asyncFs } from "fs";
 import * as path from "path";
 import typescript from "@rollup/plugin-typescript";
-import { terser } from "rollup-plugin-terser";
+// import { terser } from "rollup-plugin-terser";
 import json from "@rollup/plugin-json";
 import { RollupOptions } from "rollup";
 
@@ -36,8 +36,9 @@ const cliBundle: RollupOptions = {
       declarationDir: undefined,
       composite: false,
       sourceMap: false,
+      outDir: "./bin",
     }),
-    terser(),
+    // terser(),
   ],
 };
 

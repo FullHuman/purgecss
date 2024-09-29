@@ -6,7 +6,6 @@ import {
   IExtractorConfigPrepareOptions,
 } from "@microsoft/api-extractor";
 import typescript from "@rollup/plugin-typescript";
-import { terser } from "rollup-plugin-terser";
 import * as path from "path";
 
 const rollupBaseConfig: RollupOptions = {
@@ -15,9 +14,11 @@ const rollupBaseConfig: RollupOptions = {
     typescript({
       tsconfig: "./tsconfig.json",
       sourceMap: false,
-    }),
-    terser({
-      keep_classnames: true,
+      compilerOptions: {
+        declaration: true,
+        declarationDir: "./lib/.temp",
+        outDir: "./lib",
+      },
     }),
   ],
 };

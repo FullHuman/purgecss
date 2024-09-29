@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+ 
 const message = fs.readFileSync(process.env.HUSKY_GIT_PARAMS!, "utf-8").trim();
 
 const commitRE =

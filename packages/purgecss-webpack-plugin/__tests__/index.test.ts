@@ -24,6 +24,7 @@ async function readFileOrEmpty(path: string): Promise<string> {
   try {
     return await fs.promises.readFile(path, "utf-8");
   } catch (e) {
+    console.error(e);
     return "";
   }
 }
@@ -47,8 +48,9 @@ describe("Webpack integration", () => {
       const expectedDirectory = path.resolve(testDirectory, "expected");
 
       process.chdir(testDirectory);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const webpackConfig = require(`${testDirectory}/webpack.config.js`);
+      
+      const webpackConfig = await import(`${testDirectory}/webpack.config.js`);
+      // const webpackConfig = require(`${testDirectory}/webpack.config.js`);
 
       await runWebpack({
         ...webpackConfig,

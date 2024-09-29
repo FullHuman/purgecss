@@ -186,4 +186,4 @@ declare module "acorn-jsx" {
     options?: PluginOptions,
   ): (BaseParser: typeof Parser) => typeof Parser;
 }
-/* eslint-enable no-use-before-define */
+ 

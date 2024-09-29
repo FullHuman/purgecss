@@ -30,7 +30,7 @@
     "purgecss": "^6.0.0"
   },
   "devDependencies": {
-    "postcss": "^8.4.4"
+    "postcss": "^8.4.47"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
