@@ -186,4 +186,3 @@ declare module "acorn-jsx" {
     options?: PluginOptions,
   ): (BaseParser: typeof Parser) => typeof Parser;
 }
- 

@@ -1,6 +1,5 @@
 import * as fs from "fs";
 
- 
 const message = fs.readFileSync(process.env.HUSKY_GIT_PARAMS!, "utf-8").trim();
 
 const commitRE =

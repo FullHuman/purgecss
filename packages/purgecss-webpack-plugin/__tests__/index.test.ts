@@ -48,7 +48,7 @@ describe("Webpack integration", () => {
       const expectedDirectory = path.resolve(testDirectory, "expected");
 
       process.chdir(testDirectory);
-      
+
       const webpackConfig = await import(`${testDirectory}/webpack.config.js`);
 
       await runWebpack({

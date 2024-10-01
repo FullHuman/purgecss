@@ -21,8 +21,8 @@ import { RollupOptions } from "rollup";
     plugins: [
       typescript({
         outDir: "./tasks",
-      })
-    ]
+      }),
+    ],
   };
   await buildRollup(rollupConfig);
 })();
