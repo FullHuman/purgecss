@@ -1,6 +1,6 @@
-import type { InitialOptionsTsJest } from "ts-jest";
+import type { JestConfigWithTsJest } from "ts-jest";
 
-const config: InitialOptionsTsJest = {
+const config: JestConfigWithTsJest = {
   preset: "ts-jest",
   coverageDirectory: "coverage",
   coverageReporters: ["html", "lcov", "text"],
@@ -10,19 +10,15 @@ const config: InitialOptionsTsJest = {
     "^purgecss-from-html$": "<rootDir>/../purgecss-from-html/src",
   },
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
-  globals: {
-    "ts-jest": {
-      tsconfig: {
-        types: ["jest"],
-      },
-    },
+  transform: {
+    "^.+.tsx?$": ["ts-jest",{}],
   },
 };
 
 export function createConfig(
   rootDir: string,
   displayName: string,
-): InitialOptionsTsJest {
+): JestConfigWithTsJest {
   return {
     ...config,
     rootDir,
