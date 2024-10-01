@@ -30,3 +30,18 @@ export const TEST_1_CLASS = [
 ];
 
 export const TEST_1_ID = ["a-link", "blo"];
+
+export const TEST_1_ATTRIBUTE_NAMES = ["class", "id", "type", "disabled"];
+
+export const TEST_1_ATTRIBUTE_VALUES = [
+  "test-container",
+  "test-footer",
+  "a-link",
+  "first-class",
+  "second-class",
+  "enabled",
+  "blo",
+  "text",
+  "true",
+  "false",
+];

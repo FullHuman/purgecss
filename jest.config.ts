@@ -11,7 +11,7 @@ const config: JestConfigWithTsJest = {
   },
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   transform: {
-    "^.+.tsx?$": ["ts-jest",{}],
+    "^.+.tsx?$": ["ts-jest", {}],
   },
 };
 

@@ -1,5 +1,14 @@
 import lex from "pug-lexer";
+import type { ExtractorResultDetailed } from "purgecss";
 
+const getAttributeTokenValues = (token: lex.AttributeToken): string[] => {
+  if (typeof token.val === "string") {
+    return (token.mustEscape ? token.val.replace(/"/g, "") : token.val).split(
+      " ",
+    );
+  }
+  return [];
+};
 /**
  * Get the potential selectors from Pug code
  *
@@ -8,32 +17,39 @@ import lex from "pug-lexer";
  *
  * @public
  */
-const purgeFromPug = (content: string): string[] => {
+export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
   const tokens = lex(content);
-  const selectors: string[] = [];
+  const extractorResult: ExtractorResultDetailed = {
+    attributes: {
+      // always add to attributes, to handle things like [class*=foo]
+      names: ["class", "id"],
+      values: ["true", "false"],
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: [],
+  };
   for (const token of tokens) {
-    switch (token.type) {
-      case "tag":
-      case "id":
-      case "class":
-        selectors.push(...token.val.split(" "));
-        break;
-      case "attribute":
-        if (token.name === "class" || token.name === "id") {
-          if (typeof token.val !== "string") continue;
-          selectors.push(
-            ...(token.mustEscape
-              ? token.val.replace(/"/g, "")
-              : token.val
-            ).split(" "),
-          );
-        }
-        break;
-      default:
-        break;
+    if (token.type === "tag") {
+      extractorResult.tags.push(token.val);
+    } else if (token.type === "class") {
+      extractorResult.classes.push(...token.val.split(" "));
+      extractorResult.attributes.values.push(...token.val.split(" "));
+    } else if (token.type === "id") {
+      extractorResult.ids.push(token.val);
+      extractorResult.attributes.values.push(token.val);
+    } else if (token.type === "attribute") {
+      const tokenValues = getAttributeTokenValues(token);
+      if (token.name === "class") {
+        extractorResult.classes.push(...tokenValues);
+      } else if (token.name === "id") {
+        extractorResult.ids.push(...tokenValues);
+      } else {
+        extractorResult.attributes.names.push(token.name);
+      }
+      extractorResult.attributes.values.push(...tokenValues);
     }
   }
-  return selectors;
+  return extractorResult;
 };
-
-export default purgeFromPug;
