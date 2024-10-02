@@ -43,19 +43,19 @@ Using a specific extractor for an extension should provide you with the best acc
 You can use an extractor by settings the extractors option in the PurgeCSS config file.
 
 ```js
-import purgeJs from "purgecss-from-js";
-import purgeHtml from "purgecss-from-html";
+import { purgeCSSFromPug } from "purgecss-from-pug";
+import { purgeCSSFromHtml } from "purgecss-from-html";
 
 const options = {
   content: [], // files to extract the selectors from
   css: [], // css
   extractors: [
     {
-      extractor: purgeJs,
-      extensions: ["js"],
+      extractor: purgeCSSFromPug,
+      extensions: ["pug"],
     },
     {
-      extractor: purgeHtml,
+      extractor: purgeCSSFromHtml,
       extensions: ["html"],
     },
   ],
@@ -66,6 +66,21 @@ export default options;
 ## Creating an extractor
 
 An extractor is a simple function that takes the content of a file as a string and returns an array of selectors. By convention, the name of the npm package is `purgecss-from-[typefile]` \(e.g. purgecss-from-pug\). Using this convention will allow users to look at the list of extractor on npm by searching `purgecss-from`.
+
+The function can returns either an array of selectors (tags, classes, ids) or the object below for better accuracy:
+
+```ts
+interface ExtractorResultDetailed {
+  attributes: {
+    names: string[];
+    values: string[];
+  };
+  classes: string[];
+  ids: string[];
+  tags: string[];
+  undetermined: string[];
+}
+```
 
 ```js
 const purgeFromJs = (content) => {

@@ -1,3 +1,13 @@
+/**
+ * Pug extractor for PurgeCSS
+ *
+ * A PurgeCSS extractor for PUG files that automatically generates a list of
+ * used CSS selectors. This extractor can be used with PurgeCSS to eliminate 
+ * unused CSS and reduce the size of your production builds.
+ *
+ * @packageDocumentation
+ */
+
 import lex from "pug-lexer";
 import type { ExtractorResultDetailed } from "purgecss";
 
