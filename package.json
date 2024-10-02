@@ -23,7 +23,6 @@
     "husky": "^9.1.6",
     "jest": "^29.7.0",
     "lerna": "^8.1.8",
-    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "rollup": "^4.22.5",
     "ts-jest": "^29.2.5",
@@ -40,10 +39,6 @@
     "lint": "eslint . --fix --ignore-pattern **/lib/** --ignore-pattern **/bin/**",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
     "test": "lerna run test",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "*.ts": "eslint --cache --fix",
-    "*.{js,md}": "prettier --write"
+    "prepare": "husky || true"
   }
 }
