@@ -26,3 +26,11 @@
 .\[\&\:is\(\.a\)\]\:text-black:is(.a) {
   color: black;
 }
+
+:is(.b) {
+  color: black;
+}
+
+:is(.unused) {
+  color: chartreuse;
+}

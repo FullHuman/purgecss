@@ -303,6 +303,33 @@ function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
   );
 }
 
+/**
+ * Returns true if the selector is a pseudo class at the root level
+ * Pseudo classes checked: :where, :is, :has, :not
+ * @param selector - selector
+ */
+function isPseudoClassAtRootLevel(selector: selectorParser.Node): boolean {
+  let result = false;
+  if (
+    selector.type === "selector" &&
+    selector.parent?.type === "root" &&
+    selector.nodes.length === 1
+  ) {
+    selector.walk((node) => {
+      if (
+        node.type === "pseudo" &&
+        (node.value === ":where" ||
+          node.value === ":is" ||
+          node.value === ":has" ||
+          node.value === ":not")
+      ) {
+        result = true;
+      }
+    });
+  }
+  return result;
+}
+
 function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
   return node?.type === "atrule";
 }
@@ -531,7 +558,6 @@ class PurgeCSS {
     }
 
     const selectorsRemovedFromRule: string[] = [];
-
     // selector transformer, walk over the list of the parsed selectors twice.
     // First pass will remove the unused selectors. It goes through
     // pseudo-classes like :where() and :is() and remove the unused
@@ -543,7 +569,6 @@ class PurgeCSS {
         if (selector.type !== "selector") {
           return;
         }
-
         const keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
@@ -861,6 +886,10 @@ class PurgeCSS {
   ): boolean {
     // selectors in pseudo classes are ignored except :where() and :is(). For those pseudo-classes, we are treating the selectors inside the same way as they would be outside.
     if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
+      return true;
+    }
+
+    if (isPseudoClassAtRootLevel(selector)) {
       return true;
     }
 

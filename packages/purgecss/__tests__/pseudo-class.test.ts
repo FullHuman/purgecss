@@ -1,5 +1,5 @@
 import { PurgeCSS } from "./../src/index";
-import { ROOT_TEST_EXAMPLES } from "./utils";
+import { findInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe(":not pseudo class", () => {
   let purgedCSS: string;
@@ -116,13 +116,18 @@ describe(":where pseudo class", () => {
 
   it("removes unused selectors", () => {
     expect(purgedCSS.includes(".unused")).toBe(false);
-    expect(purgedCSS.includes(".root :where(.a) .c {")).toBe(true);
-    expect(purgedCSS.includes(".root:where(.a) .c {")).toBe(true);
-    expect(
-      purgedCSS.includes(
+  });
+
+  it("keeps used selectors", () => {
+    findInCSS(
+      expect,
+      [
+        ".root :where(.a) .c {",
+        ".root:where(.a) .c {",
         ".\\[\\&\\:where\\(\\.a\\)\\]\\:text-black:where(.a) {",
-      ),
-    ).toBe(true);
+      ],
+      purgedCSS,
+    );
   });
 });
 
@@ -141,10 +146,19 @@ describe(":is pseudo class", () => {
 
   it("removes unused selectors", () => {
     expect(purgedCSS.includes(".unused")).toBe(false);
-    expect(purgedCSS.includes(".root :is(.a) .c {")).toBe(true);
-    expect(purgedCSS.includes(".root:is(.a) .c {")).toBe(true);
-    expect(
-      purgedCSS.includes(".\\[\\&\\:is\\(\\.a\\)\\]\\:text-black:is(.a) {"),
-    ).toBe(true);
+    expect(purgedCSS.includes(":is(.unused)")).toBe(false);
+  });
+
+  it("keeps used selectors", () => {
+    findInCSS(
+      expect,
+      [
+        ".root :is(.a) .c {",
+        ".root:is(.a) .c {",
+        ".\\[\\&\\:is\\(\\.a\\)\\]\\:text-black:is(.a) {",
+        ":is(.b)",
+      ],
+      purgedCSS,
+    );
   });
 });
