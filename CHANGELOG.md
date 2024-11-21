@@ -1,3 +1,18 @@
+# [7.0.0](https://github.com/FullHuman/purgecss/compare/v6.0.0...v7.0.1)
+
+### Bug Fixes
+
+* fix: fix issue where pseudo classes like :where, :not, :is were always removed at root level ([89024ce](https://github.com/FullHuman/purgecss/commit/89024ce)), closes [#1282](https://github.com/FullHuman/purgecss/issues/1282) [#978](https://github.com/FullHuman/purgecss/issues/978)
+* build: add named export for postcss plugin ([87d15b7](https://github.com/FullHuman/purgecss/commit/87d15b7)), closes [#1263](https://github.com/FullHuman/purgecss/issues/1263)
+
+### Features
+
+* feat(purgecss-from-pug): returns ExtractorResultDetailed instead of selectors ([fb51dc6](https://github.com/FullHuman/purgecss/commit/fb51dc6))
+
+### BREAKING CHANGES
+
+drop support for node 18
+
 # [](https://github.com/FullHuman/purgecss/compare/v6.0.0...v) (2024-03-29)
 
 # [6.0.0](https://github.com/FullHuman/purgecss/compare/v5.0.0...v6.0.0) (2024-03-29)
