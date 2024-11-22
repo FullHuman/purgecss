@@ -11,7 +11,11 @@
 
 ### BREAKING CHANGES
 
-drop support for node 18
+- PostCSS plugin should now be imported via purgeCSSPlugin
+```ts
+import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+```
+- drop support for node 18
 
 # [](https://github.com/FullHuman/purgecss/compare/v6.0.0...v) (2024-03-29)
 
