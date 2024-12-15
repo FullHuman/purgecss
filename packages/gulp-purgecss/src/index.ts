@@ -1,4 +1,4 @@
-import * as glob from "glob";
+import glob from "fast-glob";
 import PluginError from "plugin-error";
 import { PurgeCSS } from "purgecss";
 import * as internal from "stream";
