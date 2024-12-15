@@ -7,7 +7,7 @@
  */
 
 import * as fs from "fs";
-import * as glob from "glob";
+import * as glob from "fast-glob";
 import * as path from "path";
 import * as postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
@@ -451,7 +451,7 @@ class PurgeCSS {
       } catch (err) {
         filesNames.push(
           ...glob.sync(globFile, {
-            nodir: true,
+            onlyFiles: true,
             ignore: this.options.skippedContentGlobs.map((glob) =>
               glob.replace(/^\.\//, ""),
             ),
@@ -645,7 +645,7 @@ class PurgeCSS {
       if (typeof option === "string") {
         processedOptions.push(
           ...glob.sync(option, {
-            nodir: true,
+            onlyFiles: true,
             ignore: this.options.skippedContentGlobs,
           }),
         );

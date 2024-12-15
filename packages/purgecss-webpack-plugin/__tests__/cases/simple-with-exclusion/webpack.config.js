@@ -1,5 +1,5 @@
 const path = require("path");
-const glob = require("glob");
+const glob = require("fast-glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { PurgeCSSPlugin } = require("../../../src/");
 
