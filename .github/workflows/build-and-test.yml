@@ -24,7 +24,7 @@ jobs:
         npm run lint
         npm run test -- -- --coverage
     - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v2.3.4
+      uses: coverallsapp/github-action@v2.3.6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         base-path: ./packages/purgecss
