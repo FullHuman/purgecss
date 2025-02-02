@@ -1,5 +1,5 @@
 const path = require("path");
-const glob = require("glob");
+const glob = require("fast-glob");
 
 const customExtractor = (content) => {
   const res = content.match(/[A-z0-9-:/]+/g) || [];
