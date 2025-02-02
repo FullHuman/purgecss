@@ -1,8 +1,14 @@
 import { defineUserConfig } from "vuepress";
 import localTheme from "./theme/index";
 import { searchPlugin } from "@vuepress/plugin-search";
+import { viteBundler } from "@vuepress/bundler-vite";
+import { markdownTabPlugin } from "@vuepress/plugin-markdown-tab";
 
 export default defineUserConfig({
+  bundler: viteBundler({
+    viteOptions: {},
+    vuePluginOptions: {},
+  }),
   lang: "en-US",
   title: "PurgeCSS",
   description: "PurgeCSS is a tool to remove unused CSS from your project",
@@ -203,5 +209,13 @@ export default defineUserConfig({
       ],
     },
   }),
-  plugins: [searchPlugin()],
+  plugins: [
+    searchPlugin(),
+    markdownTabPlugin({
+      // Enable code tabs
+      codeTabs: true,
+      // Enable tabs
+      tabs: true,
+    }),
+  ],
 });

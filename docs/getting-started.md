@@ -28,23 +28,21 @@ Most bundlers and frameworks to build websites are using PostCSS. The easiest wa
 
 Install the PostCSS plugin:
 
-:::: code-group
-::: code-group-item NPM
+:::: code-tabs
+@tab npm
 ```sh
 npm i -D @fullhuman/postcss-purgecss
 ```
-:::
-::: code-group-item YARN
+@tab yarn
 ```sh
 yarn add @fullhuman/postcss-purgecss --dev
 ```
-:::
 ::::
 
 and add the PurgeCSS plugin to the PostCSS configuration:
 
 ```js{1,5-7}
-const purgecss = require('@fullhuman/postcss-purgecss')
+import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
 
 module.exports = {
   plugins: [

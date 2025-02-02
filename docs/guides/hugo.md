@@ -93,7 +93,9 @@ If it's not already there, add `node_modules/` to your `.gitignore` file.
 Create a `postcss.config.js` file at the project root with these contents:
 
 ```js
-const purgecss = require("@fullhuman/postcss-purgecss")({
+import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+
+const purgecss = purgeCSSPlugin({
   content: ["./hugo_stats.json"],
   defaultExtractor: (content) => {
     const els = JSON.parse(content).htmlElements;
@@ -102,7 +104,7 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
   safelist: [],
 });
 
-module.exports = {
+export default {
   plugins: [
     ...(process.env.HUGO_ENVIRONMENT === "production" ? [purgecss] : []),
   ],
