@@ -18,9 +18,9 @@ npm i -D @fullhuman/postcss-purgecss postcss
 ## Usage
 
 ```js
-const purgecss = require('@fullhuman/postcss-purgecss')
+const { purgeCSSPlugin } = require('@fullhuman/postcss-purgecss')
 postcss([
-  purgecss({
+  purgeCSSPlugin({
     content: ['./src/**/*.html']
   })
 ])
