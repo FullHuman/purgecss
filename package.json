@@ -32,7 +32,7 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
-    "vuepress": "2.0.0-rc.19"
+    "vuepress": "2.0.0-rc.23"
   },
   "scripts": {
     "build": "lerna run build",
