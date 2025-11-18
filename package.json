@@ -25,7 +25,7 @@
     "globals": "^15.9.0",
     "husky": "^9.1.6",
     "jest": "^29.7.0",
-    "lerna": "^8.1.8",
+    "lerna": "^9.0.1",
     "prettier": "^3.3.3",
     "rollup": "^4.22.5",
     "sass-embedded": "^1.81.0",
