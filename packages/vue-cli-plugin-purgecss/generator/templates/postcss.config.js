@@ -6,10 +6,15 @@ module.exports = {
       require("@fullhuman/postcss-purgecss")({
         content: [`./public/**/*.html`, `./src/**/*.vue`],
         defaultExtractor(content) {
-          const contentWithoutStyleBlocks = content.replace(
-            /<style[^]+?<\/style>/gi,
-            ""
-          );
+          let previous;
+          let contentWithoutStyleBlocks = content;
+          do {
+            previous = contentWithoutStyleBlocks;
+            contentWithoutStyleBlocks = contentWithoutStyleBlocks.replace(
+              /<style[^]+?<\/style>/gi,
+              ""
+            );
+          } while (contentWithoutStyleBlocks !== previous);
           return (
             contentWithoutStyleBlocks.match(
               /[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g
