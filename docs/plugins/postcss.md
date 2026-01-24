@@ -40,7 +40,7 @@ npm i -D @fullhuman/postcss-purgecss postcss
 In `postcss.config.js`:
 
 ```js
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
 module.exports = {
   plugins: [
@@ -54,7 +54,7 @@ module.exports = {
 Using PostCSS API:
 
 ```js
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
 postcss([
   purgeCSSPlugin({

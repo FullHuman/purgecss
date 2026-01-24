@@ -93,7 +93,7 @@ If it's not already there, add `node_modules/` to your `.gitignore` file.
 Create a `postcss.config.js` file at the project root with these contents:
 
 ```js
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
 const purgecss = purgeCSSPlugin({
   content: ["./hugo_stats.json"],
