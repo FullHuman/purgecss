@@ -1,0 +1,63 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run in dry-run mode (no actual publish)'
+        required: false
+        default: false
+        type: boolean
+      otp:
+        description: 'npm OTP code (if 2FA is enabled)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: |
+          npm i -g npm
+          npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Publish packages (dry-run)
+        if: ${{ inputs.dry-run == true || inputs.dry-run == 'true' }}
+        run: npx lerna publish from-package --no-private --yes --no-git-tag-version --no-push
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm_config_dry_run: true
+
+      - name: Publish packages
+        if: ${{ inputs.dry-run == false || inputs.dry-run == 'false' }}
+        run: |
+          if [ -n "${{ inputs.otp }}" ]; then
+            npx lerna publish from-package --no-private --yes --otp ${{ inputs.otp }}
+          else
+            npx lerna publish from-package --no-private --yes
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
