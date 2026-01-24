@@ -676,9 +676,12 @@ class PurgeCSS {
       const postCSSResult = root.toResult({
         map: this.options.sourceMap,
         to:
-          typeof this.options.sourceMap === "object"
+          typeof this.options.sourceMap === "object" &&
+          this.options.sourceMap.to
             ? this.options.sourceMap.to
-            : undefined,
+            : isFromFile
+              ? option
+              : undefined,
       });
       const result: ResultPurge = {
         css: postCSSResult.toString(),
