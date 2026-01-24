@@ -4,7 +4,7 @@
   "description": "Pug extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/purgecss-from-pug.js",
   "directories": {
     "lib": "lib",

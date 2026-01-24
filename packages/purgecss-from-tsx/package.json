@@ -4,7 +4,7 @@
   "description": "TSX extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "./lib/purgecss-from-tsx.js",
   "module": "./lib/purgecss-from-tsx.esm.js",
   "types": "./lib/purgecss-from-tsx.d.ts",

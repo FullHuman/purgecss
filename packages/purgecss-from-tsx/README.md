@@ -134,4 +134,4 @@ Extracted selectors: `["article", "card", "card-hover", "featured", "CardHeader"
 
 ## License
 
-ISC
+MIT License

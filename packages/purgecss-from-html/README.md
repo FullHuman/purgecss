@@ -91,4 +91,4 @@ This extractor uses [parse5](https://github.com/inikulin/parse5) to parse the HT
 
 ## License
 
-ISC
+MIT License
