@@ -55,6 +55,7 @@ Options:
   -s, --safelist <list...>             list of classes that should not be removed
   -b, --blocklist <list...>            list of selectors that should be removed
   -k, --skippedContentGlobs <list...>  list of glob patterns for folders/files that should not be scanned
+  -p, --preserve-paths                 preserve folder hierarchy in the output
   -h, --help                           display help for command
 ```
 
@@ -89,6 +90,24 @@ By default, the CLI outputs the result in the console. If you wish to return the
 ```sh
 purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build/css/
 ```
+
+### --preserve-paths
+
+By default, the CLI flattens the folder hierarchy and outputs all CSS files to the same directory. If you want to preserve the original folder structure in the output, use the `--preserve-paths` flag.
+
+```sh
+purgecss --css src/**/*.css --content src/index.html --output build/ --preserve-paths
+```
+
+For example, if your CSS files are located at:
+- `src/styles/main.css`
+- `src/components/button.css`
+
+Without `--preserve-paths`, both files would be written to `build/main.css` and `build/button.css`.
+
+With `--preserve-paths`, the files would be written to:
+- `build/src/styles/main.css`
+- `build/src/components/button.css`
 
 ### --safelist
 

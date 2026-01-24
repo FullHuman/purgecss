@@ -38,6 +38,7 @@ type CommandOptions = {
   safelist?: string[];
   blocklist?: string[];
   skippedContentGlobs: string[];
+  preservePaths?: boolean;
 };
 
 export function parseCommandOptions(program: Command): Command {
@@ -70,12 +71,15 @@ export function parseCommandOptions(program: Command): Command {
     .option(
       "-k, --skippedContentGlobs <list...>",
       "list of glob patterns for folders/files that should not be scanned",
-    );
+    )
+    .option("-p, --preserve-paths", "preserve folder hierarchy in the output");
 
   return program;
 }
 
-export async function getOptions(program: Command): Promise<Options> {
+export async function getOptions(
+  program: Command,
+): Promise<Options & { preservePaths?: boolean }> {
   const {
     config,
     css,
@@ -89,6 +93,7 @@ export async function getOptions(program: Command): Promise<Options> {
     safelist,
     blocklist,
     skippedContentGlobs,
+    preservePaths,
   } = program.opts<CommandOptions>();
   // config file is not specified or the content and css are not,
   // PurgeCSS will not run
@@ -134,12 +139,13 @@ export async function getOptions(program: Command): Promise<Options> {
   if (blocklist) options.blocklist = blocklist;
   if (skippedContentGlobs) options.skippedContentGlobs = skippedContentGlobs;
   if (output) options.output = output;
-  return options;
+  return { ...options, preservePaths };
 }
 
 export async function run(program: Command) {
   const options = await getOptions(program);
-  const purged = await new PurgeCSS().purge(options);
+  const { preservePaths, ...purgeOptions } = options;
+  const purged = await new PurgeCSS().purge(purgeOptions);
 
   // output results in specified directory
   if (options.output) {
@@ -149,8 +155,19 @@ export async function run(program: Command) {
     }
 
     for (const purgedResult of purged) {
-      const fileName = purgedResult?.file?.split("/").pop();
-      await writeCSSToFile(`${options.output}/${fileName}`, purgedResult.css);
+      let outputPath: string;
+      if (preservePaths && purgedResult?.file) {
+        // Preserve the folder hierarchy
+        outputPath = `${options.output}/${purgedResult.file}`;
+      } else {
+        // Default behavior: flatten to just the filename
+        const fileName = purgedResult?.file?.split("/").pop();
+        outputPath = `${options.output}/${fileName}`;
+      }
+      // Ensure the directory exists
+      const dir = outputPath.substring(0, outputPath.lastIndexOf("/"));
+      await fs.promises.mkdir(dir, { recursive: true });
+      await writeCSSToFile(outputPath, purgedResult.css);
     }
   } else {
     console.log(JSON.stringify(purged));
