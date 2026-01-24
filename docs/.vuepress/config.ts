@@ -4,14 +4,247 @@ import { searchPlugin } from "@vuepress/plugin-search";
 import { viteBundler } from "@vuepress/bundler-vite";
 import { markdownTabPlugin } from "@vuepress/plugin-markdown-tab";
 
+// Sidebar configuration for reuse across locales
+const getEnglishSidebar = () => [
+  {
+    text: "PurgeCSS",
+    children: [
+      {
+        text: "About PurgeCSS",
+        link: "/introduction",
+      },
+      {
+        text: "Getting Started",
+        link: "/getting-started",
+      },
+      {
+        text: "Configuration",
+        link: "/configuration",
+      },
+      {
+        text: "Command Line Interface",
+        link: "/CLI",
+      },
+      {
+        text: "Programmatic API",
+        link: "/api",
+      },
+      {
+        text: "Safelisting",
+        link: "/safelisting",
+      },
+      {
+        text: "Extractors",
+        link: "/extractors",
+      },
+    ],
+  },
+  {
+    text: "Plugins",
+    children: [
+      {
+        text: "PostCSS",
+        link: "/plugins/postcss",
+      },
+      {
+        text: "Webpack",
+        link: "/plugins/webpack",
+      },
+      {
+        text: "Gulp",
+        link: "/plugins/gulp",
+      },
+      {
+        text: "Grunt",
+        link: "/plugins/grunt",
+      },
+      {
+        text: "Gatsby",
+        link: "/plugins/gatsby",
+      },
+    ],
+  },
+  {
+    text: "Guides",
+    children: [
+      {
+        text: "Vue",
+        link: "/guides/vue",
+      },
+      {
+        text: "React",
+        link: "/guides/react",
+      },
+      {
+        text: "Next.js",
+        link: "/guides/next",
+      },
+      {
+        text: "Nuxt.js",
+        link: "/guides/nuxt",
+      },
+      {
+        text: "Razzle",
+        link: "/guides/razzle",
+      },
+      {
+        text: "WordPress",
+        link: "/guides/wordpress",
+      },
+      {
+        text: "Hugo",
+        link: "/guides/hugo",
+      },
+    ],
+  },
+  {
+    text: "Comparison",
+    link: "/comparison",
+  },
+  {
+    text: "Common Questions",
+    children: [
+      {
+        text: "How to use with CSS modules",
+        link: "/css_modules",
+      },
+      {
+        text: "How to use with Ant Design",
+        link: "/ant_design",
+      },
+    ],
+  },
+];
+
+const getFrenchSidebar = () => [
+  {
+    text: "PurgeCSS",
+    children: [
+      {
+        text: "À propos de PurgeCSS",
+        link: "/fr/introduction",
+      },
+      {
+        text: "Démarrage rapide",
+        link: "/fr/getting-started",
+      },
+      {
+        text: "Configuration",
+        link: "/fr/configuration",
+      },
+      {
+        text: "Interface en ligne de commande",
+        link: "/fr/CLI",
+      },
+      {
+        text: "API programmatique",
+        link: "/fr/api",
+      },
+      {
+        text: "Liste blanche",
+        link: "/fr/safelisting",
+      },
+      {
+        text: "Extracteurs",
+        link: "/fr/extractors",
+      },
+    ],
+  },
+  {
+    text: "Plugins",
+    children: [
+      {
+        text: "PostCSS",
+        link: "/fr/plugins/postcss",
+      },
+      {
+        text: "Webpack",
+        link: "/fr/plugins/webpack",
+      },
+      {
+        text: "Gulp",
+        link: "/fr/plugins/gulp",
+      },
+      {
+        text: "Grunt",
+        link: "/fr/plugins/grunt",
+      },
+      {
+        text: "Gatsby",
+        link: "/fr/plugins/gatsby",
+      },
+    ],
+  },
+  {
+    text: "Guides",
+    children: [
+      {
+        text: "Vue",
+        link: "/fr/guides/vue",
+      },
+      {
+        text: "React",
+        link: "/fr/guides/react",
+      },
+      {
+        text: "Next.js",
+        link: "/fr/guides/next",
+      },
+      {
+        text: "Nuxt.js",
+        link: "/fr/guides/nuxt",
+      },
+      {
+        text: "Razzle",
+        link: "/fr/guides/razzle",
+      },
+      {
+        text: "WordPress",
+        link: "/fr/guides/wordpress",
+      },
+      {
+        text: "Hugo",
+        link: "/fr/guides/hugo",
+      },
+    ],
+  },
+  {
+    text: "Comparaison",
+    link: "/fr/comparison",
+  },
+  {
+    text: "Questions fréquentes",
+    children: [
+      {
+        text: "Utilisation avec les modules CSS",
+        link: "/fr/css_modules",
+      },
+      {
+        text: "Utilisation avec Ant Design",
+        link: "/fr/ant_design",
+      },
+    ],
+  },
+];
+
 export default defineUserConfig({
   bundler: viteBundler({
     viteOptions: {},
     vuePluginOptions: {},
   }),
-  lang: "en-US",
-  title: "PurgeCSS",
-  description: "PurgeCSS is a tool to remove unused CSS from your project",
+  locales: {
+    "/": {
+      lang: "en-US",
+      title: "PurgeCSS",
+      description: "PurgeCSS is a tool to remove unused CSS from your project",
+    },
+    "/fr/": {
+      lang: "fr-FR",
+      title: "PurgeCSS",
+      description:
+        "PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet",
+    },
+  },
   head: [
     [
       "link",
@@ -90,123 +323,33 @@ export default defineUserConfig({
   theme: localTheme({
     logo: "https://i.imgur.com/UEiUiJ0.png",
     repo: "FullHuman/purgecss",
-    navbar: [
-      {
-        text: "API Reference",
-        link: "/api-reference/",
+    locales: {
+      "/": {
+        selectLanguageName: "English",
+        selectLanguageText: "Languages",
+        navbar: [
+          {
+            text: "API Reference",
+            link: "/api-reference/",
+          },
+        ],
+        sidebar: {
+          "/": getEnglishSidebar(),
+        },
       },
-    ],
-    sidebar: {
-      "/": [
-        {
-          text: "PurgeCSS",
-          children: [
-            {
-              text: "About PurgeCSS",
-              link: "/introduction",
-            },
-            {
-              text: "Getting Started",
-              link: "/getting-started",
-            },
-            {
-              text: "Configuration",
-              link: "/configuration",
-            },
-            {
-              text: "Command Line Interface",
-              link: "/CLI",
-            },
-            {
-              text: "Programmatic API",
-              link: "/api",
-            },
-            {
-              text: "Safelisting",
-              link: "/safelisting",
-            },
-            {
-              text: "Extractors",
-              link: "/extractors",
-            },
-          ],
+      "/fr/": {
+        selectLanguageName: "Français",
+        selectLanguageText: "Langues",
+        navbar: [
+          {
+            text: "Référence API",
+            link: "/api-reference/",
+          },
+        ],
+        sidebar: {
+          "/fr/": getFrenchSidebar(),
         },
-        {
-          text: "Plugins",
-          children: [
-            {
-              text: "PostCSS",
-              link: "/plugins/postcss",
-            },
-            {
-              text: "Webpack",
-              link: "/plugins/webpack",
-            },
-            {
-              text: "Gulp",
-              link: "/plugins/gulp",
-            },
-            {
-              text: "Grunt",
-              link: "/plugins/grunt",
-            },
-            {
-              text: "Gatsby",
-              link: "/plugins/gatsby",
-            },
-          ],
-        },
-        {
-          text: "Guides",
-          children: [
-            {
-              text: "Vue",
-              link: "/guides/vue",
-            },
-            {
-              text: "React",
-              link: "/guides/react",
-            },
-            {
-              text: "Next.js",
-              link: "/guides/next",
-            },
-            {
-              text: "Nuxt.js",
-              link: "/guides/nuxt",
-            },
-            {
-              text: "Razzle",
-              link: "/guides/razzle",
-            },
-            {
-              text: "WordPress",
-              link: "/guides/wordpress",
-            },
-            {
-              text: "Hugo",
-              link: "/guides/hugo",
-            },
-          ],
-        },
-        {
-          text: "Comparison",
-          link: "/comparison",
-        },
-        {
-          text: "Common Questions",
-          children: [
-            {
-              text: "How to use with CSS modules",
-              link: "/css_modules",
-            },
-            {
-              text: "How to use with Ant Design",
-              link: "/ant_design",
-            },
-          ],
-        },
-      ],
+      },
     },
   }),
   plugins: [
