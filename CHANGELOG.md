@@ -1,3 +1,85 @@
+# [8.0.0](https://github.com/FullHuman/purgecss/compare/v7.0.2...v8.0.0)
+
+### BREAKING CHANGES
+
+- Revert the changes from v7.0.2 that modified the import of the PostCSS plugin. This was causing issues (see [#1295](https://github.com/FullHuman/purgecss/issues/1295). The PostCSS plugin should now be imported via a default import:
+```ts
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
+```
+
+### Features
+
+* feat: add --preserve-paths option to CLI for maintaining folder hierarchy ([aa5ac9d](https://github.com/FullHuman/purgecss/commit/aa5ac9d)), closes [#377](https://github.com/FullHuman/purgecss/issues/377)
+
+### Bug fixes
+
+* fix:  for code scanning alert no. 5: Incomplete multi-character sanitization (#1403) ([3f39411](https://github.com/FullHuman/purgecss/commit/3f39411)), closes [#1403](https://github.com/FullHuman/purgecss/issues/1403)
+* fix: enhance setOptions to support both ES modules and CommonJS config exports ([4ad48c4](https://github.com/FullHuman/purgecss/commit/4ad48c4)), closes [#1340](https://github.com/FullHuman/purgecss/issues/1340)
+* fix: fix glob expression illegal operations on directories (#1308) ([b27293f](https://github.com/FullHuman/purgecss/commit/b27293f)), closes [#1308](https://github.com/FullHuman/purgecss/issues/1308) [#1266](https://github.com/FullHuman/purgecss/issues/1266)
+* fix: update import statements for purgeCSSPlugin in documentation and source files ([e5cbce2](https://github.com/FullHuman/purgecss/commit/e5cbce2)), closes [#1295](https://github.com/FullHuman/purgecss/issues/1295)
+* fix(#995): preserve relative paths in source maps ([4f6c4d9](https://github.com/FullHuman/purgecss/commit/4f6c4d9)), closes [#995](https://github.com/FullHuman/purgecss/issues/995)
+* fix: enhance keyframes handling to preserve animations referenced via CSS variables ([076c027](https://github.com/FullHuman/purgecss/commit/076c027)), closes [#478](https://github.com/FullHuman/purgecss/issues/478)
+
+### Changes (commits since v7.0.2)
+
+* Add French documentation for PurgeCSS guides and plugins ([b9f4309](https://github.com/FullHuman/purgecss/commit/b9f4309))
+* fix for "Workflow does not contain permissions" ([eb6d3b8](https://github.com/FullHuman/purgecss/commit/eb6d3b8))
+* fix(#995): preserve relative paths in source maps ([4f6c4d9](https://github.com/FullHuman/purgecss/commit/4f6c4d9)), closes [#995](https://github.com/FullHuman/purgecss/issues/995)
+* v8.0.0 ([2e315a5](https://github.com/FullHuman/purgecss/commit/2e315a5))
+* chore: format ([6c0c84e](https://github.com/FullHuman/purgecss/commit/6c0c84e))
+* chore: format ([7ad2fb7](https://github.com/FullHuman/purgecss/commit/7ad2fb7))
+* docs: add breaking changes for v7 about named export for postcss plugin ([7d86fb5](https://github.com/FullHuman/purgecss/commit/7d86fb5))
+* docs: add changelog for v7 ([bafb8a1](https://github.com/FullHuman/purgecss/commit/bafb8a1))
+* docs: add SEO enhancements and sitemap support to documentation ([6505b7d](https://github.com/FullHuman/purgecss/commit/6505b7d))
+* docs: remove outdated TailwindCSS sponsor image ([3949790](https://github.com/FullHuman/purgecss/commit/3949790))
+* docs: update sponsorship images and remove outdated link ([bdf87e4](https://github.com/FullHuman/purgecss/commit/bdf87e4))
+* docs: use named export for postcss plugin ([8eb027d](https://github.com/FullHuman/purgecss/commit/8eb027d))
+* feat: add --preserve-paths option to CLI for maintaining folder hierarchy ([aa5ac9d](https://github.com/FullHuman/purgecss/commit/aa5ac9d)), closes [#377](https://github.com/FullHuman/purgecss/issues/377)
+* feat: enhance keyframes handling to preserve animations referenced via CSS variables ([076c027](https://github.com/FullHuman/purgecss/commit/076c027)), closes [#478](https://github.com/FullHuman/purgecss/issues/478)
+* build(deps-dev): bump @eslint/eslintrc from 3.1.0 to 3.2.0 (#1303) ([8308cdb](https://github.com/FullHuman/purgecss/commit/8308cdb)), closes [#1303](https://github.com/FullHuman/purgecss/issues/1303)
+* build(deps-dev): bump @eslint/js from 9.11.1 to 9.39.0 (#1391) ([2348f82](https://github.com/FullHuman/purgecss/commit/2348f82)), closes [#1391](https://github.com/FullHuman/purgecss/issues/1391)
+* build(deps-dev): bump @rollup/plugin-typescript from 12.1.0 to 12.1.2 (#1312) ([9387a9b](https://github.com/FullHuman/purgecss/commit/9387a9b)), closes [#1312](https://github.com/FullHuman/purgecss/issues/1312)
+* build(deps-dev): bump @rollup/plugin-typescript from 12.1.2 to 12.3.0 (#1407) ([5902189](https://github.com/FullHuman/purgecss/commit/5902189)), closes [#1407](https://github.com/FullHuman/purgecss/issues/1407)
+* build(deps-dev): bump @types/glob from 8.0.0 to 9.0.0 (#1408) ([aa30f0f](https://github.com/FullHuman/purgecss/commit/aa30f0f)), closes [#1408](https://github.com/FullHuman/purgecss/issues/1408)
+* build(deps-dev): bump @types/jest from 29.5.13 to 29.5.14 (#1301) ([cb3d1c4](https://github.com/FullHuman/purgecss/commit/cb3d1c4)), closes [#1301](https://github.com/FullHuman/purgecss/issues/1301)
+* build(deps-dev): bump @types/node from 22.13.0 to 25.0.3 (#1406) ([ca242ee](https://github.com/FullHuman/purgecss/commit/ca242ee)), closes [#1406](https://github.com/FullHuman/purgecss/issues/1406)
+* build(deps-dev): bump @types/node from 22.8.6 to 22.13.0 (#1322) ([0d9f594](https://github.com/FullHuman/purgecss/commit/0d9f594)), closes [#1322](https://github.com/FullHuman/purgecss/issues/1322)
+* build(deps-dev): bump @typescript-eslint/parser from 8.14.0 to 8.46.2 (#1390) ([67b5b0c](https://github.com/FullHuman/purgecss/commit/67b5b0c)), closes [#1390](https://github.com/FullHuman/purgecss/issues/1390)
+* build(deps-dev): bump @vuepress/plugin-search (#1320) ([00251a7](https://github.com/FullHuman/purgecss/commit/00251a7)), closes [#1320](https://github.com/FullHuman/purgecss/issues/1320)
+* build(deps-dev): bump @vuepress/plugin-search (#1372) ([307f8d2](https://github.com/FullHuman/purgecss/commit/307f8d2)), closes [#1372](https://github.com/FullHuman/purgecss/issues/1372)
+* build(deps-dev): bump @vuepress/theme-default (#1405) ([047f0ea](https://github.com/FullHuman/purgecss/commit/047f0ea)), closes [#1405](https://github.com/FullHuman/purgecss/issues/1405)
+* build(deps-dev): bump axios from 1.7.7 to 1.13.2 (#1401) ([bb14e06](https://github.com/FullHuman/purgecss/commit/bb14e06)), closes [#1401](https://github.com/FullHuman/purgecss/issues/1401)
+* build(deps-dev): bump eslint from 9.39.1 to 9.39.2 (#1409) ([4a24603](https://github.com/FullHuman/purgecss/commit/4a24603)), closes [#1409](https://github.com/FullHuman/purgecss/issues/1409)
+* build(deps-dev): bump eslint-plugin-tsdoc from 0.3.0 to 0.4.0 (#1304) ([447d424](https://github.com/FullHuman/purgecss/commit/447d424)), closes [#1304](https://github.com/FullHuman/purgecss/issues/1304)
+* build(deps-dev): bump form-data from 4.0.0 to 4.0.4 (#1374) ([0853fd4](https://github.com/FullHuman/purgecss/commit/0853fd4)), closes [#1374](https://github.com/FullHuman/purgecss/issues/1374)
+* build(deps-dev): bump globals from 15.11.0 to 16.5.0 (#1393) ([cfc4939](https://github.com/FullHuman/purgecss/commit/cfc4939)), closes [#1393](https://github.com/FullHuman/purgecss/issues/1393)
+* build(deps-dev): bump lodash from 4.17.21 to 4.17.23 (#1414) ([f79b815](https://github.com/FullHuman/purgecss/commit/f79b815)), closes [#1414](https://github.com/FullHuman/purgecss/issues/1414)
+* build(deps-dev): bump prettier from 3.3.3 to 3.4.2 (#1315) ([504f025](https://github.com/FullHuman/purgecss/commit/504f025)), closes [#1315](https://github.com/FullHuman/purgecss/issues/1315)
+* build(deps-dev): bump prettier from 3.4.2 to 3.7.4 (#1413) ([bb778ad](https://github.com/FullHuman/purgecss/commit/bb778ad)), closes [#1413](https://github.com/FullHuman/purgecss/issues/1413)
+* build(deps-dev): bump rollup from 4.53.3 to 4.54.0 (#1410) ([14052e6](https://github.com/FullHuman/purgecss/commit/14052e6)), closes [#1410](https://github.com/FullHuman/purgecss/issues/1410)
+* build(deps-dev): bump vuepress from 2.0.0-rc.19 to 2.0.0-rc.26 ([a0bcec5](https://github.com/FullHuman/purgecss/commit/a0bcec5))
+* build(deps-dev): update @typescript-eslint packages to version 8.48.1 ([52c16f4](https://github.com/FullHuman/purgecss/commit/52c16f4))
+* build(deps-dev): update conventional-changelog-cli to conventional-changelog version 7.1.1 ([2745ee9](https://github.com/FullHuman/purgecss/commit/2745ee9))
+* build(deps-dev): update conventional-changelog-cli to conventional-changelog version 7.1.1 ([69d8bbb](https://github.com/FullHuman/purgecss/commit/69d8bbb))
+* build(deps): bump actions/checkout from 4 to 6 (#1399) ([f1f9930](https://github.com/FullHuman/purgecss/commit/f1f9930)), closes [#1399](https://github.com/FullHuman/purgecss/issues/1399)
+* build(deps): bump actions/setup-node from 4 to 6 (#1389) ([256eea7](https://github.com/FullHuman/purgecss/commit/256eea7)), closes [#1389](https://github.com/FullHuman/purgecss/issues/1389)
+* build(deps): bump actions/stale from 9 to 10 (#1384) ([3f67275](https://github.com/FullHuman/purgecss/commit/3f67275)), closes [#1384](https://github.com/FullHuman/purgecss/issues/1384)
+* build(deps): bump coverallsapp/github-action from 2.3.4 to 2.3.6 (#1319) ([53edc4f](https://github.com/FullHuman/purgecss/commit/53edc4f)), closes [#1319](https://github.com/FullHuman/purgecss/issues/1319)
+* build(deps): bump coverallsapp/github-action from 2.3.6 to 2.3.7 (#1398) ([9f760aa](https://github.com/FullHuman/purgecss/commit/9f760aa)), closes [#1398](https://github.com/FullHuman/purgecss/issues/1398)
+* build(deps): bump js-yaml, @microsoft/api-documenter and lerna (#1402) ([1505cac](https://github.com/FullHuman/purgecss/commit/1505cac)), closes [#1402](https://github.com/FullHuman/purgecss/issues/1402)
+* build(deps): bump nanoid from 3.3.7 to 3.3.8 (#1307) ([5e13f33](https://github.com/FullHuman/purgecss/commit/5e13f33)), closes [#1307](https://github.com/FullHuman/purgecss/issues/1307)
+* build(deps): bump postcss from 8.5.1 to 8.5.6 (#1371) ([c5b9e06](https://github.com/FullHuman/purgecss/commit/c5b9e06)), closes [#1371](https://github.com/FullHuman/purgecss/issues/1371)
+* build(deps): bump postcss-selector-parser from 6.1.2 to 7.0.0 (#1306) ([23cf540](https://github.com/FullHuman/purgecss/commit/23cf540)), closes [#1306](https://github.com/FullHuman/purgecss/issues/1306)
+* build(deps): bump postcss-selector-parser from 7.0.0 to 7.1.1 (#1404) ([b1f2eab](https://github.com/FullHuman/purgecss/commit/b1f2eab)), closes [#1404](https://github.com/FullHuman/purgecss/issues/1404)
+* build(deps): bump tmp and inquirer (#1400) ([9a05d07](https://github.com/FullHuman/purgecss/commit/9a05d07)), closes [#1400](https://github.com/FullHuman/purgecss/issues/1400)
+* build(deps): bump typescript from 5.6.3 to 5.9.3 (#1412) ([0ee0b45](https://github.com/FullHuman/purgecss/commit/0ee0b45)), closes [#1412](https://github.com/FullHuman/purgecss/issues/1412)
+* fix:  for code scanning alert no. 5: Incomplete multi-character sanitization (#1403) ([3f39411](https://github.com/FullHuman/purgecss/commit/3f39411)), closes [#1403](https://github.com/FullHuman/purgecss/issues/1403)
+* fix: enhance setOptions to support both ES modules and CommonJS config exports ([4ad48c4](https://github.com/FullHuman/purgecss/commit/4ad48c4)), closes [#1340](https://github.com/FullHuman/purgecss/issues/1340)
+* fix: fix glob expression illegal operations on directories (#1308) ([b27293f](https://github.com/FullHuman/purgecss/commit/b27293f)), closes [#1308](https://github.com/FullHuman/purgecss/issues/1308) [#1266](https://github.com/FullHuman/purgecss/issues/1266)
+* fix: update import statements for purgeCSSPlugin in documentation and source files ([e5cbce2](https://github.com/FullHuman/purgecss/commit/e5cbce2)), closes [#1295](https://github.com/FullHuman/purgecss/issues/1295)
+
+
+
 # [7.0.0](https://github.com/FullHuman/purgecss/compare/v6.0.0...v7.0.1)
 
 ### Bug Fixes
