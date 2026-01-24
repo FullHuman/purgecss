@@ -90,7 +90,12 @@ export async function setOptions(
   let options: Options;
   try {
     const t = path.resolve(process.cwd(), configFile);
-    options = await import(t);
+    const importedConfig = await import(t);
+    // Handle both ES modules (direct export) and CommonJS (default export)
+    options =
+      importedConfig.default && typeof importedConfig.default === "object"
+        ? importedConfig.default
+        : importedConfig;
   } catch (err: unknown) {
     if (err instanceof Error) {
       throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`);
