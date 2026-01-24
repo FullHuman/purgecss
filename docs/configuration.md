@@ -206,6 +206,20 @@ await new PurgeCSS().purge({
 
 If you are using a CSS animation library such as animate.css, you can remove unused keyframes by setting the `keyframes` option to `true`.
 
+PurgeCSS detects used keyframes by scanning `animation` and `animation-name` property values, as well as CSS custom property (variable) values. This means keyframes referenced via CSS variables will be correctly preserved:
+
+```css
+.component {
+  animation: var(--component-animation);
+}
+.component--animated {
+  --component-animation: fadeIn 0.4s;
+}
+@keyframes fadeIn {
+  /* This keyframe will be preserved because "fadeIn" appears in --component-animation */
+}
+```
+
 ```js
 await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],

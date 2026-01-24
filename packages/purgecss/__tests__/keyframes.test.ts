@@ -121,3 +121,47 @@ describe("keep webkit keyframe decimals", () => {
     expect(purgedCSS.includes("99.9%")).toBe(true);
   });
 });
+
+describe("keep keyframes referenced via CSS variables", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: '<div class="component component--animated"></div>',
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: `
+            .component {
+              animation: var(--component-animation);
+            }
+            .component--animated {
+              --component-animation: fadeIn 0.4s;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes unused {
+              from { opacity: 1; }
+              to { opacity: 0; }
+            }
+          `,
+        },
+      ],
+      keyframes: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps `@keyframes fadeIn` referenced via CSS variable", () => {
+    expect(purgedCSS.includes("@keyframes fadeIn")).toBe(true);
+  });
+
+  it("removes `@keyframes unused`", () => {
+    expect(purgedCSS.includes("@keyframes unused")).toBe(false);
+  });
+});

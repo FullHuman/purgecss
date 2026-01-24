@@ -404,6 +404,13 @@ class PurgeCSS {
         }
         return;
       }
+      // Also check CSS custom properties for animation names
+      // e.g., --my-animation: fadeIn 0.4s;
+      if (prop.startsWith("--")) {
+        for (const word of value.split(/[\s,]+/)) {
+          this.usedAnimations.add(word);
+        }
+      }
     }
 
     // collect font faces data
