@@ -18,7 +18,7 @@
     "@vuepress/bundler-vite": "^2.0.0-rc.26",
     "@vuepress/plugin-markdown-tab": "^2.0.0-rc.120",
     "@vuepress/plugin-search": "^2.0.0-rc.120",
-    "@vuepress/theme-default": "2.0.0-rc.120",
+    "@vuepress/theme-default": "2.0.0-rc.121",
     "conventional-changelog": "^7.1.1",
     "eslint": "^9.11.1",
     "eslint-plugin-tsdoc": "^0.4.0",
