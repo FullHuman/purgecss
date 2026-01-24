@@ -3,6 +3,7 @@ import localTheme from "./theme/index";
 import { searchPlugin } from "@vuepress/plugin-search";
 import { viteBundler } from "@vuepress/bundler-vite";
 import { markdownTabPlugin } from "@vuepress/plugin-markdown-tab";
+import { sitemapPlugin } from "@vuepress/plugin-sitemap";
 
 // Sidebar configuration for reuse across locales
 const getEnglishSidebar = () => [
@@ -246,6 +247,56 @@ export default defineUserConfig({
     },
   },
   head: [
+    // Canonical URL
+    ["link", { rel: "canonical", href: "https://purgecss.com" }],
+    // Open Graph meta tags
+    ["meta", { property: "og:site_name", content: "PurgeCSS" }],
+    ["meta", { property: "og:type", content: "website" }],
+    [
+      "meta",
+      { property: "og:image", content: "https://purgecss.com/og-image.png" },
+    ],
+    ["meta", { property: "og:image:width", content: "1200" }],
+    ["meta", { property: "og:image:height", content: "630" }],
+    [
+      "meta",
+      { property: "og:image:alt", content: "PurgeCSS - Remove unused CSS" },
+    ],
+    // Twitter Card meta tags
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:site", content: "@paborodulin" }],
+    [
+      "meta",
+      {
+        name: "twitter:title",
+        content: "PurgeCSS - Remove unused CSS from your project",
+      },
+    ],
+    [
+      "meta",
+      {
+        name: "twitter:description",
+        content:
+          "PurgeCSS analyzes your content and CSS files, removing unused selectors for smaller CSS files.",
+      },
+    ],
+    [
+      "meta",
+      {
+        name: "twitter:image",
+        content: "https://purgecss.com/og-image.png",
+      },
+    ],
+    // Additional SEO meta tags
+    ["meta", { name: "author", content: "Full Human" }],
+    [
+      "meta",
+      {
+        name: "keywords",
+        content:
+          "purgecss, css, unused css, remove css, optimize css, tailwindcss, postcss, webpack, purge",
+      },
+    ],
     [
       "link",
       {
@@ -321,7 +372,7 @@ export default defineUserConfig({
     ],
   ],
   theme: localTheme({
-    logo: "https://i.imgur.com/UEiUiJ0.png",
+    logo: "/logo.png",
     repo: "FullHuman/purgecss",
     locales: {
       "/": {
@@ -359,6 +410,10 @@ export default defineUserConfig({
       codeTabs: true,
       // Enable tabs
       tabs: true,
+    }),
+    sitemapPlugin({
+      hostname: "https://purgecss.com",
+      changefreq: "weekly",
     }),
   ],
 });

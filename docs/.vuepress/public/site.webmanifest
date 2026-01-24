@@ -1,6 +1,7 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "PurgeCSS - Remove unused CSS",
+    "short_name": "PurgeCSS",
+    "description": "PurgeCSS is a tool to remove unused CSS from your project",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -15,5 +16,7 @@
     ],
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "start_url": "/",
+    "scope": "/"
 }
