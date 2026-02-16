@@ -11,8 +11,15 @@ const config: JestConfigWithTsJest = {
   },
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
+    "^.+\\.tsx?$": ["ts-jest", {}],
+    "node_modules/(parse5|parse5-htmlparser2-tree-adapter)/.+\\.js$": [
+      "ts-jest",
+      { useESM: false },
+    ],
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!(parse5|parse5-htmlparser2-tree-adapter)/)",
+  ],
 };
 
 export function createConfig(

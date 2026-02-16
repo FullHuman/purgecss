@@ -48,18 +48,18 @@ export function parseCommandOptions(program: Command): Command {
     .usage("--css <css...> --content <content...> [options]");
 
   program
-    .option("-con, --content <files...>", "glob of content files")
-    .option("-css, --css <files...>", "glob of css files")
+    .option("--content <files...>", "glob of content files")
+    .option("--css <files...>", "glob of css files")
     .option("-c, --config <path>", "path to the configuration file")
     .option(
       "-o, --output <path>",
       "file path directory to write purged css files to",
     )
-    .option("-font, --font-face", "option to remove unused font-faces")
-    .option("-keyframes, --keyframes", "option to remove unused keyframes")
+    .option("-f, --font-face", "option to remove unused font-faces")
+    .option("-K, --keyframes", "option to remove unused keyframes")
     .option("-v, --variables", "option to remove unused variables")
-    .option("-rejected, --rejected", "option to output rejected selectors")
-    .option("-rejected-css, --rejected-css", "option to output rejected css")
+    .option("-r, --rejected", "option to output rejected selectors")
+    .option("-R, --rejected-css", "option to output rejected css")
     .option(
       "-s, --safelist <list...>",
       "list of classes that should not be removed",

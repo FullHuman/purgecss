@@ -36,19 +36,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "fast-glob": "^3.3.2",
-    "plugin-error": "^2.0.0",
+    "fast-glob": "^3.3.3",
+    "plugin-error": "^2.0.1",
     "purgecss": "^8.0.0",
-    "through2": "^4.0.1",
+    "through2": "^4.0.2",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
-    "@types/event-stream": "^4.0.0",
+    "@types/event-stream": "^4.0.6",
     "@types/glob": "^9.0.0",
-    "@types/through2": "^2.0.34",
-    "@types/vinyl": "^2.0.4",
+    "@types/through2": "^2.0.41",
+    "@types/vinyl": "^2.0.12",
     "event-stream": "^4.0.1",
-    "vinyl": "^3.0.0"
+    "vinyl": "^3.0.1"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"

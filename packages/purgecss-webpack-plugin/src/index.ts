@@ -104,7 +104,7 @@ function createSource(
     name,
     purgeResult.sourceMap,
     source.toString(),
-    map,
+    map ?? undefined,
     false,
   );
 }

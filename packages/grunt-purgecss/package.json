@@ -31,10 +31,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "purgecss": "^5.0.0"
+    "purgecss": "^8.0.0"
   },
   "devDependencies": {
-    "@types/grunt": "^0.4.25",
+    "@types/grunt": "^0.4.32",
     "grunt": "~1.6.1"
   },
   "bugs": {
