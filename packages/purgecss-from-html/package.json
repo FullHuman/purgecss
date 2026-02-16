@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "parse5": "^7.1.2",
-    "parse5-htmlparser2-tree-adapter": "^7.0.0"
+    "parse5-htmlparser2-tree-adapter": "^8.0.0"
   },
   "publishConfig": {
     "access": "public",
