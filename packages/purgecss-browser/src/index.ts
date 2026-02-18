@@ -679,9 +679,7 @@ class PurgeCSS {
    * });
    * ```
    */
-  public async purge(
-    userOptions: UserDefinedOptions,
-  ): Promise<ResultPurge[]> {
+  public async purge(userOptions: UserDefinedOptions): Promise<ResultPurge[]> {
     this.options = {
       ...defaultOptions,
       ...userOptions,
