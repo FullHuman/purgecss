@@ -29,6 +29,8 @@ When you are building a website, you might decide to use a CSS framework like Ta
 
 This is where PurgeCSS comes into play. PurgeCSS analyzes your content and your CSS files. Then it matches the selectors used in your files with the one in your content files. It removes unused selectors from your CSS, resulting in smaller CSS files.
 
+You can try PurgeCSS online at [purgecss.full-human.com](https://purgecss.full-human.com).
+
 ## Sponsors 🥰
 
 [<img src="https://avatars.githubusercontent.com/u/133211198?v=4" height="85" style="margin-right: 10px" alt="BairesDev - Sponsor">](https://www.bairesdev.com/sponsoring-open-source-projects/)
