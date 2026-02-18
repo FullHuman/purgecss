@@ -1,0 +1,61 @@
+{
+  "name": "purgecss-browser",
+  "version": "8.0.0",
+  "description": "Remove unused css selectors – browser-compatible build",
+  "author": "Ffloriel",
+  "homepage": "https://purgecss.com",
+  "keywords": [
+    "optimize",
+    "optimization",
+    "remove",
+    "unused",
+    "css",
+    "html",
+    "rules",
+    "purge",
+    "browser"
+  ],
+  "license": "MIT",
+  "main": "lib/purgecss-browser.js",
+  "module": "./lib/purgecss-browser.esm.js",
+  "types": "./lib/purgecss-browser.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/purgecss-browser.esm.js",
+      "require": "./lib/purgecss-browser.js",
+      "types": "./lib/purgecss-browser.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FullHuman/purgecss.git"
+  },
+  "scripts": {
+    "build": "ts-node build.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "postcss": "^8.5.6",
+    "postcss-selector-parser": "^7.1.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.1",
+    "rollup": "^4.30.1",
+    "typescript": "^5.7.2"
+  },
+  "bugs": {
+    "url": "https://github.com/FullHuman/purgecss/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

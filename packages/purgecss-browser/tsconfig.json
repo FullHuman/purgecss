@@ -1,0 +1,12 @@
+{
+    "extends": "./../../tsconfig.json",
+    "compilerOptions": {
+        "declaration": true,
+        "outDir": "./lib",
+        "declarationDir": ".temp/",
+        "baseUrl": ".",
+        "lib": ["esnext", "dom"]
+    },
+    "include": ["src", "package.json"],
+    "exclude": ["lib"]
+}
