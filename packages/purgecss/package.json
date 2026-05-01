@@ -42,7 +42,7 @@
   "dependencies": {
     "commander": "^14.0.3",
     "fast-glob": "^3.3.3",
-    "postcss": "^8.5.9",
+    "postcss": "^8.5.13",
     "postcss-selector-parser": "^7.1.1"
   },
   "bugs": {
