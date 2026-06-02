@@ -33,7 +33,7 @@
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.2",
-    "vuepress": "2.0.0-rc.28"
+    "vuepress": "2.0.0-rc.30"
   },
   "scripts": {
     "build": "lerna run build",
