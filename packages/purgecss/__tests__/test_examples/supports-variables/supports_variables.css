@@ -1,0 +1,31 @@
+:root {
+    --font-size-1: 1.5rem;
+    --font-size-2: 1.5rem;
+    --font-size-3: 1.5rem;
+    --unused-font-size-1: 1.5rem;
+    --unused-font-size-2: 1.5rem;
+}
+
+.used-class-1 {
+    .used-class-2 {
+        font-size: var(--font-size-1);
+    }
+
+    .unused-class-1 {
+        font-size: var(--unused-font-size-1);
+    }
+
+    @supports (display: grid) {
+        font-size: var(--font-size-2);
+
+        .used-class-3 {
+            @supports (backdrop-filter: blur(10px)) {
+                font-size: var(--font-size-3);
+            }
+        }
+
+        .unused-class-2 {
+            font-size: var(--unused-font-size-2);
+        }
+    }
+}
