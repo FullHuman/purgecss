@@ -509,6 +509,19 @@ class PurgeCSS {
    * @param node - node of postcss AST
    */
   private evaluateAtRule(node: postcss.AtRule): void {
+    // when tracking variables, collect var() usages from declarations
+    // nested inside at-rules (e.g. @media, @supports, ...)
+    if (
+      this.options.variables &&
+      (node.name === "media" || node.name === "supports") &&
+      node.nodes
+    ) {
+      for (const childNode of node.nodes) {
+        if (childNode.type !== "decl") continue;
+        this.collectDeclarationsData(childNode);
+      }
+    }
+
     // keyframes
     if (this.options.keyframes && node.name.endsWith("keyframes")) {
       this.atRules.keyframes.push(node);
@@ -615,7 +628,7 @@ class PurgeCSS {
     }).processSync(node.selector);
 
     // declarations
-    if (node.selector && typeof node.nodes !== "undefined") {
+    if (node.selector && node.nodes) {
       for (const childNode of node.nodes) {
         if (childNode.type !== "decl") continue;
         this.collectDeclarationsData(childNode);
