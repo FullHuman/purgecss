@@ -27,7 +27,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "acorn": "^8.16.0",
+    "acorn": "^8.19.0",
     "acorn-jsx": "^5.3.2",
     "acorn-jsx-walk": "^2.0.0",
     "acorn-walk": "^8.3.5"

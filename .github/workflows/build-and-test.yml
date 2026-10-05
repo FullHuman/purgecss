@@ -13,9 +13,9 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, lerna bootstrap, run build and test
@@ -26,7 +26,7 @@ jobs:
         npm run lint
         npm run test -- -- --coverage
     - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v2.3.7
+      uses: coverallsapp/github-action@v2.3.8
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         base-path: ./packages/purgecss
