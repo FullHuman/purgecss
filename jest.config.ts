@@ -12,13 +12,11 @@ const config: JestConfigWithTsJest = {
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {}],
-    "node_modules/(parse5|parse5-htmlparser2-tree-adapter)/.+\\.js$": [
-      "ts-jest",
-      { useESM: false },
-    ],
+    "node_modules/(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/.+\\.js$":
+      ["ts-jest", { useESM: false }],
   },
   transformIgnorePatterns: [
-    "node_modules/(?!(parse5|parse5-htmlparser2-tree-adapter)/)",
+    "node_modules/(?!(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/)",
   ],
 };
 

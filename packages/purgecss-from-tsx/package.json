@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@fullhuman/purgecss-from-jsx": "^8.0.0",
-    "acorn": "^8.16.0",
-    "typescript": "^6.0.2"
+    "acorn": "^8.19.0",
+    "typescript": "^6.0.3"
   },
   "publishConfig": {
     "access": "public",

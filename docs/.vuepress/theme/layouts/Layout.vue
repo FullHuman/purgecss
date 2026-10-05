@@ -7,6 +7,6 @@
 </template>
 
 <script setup>
-import Layout from '../../../../node_modules/@vuepress/theme-default/lib/client/layouts/Layout.vue'
+import Layout from '@vuepress/theme-default/layouts/Layout.vue'
 import CarbonAds from '../components/CarbonAds.vue'
 </script>
