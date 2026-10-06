@@ -12,13 +12,13 @@ const config: JestConfigWithTsJest = {
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {}],
-    "node_modules/(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/.+\\.js$":
+    "node_modules/(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype|commander)/.+\\.js$":
       ["ts-jest", { useESM: false }],
   },
   // `\\.pnpm` keeps pnpm's virtual store (node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>)
   // from being ignored before the package name can be matched
   transformIgnorePatterns: [
-    "node_modules/(?!(\\.pnpm|parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/)",
+    "node_modules/(?!(\\.pnpm|parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype|commander)/)",
   ],
 };
 
