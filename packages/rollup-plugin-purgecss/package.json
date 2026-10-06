@@ -3,8 +3,8 @@
   "version": "8.0.0",
   "description": "Rollup plugin for purgecss",
   "main": "lib/rollup-plugin-purgecss.js",
-  "module": "./lib/rollup-plugin-purgecss.es.js",
-  "jsnext:main": "./lib/rollup-plugin-purgecss.es.js",
+  "module": "./lib/rollup-plugin-purgecss.esm.js",
+  "jsnext:main": "./lib/rollup-plugin-purgecss.esm.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
