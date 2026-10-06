@@ -31,7 +31,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "purgecss": "^8.0.0"
+    "purgecss": "workspace:^"
   },
   "devDependencies": {
     "@types/grunt": "^0.4.32",

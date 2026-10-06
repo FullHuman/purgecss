@@ -55,6 +55,8 @@ describe("Webpack integration", () => {
         ...webpackConfig.default,
         output: {
           path: outputDirectory,
+          // module paths in the output depend on the node_modules layout
+          pathinfo: false,
         },
       });
 

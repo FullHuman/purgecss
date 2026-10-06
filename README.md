@@ -73,7 +73,7 @@ const purgeCSSResults = await new PurgeCSS().purge({
 
 ## Packages
 
-This repository is a monorepo that we manage using [Lerna](https://github.com/lerna/lerna). That means that we actually publish [several packages](/packages) to npm from the same codebase, including:
+This repository is a monorepo that we manage using [pnpm workspaces](https://pnpm.io/workspaces) and [Changesets](https://github.com/changesets/changesets). That means that we actually publish [several packages](/packages) to npm from the same codebase, including:
 
 | Package                                                      | Version                                                                                     | Description                                |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------ |

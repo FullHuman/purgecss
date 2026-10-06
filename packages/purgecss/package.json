@@ -45,6 +45,9 @@
     "postcss": "^8.5.29",
     "postcss-selector-parser": "^7.1.6"
   },
+  "devDependencies": {
+    "purgecss-from-html": "workspace:^"
+  },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
