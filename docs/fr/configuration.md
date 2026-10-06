@@ -350,6 +350,13 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Même si nav-links et usedClass sont trouvés par un extracteur, ils seront supprimés.
 
+Les sélecteurs d'attribut peuvent être bloqués par le nom de l'attribut, ou avec leur opérateur et leur valeur pour cibler un sélecteur précis. Les guillemets autour de la valeur sont optionnels et n'ont pas besoin de correspondre à ceux utilisés dans le CSS.
+
+```js
+blocklist: ['data-theme', '[type="button"]', /^\[lang\|=/]
+```
+Ici, tous les sélecteurs utilisant l'attribut `data-theme` seront supprimés, ainsi que `[type='button']` et les sélecteurs tels que `[lang|="en"]`. Les autres sélecteurs sur l'attribut `type`, comme `[type='submit']`, sont conservés.
+
 - **skippedContentGlobs**
 
 Si vous fournissez des globs pour le paramètre `content`, vous pouvez utiliser cette option pour exclure certains fichiers ou dossiers qui seraient autrement analysés. Passez un tableau de globs correspondant aux éléments qui doivent être exclus. (Note : cette option n'a aucun effet si `content` n'utilise pas de globs.)
