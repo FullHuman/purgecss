@@ -40,43 +40,59 @@ Vous pouvez utiliser un module communautaire appelé [nuxt-purgecss](https://git
 ### Installation
 
 - Ajoutez la dépendance `nuxt-purgecss` à votre projet en utilisant yarn ou npm
-- Ajoutez `nuxt-purgecss` à la section `modules` de `nuxt.config.js` :
+- Ajoutez `nuxt-purgecss` à la section `modules` de `nuxt.config.js` ou `nuxt.config.ts` :
 
 ```js
-{
-  buildModules: [ // si vous utilisez nuxt < 2.9.0, utilisez la propriété modules à la place.
+export default defineNuxtConfig({
+  modules: [
     'nuxt-purgecss',
   ],
 
-  purgeCSS: {
-   // vos paramètres ici
+  purgecss: {
+    // vos paramètres ici
   }
-}
+})
 ```
+
+Si vous utilisez Nuxt 2, utilisez `nuxt-purgecss` v1.x et l'ancienne configuration `buildModules`. `nuxt-purgecss` v2.x cible Nuxt 3 et utilise la clé de configuration `purgecss`.
 
 ### Options
 
 #### Valeurs par défaut
 
-Avant d'examiner les attributs individuels, voici les paramètres par défaut du module :
+Avant d'examiner les attributs individuels, voici les paramètres par défaut du module (voir [`src/config.ts`](https://github.com/Developmint/nuxt-purgecss/blob/main/src/config.ts) pour la version actuelle) :
 
 ```js
 {
-  mode: MODES.webpack,
-  enabled: ({ isDev, isClient }) => (!isDev && isClient), // ou `false` en mode dev/debug
-  paths: [
-    'components/**/*.vue',
-    'layouts/**/*.vue',
-    'pages/**/*.vue',
-    'plugins/**/*.js'
+  enabled: !nuxt.options.dev,
+  content: [
+    'components/**/*.{vue,jsx?,tsx?}',
+    'layouts/**/*.{vue,jsx?,tsx?}',
+    'pages/**/*.{vue,jsx?,tsx?}',
+    'composables/**/*.{vue,jsx?,tsx?}',
+    'App.{vue,jsx?,tsx?}',
+    'app.{vue,jsx?,tsx?}',
+    'plugins/**/*.{js,ts}',
+    'nuxt.config.{js,ts}'
   ],
-  styleExtensions: ['.css'],
-  whitelist: ['body', 'html', 'nuxt-progress'],
-  extractors: [
-    {
-      extractor: content => content.match(/[A-z0-9-:\\/]+/g) || [],
-      extensions: ['html', 'vue', 'js']
-    }
+  defaultExtractor: (content) => {
+    const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '') // Remove inline vue styles
+    return contentWithoutStyleBlocks.match(/[\w-.:/]+(?<!:)/g) || [] // Default extractor
+  },
+  safelist: [
+    'body',
+    'html',
+    'nuxt-progress',
+    '__nuxt',
+    /-(leave|enter|appear)(|-(to|from|active))$/, // Normal transitions
+    /^nuxt-link(|-exact)-active$/, // Nuxt link classes
+    /^(?!cursor-move).+-move$/, // Move transitions
+    /.*data-v-.*/, // Keep scoped styles
+    // New Vue3 selectors
+    /:slotted/,
+    /:deep/,
+    /:global/,
+    /nuxt-devtools-.*/
   ]
 }
 ```
@@ -85,40 +101,24 @@ Ces paramètres devraient constituer une bonne base pour une variété de projet
 
 #### Fusion des valeurs par défaut
 
-Vous pouvez définir chaque option soit comme fonction, soit comme valeur statique (primitives, objets, tableaux, ...).
-Si vous utilisez une fonction, la valeur par défaut sera fournie comme premier argument.
-
-Si vous *n'utilisez pas* de fonction pour définir vos propriétés, le module essaiera de les fusionner avec les valeurs par défaut. Cela peut être pratique pour `paths`, `whitelist` et ainsi de suite car les valeurs par défaut sont assez sensées. Si vous ne voulez pas inclure les valeurs par défaut, utilisez simplement une fonction.
+Vos options sont fusionnées avec les valeurs par défaut à l'aide de [`defu`](https://github.com/unjs/defu). Écrivez vos valeurs normalement : les tableaux comme `content` et `safelist` s'ajoutent à ceux par défaut, et les autres options remplacent leur valeur par défaut.
 
 #### Propriétés en détail
 
-##### mode
-
-* Type : `String` (webpack ou postcss)
-* Défaut : `webpack`
-
-Définit le mode dans lequel PurgeCSS doit être utilisé.
-
-* Le mode Webpack ne peut être utilisé qu'avec `build.extractCSS: true`
-* Le mode PostCSS ne peut être utilisé qu'avec un **objet** `build.postcss` (pas un tableau) ou les paramètres par défaut
-
 ##### enabled
 
-* Type : `Boolean` ou `Function` (uniquement pour le mode webpack, recevra le ctx de build.extend)
-* Défaut : `({ isDev, isClient }) => (!isDev && isClient)` (s'active uniquement en mode production) ou `false` en mode debug/dev
+* Type : `Boolean`
+* Défaut : `!nuxt.options.dev` (désactivé pendant `nuxt dev`, activé pour les builds)
 
 Active/Désactive le module
 
 * S'il est évalué à false, le module ne sera pas activé du tout
-* Si une fonction est fournie, elle sera correctement évaluée en mode webpack (en mode postcss, elle sera traitée comme true)
-
 
 ##### Options PurgeCSS
 
 Veuillez lire [la documentation PurgeCSS](https://www.purgecss.com/fr/configuration) pour obtenir des informations sur les paramètres liés à PurgeCSS.
 
-Au lieu de `content`, nous utilisons `paths` pour spécifier les chemins que PurgeCSS doit examiner (expliqué [ici](https://www.purgecss.com/with-webpack#options)).
-Cela s'applique aux **deux modes**, pas seulement au `mode webpack`.
+Toutes les options de PurgeCSS peuvent être écrites directement dans l'objet `purgecss`. Si vous ajoutez des composants ou des pages en dehors des dossiers Nuxt par défaut, incluez-les dans `content`.
 
 ## Plugin PostCSS
 
@@ -128,18 +128,16 @@ Lors de la génération de votre application, cela peut représenter beaucoup de
 Pour inclure le CSS dans l'en-tête du fichier HTML, vous devrez exécuter les commandes suivantes.
 Veuillez noter qu'avec cette configuration, PurgeCSS sera actif en mode production et développement.
 
-:::: code-group
-::: code-group-item NPM
+::::: code-tabs
+@tab npm
 ```sh
 npm i -D @fullhuman/postcss-purgecss
 ```
-:::
-::: code-group-item YARN
+@tab yarn
 ```sh
 yarn add @fullhuman/postcss-purgecss --dev
 ```
-:::
-::::
+:::::
 
 ```js
 '@fullhuman/postcss-purgecss': {

@@ -61,21 +61,40 @@ If you are using Nuxt 2, use `nuxt-purgecss` v1.x and the legacy `buildModules` 
 
 #### Defaults
 
-Before diving into the individual attributes, here are the default settings of the module:
+Before diving into the individual attributes, here are the default settings of the module (see [`src/config.ts`](https://github.com/Developmint/nuxt-purgecss/blob/main/src/config.ts) for the current version):
 
 ```js
 {
   enabled: !nuxt.options.dev,
   content: [
-    'components/**/*.vue',
-    'layouts/**/*.vue',
-    'pages/**/*.vue',
+    'components/**/*.{vue,jsx?,tsx?}',
+    'layouts/**/*.{vue,jsx?,tsx?}',
+    'pages/**/*.{vue,jsx?,tsx?}',
+    'composables/**/*.{vue,jsx?,tsx?}',
+    'App.{vue,jsx?,tsx?}',
+    'app.{vue,jsx?,tsx?}',
     'plugins/**/*.{js,ts}',
-    'app.vue',
-    'error.vue',
-    'nuxt.config.{js,ts}',
+    'nuxt.config.{js,ts}'
   ],
-  safelist: ['body', 'html', 'nuxt-progress'],
+  defaultExtractor: (content) => {
+    const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, '') // Remove inline vue styles
+    return contentWithoutStyleBlocks.match(/[\w-.:/]+(?<!:)/g) || [] // Default extractor
+  },
+  safelist: [
+    'body',
+    'html',
+    'nuxt-progress',
+    '__nuxt',
+    /-(leave|enter|appear)(|-(to|from|active))$/, // Normal transitions
+    /^nuxt-link(|-exact)-active$/, // Nuxt link classes
+    /^(?!cursor-move).+-move$/, // Move transitions
+    /.*data-v-.*/, // Keep scoped styles
+    // New Vue3 selectors
+    /:slotted/,
+    /:deep/,
+    /:global/,
+    /nuxt-devtools-.*/
+  ]
 }
 ```
 
@@ -83,12 +102,7 @@ These settings should be a good foundation for a variety of projects.
 
 #### Merging defaults
 
-You can define every option either as function or as static value (primitives, objects, arrays, ...).
-if you use a function, the default value will be provided as the first argument.
-
-If you *don't* use a function to define you properties, the module will try to
-merge them with the default values. This can be handy for `paths`, `whitelist` and so on because
-the defaults are quite sensible. If you don't want to have the defaults include, just use a function.
+Your options are merged with the defaults using [`defu`](https://github.com/unjs/defu). Write your values as usual: arrays such as `content` and `safelist` are added to the default ones, and the other options replace their default value.
 
 #### Properties in-depth
 
@@ -116,18 +130,16 @@ When generating your application this might be a lot of small files.
 To include the CSS into the header of the HTML file you'll need to run the following commands. 
 Please note that using this configuration PurgeCSS will be active in production and development mode.
 
-:::: code-group
-::: code-group-item NPM
+::::: code-tabs
+@tab npm
 ```sh
 npm i -D @fullhuman/postcss-purgecss
 ```
-:::
-::: code-group-item YARN
+@tab yarn
 ```sh
 yarn add @fullhuman/postcss-purgecss --dev
 ```
-:::
-::::
+:::::
 
 ```js
 '@fullhuman/postcss-purgecss': {

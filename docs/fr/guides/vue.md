@@ -24,7 +24,47 @@ meta:
 
 # Vue
 
-## Utiliser le plugin Vue CLI
+## Vue 3 avec Vite
+
+Pour les projets Vue 3 créés avec Vite, ajoutez PurgeCSS via le plugin PostCSS.
+
+::::: code-tabs
+@tab npm
+```sh
+npm i -D @fullhuman/postcss-purgecss
+```
+@tab yarn
+```sh
+yarn add @fullhuman/postcss-purgecss --dev
+```
+:::::
+
+Créez ou modifiez `postcss.config.js` :
+
+```js
+import purgeCSSPlugin from "@fullhuman/postcss-purgecss";
+
+export default {
+  plugins: [
+    purgeCSSPlugin({
+      content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+      defaultExtractor(content) {
+        const contentWithoutStyleBlocks = content.replace(/<style[^]+?<\/style>/gi, "");
+        return contentWithoutStyleBlocks.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || [];
+      },
+      safelist: [
+        /-(leave|enter|appear)(|-(to|from|active))$/,
+        /^router-link(|-exact)-active$/,
+        /data-v-.*/,
+      ],
+    }),
+  ],
+};
+```
+
+Les entrées de `content` incluent le point d'entrée HTML de Vite et les composants monofichiers Vue. Le `defaultExtractor` ignore les blocs `<style>` des composants monofichiers, afin qu'un sélecteur ne soit pas conservé uniquement parce qu'il apparaît dans les styles du composant. La safelist conserve les classes de transition de Vue, les classes actives du routeur et les attributs des styles scopés.
+
+## Plugin Vue CLI
 
 ![vue cli plugin purgecss](https://i.imgur.com/ZYnJSin.png)
 
