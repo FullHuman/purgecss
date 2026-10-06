@@ -27,7 +27,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "@fullhuman/purgecss-from-jsx": "^8.0.0",
+    "@fullhuman/purgecss-from-jsx": "workspace:^",
     "acorn": "^8.19.0",
     "typescript": "^6.0.3"
   },

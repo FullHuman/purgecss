@@ -15,8 +15,10 @@ const config: JestConfigWithTsJest = {
     "node_modules/(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/.+\\.js$":
       ["ts-jest", { useESM: false }],
   },
+  // `\\.pnpm` keeps pnpm's virtual store (node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>)
+  // from being ignored before the package name can be matched
   transformIgnorePatterns: [
-    "node_modules/(?!(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/)",
+    "node_modules/(?!(\\.pnpm|parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype)/)",
   ],
 };
 

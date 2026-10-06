@@ -31,7 +31,7 @@
   },
   "homepage": "https://purgecss.com",
   "dependencies": {
-    "purgecss": "^5.0.0",
+    "purgecss": "workspace:^",
     "rollup-pluginutils": "^2.8.2"
   },
   "publishConfig": {

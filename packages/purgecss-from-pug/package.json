@@ -24,9 +24,12 @@
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
+  "dependencies": {
+    "pug-lexer": "^5.0.1"
+  },
   "devDependencies": {
-    "pug-lexer": "^5.0.1",
-    "pug-parser": "^6.0.0"
+    "pug-parser": "^6.0.0",
+    "purgecss": "workspace:^"
   },
   "publishConfig": {
     "access": "public",
