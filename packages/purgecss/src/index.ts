@@ -762,6 +762,34 @@ class PurgeCSS {
   }
 
   /**
+   * Check if the attribute selector is blocklisted with the option blocklist
+   *
+   * The blocklist is compared with the attribute selector as it is written
+   * in the CSS, and with its unquoted, double-quoted and single-quoted forms,
+   * e.g. `[type=button]`, `[type="button"]` and `[type='button']`.
+   *
+   * @param attributeNode - node of type "attribute"
+   */
+  private isAttributeSelectorBlocklisted(
+    attributeNode: selectorParser.Attribute,
+  ): boolean {
+    const { attribute, operator, value } = attributeNode;
+    const attributeSelectors = new Set([attributeNode.toString().trim()]);
+    if (operator && value !== undefined) {
+      for (const quote of ["", '"', "'"]) {
+        attributeSelectors.add(
+          `[${attribute}${operator}${quote}${value}${quote}]`,
+        );
+      }
+    } else {
+      attributeSelectors.add(`[${attribute}]`);
+    }
+    return [...attributeSelectors].some((attributeSelector) =>
+      this.isSelectorBlocklisted(attributeSelector),
+    );
+  }
+
+  /**
    * Check if the selector is safelisted with the option safelist standard
    *
    * @param selector - css selector
@@ -960,6 +988,14 @@ class PurgeCSS {
 
       // The selector is present in the blocklist
       if (selectorValue && this.isSelectorBlocklisted(selectorValue)) {
+        return false;
+      }
+
+      // The attribute selector, with its value, is present in the blocklist
+      if (
+        selectorNode.type === "attribute" &&
+        this.isAttributeSelectorBlocklisted(selectorNode)
+      ) {
         return false;
       }
 

@@ -200,3 +200,106 @@ describe("blocklist option", () => {
     findInCSS(expect, ["data-v-test", ".random"], purgedCSS);
   });
 });
+
+describe("blocklist option with attribute selectors", () => {
+  const content = [
+    {
+      raw: '<button type="button" class="btn">a</button><input type="reset" disabled><input type="submit">',
+      extension: "html",
+    },
+  ];
+  const css = [
+    {
+      raw: `
+        button,
+        [type='button'],
+        [type="reset"],
+        [type=submit] {
+          appearance: button;
+        }
+        [type='button'].btn {
+          color: red;
+        }
+        [type^='sub'] {
+          color: green;
+        }
+        [disabled] {
+          color: blue;
+        }
+      `,
+    },
+  ];
+
+  async function purge(blocklist: Array<string | RegExp>): Promise<string> {
+    const resultsPurge = await new PurgeCSS().purge({
+      content,
+      css,
+      blocklist,
+    });
+    return resultsPurge[0].css;
+  }
+
+  it("keeps the attribute selectors when they are not blocklisted", async () => {
+    const purgedCSS = await purge([]);
+    findInCSS(
+      expect,
+      [
+        "[type='button']",
+        '[type="reset"]',
+        "[type=submit]",
+        "[type='button'].btn",
+        "[type^='sub']",
+        "[disabled]",
+      ],
+      purgedCSS,
+    );
+  });
+
+  it("excludes an attribute selector blocklisted with its value", async () => {
+    const purgedCSS = await purge(["[type='button']"]);
+    notFindInCSS(expect, ["[type='button']"], purgedCSS);
+    findInCSS(
+      expect,
+      ["button", '[type="reset"]', "[type=submit]", "[type^='sub']"],
+      purgedCSS,
+    );
+  });
+
+  it("ignores the quotes used in the blocklist and in the CSS", async () => {
+    const purgedCSS = await purge([
+      '[type="button"]',
+      "[type=reset]",
+      "[type='submit']",
+    ]);
+    notFindInCSS(
+      expect,
+      ["[type='button']", '[type="reset"]', "[type=submit]"],
+      purgedCSS,
+    );
+    findInCSS(expect, ["button", "[type^='sub']", "[disabled]"], purgedCSS);
+  });
+
+  it("excludes attribute selectors matching a regular expression", async () => {
+    const purgedCSS = await purge([/^\[type=["']?(button|reset)["']?\]$/]);
+    notFindInCSS(expect, ["[type='button']", '[type="reset"]'], purgedCSS);
+    findInCSS(expect, ["[type=submit]", "[type^='sub']"], purgedCSS);
+  });
+
+  it("takes the operator into account", async () => {
+    const purgedCSS = await purge(["[type^=sub]"]);
+    notFindInCSS(expect, ["[type^='sub']"], purgedCSS);
+    findInCSS(expect, ["[type=submit]", "[type='button']"], purgedCSS);
+  });
+
+  it("excludes an attribute selector without value", async () => {
+    const purgedCSS = await purge(["[disabled]"]);
+    notFindInCSS(expect, ["[disabled]"], purgedCSS);
+    findInCSS(expect, ["[type='button']"], purgedCSS);
+  });
+
+  it("still excludes every selector of an attribute blocklisted by its name", async () => {
+    const purgedCSS = await purge(["type"]);
+    notFindInCSS(expect, ["[type"], purgedCSS);
+    findInCSS(expect, ["button", "[disabled]"], purgedCSS);
+  });
+});

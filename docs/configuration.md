@@ -350,6 +350,13 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Even if nav-links and usedClass are found by an extractor, they will be removed.
 
+Attribute selectors can be blocklisted by the name of the attribute, or with their operator and value to target a specific selector. The quotes around the value are optional and do not need to match the ones used in the CSS.
+
+```js
+blocklist: ['data-theme', '[type="button"]', /^\[lang\|=/]
+```
+Here, every selector using the attribute `data-theme` will be removed, as well as `[type='button']` and the selectors such as `[lang|="en"]`. Other selectors on the attribute `type`, such as `[type='submit']`, are kept.
+
 - **skippedContentGlobs**
 
 If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
