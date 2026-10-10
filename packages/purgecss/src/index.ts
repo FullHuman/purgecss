@@ -383,8 +383,9 @@ class PurgeCSS {
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration =
-        value.matchAll(/var\((.+?)[,)]/g);
+      const usedVariablesMatchesInDeclaration = value.matchAll(
+        /\bvar\(\s*(.+?)\s*[,)]/g,
+      );
       if (prop.startsWith("--")) {
         this.variablesStructure.addVariable(declaration);
         this.variablesStructure.addVariableUsage(
