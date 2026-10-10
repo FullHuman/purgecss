@@ -31,7 +31,11 @@ function gruntPurgeCSS(grunt: IGrunt): void {
             throw new Error(`Destination file not found`);
           }
 
-          grunt.file.write(file.dest, purgeCSSResults[0].css);
+          // PurgeCSS returns one result per source file, so write them all.
+          grunt.file.write(
+            file.dest,
+            purgeCSSResults.map((result) => result.css).join("\n"),
+          );
           // Print a success message
           grunt.log.writeln(`File "${file.dest}" created.`);
         });
