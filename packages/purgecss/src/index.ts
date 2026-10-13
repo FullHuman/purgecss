@@ -371,6 +371,10 @@ class PurgeCSS {
   };
 
   private usedAnimations: Set<string> = new Set();
+  private keyframeRules: Map<
+    postcss.AtRule,
+    { rule: postcss.Rule; ignored: boolean }[]
+  > = new Map();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
   public removedNodes: postcss.Node[] = [];
@@ -378,24 +382,32 @@ class PurgeCSS {
 
   public options: Options = defaultOptions;
 
+  private collectVariablesData(
+    declaration: postcss.Declaration,
+    ignored = false,
+  ): void {
+    const { prop, value } = declaration;
+    const usedVariablesMatchesInDeclaration =
+      value.matchAll(/var\(([^,)]+)[,)]/g);
+    if (prop.startsWith("--") && !ignored) {
+      this.variablesStructure.addVariable(declaration);
+      this.variablesStructure.addVariableUsage(
+        declaration,
+        usedVariablesMatchesInDeclaration,
+      );
+    } else {
+      this.variablesStructure.addVariableUsageInProperties(
+        usedVariablesMatchesInDeclaration,
+      );
+    }
+  }
+
   private collectDeclarationsData(declaration: postcss.Declaration): void {
     const { prop, value } = declaration;
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration =
-        value.matchAll(/var\((.+?)[,)]/g);
-      if (prop.startsWith("--")) {
-        this.variablesStructure.addVariable(declaration);
-        this.variablesStructure.addVariableUsage(
-          declaration,
-          usedVariablesMatchesInDeclaration,
-        );
-      } else {
-        this.variablesStructure.addVariableUsageInProperties(
-          usedVariablesMatchesInDeclaration,
-        );
-      }
+      this.collectVariablesData(declaration);
     }
 
     // collect keyframes data
@@ -540,6 +552,24 @@ class PurgeCSS {
     }
   }
 
+  private registerKeyframeRule(node: postcss.Node, ignored: boolean): boolean {
+    if (
+      !isPostCSSRule(node) ||
+      !node.parent ||
+      !isPostCSSAtRule(node.parent) ||
+      !node.parent.name.endsWith("keyframes")
+    ) {
+      return false;
+    }
+
+    if (this.options.variables) {
+      const rules = this.keyframeRules.get(node.parent) || [];
+      rules.push({ rule: node, ignored });
+      this.keyframeRules.set(node.parent, rules);
+    }
+    return true;
+  }
+
   /**
    * Evaluate css selector and decide if it should be removed or not
    *
@@ -552,6 +582,7 @@ class PurgeCSS {
   ): void {
     // exit if is in ignoring state activated by an ignore comment
     if (this.ignore) {
+      this.registerKeyframeRule(node, true);
       return;
     }
 
@@ -562,15 +593,7 @@ class PurgeCSS {
       isIgnoreAnnotation(annotation, "next")
     ) {
       annotation.remove();
-      return;
-    }
-
-    // exit if it is inside a keyframes
-    if (
-      node.parent &&
-      isPostCSSAtRule(node.parent) &&
-      node.parent.name.endsWith("keyframes")
-    ) {
+      this.registerKeyframeRule(node, true);
       return;
     }
 
@@ -581,6 +604,12 @@ class PurgeCSS {
 
     // exit if it has an ignore rule comment inside
     if (hasIgnoreAnnotation(node)) {
+      this.registerKeyframeRule(node, true);
+      return;
+    }
+
+    // Defer variable collection until unused animations have been removed.
+    if (this.registerKeyframeRule(node, false)) {
       return;
     }
 
@@ -835,6 +864,13 @@ class PurgeCSS {
           };
     const { content, css, extractors, safelist } = this.options;
 
+    // Files in one call share usages; separate purge calls start fresh.
+    this.variablesStructure.nodes.clear();
+    this.variablesStructure.usedVariables.clear();
+    this.keyframeRules.clear();
+    this.usedAnimations.clear();
+    this.atRules.keyframes = [];
+
     if (this.options.variables) {
       this.variablesStructure.safelist = safelist.variables || [];
     }
@@ -865,6 +901,18 @@ class PurgeCSS {
    * Remove unused CSS variables
    */
   public removeUnusedCSSVariables(): void {
+    // Collect usages only from keyframes that remain after unused animations are removed.
+    for (const [keyframes, rules] of this.keyframeRules) {
+      if (!keyframes.parent) continue;
+      for (const { rule, ignored } of rules) {
+        for (const declaration of rule.nodes) {
+          if (declaration.type !== "decl") continue;
+          // Ignored declarations stay intact, but their dependencies are still used.
+          this.collectVariablesData(declaration, ignored);
+        }
+      }
+    }
+    this.keyframeRules.clear();
     this.variablesStructure.removeUnused();
   }
 

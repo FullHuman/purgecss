@@ -172,8 +172,12 @@ describe("safelist option: variables", () => {
     findInCSS(expect, ["--unused-color", "--button-color"], purgedCSS);
   });
 
-  it("excludes non-safelisted css variables", () => {
-    notFindInCSS(expect, ["--tertiary-color:"], purgedCSS);
+  it("keeps dependencies of safelisted css variables", () => {
+    findInCSS(expect, ["--tertiary-color:"], purgedCSS);
+  });
+
+  it("excludes unrelated non-safelisted css variables", () => {
+    notFindInCSS(expect, ["--unreferenced-color:"], purgedCSS);
   });
 });
 

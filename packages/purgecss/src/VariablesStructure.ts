@@ -1,6 +1,10 @@
 import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
 
+function trimCSSWhitespace(value: string): string {
+  return value.replace(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/g, "");
+}
+
 /**
  * @public
  */
@@ -42,7 +46,7 @@ export class VariablesStructure {
     const nodes = this.nodes.get(prop);
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
-      const variableName = variableMatch[1];
+      const variableName = trimCSSWhitespace(variableMatch[1]);
       if (this.nodes.has(variableName)) {
         const usedVariableNodes = this.nodes.get(variableName);
         nodes?.forEach((node) => {
@@ -59,7 +63,7 @@ export class VariablesStructure {
   ): void {
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
-      const variableName = variableMatch[1];
+      const variableName = trimCSSWhitespace(variableMatch[1]);
       this.usedVariables.add(variableName);
     }
   }
@@ -79,17 +83,25 @@ export class VariablesStructure {
   }
 
   removeUnused(): void {
+    // Safelisted variables also keep the variables they depend on.
+    for (const name of this.nodes.keys()) {
+      if (this.isVariablesSafelisted(name)) {
+        this.usedVariables.add(name);
+      }
+    }
+
     // check unordered usage
     for (const used of this.usedVariables) {
       const usedNodes = this.nodes.get(used);
       if (usedNodes) {
         for (const usedNode of usedNodes) {
           const usedVariablesMatchesInDeclaration =
-            usedNode.value.value.matchAll(/var\((.+?)[,)]/g);
+            usedNode.value.value.matchAll(/var\(([^,)]+)[,)]/g);
 
           for (const usage of usedVariablesMatchesInDeclaration) {
-            if (!this.usedVariables.has(usage[1])) {
-              this.usedVariables.add(usage[1]);
+            const variableName = trimCSSWhitespace(usage[1]);
+            if (!this.usedVariables.has(variableName)) {
+              this.usedVariables.add(variableName);
             }
           }
         }
@@ -111,9 +123,15 @@ export class VariablesStructure {
 
   isVariablesSafelisted(variable: string): boolean {
     return this.safelist.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === variable
-        : safelistItem.test(variable);
+      if (typeof safelistItem === "string") {
+        return safelistItem === variable;
+      }
+      // Stateful expressions must not depend on or mutate the caller's lastIndex.
+      const expression =
+        safelistItem.global || safelistItem.sticky
+          ? new RegExp(safelistItem.source, safelistItem.flags)
+          : safelistItem;
+      return expression.test(variable);
     });
   }
 }

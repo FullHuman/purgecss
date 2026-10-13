@@ -2,6 +2,34 @@ import { PurgeCSS } from "./../src/index";
 
 import { ROOT_TEST_EXAMPLES } from "./utils";
 
+it("keeps animations referenced from an earlier CSS input with variables disabled", async () => {
+  const purgeCSS = new PurgeCSS();
+  const options = {
+    content: [],
+    keyframes: true,
+    variables: false,
+    safelist: [/.*/],
+  };
+  const results = await purgeCSS.purge({
+    ...options,
+    css: [
+      { raw: ".input { animation: pulse 1s; }" },
+      { raw: "@keyframes pulse { from { opacity: 0; } to { opacity: 1; } }" },
+    ],
+  });
+
+  expect(results[1].css).toContain("@keyframes pulse");
+
+  const [nextResult] = await purgeCSS.purge({
+    ...options,
+    css: [
+      { raw: "@keyframes pulse { from { opacity: 0; } to { opacity: 1; } }" },
+    ],
+  });
+
+  expect(nextResult.css).not.toContain("@keyframes pulse");
+});
+
 describe("keyframes", () => {
   let purgedCSS: string;
   beforeAll(async () => {
