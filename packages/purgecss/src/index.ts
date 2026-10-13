@@ -565,7 +565,7 @@ class PurgeCSS {
       return;
     }
 
-    // exit if it is inside a keyframes
+    // collect variables and exit if it is inside a keyframes
     if (
       node.parent &&
       isPostCSSAtRule(node.parent) &&
