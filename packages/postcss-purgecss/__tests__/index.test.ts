@@ -4,6 +4,94 @@ import postcss from "postcss";
 import purgeCSSPlugin from "../src/";
 
 describe("Purgecss postcss plugin", () => {
+  it("keeps ignored and safelisted dependencies with non-ASCII variable names", async () => {
+    const pattern = /^--public-/g;
+    pattern.lastIndex = 5;
+    const plugin = purgeCSSPlugin({
+      content: [],
+      variables: true,
+      keyframes: true,
+      safelist: { standard: [/.*/], variables: [pattern] },
+    });
+
+    for (let run = 0; run < 2; run++) {
+      const result = await postcss([plugin]).process(
+        `
+          :root { --base: red; --unused: white; }
+          .input { animation: pulse 1s; }
+          @keyframes pulse {
+            from {
+              --public-a: red;
+              --public-b: var(--private\u1680);
+              --private\u1680: blue;
+              --color: var(--base);
+              --local-unused: white;
+            }
+            to {
+              /* purgecss ignore current */
+              color: var(--color);
+              --protected: var(--base);
+            }
+          }
+        `,
+        { from: undefined },
+      );
+      const names: string[] = [];
+      result.root.walkDecls(/^--/, ({ prop }) => {
+        names.push(prop);
+      });
+
+      expect(names).toEqual([
+        "--base",
+        "--public-a",
+        "--public-b",
+        "--private\u1680",
+        "--color",
+        "--protected",
+      ]);
+      expect(pattern.lastIndex).toBe(5);
+    }
+  });
+
+  it.each([false, true])(
+    "keeps variables used by retained keyframes with keyframes: %s",
+    async (keyframes) => {
+      const plugin = purgeCSSPlugin({
+        content: [],
+        variables: true,
+        keyframes,
+        safelist: [/.*/],
+      });
+      const result = await postcss([plugin]).process(
+        `
+          :root {
+            --reject: var(--negative);
+            --negative: red;
+            --unused: white;
+          }
+          .input { animation: reject .3s; }
+          @-webkit-keyframes reject { from { color: var(--reject); } }
+          @keyframes reject { from { color: var(--reject); } }
+          @keyframes unused { to { color: var(--unused); } }
+        `,
+        { from: undefined },
+      );
+
+      expect(result.css).toContain("--reject:");
+      expect(result.css).toContain("--negative:");
+      expect(result.css.includes("--unused:")).toBe(!keyframes);
+      expect(result.css.includes("@keyframes unused")).toBe(!keyframes);
+
+      const nextResult = await postcss([plugin]).process(
+        ":root { --reject: red; --text: black; } .text { color: var(--text); }",
+        { from: undefined },
+      );
+
+      expect(nextResult.css).not.toContain("--reject:");
+      expect(nextResult.css).toContain("--text:");
+    },
+  );
+
   const files = ["simple", "font-keyframes"];
   const fileContents = files.map((file) => {
     return {
