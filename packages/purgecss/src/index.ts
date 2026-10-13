@@ -571,6 +571,14 @@ class PurgeCSS {
       isPostCSSAtRule(node.parent) &&
       node.parent.name.endsWith("keyframes")
     ) {
+      // declarations inside keyframes rules
+      if (isPostCSSRule(node) && node.nodes) {
+        for (const childNode of node.nodes) {
+          if (childNode.type !== "decl") continue;
+          this.collectDeclarationsData(childNode);
+        }
+      }
+
       return;
     }
 
