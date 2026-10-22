@@ -11,6 +11,7 @@ import * as glob from "fast-glob";
 import * as path from "path";
 import * as postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
+import { pathToFileURL } from "url";
 import { promisify } from "util";
 import {
   CONFIG_FILENAME,
@@ -90,7 +91,7 @@ export async function setOptions(
   let options: Options;
   try {
     const t = path.resolve(process.cwd(), configFile);
-    const importedConfig = await import(t);
+    const importedConfig = await import(pathToFileURL(t).href);
     // Handle both ES modules (direct export) and CommonJS (default export)
     options =
       importedConfig.default && typeof importedConfig.default === "object"
