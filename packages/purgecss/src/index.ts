@@ -812,7 +812,14 @@ class PurgeCSS {
   private isAttributeDynamic(attributeName: string): boolean {
     return (
       DYNAMIC_ATTRIBUTES.includes(attributeName) ||
-      this.options.dynamicAttributes.includes(attributeName)
+      this.options.dynamicAttributes.some((dynamicAttribute) => {
+        if (typeof dynamicAttribute === "string") {
+          return dynamicAttribute === attributeName;
+        }
+        // a regex with the g or y flag keeps its lastIndex between calls
+        dynamicAttribute.lastIndex = 0;
+        return dynamicAttribute.test(attributeName);
+      })
     );
   }
 
