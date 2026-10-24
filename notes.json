@@ -2,61 +2,105 @@
   "version": 1,
   "cursors": {
     "labelling_after": null,
-    "investigation_after": null
+    "investigation_after": 1318
   },
   "issues": [
     {
       "number": 978,
       "state": "resolution_recommended",
       "updated_at": "2026-10-24",
-      "note": "Root-level :is/:where fix verified on main (#1467, #1509), not yet on npm (still 8.0.0). Recommend closing after next release."
+      "note": "Root-level :is/:where fix (#1467, #1509) re-verified on main 2026-10-24; not on npm yet (8.0.0). Recommend closing after next release."
     },
     {
       "number": 1282,
       "state": "resolution_recommended",
       "updated_at": "2026-10-24",
-      "note": "Same root cause as #978/#1197 (:where(:not())/:is():not() nesting). Verified fixed on main, commented with repro. Pending release."
+      "note": "Bare pseudo-classes (:hover, :not(:hover), :where(:hover)) re-verified kept on main. Pending release."
     },
     {
       "number": 1197,
-      "state": "resolution_recommended",
+      "state": "commented",
       "updated_at": "2026-10-24",
-      "note": "Same root cause as #978/#1282. Verified fixed on main, commented with repro. Pending release."
+      "note": "Earlier \"fixed on main\" claim was WRONG (only mirror :where(:not()) fixed). .root :not(:where(.unused)) still purged on main; posted correction. Community PR #1504 fixes it. Not closable on release."
     },
     {
       "number": 1153,
       "state": "resolution_recommended",
       "updated_at": "2026-10-24",
-      "note": "&:hover nested in a used rule now kept; side effect of #1467. Commented with repro and added a regression test via PR."
+      "note": "&:hover nested in a used rule kept on main (side effect of #1467). Regression test PR #1513. Pending release."
+    },
+    {
+      "number": 964,
+      "state": "commented",
+      "updated_at": "2026-10-24",
+      "note": "Fix PR opened (branch repo-assist/fix-issue-964-empty-media-queries): remove comment-only / nested emptied at-rules. Commented on issue linking it."
+    },
+    {
+      "number": 913,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-24",
+      "note": "Greedy safelist tests attribute NAME not value. Posted root cause + verified workaround greedy [/^class$/]. Fix needs maintainer decision aligned with blocklist design in #1495."
+    },
+    {
+      "number": 1318,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-24",
+      "note": "Usage error: -content parsed as -c ontent (--config). Explained --css/--content usage, labelled question. Close once reporter confirms."
+    },
+    {
+      "number": 1339,
+      "state": "deferred",
+      "updated_at": "2026-10-24",
+      "note": "Covered by maintainer PR #1495 (blocklist attribute selectors with value). Do not duplicate."
     },
     {
       "number": 170,
       "state": "deferred",
       "updated_at": "2026-10-24",
-      "note": "2019 thread on ignore comments vs @import'd CSS. Root cause already explained by community; docs cover the `!` comment gotcha. Low value to comment; revisit only on new activity."
+      "note": "2019 thread on ignore comments vs @import CSS. Root cause already explained by community; low value to comment; revisit only on new activity."
     }
   ],
   "fixes": [
     {
       "issue": 1153,
-      "pr": null,
+      "pr": 1513,
       "branch": "repo-assist/test-nested-hover-1153",
       "status": "open",
       "updated_at": "2026-10-24",
       "note": "No code fix needed (already fixed by #1467); PR adds a regression test only."
+    },
+    {
+      "issue": 964,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-964-empty-media-queries",
+      "status": "open",
+      "updated_at": "2026-10-24",
+      "note": "Draft PR: isRuleEmpty treats comment-only rules/at-rules as empty (ignore annotations excluded) and removes emptied ancestors up to root. Changeset patch."
     }
   ],
   "checks": [
     {
       "area": "docs",
       "checked_at": "2026-10-24",
-      "result": "docs/CLI.md and docs/fr/CLI.md had stale --help output (old short flags -con/-css/-font/-keyframes/-rejected/-rejected-css). Fixed via PR repo-assist/basics-cli-docs-fix.",
+      "result": "docs/CLI.md and docs/fr/CLI.md had stale --help output (old short flags like -con). Fixed via PR #1512.",
       "follow_up": null
     },
     {
       "area": "tests",
       "checked_at": "2026-10-24",
-      "result": "pseudo-class.test.ts had no coverage for native CSS nesting (&:hover). Added via PR repo-assist/test-nested-hover-1153.",
+      "result": "gulp-purgecss lacked tests for rejected option and PluginError emission; added via PR branch repo-assist/test-gulp-rejected-and-errors (stmts 82.9->87.8%).",
+      "follow_up": "Remaining gulp gaps: sourcemap application and stream-mode error path."
+    },
+    {
+      "area": "build",
+      "checked_at": "2026-10-24",
+      "result": "postcss-purgecss CJS does module.exports=fn but d.ts says export default -> wrong ESM types under node16 (#1263). Needs exports map/per-condition types; maintainer assigned.",
+      "follow_up": "Only propose if maintainer asks; affects build of several packages."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-10-24",
+      "result": "Reviewed purgecss/src/index.ts helpers; no clearly beneficial low-risk refactor found.",
       "follow_up": null
     }
   ],
@@ -64,18 +108,18 @@
   "priorities": [
     {
       "task": 2,
-      "item": "issues-978-1282-1197-1153",
-      "note": "Once the pending minor release ships (root-level pseudo-class fix), recommend closing these four as resolved."
+      "item": "release-closures",
+      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
+    },
+    {
+      "task": 2,
+      "item": "untouched-older-issues",
+      "note": "Never-addressed older bugs to investigate: #523, #803, #881, #998, #1036, #1115, #1123, #1131, #1156, #1229, #1258, #1262, #1298, #1324, #1348."
     },
     {
       "task": 3,
-      "item": "issue-1339",
-      "note": "[blocklist] can't remove [type='button'] selector — not yet investigated, candidate for next pass."
-    },
-    {
-      "task": 3,
-      "item": "issue-964",
-      "note": "Empty @media queries not purged — not yet investigated, candidate for next pass."
+      "item": "issue-913",
+      "note": "If maintainer picks a direction (attribute value vs full selector), implement greedy/standard safelist matching for attribute values."
     }
   ]
 }
