@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "cursors": {
+    "labelling_after": null,
+    "investigation_after": null
+  },
+  "issues": [
+    {
+      "number": 978,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-24",
+      "note": "Root-level :is/:where fix verified on main (#1467, #1509), not yet on npm (still 8.0.0). Recommend closing after next release."
+    },
+    {
+      "number": 1282,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-24",
+      "note": "Same root cause as #978/#1197 (:where(:not())/:is():not() nesting). Verified fixed on main, commented with repro. Pending release."
+    },
+    {
+      "number": 1197,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-24",
+      "note": "Same root cause as #978/#1282. Verified fixed on main, commented with repro. Pending release."
+    },
+    {
+      "number": 1153,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-24",
+      "note": "&:hover nested in a used rule now kept; side effect of #1467. Commented with repro and added a regression test via PR."
+    },
+    {
+      "number": 170,
+      "state": "deferred",
+      "updated_at": "2026-10-24",
+      "note": "2019 thread on ignore comments vs @import'd CSS. Root cause already explained by community; docs cover the `!` comment gotcha. Low value to comment; revisit only on new activity."
+    }
+  ],
+  "fixes": [
+    {
+      "issue": 1153,
+      "pr": null,
+      "branch": "repo-assist/test-nested-hover-1153",
+      "status": "open",
+      "updated_at": "2026-10-24",
+      "note": "No code fix needed (already fixed by #1467); PR adds a regression test only."
+    }
+  ],
+  "checks": [
+    {
+      "area": "docs",
+      "checked_at": "2026-10-24",
+      "result": "docs/CLI.md and docs/fr/CLI.md had stale --help output (old short flags -con/-css/-font/-keyframes/-rejected/-rejected-css). Fixed via PR repo-assist/basics-cli-docs-fix.",
+      "follow_up": null
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-10-24",
+      "result": "pseudo-class.test.ts had no coverage for native CSS nesting (&:hover). Added via PR repo-assist/test-nested-hover-1153.",
+      "follow_up": null
+    }
+  ],
+  "completed_actions": [],
+  "priorities": [
+    {
+      "task": 2,
+      "item": "issues-978-1282-1197-1153",
+      "note": "Once the pending minor release ships (root-level pseudo-class fix), recommend closing these four as resolved."
+    },
+    {
+      "task": 3,
+      "item": "issue-1339",
+      "note": "[blocklist] can't remove [type='button'] selector — not yet investigated, candidate for next pass."
+    },
+    {
+      "task": 3,
+      "item": "issue-964",
+      "note": "Empty @media queries not purged — not yet investigated, candidate for next pass."
+    }
+  ]
+}
