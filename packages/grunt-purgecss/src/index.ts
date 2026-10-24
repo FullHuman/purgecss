@@ -21,6 +21,14 @@ function gruntPurgeCSS(grunt: IGrunt): void {
     const promisedPurgedFiles = [];
     for (const file of this.files) {
       const source = getAvailableFiles(grunt, file.src);
+      if (source.length === 0) {
+        promisedPurgedFiles.push(
+          Promise.reject(
+            new Error(`No source files found for "${file.dest}".`),
+          ),
+        );
+        continue;
+      }
       const purgedCss = new PurgeCSS()
         .purge({
           ...options,
@@ -46,7 +54,10 @@ function gruntPurgeCSS(grunt: IGrunt): void {
       .then(() => {
         done();
       })
-      .catch(() => done(false));
+      .catch((error: Error) => {
+        grunt.log.error(error.message);
+        done(false);
+      });
   });
 }
 
