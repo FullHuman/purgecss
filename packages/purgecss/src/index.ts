@@ -311,33 +311,6 @@ function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
   );
 }
 
-/**
- * Returns true if the selector is a pseudo class at the root level
- * Pseudo classes checked: :where, :is, :has, :not
- * @param selector - selector
- */
-function isPseudoClassAtRootLevel(selector: selectorParser.Node): boolean {
-  let result = false;
-  if (
-    selector.type === "selector" &&
-    selector.parent?.type === "root" &&
-    selector.nodes.length === 1
-  ) {
-    selector.walk((node) => {
-      if (
-        node.type === "pseudo" &&
-        (node.value === ":where" ||
-          node.value === ":is" ||
-          node.value === ":has" ||
-          node.value === ":not")
-      ) {
-        result = true;
-      }
-    });
-  }
-  return result;
-}
-
 function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
   return node?.type === "atrule";
 }
@@ -921,10 +894,6 @@ class PurgeCSS {
       return true;
     }
 
-    if (isPseudoClassAtRootLevel(selector)) {
-      return true;
-    }
-
     // if there is any greedy safelist pattern, run all the selector parts through them
     // if there is any match, return true
     if (this.options.safelist.greedy.length > 0) {
@@ -938,8 +907,6 @@ class PurgeCSS {
         return true;
       }
     }
-
-    let isPresent = false;
 
     for (const selectorNode of selector.nodes) {
       const selectorValue = this.getSelectorValue(selectorNode);
@@ -956,7 +923,6 @@ class PurgeCSS {
         (CSS_SAFELIST.includes(selectorValue) ||
           this.isSelectorSafelisted(selectorValue))
       ) {
-        isPresent = true;
         continue;
       }
 
@@ -965,6 +931,7 @@ class PurgeCSS {
         return false;
       }
 
+      let isPresent: boolean;
       switch (selectorNode.type) {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
@@ -990,17 +957,20 @@ class PurgeCSS {
           isPresent = isTagFound(selectorNode, selectorsFromExtractor);
           break;
         default:
+          // Pseudo-classes (:where, :is, :not, …) carry no matchable name at
+          // this level; their inner selectors are evaluated separately. Skip
+          // them without treating the compound as unused.
           continue;
       }
 
-      // selector is not safelisted
-      // and it has not been found as an attribute/class/id/tag
+      // a matchable part (class/id/tag/attribute) was not found: drop it
       if (!isPresent) {
         return false;
       }
     }
 
-    return isPresent;
+    // nothing was found missing: keep the selector
+    return true;
   }
 
   /**
