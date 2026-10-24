@@ -375,7 +375,11 @@ steps:
           json.dump(result, f, indent=2)
       EOF
 
-engine: claude
+engine:
+  id: claude
+  model: claude-opus-5-5
+  env:
+    CLAUDE_CODE_EFFORT_LEVEL: xhigh
 
 source: githubnext/agentics/workflows/repo-assist.md@139fa09ef17cde4135e696ff8e7af09bc5ddfa6e
 ---
