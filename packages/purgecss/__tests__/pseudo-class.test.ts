@@ -266,6 +266,34 @@ describe("root-level pseudo-class selectors", () => {
   });
 });
 
+describe("root-level pseudo-class selectors with a blocklist", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: "<div class='used blocked'></div>", extension: "html" }],
+      css: [
+        {
+          raw: ":is(.used){a:b} :where(.used){c:d} :not(.x){e:f} :has(.used){g:h} :is(.used, .blocked){i:j}",
+        },
+      ],
+      blocklist: [/is/, /re/, /not/, /has/, "blocked"],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("does not match the blocklist against the pseudo class name", () => {
+    expect(purgedCSS).toContain(":is(.used){a:b}");
+    expect(purgedCSS).toContain(":where(.used){c:d}");
+    expect(purgedCSS).toContain(":not(.x){e:f}");
+    expect(purgedCSS).toContain(":has(.used){g:h}");
+  });
+
+  it("still removes blocklisted selectors inside :is()", () => {
+    expect(purgedCSS).toContain(":is(.used){i:j}");
+    expect(purgedCSS).not.toContain(".blocked");
+  });
+});
+
 describe(":is pseudo class", () => {
   let purgedCSS: string;
   beforeAll(async () => {
