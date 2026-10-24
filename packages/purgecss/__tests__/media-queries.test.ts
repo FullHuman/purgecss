@@ -33,4 +33,19 @@ describe("media queries", () => {
   it("removes the empty media query", () => {
     expect(purgecssResult.includes("66666px")).toBe(false);
   });
+
+  it("removes the media query left with only a comment", () => {
+    expect(purgecssResult.includes("77777px")).toBe(false);
+    expect(purgecssResult.includes("only this comment is left")).toBe(false);
+  });
+
+  it("removes the media query left empty by a nested at-rule", () => {
+    expect(purgecssResult.includes("88888px")).toBe(false);
+    expect(purgecssResult.includes("@supports")).toBe(false);
+  });
+
+  it("keeps the comments of a media query that is still used", () => {
+    expect(purgecssResult.includes("99999px")).toBe(true);
+    expect(purgecssResult.includes("this comment stays")).toBe(true);
+  });
 });
