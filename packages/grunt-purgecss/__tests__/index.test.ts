@@ -27,7 +27,13 @@ describe("Purgecss grunt plugin", () => {
     process.chdir(cwd);
   });
 
-  const files = ["simple.css", "footer.css", "menu.css", "profile.css"];
+  const files = [
+    "simple.css",
+    "footer.css",
+    "menu.css",
+    "profile.css",
+    "multi.css",
+  ];
   for (const file of files) {
     it(`remove unused css successfully: ${file}`, () => {
       const actual = fs.readFileSync(`${__dirname}/tmp/${file}`).toString();

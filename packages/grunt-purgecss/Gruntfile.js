@@ -14,6 +14,14 @@ module.exports = grunt => {
           '__tests__/tmp/footer.css': ['__tests__/fixtures/src/footer.css'],
           '__tests__/tmp/simple.css': ['__tests__/fixtures/src/simple/simple.css']
         }
+      },
+      multi: {
+        options: {
+          content: ['./__tests__/fixtures/src/multi/*.html']
+        },
+        files: {
+          '__tests__/tmp/multi.css': ['__tests__/fixtures/src/multi/a.css', '__tests__/fixtures/src/multi/b.css']
+        }
       }
     }
   });
