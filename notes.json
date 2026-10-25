@@ -60,22 +60,10 @@
       "note": "Fix PR #1515 open (remove comment-only / nested emptied at-rules). Await review."
     },
     {
-      "number": 1324,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-25",
-      "note": "7.x CLI dropped CJS config defaultExtractor (import() .default not unwrapped); fixed by 4ad48c4 in 8.0.0, verified v6/v7.0.2/v8. Commented; recommend close."
-    },
-    {
       "number": 1262,
       "state": "commented",
       "updated_at": "2026-10-25",
       "note": "Cross-file vars/keyframes/font-faces removed when definition file precedes usage file. Fix PR from branch repo-assist/fix-issue-1262-cross-file-variables. Commented."
-    },
-    {
-      "number": 1348,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-25",
-      "note": "No repro, reporter account deleted (ghost). No comment posted; suggested close in monthly summary."
     },
     {
       "number": 1325,
@@ -88,6 +76,12 @@
       "state": "deferred",
       "updated_at": "2026-10-25",
       "note": "JSON config cannot hold RegExp in safelist deep/greedy; assigned to maintainer. Possible fix: accept strings and convert to RegExp."
+    },
+    {
+      "number": 1519,
+      "state": "commented",
+      "updated_at": "2026-10-25",
+      "note": "Rejected selectors kept leading whitespace (selector-parser spaces.before). Fix PR from branch repo-assist/fix-issue-1519-trim-rejected (trims for rejected + rejectedCss). Commented."
     }
   ],
   "fixes": [
@@ -109,11 +103,19 @@
     },
     {
       "issue": 1262,
-      "pr": null,
+      "pr": 1517,
       "branch": "repo-assist/fix-issue-1262-cross-file-variables",
       "status": "open",
       "updated_at": "2026-10-25",
       "note": "getPurgedCSS walks all css files, then removes unused vars/keyframes/font-faces once. Test multiple-css-files.test.ts. Changeset patch."
+    },
+    {
+      "issue": 1519,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-1519-trim-rejected",
+      "status": "open",
+      "updated_at": "2026-10-25",
+      "note": "Trim selector.toString() in evaluateRule for rejected and rejectedCss; fixed 3-space expectation in rejectedCss test. Changeset patch."
     }
   ],
   "checks": [
@@ -130,24 +132,39 @@
       "follow_up": "Only propose if maintainer asks; affects build of several packages."
     },
     {
-      "area": "code",
-      "checked_at": "2026-10-24",
-      "result": "Reviewed purgecss/src/index.ts helpers; no clearly beneficial low-risk refactor found.",
-      "follow_up": null
+      "area": "performance",
+      "checked_at": "2026-10-25",
+      "result": "VariablesStructure.addVariableUsage linked all redefinitions (O(N^3) edges, crash ~800 rules). PR branch repo-assist/perf-css-variables-redefinitions. Differential fuzz 5000 cases identical.",
+      "follow_up": "addVariable still copies the array per redefinition (O(N^2)); minor, skipped to avoid conflict with #1503."
     },
     {
       "area": "tests",
       "checked_at": "2026-10-25",
-      "result": "gulp-purgecss sourcemap branch was broken (sourceMap:true -> inline map -> applySourceMap(undefined) throws). Fixed + tests in PR branch repo-assist/fix-gulp-sourcemaps (stmts 87.8->93.6%). #1516 gulp rejected/error tests merged.",
-      "follow_up": "Remaining gulp gap: stream-mode error path. cli-config-file.test.ts has stale issues/XXX placeholder (could cite #1324)."
+      "result": "gulp sourcemaps PR #1518. rollup-plugin-purgecss had 72.7% stmts; new options test in rollup PR (-> 78.8%).",
+      "follow_up": "rollup: insert option is a no-op and dest is never set (dead code). gulp stream-mode error path untested. grunt coverage reports 0% (tests run built tasks/)."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-10-25",
+      "result": "rollup-plugin-purgecss only passed content to PurgeCSS (safelist etc. ignored). Fix PR branch repo-assist/fix-rollup-plugin-options.",
+      "follow_up": null
     }
   ],
-  "completed_actions": [],
+  "completed_actions": [
+    {
+      "key": "close-issue-1324",
+      "completed_at": "2026-10-25"
+    },
+    {
+      "key": "close-issue-1348",
+      "completed_at": "2026-10-25"
+    }
+  ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504). #1324 already fixed in 8.0.0."
+      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
     },
     {
       "task": 2,
