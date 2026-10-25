@@ -244,6 +244,26 @@ function isAttributeFound(
 }
 
 /**
+ * Compare attribute selectors by their parsed values rather than CSS formatting.
+ *
+ * @param attributeNode - node of type `attribute`
+ */
+function getAttributeSelectorKey(
+  attributeNode: selectorParser.Attribute,
+): string {
+  const { attribute, namespace, operator, value, insensitive, raws } =
+    attributeNode;
+  // Explicit `s` is stored only in raws; keep it distinct from an omitted flag.
+  const modifier = insensitive
+    ? "i"
+    : "insensitiveFlag" in raws && typeof raws.insensitiveFlag === "string"
+      ? raws.insensitiveFlag.toLowerCase()
+      : "";
+
+  return JSON.stringify([namespace, attribute, operator, value, modifier]);
+}
+
+/**
  * Returns true if the class is found in the extractor selectors
  *
  * @param classNode - node of type `class`
@@ -373,6 +393,8 @@ class PurgeCSS {
 
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
+  private blocklistedAttributeSelectors: Set<string> = new Set();
+  private blocklistPatterns: RegExp[] = [];
   public selectorsRemoved: Set<string> = new Set();
   public removedNodes: postcss.Node[] = [];
   public variablesStructure: VariablesStructure = new VariablesStructure();
@@ -764,18 +786,60 @@ class PurgeCSS {
   }
 
   /**
+   * Parse full attribute selector strings once per CSS traversal. Other strings
+   * remain literal selector names, and regexes retain their textual matching.
+   */
+  private prepareAttributeBlocklist(): void {
+    this.blocklistedAttributeSelectors.clear();
+    this.blocklistPatterns = [];
+
+    for (const item of this.options.blocklist) {
+      if (typeof item !== "string") {
+        this.blocklistPatterns.push(item);
+        continue;
+      }
+      if (!item.trim().startsWith("[")) continue;
+
+      try {
+        const parsed = selectorParser().astSync(item);
+        const selector = parsed.nodes[0];
+        const attribute = selector?.nodes[0];
+        if (
+          parsed.nodes.length === 1 &&
+          selector.nodes.length === 1 &&
+          attribute?.type === "attribute"
+        ) {
+          this.blocklistedAttributeSelectors.add(
+            getAttributeSelectorKey(attribute),
+          );
+        }
+      } catch {
+        // Literal blocklist names need not be valid CSS selectors.
+      }
+    }
+  }
+
+  /**
    * Check if the attribute selector is blocklisted with the option blocklist
    *
-   * The blocklist is compared with the attribute selector as it is written
-   * in the CSS, and with its unquoted, double-quoted and single-quoted forms,
-   * e.g. `[type=button]`, `[type="button"]` and `[type='button']`.
+   * Strings compare parsed attribute values. Regexes compare the original CSS
+   * and its unquoted, double-quoted and single-quoted forms, with original and
+   * normalized whitespace.
    *
    * @param attributeNode - node of type "attribute"
    */
   private isAttributeSelectorBlocklisted(
     attributeNode: selectorParser.Attribute,
   ): boolean {
-    if (this.options.blocklist.length === 0) {
+    if (
+      this.blocklistedAttributeSelectors.size > 0 &&
+      this.blocklistedAttributeSelectors.has(
+        getAttributeSelectorKey(attributeNode),
+      )
+    ) {
+      return true;
+    }
+    if (this.blocklistPatterns.length === 0) {
       return false;
     }
 
@@ -806,7 +870,7 @@ class PurgeCSS {
       attributeSelectors.add(normalizedAttribute.toString());
     }
     return [...attributeSelectors].some((attributeSelector) =>
-      this.isSelectorBlocklisted(attributeSelector),
+      this.blocklistPatterns.some((pattern) => pattern.test(attributeSelector)),
     );
   }
 
@@ -1070,6 +1134,7 @@ class PurgeCSS {
     root: PostCSSRoot,
     selectors: ExtractorResultSets,
   ): void {
+    this.prepareAttributeBlocklist();
     root.walk((node) => {
       if (node.type === "rule") {
         return this.evaluateRule(node, selectors);

@@ -350,12 +350,14 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Même si nav-links et usedClass sont trouvés par un extracteur, ils seront supprimés.
 
-Les sélecteurs d'attribut peuvent être bloqués par le nom de l'attribut, ou avec leur opérateur et leur valeur pour cibler un sélecteur précis. Les guillemets autour de la valeur sont optionnels et n'ont pas besoin de correspondre à ceux utilisés dans le CSS.
+Les sélecteurs d'attribut peuvent être bloqués par le nom de l'attribut, ou avec leur opérateur et leur valeur pour cibler un sélecteur précis. Les guillemets autour de la valeur n'ont pas besoin de correspondre à ceux utilisés dans le CSS et peuvent être omis lorsque la valeur est un identifiant CSS valide.
 
 ```js
 blocklist: ['data-theme', '[type="button"]', /^\[lang\|=/]
 ```
 Ici, tous les sélecteurs utilisant l'attribut `data-theme` seront supprimés, ainsi que `[type='button']` et les sélecteurs tels que `[lang|="en"]`. Les autres sélecteurs sur l'attribut `type`, comme `[type='submit']`, sont conservés.
+
+Les chaînes contenant un sélecteur d'attribut complet sont analysées des deux côtés de la comparaison. Les espaces en dehors des valeurs, le type de guillemets et les séquences d'échappement CSS équivalentes n'affectent pas la correspondance. Par exemple, `'[ data-label = "café" ]'` bloque `[data-label='café']` ainsi que `[data-label="caf\e9"]`.
 
 Les espaces de noms et les modificateurs de sensibilité à la casse restent pris en compte dans la comparaison. Par exemple, `[data-kind="button" i]` correspond à `[data-kind='button' i]`, mais `[data-kind="button"]` ne correspond pas à la version avec le modificateur `i`. De même, `[href="icon"]` ne bloque pas `[*|href="icon"]`. Les valeurs et les noms d'attribut doivent utiliser des séquences d'échappement CSS valides, en échappant également les barres obliques inverses si nécessaire dans les chaînes JavaScript.
 

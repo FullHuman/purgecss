@@ -390,6 +390,32 @@ describe("blocklisted attribute selector normalization", () => {
   });
 
   it.each([
+    ["[data-label='café']", '[data-label="café"]', "data-label", "café"],
+    [
+      "[data-label='日本語🌍']",
+      "[data-label=日本語🌍]",
+      "data-label",
+      "日本語🌍",
+    ],
+    [
+      String.raw`[data-label='\62 utton']`,
+      String.raw`[data-label="\62 utton"]`,
+      "data-label",
+      "button",
+    ],
+    [
+      String.raw`[data-label='caf\e9']`,
+      '[data-label="café"]',
+      "data-label",
+      "café",
+    ],
+    [
+      String.raw`[\64 ata-kind='button']`,
+      '[data-kind="button"]',
+      "data-kind",
+      "button",
+    ],
+    [String.raw`[s\76 g|href='icon']`, '[svg|href="icon"]', "href", "icon"],
     [
       String.raw`[data-label='say "hi"']`,
       String.raw`[data-label="say \"hi\""]`,
@@ -437,10 +463,73 @@ describe("blocklisted attribute selector normalization", () => {
     ["[ data-kind = 'button' ]", '[data-kind="button"]'],
     ["[ data-kind = 'button'  i ]", '[data-kind="button" i]'],
     ["[ data-kind /* comment */ = 'button' s ]", '[data-kind="button" s]'],
+    ["[data-kind/**/='button']", '[data-kind="button"]'],
+    ["[data-kind='button'i]", "[data-kind=button i]"],
     ["[ data-kind ]", "[data-kind]"],
   ])("normalizes whitespace in %s", async (selector, blocked) => {
     expect(await purge(selector, [])).toBe(`${selector} { color: red }`);
     expect(await purge(selector, [blocked])).toBe("");
+    expect(await purge(blocked, [selector])).toBe("");
+  });
+
+  it.each(["i", "s"])(
+    "normalizes the case of the %s modifier",
+    async (flag) => {
+      const selector = `[data-kind='button' ${flag.toUpperCase()}]`;
+      const blocked = `[data-kind="button" ${flag}]`;
+      expect(await purge(selector, [blocked])).toBe("");
+      expect(await purge(blocked, [selector])).toBe("");
+    },
+  );
+
+  it.each([
+    "[data-kind=",
+    "[data-kind='button'].other",
+    "[data-kind='button'], [disabled]",
+  ])(
+    "does not treat %s as a standalone attribute selector",
+    async (blocked) => {
+      const selector = '[data-kind="button"]';
+      expect(await purge(selector, [blocked])).toBe(
+        `${selector} { color: red }`,
+      );
+    },
+  );
+
+  it("distinguishes an empty attribute value from a presence selector", async () => {
+    expect(
+      await purge('[data-kind=""]', ["[data-kind='']"], "data-kind", ""),
+    ).toBe("");
+    expect(
+      await purge('[data-kind=""]', ["[data-kind]"], "data-kind", ""),
+    ).toBe('[data-kind=""] { color: red }');
+    expect(await purge("[data-kind]", ['[data-kind=""]'])).toBe(
+      "[data-kind] { color: red }",
+    );
+  });
+
+  it("refreshes the attribute blocklist when reusing a PurgeCSS instance", async () => {
+    const purgecss = new PurgeCSS();
+    const options = {
+      content: [{ raw: "data-kind button", extension: "html" }],
+      css: [{ raw: '[data-kind="button"] { color: red }' }],
+    };
+    expect(
+      (
+        await purgecss.purge({
+          ...options,
+          blocklist: ["[ data-kind = 'button' ]"],
+        })
+      )[0].css,
+    ).toBe("");
+    expect((await purgecss.purge({ ...options, blocklist: [] }))[0].css).toBe(
+      options.css[0].raw,
+    );
+    expect(
+      (
+        await purgecss.purge({ ...options, blocklist: ['[data-kind="reset"]'] })
+      )[0].css,
+    ).toBe(options.css[0].raw);
   });
 
   it("tests regexes against escaped selectors with their modifiers", async () => {

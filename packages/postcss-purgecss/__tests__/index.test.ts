@@ -71,6 +71,20 @@ describe("Purgecss postcss plugin", () => {
     expect(result.messages[0].text).toMatch(/another-one-not-found/);
   });
 
+  it("normalizes full attribute selectors in the blocklist", async () => {
+    const result = await postcss([
+      purgeCSSPlugin({
+        content: [{ raw: "content", extension: "html" }],
+        defaultExtractor: () => ["data-label", "café", "tea"],
+        blocklist: ['[ data-label = "café" ]'],
+      }),
+    ]).process("[data-label='café'],[data-label='tea']{color:red}", {
+      from: undefined,
+    });
+
+    expect(result.css).toBe("[data-label='tea']{color:red}");
+  });
+
   it(`lets other plugins transform selectors before purging`, async () => {
     const input = fs
       .readFileSync(`${__dirname}/fixtures/src/other-plugins/other-plugins.css`)
