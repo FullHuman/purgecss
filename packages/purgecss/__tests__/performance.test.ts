@@ -22,4 +22,22 @@ describe("performance", () => {
         console.log("performance test took", Date.now() - start, "ms");
       });
   });
+
+  it("should not suffer from css variables redefined in many rules", async () => {
+    // every rule redefines `--x`, which depends on `--y`, also redefined
+    const classes = Array.from({ length: 1000 }, (_, i) => `c${i}`);
+    const css = classes
+      .map(
+        (name, i) =>
+          `.${name} { --y: ${i}px; --x: var(--y); color: var(--x); }`,
+      )
+      .join("\n");
+    const [result] = await new PurgeCSS().purge({
+      content: [{ raw: classes.join(" "), extension: "html" }],
+      css: [{ raw: `${css}\n:root { --unused: 0; }` }],
+      variables: true,
+    });
+    expect(result.css).toContain(".c999 { --y: 999px; --x: var(--y);");
+    expect(result.css).not.toContain("--unused");
+  });
 });

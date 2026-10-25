@@ -39,7 +39,12 @@ export class VariablesStructure {
     matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
     const { prop } = declaration;
-    const nodes = this.nodes.get(prop);
+    // only the node of this declaration depends on the variables it uses.
+    // Linking every earlier declaration of `prop` again on each redefinition
+    // would add duplicate dependencies and slow down large stylesheets.
+    const nodes = this.nodes
+      .get(prop)
+      ?.filter((node) => node.value === declaration);
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
@@ -72,7 +77,11 @@ export class VariablesStructure {
         const currentNode = queue.pop();
         if (currentNode && !currentNode.isUsed) {
           currentNode.isUsed = true;
-          queue.push(...currentNode.nodes);
+          // push one by one, spreading a large array of dependencies
+          // as arguments can exceed the maximum call stack size
+          for (const node of currentNode.nodes) {
+            queue.push(node);
+          }
         }
       }
     }
