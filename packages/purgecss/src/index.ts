@@ -41,6 +41,10 @@ import {
 } from "./types";
 
 import { VariablesStructure } from "./VariablesStructure";
+import {
+  getAttributeSelectorKey,
+  parseAttributeSelector,
+} from "./attribute-selector";
 
 export * from "./types";
 export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
@@ -241,55 +245,6 @@ function isAttributeFound(
     default:
       return true;
   }
-}
-
-/**
- * Compare attribute selectors by their parsed values rather than CSS formatting.
- *
- * @param attributeNode - node of type `attribute`
- */
-function getAttributeSelectorKey(
-  attributeNode: selectorParser.Attribute,
-): string {
-  const { attribute, namespace, operator, value, insensitive, raws } =
-    attributeNode;
-  // Explicit `s` is stored only in raws; keep it distinct from an omitted flag.
-  let modifier = insensitive
-    ? "i"
-    : "insensitiveFlag" in raws && typeof raws.insensitiveFlag === "string"
-      ? raws.insensitiveFlag.toLowerCase()
-      : "";
-
-  if (modifier.includes("\\")) {
-    // The attribute parser leaves escaped modifiers raw. Parse the identifier
-    // separately to decode its escapes using the same CSS parser.
-    try {
-      const parsed = selectorParser().astSync(modifier);
-      const selector = parsed.nodes[0];
-      const identifier = selector?.nodes[0];
-      if (
-        parsed.nodes.length === 1 &&
-        selector.nodes.length === 1 &&
-        identifier?.type === "tag"
-      ) {
-        modifier = identifier.value.toLowerCase();
-      }
-    } catch {
-      // An invalid modifier must not become equivalent to a valid one.
-    }
-  }
-
-  // An escaped `*` names a namespace; a bare `*` is the wildcard.
-  const wildcardNamespace =
-    namespace === "*" && !("namespace" in raws && raws.namespace);
-  return JSON.stringify([
-    namespace,
-    wildcardNamespace,
-    attribute,
-    operator,
-    value,
-    modifier,
-  ]);
 }
 
 /**
@@ -649,7 +604,11 @@ class PurgeCSS {
         if (selector.type !== "selector") {
           return;
         }
-        const keepSelector = this.shouldKeepSelector(selector, selectors);
+        const keepSelector = this.shouldKeepSelector(
+          selector,
+          selectors,
+          node.selector,
+        );
 
         if (!keepSelector) {
           if (this.options.rejected) {
@@ -845,23 +804,11 @@ class PurgeCSS {
         this.blocklistPatterns.push(item);
         continue;
       }
-      if (!item.trim().startsWith("[")) continue;
-
-      try {
-        const parsed = selectorParser().astSync(item);
-        const selector = parsed.nodes[0];
-        const attribute = selector?.nodes[0];
-        if (
-          parsed.nodes.length === 1 &&
-          selector.nodes.length === 1 &&
-          attribute?.type === "attribute"
-        ) {
-          this.blocklistedAttributeSelectors.add(
-            getAttributeSelectorKey(attribute),
-          );
-        }
-      } catch {
-        // Literal blocklist names need not be valid CSS selectors.
+      const attribute = parseAttributeSelector(item);
+      if (attribute) {
+        this.blocklistedAttributeSelectors.add(
+          getAttributeSelectorKey(attribute),
+        );
       }
     }
   }
@@ -874,15 +821,25 @@ class PurgeCSS {
    * normalized whitespace.
    *
    * @param attributeNode - node of type "attribute"
+   * @param source - original rule selector text
    */
   private isAttributeSelectorBlocklisted(
     attributeNode: selectorParser.Attribute,
+    source: string,
   ): boolean {
     if (
+      this.blocklistedAttributeSelectors.size === 0 &&
+      this.blocklistPatterns.length === 0
+    )
+      return false;
+    const attribute = parseAttributeSelector(
+      source.slice(attributeNode.sourceIndex),
+      false,
+    );
+    if (!attribute) return false;
+    if (
       this.blocklistedAttributeSelectors.size > 0 &&
-      this.blocklistedAttributeSelectors.has(
-        getAttributeSelectorKey(attributeNode),
-      )
+      this.blocklistedAttributeSelectors.has(getAttributeSelectorKey(attribute))
     ) {
       return true;
     }
@@ -890,18 +847,33 @@ class PurgeCSS {
       return false;
     }
 
-    const { operator, value } = attributeNode;
-    const attributeSelectors = new Set([attributeNode.toString().trim()]);
+    const { operator, value } = attribute;
+    const attributeSelectors = new Set([attribute.raw]);
     const quotedAttribute = attributeNode.clone();
-    const normalizedAttribute = attributeNode.clone({
+    // Repair decoded fields for generated regex candidates without changing the
+    // AST that will be serialized into the output stylesheet.
+    if (quotedAttribute.attribute !== attribute.attribute)
+      quotedAttribute.attribute = attribute.attribute;
+    if (quotedAttribute.namespace !== attribute.namespace)
+      quotedAttribute.namespace = attribute.namespace ?? "";
+    if (
+      attribute.namespace === "*" &&
+      !attribute.wildcardNamespace &&
+      !("namespace" in quotedAttribute.raws && quotedAttribute.raws.namespace)
+    ) {
+      Object.assign(quotedAttribute.raws, { namespace: "\\*" });
+    }
+    quotedAttribute.operator = operator;
+    quotedAttribute.insensitive = attribute.modifier === "i";
+    Object.assign(quotedAttribute.raws, {
+      insensitiveFlag: attribute.rawModifier,
+    });
+    const normalizedAttribute = quotedAttribute.clone({
       spaces: { before: "", after: "" },
     });
     delete normalizedAttribute.raws.spaces;
     // The parser stores an explicit case-sensitive flag in raws.
-    if (
-      normalizedAttribute.insensitive ||
-      "insensitiveFlag" in normalizedAttribute.raws
-    ) {
+    if (attribute.modifier) {
       normalizedAttribute.spaces.value = { after: " " };
     }
 
@@ -1069,12 +1041,14 @@ class PurgeCSS {
    *
    * @param selector - set of css selectors found in the content files or string
    * @param selectorsFromExtractor - selectors in the css rule
+   * @param source - original rule selector text
    *
    * @returns true if the selector should be kept in the processed CSS
    */
   private shouldKeepSelector(
     selector: selectorParser.Selector,
     selectorsFromExtractor: ExtractorResultSets,
+    source: string,
   ): boolean {
     // selectors in pseudo classes are ignored except :where() and :is(). For those pseudo-classes, we are treating the selectors inside the same way as they would be outside.
     if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
@@ -1126,7 +1100,7 @@ class PurgeCSS {
       // The attribute selector, with its value, is present in the blocklist
       if (
         selectorNode.type === "attribute" &&
-        this.isAttributeSelectorBlocklisted(selectorNode)
+        this.isAttributeSelectorBlocklisted(selectorNode, source)
       ) {
         return false;
       }

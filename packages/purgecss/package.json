@@ -40,6 +40,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@csstools/css-tokenizer": "^4.0.2",
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
     "postcss": "^8.5.29",

@@ -7,3 +7,5 @@ Allow blocklisting full attribute selectors, such as `[type="button"]`, while re
 Regular expressions in `blocklist` now also match full attribute selectors and their quote variants. Existing unanchored patterns can therefore remove additional selectors: `/nav-/` now removes `[data-section="nav-top"]` as well as matching class or attribute names.
 
 Match escaped case-sensitivity modifiers in attribute-selector strings and distinguish wildcard namespace prefixes from escaped literal names. Evaluate global and sticky blocklist regexes independently for each candidate without changing their `lastIndex`, so an attribute match cannot cause a subsequent class, ID, or tag to be missed.
+
+Tokenize the original attribute-selector text to correctly decode hexadecimal escape terminators and escaped line continuations, and preserve token boundaries around comments. Validate the complete attribute grammar so malformed blocklist entries cannot be silently repaired into different valid selectors. Generate regex quote variants from the correctly decoded values.

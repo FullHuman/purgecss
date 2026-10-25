@@ -11,6 +11,7 @@ import json from "@rollup/plugin-json";
 import { RollupOptions } from "rollup";
 
 const external = [
+  "@csstools/css-tokenizer",
   "postcss",
   "postcss-selector-parser",
   "glob",

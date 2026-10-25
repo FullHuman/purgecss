@@ -359,6 +359,8 @@ Here, every selector using the attribute `data-theme` will be removed, as well a
 
 Full attribute-selector strings are parsed on both sides of the comparison. Whitespace outside values, quote styles, and equivalent CSS escapes do not affect matching. For example, `'[ data-label = "café" ]'` blocks `[data-label='café']` as well as `[data-label="caf\e9"]`.
 
+CSS escape terminators, escaped line continuations, and comments follow CSS tokenization rules. For example, `[type=button/**/i]` matches `[type="button" i]`. Only syntactically valid, complete attribute selectors receive this matching behavior. Malformed entries such as `[type="button""reset"]` or `[type="button" i s]` retain literal-name matching and are never repaired into other attribute selectors.
+
 Namespaces and case-sensitivity modifiers remain part of the comparison. For example, `[data-kind="button" i]` matches `[data-kind='button' i]`, but `[data-kind="button"]` does not match the version with the `i` modifier. Similarly, `[href="icon"]` does not block `[*|href="icon"]`. Values and attribute names must use valid CSS escapes, with backslashes also escaped as needed in JavaScript strings.
 
 Regular expressions are tested against attribute names and full attribute selectors, including their quote variants. Existing unanchored patterns can therefore match attribute values: `/nav-/` also removes `[data-section="nav-top"]`.
