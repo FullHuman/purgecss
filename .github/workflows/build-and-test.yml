@@ -14,17 +14,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
+    - uses: pnpm/action-setup@v6
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, lerna bootstrap, run build and test
+        cache: pnpm
+    - name: install, run build, lint and test
       run: |
-        npm i -g npm
-        npm i
-        npm run build --if-present
-        npm run lint
-        npm run test -- -- --coverage
+        pnpm install --frozen-lockfile
+        pnpm run build
+        pnpm run lint
+        pnpm run test --coverage
     - name: Coveralls GitHub Action
       if: matrix.node-version == '24.x'
       uses: coverallsapp/github-action@v2.3.8
@@ -33,4 +34,3 @@ jobs:
         base-path: ./packages/purgecss
       env:
         CI: true
-

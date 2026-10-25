@@ -27,7 +27,7 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
-    "purgecss": "^8.0.0"
+    "purgecss": "workspace:^"
   },
   "devDependencies": {
     "postcss": "^8.5.29"

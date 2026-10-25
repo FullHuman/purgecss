@@ -1,3 +1,4 @@
+import { execFileSync } from "child_process";
 import { Command } from "commander";
 import * as fs from "fs";
 import * as path from "path";
@@ -92,6 +93,37 @@ describe("PurgeCSS CLI config file loading", () => {
       expect(options.blocklist).toEqual(["overridden"]);
       // Config file fontFace should still be applied
       expect(options.fontFace).toBe(true);
+    });
+  });
+
+  // Uses the built CLI: ts-jest compiles `import()` to `require()`, which takes
+  // any file path. Node's `import()` takes a URL, so a Windows drive letter or
+  // a `#` in a folder name made the config file fail to load.
+  describe("built CLI", () => {
+    const binPath = path.join(__dirname, "../../bin/purgecss.js");
+    const configDir = path.join(testDir, "c#");
+    const configPath = path.join(configDir, "purgecss.config.js");
+
+    beforeAll(() => {
+      fs.mkdirSync(configDir, { recursive: true });
+      fs.writeFileSync(
+        configPath,
+        `module.exports = {
+          content: [{ raw: '<div class="used"></div>', extension: "html" }],
+          css: [{ raw: ".used { color: red; } .unused { color: blue; }" }],
+        };`,
+      );
+    });
+
+    it("should load a config file whose path is not a valid URL", () => {
+      const output = execFileSync(
+        process.execPath,
+        [binPath, "--config", configPath],
+        { encoding: "utf8" },
+      );
+      const [result] = JSON.parse(output);
+      expect(result.css).toContain(".used");
+      expect(result.css).not.toContain(".unused");
     });
   });
 });

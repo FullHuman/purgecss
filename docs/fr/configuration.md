@@ -357,6 +357,10 @@ blocklist: ['data-theme', '[type="button"]', /^\[lang\|=/]
 ```
 Ici, tous les sélecteurs utilisant l'attribut `data-theme` seront supprimés, ainsi que `[type='button']` et les sélecteurs tels que `[lang|="en"]`. Les autres sélecteurs sur l'attribut `type`, comme `[type='submit']`, sont conservés.
 
+Les espaces de noms et les modificateurs de sensibilité à la casse restent pris en compte dans la comparaison. Par exemple, `[data-kind="button" i]` correspond à `[data-kind='button' i]`, mais `[data-kind="button"]` ne correspond pas à la version avec le modificateur `i`. De même, `[href="icon"]` ne bloque pas `[*|href="icon"]`. Les valeurs et les noms d'attribut doivent utiliser des séquences d'échappement CSS valides, en échappant également les barres obliques inverses si nécessaire dans les chaînes JavaScript.
+
+Les expressions régulières sont testées sur les noms d'attribut et les sélecteurs d'attribut complets, y compris leurs variantes de guillemets. Les motifs existants non ancrés peuvent donc correspondre aux valeurs d'attribut : `/nav-/` supprime également `[data-section="nav-top"]`.
+
 - **skippedContentGlobs**
 
 Si vous fournissez des globs pour le paramètre `content`, vous pouvez utiliser cette option pour exclure certains fichiers ou dossiers qui seraient autrement analysés. Passez un tableau de globs correspondant aux éléments qui doivent être exclus. (Note : cette option n'a aucun effet si `content` n'utilise pas de globs.)

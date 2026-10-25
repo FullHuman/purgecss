@@ -303,3 +303,166 @@ describe("blocklist option with attribute selectors", () => {
     findInCSS(expect, ["button", "[disabled]"], purgedCSS);
   });
 });
+
+describe("blocklisted attribute selector normalization", () => {
+  async function purge(
+    selector: string,
+    blocklist: Array<string | RegExp>,
+    attribute = "data-kind",
+    value = "button",
+  ): Promise<string> {
+    const [result] = await new PurgeCSS().purge({
+      content: [{ raw: "content", extension: "html" }],
+      defaultExtractor: () => ({
+        attributes: { names: [attribute], values: [value] },
+        classes: [],
+        ids: [],
+        tags: [],
+        undetermined: [],
+      }),
+      css: [{ raw: `${selector} { color: red }` }],
+      blocklist,
+    });
+    return result.css;
+  }
+
+  it.each(["i", "s", "I", "S"])(
+    "preserves the %s modifier when normalizing quotes",
+    async (flag) => {
+      const selector = `[data-kind='button' ${flag}]`;
+      expect(await purge(selector, [])).toBe(`${selector} { color: red }`);
+      expect(await purge(selector, [`[data-kind="button" ${flag}]`])).toBe("");
+      expect(await purge(selector, [`[data-kind=button ${flag}]`])).toBe("");
+    },
+  );
+
+  it.each([
+    ["[data-kind='button' i]", '[data-kind="button"]'],
+    ["[data-kind='button' s]", '[data-kind="button" i]'],
+    ["[data-kind='button']", '[data-kind="button" s]'],
+  ])("does not conflate the modifier in %s", async (selector, blocked) => {
+    expect(await purge(selector, [blocked])).toBe(`${selector} { color: red }`);
+  });
+
+  it.each(["*", ""])(
+    "preserves the %s namespace prefix when normalizing quotes",
+    async (namespace) => {
+      const selector = `[${namespace}|href='icon']`;
+      expect(await purge(selector, [], "href", "icon")).toBe(
+        `${selector} { color: red }`,
+      );
+      expect(
+        await purge(selector, [`[${namespace}|href="icon"]`], "href", "icon"),
+      ).toBe("");
+    },
+  );
+
+  it.each(["[*|href='icon']", "[*|href]"])(
+    "does not broaden a no-namespace blocklist to %s",
+    async (selector) => {
+      const blocked = selector.includes("=") ? '[href="icon"]' : "[href]";
+      expect(await purge(selector, [blocked], "href", "icon")).toBe(
+        `${selector} { color: red }`,
+      );
+    },
+  );
+
+  it("preserves named namespaces", async () => {
+    const css =
+      "@namespace svg \"http://www.w3.org/2000/svg\"; [svg|href='icon'] { color: red }";
+    const options = {
+      content: [{ raw: "href icon", extension: "html" }],
+      css: [{ raw: css }],
+    };
+    expect(
+      (
+        await new PurgeCSS().purge({ ...options, blocklist: ['[href="icon"]'] })
+      )[0].css,
+    ).toBe(css);
+    expect(
+      (
+        await new PurgeCSS().purge({
+          ...options,
+          blocklist: ['[svg|href="icon"]'],
+        })
+      )[0].css,
+    ).toBe('@namespace svg "http://www.w3.org/2000/svg"');
+  });
+
+  it.each([
+    [
+      String.raw`[data-label='say "hi"']`,
+      String.raw`[data-label="say \"hi\""]`,
+      "data-label",
+      'say "hi"',
+    ],
+    [
+      String.raw`[data-label="it's ready"]`,
+      String.raw`[data-label='it\'s ready']`,
+      "data-label",
+      "it's ready",
+    ],
+    [
+      String.raw`[data-path='a\\b']`,
+      String.raw`[data-path="a\\b"]`,
+      "data-path",
+      String.raw`a\b`,
+    ],
+    [
+      String.raw`[data\:kind='button']`,
+      String.raw`[data\:kind="button"]`,
+      "data:kind",
+      "button",
+    ],
+    [
+      "[data-label='hello world']",
+      String.raw`[data-label=hello\ world]`,
+      "data-label",
+      "hello world",
+    ],
+  ])(
+    "escapes quote variants of %s",
+    async (selector, blocked, attribute, value) => {
+      expect(await purge(selector, [], attribute, value)).toBe(
+        `${selector} { color: red }`,
+      );
+      expect(await purge(selector, [blocked], attribute, value)).toBe("");
+      expect(await purge(blocked, [selector], attribute, value)).toBe("");
+    },
+  );
+
+  it.each([
+    ["[data-kind='button'i]", '[data-kind="button"i]'],
+    ["[ data-kind = 'button' ]", '[ data-kind = "button" ]'],
+    ["[ data-kind = 'button' ]", '[data-kind="button"]'],
+    ["[ data-kind = 'button'  i ]", '[data-kind="button" i]'],
+    ["[ data-kind /* comment */ = 'button' s ]", '[data-kind="button" s]'],
+    ["[ data-kind ]", "[data-kind]"],
+  ])("normalizes whitespace in %s", async (selector, blocked) => {
+    expect(await purge(selector, [])).toBe(`${selector} { color: red }`);
+    expect(await purge(selector, [blocked])).toBe("");
+  });
+
+  it("tests regexes against escaped selectors with their modifiers", async () => {
+    expect(
+      await purge("[data-kind='button' i]", [/^\[data-kind="button" i\]$/]),
+    ).toBe("");
+    expect(
+      await purge("[data-kind='button' i]", [/^\[data-kind="button"\]$/]),
+    ).toBe("[data-kind='button' i] { color: red }");
+    expect(
+      await purge(
+        String.raw`[data-label='say "hi"']`,
+        [/^\[data-label="say \\"hi\\""\]$/],
+        "data-label",
+        'say "hi"',
+      ),
+    ).toBe("");
+  });
+
+  it("matches existing unanchored regexes against attribute values", async () => {
+    expect(
+      await purge('[data-kind="nav-top"]', [/nav-/], "data-kind", "nav-top"),
+    ).toBe("");
+  });
+});

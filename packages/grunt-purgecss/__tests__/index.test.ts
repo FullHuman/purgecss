@@ -27,7 +27,13 @@ describe("Purgecss grunt plugin", () => {
     process.chdir(cwd);
   });
 
-  const files = ["simple.css", "footer.css", "menu.css", "profile.css"];
+  const files = [
+    "simple.css",
+    "footer.css",
+    "menu.css",
+    "profile.css",
+    "multi.css",
+  ];
   for (const file of files) {
     it(`remove unused css successfully: ${file}`, () => {
       const actual = fs.readFileSync(`${__dirname}/tmp/${file}`).toString();
@@ -37,4 +43,20 @@ describe("Purgecss grunt plugin", () => {
       expect(actual.replace(/\s/g, "")).toBe(expected.replace(/\s/g, ""));
     });
   }
+
+  it("fails with a clear error when no source file exists", () => {
+    let output = "";
+    let failed = false;
+    try {
+      execSync("npx grunt purgecss:missing", { encoding: "utf8" });
+    } catch (error) {
+      failed = true;
+      output = (error as { stdout: string }).stdout;
+    }
+    expect(failed).toBe(true);
+    expect(output).toContain(
+      'No source files found for "__tests__/tmp/missing.css".',
+    );
+    expect(fs.existsSync(`${__dirname}/tmp/missing.css`)).toBe(false);
+  });
 });

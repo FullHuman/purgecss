@@ -357,6 +357,10 @@ blocklist: ['data-theme', '[type="button"]', /^\[lang\|=/]
 ```
 Here, every selector using the attribute `data-theme` will be removed, as well as `[type='button']` and the selectors such as `[lang|="en"]`. Other selectors on the attribute `type`, such as `[type='submit']`, are kept.
 
+Namespaces and case-sensitivity modifiers remain part of the comparison. For example, `[data-kind="button" i]` matches `[data-kind='button' i]`, but `[data-kind="button"]` does not match the version with the `i` modifier. Similarly, `[href="icon"]` does not block `[*|href="icon"]`. Values and attribute names must use valid CSS escapes, with backslashes also escaped as needed in JavaScript strings.
+
+Regular expressions are tested against attribute names and full attribute selectors, including their quote variants. Existing unanchored patterns can therefore match attribute values: `/nav-/` also removes `[data-section="nav-top"]`.
+
 - **skippedContentGlobs**
 
 If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)

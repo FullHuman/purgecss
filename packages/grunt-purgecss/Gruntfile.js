@@ -14,6 +14,23 @@ module.exports = grunt => {
           '__tests__/tmp/footer.css': ['__tests__/fixtures/src/footer.css'],
           '__tests__/tmp/simple.css': ['__tests__/fixtures/src/simple/simple.css']
         }
+      },
+      multi: {
+        options: {
+          content: ['./__tests__/fixtures/src/multi/*.html']
+        },
+        files: {
+          '__tests__/tmp/multi.css': ['__tests__/fixtures/src/multi/a.css', '__tests__/fixtures/src/multi/b.css']
+        }
+      },
+      // fails on purpose: none of its source files exist
+      missing: {
+        options: {
+          content: ['./__tests__/fixtures/src/multi/*.html']
+        },
+        files: {
+          '__tests__/tmp/missing.css': ['__tests__/fixtures/src/does-not-exist.css']
+        }
       }
     }
   });
@@ -22,6 +39,6 @@ module.exports = grunt => {
   grunt.loadTasks('tasks');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['purgecss']);
+  grunt.registerTask('default', ['purgecss:simple', 'purgecss:multi']);
 
 };

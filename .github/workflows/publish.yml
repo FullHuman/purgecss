@@ -27,37 +27,41 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
 
       - name: Install dependencies
-        run: |
-          npm i -g npm
-          npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: npm run build
+        run: pnpm run build
 
       - name: Run tests
-        run: npm run test
+        run: pnpm run test
 
       - name: Publish packages (dry-run)
         if: ${{ inputs.dry-run == true || inputs.dry-run == 'true' }}
-        run: npx lerna publish from-package --no-private --yes --no-git-tag-version --no-push
+        run: |
+          pnpm changeset publish-plan
+          pnpm -r publish --dry-run --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          npm_config_dry_run: true
 
       - name: Publish packages
         if: ${{ inputs.dry-run == false || inputs.dry-run == 'false' }}
         run: |
-          if [ -n "${{ inputs.otp }}" ]; then
-            npx lerna publish from-package --no-private --yes --otp ${{ inputs.otp }}
+          if [ -n "$NPM_OTP" ]; then
+            pnpm changeset publish --no-git-tag --otp "$NPM_OTP"
           else
-            npx lerna publish from-package --no-private --yes
+            pnpm changeset publish --no-git-tag
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_OTP: ${{ inputs.otp }}

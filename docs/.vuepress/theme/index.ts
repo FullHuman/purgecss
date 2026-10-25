@@ -1,4 +1,4 @@
-import { getDirname, path } from "@vuepress/utils";
+import { getDirname, path } from "vuepress/utils";
 import { defaultTheme, DefaultThemeOptions } from "@vuepress/theme-default";
 
 const __dirname = getDirname(import.meta.url);

@@ -1,10 +1,9 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "packageManager": "pnpm@12.9.1",
   "devDependencies": {
+    "@changesets/cli": "^3.0.3",
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@microsoft/api-documenter": "^7.30.17",
@@ -20,30 +19,33 @@
     "@vuepress/plugin-search": "^2.0.0-rc.137",
     "@vuepress/plugin-sitemap": "^2.0.0-rc.137",
     "@vuepress/theme-default": "2.0.0-rc.137",
-    "conventional-changelog": "^7.2.1",
+    "acorn": "^8.19.0",
+    "acorn-walk": "^8.3.5",
     "eslint": "^10.12.0",
     "eslint-plugin-tsdoc": "^0.5.4",
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
-    "lerna": "^9.0.7",
     "prettier": "^3.9.9",
     "rollup": "^4.64.0",
     "sass-embedded": "^1.105.1",
     "ts-jest": "^29.4.14",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
+    "vue": "^3.5.43",
     "vuepress": "2.0.0-rc.31"
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "pnpm -r run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
-    "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1",
     "lint": "eslint . --fix --ignore-pattern **/lib/** --ignore-pattern **/bin/**",
     "prettier": "prettier --write --parser typescript '**/*.ts'",
-    "test": "lerna run test",
+    "test": "pnpm -r run test",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm run build && changeset publish",
     "prepare": "husky || true"
   }
 }

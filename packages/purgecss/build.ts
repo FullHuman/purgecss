@@ -17,6 +17,7 @@ const external = [
   "path",
   "fs",
   "util",
+  "url",
 ];
 
 const cliBundle: RollupOptions = {

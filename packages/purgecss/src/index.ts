@@ -11,6 +11,7 @@ import * as glob from "fast-glob";
 import * as path from "path";
 import * as postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
+import { pathToFileURL } from "url";
 import { promisify } from "util";
 import {
   CONFIG_FILENAME,
@@ -90,7 +91,7 @@ export async function setOptions(
   let options: Options;
   try {
     const t = path.resolve(process.cwd(), configFile);
-    const importedConfig = await import(t);
+    const importedConfig = await import(pathToFileURL(t).href);
     // Handle both ES modules (direct export) and CommonJS (default export)
     options =
       importedConfig.default && typeof importedConfig.default === "object"
@@ -383,8 +384,9 @@ class PurgeCSS {
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration =
-        value.matchAll(/var\((.+?)[,)]/g);
+      const usedVariablesMatchesInDeclaration = value.matchAll(
+        /\bvar\(\s*(.+?)\s*[,)]/g,
+      );
       if (prop.startsWith("--")) {
         this.variablesStructure.addVariable(declaration);
         this.variablesStructure.addVariableUsage(
@@ -773,16 +775,35 @@ class PurgeCSS {
   private isAttributeSelectorBlocklisted(
     attributeNode: selectorParser.Attribute,
   ): boolean {
-    const { attribute, operator, value } = attributeNode;
+    if (this.options.blocklist.length === 0) {
+      return false;
+    }
+
+    const { operator, value } = attributeNode;
     const attributeSelectors = new Set([attributeNode.toString().trim()]);
+    const quotedAttribute = attributeNode.clone();
+    const normalizedAttribute = attributeNode.clone({
+      spaces: { before: "", after: "" },
+    });
+    delete normalizedAttribute.raws.spaces;
+    // The parser stores an explicit case-sensitive flag in raws.
+    if (
+      normalizedAttribute.insensitive ||
+      "insensitiveFlag" in normalizedAttribute.raws
+    ) {
+      normalizedAttribute.spaces.value = { after: " " };
+    }
+
     if (operator && value !== undefined) {
-      for (const quote of ["", '"', "'"]) {
-        attributeSelectors.add(
-          `[${attribute}${operator}${quote}${value}${quote}]`,
-        );
+      for (const quoteMark of [null, '"', "'"] as const) {
+        // Let the parser escape each value while retaining namespaces and flags.
+        quotedAttribute.setValue(value, { quoteMark });
+        attributeSelectors.add(quotedAttribute.toString().trim());
+        normalizedAttribute.setValue(value, { quoteMark });
+        attributeSelectors.add(normalizedAttribute.toString());
       }
     } else {
-      attributeSelectors.add(`[${attribute}]`);
+      attributeSelectors.add(normalizedAttribute.toString());
     }
     return [...attributeSelectors].some((attributeSelector) =>
       this.isSelectorBlocklisted(attributeSelector),
@@ -947,6 +968,7 @@ class PurgeCSS {
       return true;
     }
 
+    // keep the blocklist from matching the pseudo class name itself (":is", ":not", …)
     if (isPseudoClassAtRootLevel(selector)) {
       return true;
     }
@@ -965,8 +987,6 @@ class PurgeCSS {
       }
     }
 
-    let isPresent = false;
-
     for (const selectorNode of selector.nodes) {
       const selectorValue = this.getSelectorValue(selectorNode);
 
@@ -982,7 +1002,6 @@ class PurgeCSS {
         (CSS_SAFELIST.includes(selectorValue) ||
           this.isSelectorSafelisted(selectorValue))
       ) {
-        isPresent = true;
         continue;
       }
 
@@ -999,6 +1018,7 @@ class PurgeCSS {
         return false;
       }
 
+      let isPresent: boolean;
       switch (selectorNode.type) {
         case "attribute":
           // `value` is a dynamic attribute, highly used in input element
@@ -1024,17 +1044,20 @@ class PurgeCSS {
           isPresent = isTagFound(selectorNode, selectorsFromExtractor);
           break;
         default:
+          // Pseudo-classes (:where, :is, :not, …) carry no matchable name at
+          // this level; their inner selectors are evaluated separately. Skip
+          // them without treating the compound as unused.
           continue;
       }
 
-      // selector is not safelisted
-      // and it has not been found as an attribute/class/id/tag
+      // a matchable part (class/id/tag/attribute) was not found: drop it
       if (!isPresent) {
         return false;
       }
     }
 
-    return isPresent;
+    // nothing was found missing: keep the selector
+    return true;
   }
 
   /**
