@@ -62,7 +62,7 @@ npm i --save-dev purgecss
 ## Usage
 
 ```js
-import PurgeCSS from "purgecss";
+import { PurgeCSS } from "purgecss";
 const purgeCSSResults = await new PurgeCSS().purge({
   content: ["**/*.html"],
   css: ["**/*.css"],
