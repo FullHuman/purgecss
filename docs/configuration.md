@@ -363,6 +363,8 @@ Namespaces and case-sensitivity modifiers remain part of the comparison. For exa
 
 Regular expressions are tested against attribute names and full attribute selectors, including their quote variants. Existing unanchored patterns can therefore match attribute values: `/nav-/` also removes `[data-section="nav-top"]`.
 
+Each blocklist regex is tested from the start of each candidate string, including regexes with the `g` or `y` flag. Its `lastIndex` is preserved, so previous matches do not affect which selectors are blocked.
+
 - **skippedContentGlobs**
 
 If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)

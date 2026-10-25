@@ -254,13 +254,42 @@ function getAttributeSelectorKey(
   const { attribute, namespace, operator, value, insensitive, raws } =
     attributeNode;
   // Explicit `s` is stored only in raws; keep it distinct from an omitted flag.
-  const modifier = insensitive
+  let modifier = insensitive
     ? "i"
     : "insensitiveFlag" in raws && typeof raws.insensitiveFlag === "string"
       ? raws.insensitiveFlag.toLowerCase()
       : "";
 
-  return JSON.stringify([namespace, attribute, operator, value, modifier]);
+  if (modifier.includes("\\")) {
+    // The attribute parser leaves escaped modifiers raw. Parse the identifier
+    // separately to decode its escapes using the same CSS parser.
+    try {
+      const parsed = selectorParser().astSync(modifier);
+      const selector = parsed.nodes[0];
+      const identifier = selector?.nodes[0];
+      if (
+        parsed.nodes.length === 1 &&
+        selector.nodes.length === 1 &&
+        identifier?.type === "tag"
+      ) {
+        modifier = identifier.value.toLowerCase();
+      }
+    } catch {
+      // An invalid modifier must not become equivalent to a valid one.
+    }
+  }
+
+  // An escaped `*` names a namespace; a bare `*` is the wildcard.
+  const wildcardNamespace =
+    namespace === "*" && !("namespace" in raws && raws.namespace);
+  return JSON.stringify([
+    namespace,
+    wildcardNamespace,
+    attribute,
+    operator,
+    value,
+    modifier,
+  ]);
 }
 
 /**
@@ -781,8 +810,26 @@ class PurgeCSS {
     return this.options.blocklist.some((blocklistItem) => {
       return typeof blocklistItem === "string"
         ? blocklistItem === selector
-        : blocklistItem.test(selector);
+        : this.isBlocklistPatternMatching(blocklistItem, selector);
     });
+  }
+
+  /**
+   * Test each selector independently without changing a caller's regex state.
+   */
+  private isBlocklistPatternMatching(
+    pattern: RegExp,
+    selector: string,
+  ): boolean {
+    if (!pattern.global && !pattern.sticky) return pattern.test(selector);
+
+    const lastIndex = pattern.lastIndex;
+    try {
+      pattern.lastIndex = 0;
+      return pattern.test(selector);
+    } finally {
+      pattern.lastIndex = lastIndex;
+    }
   }
 
   /**
@@ -870,7 +917,9 @@ class PurgeCSS {
       attributeSelectors.add(normalizedAttribute.toString());
     }
     return [...attributeSelectors].some((attributeSelector) =>
-      this.blocklistPatterns.some((pattern) => pattern.test(attributeSelector)),
+      this.blocklistPatterns.some((pattern) =>
+        this.isBlocklistPatternMatching(pattern, attributeSelector),
+      ),
     );
   }
 

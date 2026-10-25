@@ -389,6 +389,31 @@ describe("blocklisted attribute selector normalization", () => {
     ).toBe('@namespace svg "http://www.w3.org/2000/svg"');
   });
 
+  it.each(["", "='icon'"])(
+    "distinguishes wildcard and escaped namespace prefixes for [href%s]",
+    async (value) => {
+      const declaration = String.raw`@namespace \* "http://www.w3.org/2000/svg";`;
+      const named = String.raw`[\*|href${value}]`;
+      const wildcard = `[*|href${value}]`;
+      const options = {
+        content: [{ raw: "href icon", extension: "html" }],
+        css: [{ raw: `${declaration} ${named},${wildcard} { color: red }` }],
+      };
+      expect(
+        (await new PurgeCSS().purge({ ...options, blocklist: [wildcard] }))[0]
+          .css,
+      ).toBe(`${declaration} ${named} { color: red }`);
+      expect(
+        (
+          await new PurgeCSS().purge({
+            ...options,
+            blocklist: [String.raw`[ \2a|href${value} ]`],
+          })
+        )[0].css,
+      ).toBe(`${declaration} ${wildcard} { color: red }`);
+    },
+  );
+
   it.each([
     ["[data-label='café']", '[data-label="café"]', "data-label", "café"],
     [
@@ -483,6 +508,28 @@ describe("blocklisted attribute selector normalization", () => {
   );
 
   it.each([
+    [String.raw`\69`, "i"],
+    [String.raw`\000049`, "i"],
+    [String.raw`\i`, "i"],
+    [String.raw`\73`, "s"],
+    [String.raw`\000053`, "s"],
+    [String.raw`\s`, "s"],
+  ])("normalizes the escaped %s modifier", async (escaped, flag) => {
+    const selector = `[data-kind='button' ${escaped}]`;
+    const blocked = `[data-kind="button" ${flag}]`;
+    expect(await purge(selector, [blocked])).toBe("");
+    expect(await purge(blocked, [selector])).toBe("");
+    expect(await purge(selector, ['[data-kind="button"]'])).toBe(
+      `${selector} { color: red }`,
+    );
+    expect(
+      await purge(selector, [
+        `[data-kind="button" ${flag === "i" ? "s" : "i"}]`,
+      ]),
+    ).toBe(`${selector} { color: red }`);
+  });
+
+  it.each([
     "[data-kind=",
     "[data-kind='button'].other",
     "[data-kind='button'], [disabled]",
@@ -553,5 +600,125 @@ describe("blocklisted attribute selector normalization", () => {
     expect(
       await purge('[data-kind="nav-top"]', [/nav-/], "data-kind", "nav-top"),
     ).toBe("");
+  });
+
+  it.each(["g", "y"])(
+    "matches each selector independently with a %s regex",
+    async (flags) => {
+      const pattern = new RegExp(
+        String.raw`button|\[data-kind=["']button["']\]`,
+        flags,
+      );
+      pattern.lastIndex = 4;
+      const options = {
+        content: [{ raw: "data-kind button keep", extension: "html" }],
+        css: [
+          {
+            raw: '[data-kind="button"],.button,#button,button,.keep { color: red }',
+          },
+        ],
+        blocklist: [pattern],
+      };
+      const purgecss = new PurgeCSS();
+      for (let run = 0; run < 2; run++) {
+        expect((await purgecss.purge(options))[0].css).toBe(
+          ".keep { color: red }",
+        );
+        expect(pattern.lastIndex).toBe(4);
+      }
+    },
+  );
+
+  it.each(["=", "~=", "|=", "^=", "$=", "*="])(
+    "blocks only the %s operator",
+    async (operator) => {
+      const selectors = ["=", "~=", "|=", "^=", "$=", "*="].map(
+        (op) => `[data-kind${op}'button']`,
+      );
+      const blocked = `[data-kind${operator}'button']`;
+      expect(
+        await purge(selectors.join(","), [
+          `[ data-kind ${operator} "button" ]`,
+        ]),
+      ).toBe(
+        `${selectors.filter((selector) => selector !== blocked).join(",")} { color: red }`,
+      );
+    },
+  );
+
+  it.each([
+    ["[|data-kind='button']", '[data-kind="button"]'],
+    ["[*|data-kind='button']", '[|data-kind="button"]'],
+    ["[*|data-kind='button']", '[svg|data-kind="button"]'],
+    ["[svg|data-kind='button']", '[math|data-kind="button"]'],
+  ])("keeps distinct namespace prefixes in %s", async (selector, blocked) => {
+    expect(await purge(selector, [blocked])).toBe(`${selector} { color: red }`);
+    expect(await purge(blocked, [selector])).toBe(`${blocked} { color: red }`);
+  });
+
+  it("combines attribute strings, literal names, and regexes across CSS inputs", async () => {
+    const raw =
+      '[data-kind="button"],.removed,[data-kind="reset"],.keep { color: red }';
+    const results = await new PurgeCSS().purge({
+      content: [
+        { raw: "data-kind button reset removed keep", extension: "html" },
+      ],
+      css: [{ raw }, { raw }],
+      blocklist: ["[ data-kind = 'button' ]", "removed", /reset/],
+      rejected: true,
+      rejectedCss: true,
+    });
+    expect(results.map(({ css }) => css)).toEqual([
+      ".keep { color: red }",
+      ".keep { color: red }",
+    ]);
+    expect(results[0].rejected).toEqual([
+      '[data-kind="button"]',
+      ".removed",
+      '[data-kind="reset"]',
+    ]);
+    expect(results[0].rejectedCss).toBe(
+      '[data-kind="button"], .removed, [data-kind="reset"] { color: red }',
+    );
+  });
+
+  it.each([":is", ":where"])(
+    "prunes blocklisted attributes inside %s",
+    async (pseudo) => {
+      const options = {
+        content: [{ raw: "data-kind button keep", extension: "html" }],
+        blocklist: ["[ data-kind = 'button' ]"],
+      };
+      const results = await new PurgeCSS().purge({
+        ...options,
+        css: [
+          { raw: `${pseudo}([data-kind="button"],.keep) { color: red }` },
+          { raw: `${pseudo}([data-kind="button"]) { color: red }` },
+        ],
+      });
+      expect(results.map(({ css }) => css)).toEqual([
+        `${pseudo}(.keep) { color: red }`,
+        "",
+      ]);
+    },
+  );
+
+  it("preserves safelist and ignore-comment precedence for full attributes", async () => {
+    const raw = '[data-kind="button"] { color: red }';
+    const options = {
+      content: [{ raw: "data-kind button", extension: "html" }],
+      blocklist: ["[ data-kind = 'button' ]"],
+    };
+    const [safelisted] = await new PurgeCSS().purge({
+      ...options,
+      css: [{ raw }],
+      safelist: ["data-kind"],
+    });
+    const [ignored] = await new PurgeCSS().purge({
+      ...options,
+      css: [{ raw: `/* purgecss ignore */${raw}` }],
+    });
+    expect(safelisted.css).toBe(raw);
+    expect(ignored.css).toBe(raw);
   });
 });

@@ -363,6 +363,8 @@ Les espaces de noms et les modificateurs de sensibilité à la casse restent pri
 
 Les expressions régulières sont testées sur les noms d'attribut et les sélecteurs d'attribut complets, y compris leurs variantes de guillemets. Les motifs existants non ancrés peuvent donc correspondre aux valeurs d'attribut : `/nav-/` supprime également `[data-section="nav-top"]`.
 
+Chaque expression régulière de la blocklist est testée depuis le début de chaque chaîne candidate, y compris avec les indicateurs `g` ou `y`. Sa propriété `lastIndex` est préservée : les correspondances précédentes n'affectent donc pas les sélecteurs bloqués.
+
 - **skippedContentGlobs**
 
 Si vous fournissez des globs pour le paramètre `content`, vous pouvez utiliser cette option pour exclure certains fichiers ou dossiers qui seraient autrement analysés. Passez un tableau de globs correspondant aux éléments qui doivent être exclus. (Note : cette option n'a aucun effet si `content` n'utilise pas de globs.)
