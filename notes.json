@@ -2,7 +2,7 @@
   "version": 1,
   "cursors": {
     "labelling_after": null,
-    "investigation_after": 1318
+    "investigation_after": 1348
   },
   "issues": [
     {
@@ -30,12 +30,6 @@
       "note": "&:hover nested in a used rule kept on main (side effect of #1467). Regression test PR #1513. Pending release."
     },
     {
-      "number": 964,
-      "state": "commented",
-      "updated_at": "2026-10-24",
-      "note": "Fix PR opened (branch repo-assist/fix-issue-964-empty-media-queries): remove comment-only / nested emptied at-rules. Commented on issue linking it."
-    },
-    {
       "number": 913,
       "state": "awaiting_approval",
       "updated_at": "2026-10-24",
@@ -58,6 +52,42 @@
       "state": "deferred",
       "updated_at": "2026-10-24",
       "note": "2019 thread on ignore comments vs @import CSS. Root cause already explained by community; low value to comment; revisit only on new activity."
+    },
+    {
+      "number": 964,
+      "state": "commented",
+      "updated_at": "2026-10-25",
+      "note": "Fix PR #1515 open (remove comment-only / nested emptied at-rules). Await review."
+    },
+    {
+      "number": 1324,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-25",
+      "note": "7.x CLI dropped CJS config defaultExtractor (import() .default not unwrapped); fixed by 4ad48c4 in 8.0.0, verified v6/v7.0.2/v8. Commented; recommend close."
+    },
+    {
+      "number": 1262,
+      "state": "commented",
+      "updated_at": "2026-10-25",
+      "note": "Cross-file vars/keyframes/font-faces removed when definition file precedes usage file. Fix PR from branch repo-assist/fix-issue-1262-cross-file-variables. Commented."
+    },
+    {
+      "number": 1348,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-25",
+      "note": "No repro, reporter account deleted (ghost). No comment posted; suggested close in monthly summary."
+    },
+    {
+      "number": 1325,
+      "state": "deferred",
+      "updated_at": "2026-10-25",
+      "note": "Covered by community PR #1503 (@property removal). Do not duplicate."
+    },
+    {
+      "number": 1258,
+      "state": "deferred",
+      "updated_at": "2026-10-25",
+      "note": "JSON config cannot hold RegExp in safelist deep/greedy; assigned to maintainer. Possible fix: accept strings and convert to RegExp."
     }
   ],
   "fixes": [
@@ -71,11 +101,19 @@
     },
     {
       "issue": 964,
-      "pr": null,
+      "pr": 1515,
       "branch": "repo-assist/fix-issue-964-empty-media-queries",
       "status": "open",
-      "updated_at": "2026-10-24",
-      "note": "Draft PR: isRuleEmpty treats comment-only rules/at-rules as empty (ignore annotations excluded) and removes emptied ancestors up to root. Changeset patch."
+      "updated_at": "2026-10-25",
+      "note": "Draft PR #1515: isRuleEmpty treats comment-only rules/at-rules as empty and removes emptied ancestors."
+    },
+    {
+      "issue": 1262,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-1262-cross-file-variables",
+      "status": "open",
+      "updated_at": "2026-10-25",
+      "note": "getPurgedCSS walks all css files, then removes unused vars/keyframes/font-faces once. Test multiple-css-files.test.ts. Changeset patch."
     }
   ],
   "checks": [
@@ -84,12 +122,6 @@
       "checked_at": "2026-10-24",
       "result": "docs/CLI.md and docs/fr/CLI.md had stale --help output (old short flags like -con). Fixed via PR #1512.",
       "follow_up": null
-    },
-    {
-      "area": "tests",
-      "checked_at": "2026-10-24",
-      "result": "gulp-purgecss lacked tests for rejected option and PluginError emission; added via PR branch repo-assist/test-gulp-rejected-and-errors (stmts 82.9->87.8%).",
-      "follow_up": "Remaining gulp gaps: sourcemap application and stream-mode error path."
     },
     {
       "area": "build",
@@ -102,6 +134,12 @@
       "checked_at": "2026-10-24",
       "result": "Reviewed purgecss/src/index.ts helpers; no clearly beneficial low-risk refactor found.",
       "follow_up": null
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-10-25",
+      "result": "gulp-purgecss sourcemap branch was broken (sourceMap:true -> inline map -> applySourceMap(undefined) throws). Fixed + tests in PR branch repo-assist/fix-gulp-sourcemaps (stmts 87.8->93.6%). #1516 gulp rejected/error tests merged.",
+      "follow_up": "Remaining gulp gap: stream-mode error path. cli-config-file.test.ts has stale issues/XXX placeholder (could cite #1324)."
     }
   ],
   "completed_actions": [],
@@ -109,12 +147,12 @@
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
+      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504). #1324 already fixed in 8.0.0."
     },
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "Never-addressed older bugs to investigate: #523, #803, #881, #998, #1036, #1115, #1123, #1131, #1156, #1229, #1258, #1262, #1298, #1324, #1348."
+      "note": "Never-addressed older bugs to investigate: #523, #803, #881 (webpack only uses name.includes), #998, #1036, #1115, #1123, #1131, #1156, #1229, #1298."
     },
     {
       "task": 3,
