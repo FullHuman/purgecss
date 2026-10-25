@@ -601,11 +601,13 @@ class PurgeCSS {
         const keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
+          // the whitespace after the previous comma belongs to the selector
+          const removedSelector = selector.toString().trim();
           if (this.options.rejected) {
-            this.selectorsRemoved.add(selector.toString());
+            this.selectorsRemoved.add(removedSelector);
           }
           if (this.options.rejectedCss) {
-            selectorsRemovedFromRule.push(selector.toString());
+            selectorsRemovedFromRule.push(removedSelector);
           }
           selector.remove();
         }
