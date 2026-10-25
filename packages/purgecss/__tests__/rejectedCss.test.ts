@@ -34,9 +34,18 @@ describe("rejectedCss", () => {
       css: [`${ROOT_TEST_EXAMPLES}rejectedCss/empty-parent-node.css`],
       rejectedCss: true,
     });
-    const expectedRejectedCss = `@media (max-width: 66666px) {\n   .unused-class {\n    color: black;\n  }\n}`;
+    const expectedRejectedCss = `@media (max-width: 66666px) {\n  .unused-class {\n    color: black;\n  }\n}`;
     const expectedPurgedCss = `@media (max-width: 66666px) {\n  .used-class {\n    color: black;\n  }\n}`;
     expect(resultsPurge[0].rejectedCss?.trim()).toEqual(expectedRejectedCss);
     expect(resultsPurge[0].css.trim()).toEqual(expectedPurgedCss);
+  });
+  it("does not keep the whitespace after the comma before a rejected selector", async () => {
+    expect.assertions(1);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: "<em>Italic</em>", extension: "html" }],
+      css: [{ raw: "em,\nstrong {\n  font-size: 2em;\n}" }],
+      rejectedCss: true,
+    });
+    expect(resultsPurge[0].rejectedCss).toBe("strong {\n  font-size: 2em;\n}");
   });
 });
