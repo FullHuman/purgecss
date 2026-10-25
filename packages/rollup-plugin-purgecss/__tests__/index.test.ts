@@ -24,4 +24,26 @@ describe("rollup-plugin-purgecss", () => {
       .toString();
     expect(actualA).toEqual(expectA);
   });
+
+  it("passes the PurgeCSS options to PurgeCSS", async () => {
+    let output = "";
+    const bundle = await rollup({
+      input: path.resolve(__dirname, "fixtures/basic/index.js"),
+      plugins: [
+        purgecss({
+          content: [path.resolve(__dirname, "assets/test_a.html")],
+          safelist: ["unused"],
+          blocklist: ["there"],
+          output: (css) => {
+            output = css;
+          },
+        }),
+      ],
+    });
+    await bundle.generate({ format: "cjs", exports: "auto" });
+
+    expect(output).toContain(".used");
+    expect(output).toContain(".unused");
+    expect(output).not.toContain(".there");
+  });
 });
