@@ -141,6 +141,8 @@ new PurgeCSSPlugin({
 });
 ```
 
+The names are compared with the chunk names (for an entrypoint, its key in `entry`), not with the file names.
+
 - #### safelist
 
 Similar as for the `paths` option, you also can define a function for this option:

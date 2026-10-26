@@ -165,15 +165,19 @@ export class PurgeCSSPlugin {
     );
 
     for (const chunk of compilation.chunks) {
-      const assetsToPurge = assetsFromCompilation.filter(([name]) => {
-        if (this.options.only) {
-          if (!this.options.only.some((only) => name.includes(only))) {
-            return false;
-          }
-        }
+      // `only` lists chunk names, e.g. the entry names. Compare them with the
+      // chunk name, not with the asset path: a substring of the path also
+      // matches other chunks (`style` in `style_print.css` or `css/style/`)
+      if (
+        this.options.only &&
+        !(chunk.name && this.options.only.includes(chunk.name))
+      ) {
+        continue;
+      }
 
-        return chunk.files.has(name);
-      });
+      const assetsToPurge = assetsFromCompilation.filter(([name]) =>
+        chunk.files.has(name),
+      );
 
       for (const [name, asset] of assetsToPurge) {
         const filesToSearch = entryPaths.filter(
