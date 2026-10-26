@@ -18,7 +18,7 @@ export type UserDefinedOptions = Omit<
   "css" | "output" | "rejectedCss"
 > & {
   contentFunction?: (sourceFile: string) => Array<string | RawContent>;
-  output: PurgeCSSUserDefinedOptions["output"] | OutputFunction | boolean;
+  output?: PurgeCSSUserDefinedOptions["output"] | OutputFunction | boolean;
   insert?: boolean;
   include?: string | RegExp | (string | RegExp)[];
   exclude?: string | RegExp | (string | RegExp)[];
