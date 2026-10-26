@@ -48,12 +48,6 @@
       "note": "Covered by maintainer PR #1495 (blocklist attribute selectors with value). Do not duplicate."
     },
     {
-      "number": 170,
-      "state": "deferred",
-      "updated_at": "2026-10-24",
-      "note": "2019 thread on ignore comments vs @import CSS. Root cause already explained by community; low value to comment; revisit only on new activity."
-    },
-    {
       "number": 964,
       "state": "commented",
       "updated_at": "2026-10-25",
@@ -78,10 +72,10 @@
       "note": "JSON config cannot hold RegExp in safelist deep/greedy; assigned to maintainer. Possible fix: accept strings and convert to RegExp."
     },
     {
-      "number": 1519,
-      "state": "commented",
-      "updated_at": "2026-10-25",
-      "note": "Rejected selectors kept leading whitespace (selector-parser spaces.before). Fix PR from branch repo-assist/fix-issue-1519-trim-rejected (trims for rejected + rejectedCss). Commented."
+      "number": 170,
+      "state": "deferred",
+      "updated_at": "2026-10-26",
+      "note": "2019 ignore-comments vs Sass @import; root cause explained by community. question label was missing; suggested it (suggest:true) 2026-10-26. Do not re-label if removed again; revisit only on new activity."
     }
   ],
   "fixes": [
@@ -108,22 +102,14 @@
       "status": "open",
       "updated_at": "2026-10-25",
       "note": "getPurgedCSS walks all css files, then removes unused vars/keyframes/font-faces once. Test multiple-css-files.test.ts. Changeset patch."
-    },
-    {
-      "issue": 1519,
-      "pr": null,
-      "branch": "repo-assist/fix-issue-1519-trim-rejected",
-      "status": "open",
-      "updated_at": "2026-10-25",
-      "note": "Trim selector.toString() in evaluateRule for rejected and rejectedCss; fixed 3-space expectation in rejectedCss test. Changeset patch."
     }
   ],
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-24",
-      "result": "docs/CLI.md and docs/fr/CLI.md had stale --help output (old short flags like -con). Fixed via PR #1512.",
-      "follow_up": null
+      "checked_at": "2026-10-26",
+      "result": "CLI --help docs fixed in PR #1512. Community PR #1523 fixes default import in purgecss README; commented that from-html/jsx/tsx/with-wordpress READMEs share it and wordpress README uses non-existent safelistPatterns.",
+      "follow_up": "If #1523 merges without the other READMEs, fix them in a docs PR."
     },
     {
       "area": "build",
@@ -134,20 +120,26 @@
     {
       "area": "performance",
       "checked_at": "2026-10-25",
-      "result": "VariablesStructure.addVariableUsage linked all redefinitions (O(N^3) edges, crash ~800 rules). PR branch repo-assist/perf-css-variables-redefinitions. Differential fuzz 5000 cases identical.",
+      "result": "VariablesStructure redefinition O(N^3) fix: PR #1520 (draft). Differential fuzz 5000 cases identical.",
       "follow_up": "addVariable still copies the array per redefinition (O(N^2)); minor, skipped to avoid conflict with #1503."
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-25",
-      "result": "gulp sourcemaps PR #1518. rollup-plugin-purgecss had 72.7% stmts; new options test in rollup PR (-> 78.8%).",
-      "follow_up": "rollup: insert option is a no-op and dest is never set (dead code). gulp stream-mode error path untested. grunt coverage reports 0% (tests run built tasks/)."
+      "checked_at": "2026-10-26",
+      "result": "rollup: PR branch repo-assist/test-rollup-string-export covers README string export + output:false; made output optional in types (was required -> README example TS error). Rollup 78.8->87.9% stmts.",
+      "follow_up": "rollup insert:true emits invalid JS (raw css as export default) + dest dead code. grunt 0% coverage (tests run built tasks/; could unit-test src with mock grunt). gulp stream-mode error path untested."
     },
     {
       "area": "code",
-      "checked_at": "2026-10-25",
-      "result": "rollup-plugin-purgecss only passed content to PurgeCSS (safelist etc. ignored). Fix PR branch repo-assist/fix-rollup-plugin-options.",
+      "checked_at": "2026-10-26",
+      "result": "rollup options fix merged (#1522); trim rejected fix merged (#1521).",
       "follow_up": null
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-10-26",
+      "result": "Deps current (patch/minor only; TS 7/@types/node 26 majors left for Dependabot). PR branch repo-assist/eng-unused-type-stubs-2026-10-26 removes unused @types/glob, @types/webpack-sources; stale msg 90->180 days.",
+      "follow_up": "dependabot.yml uses deprecated reviewers key + 2021 ignore rules (unverified offline). CI runs on push+pull_request (duplicate runs)."
     }
   ],
   "completed_actions": [
