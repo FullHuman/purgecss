@@ -2,7 +2,7 @@
   "version": 1,
   "cursors": {
     "labelling_after": null,
-    "investigation_after": 1348
+    "investigation_after": 1298
   },
   "issues": [
     {
@@ -76,6 +76,30 @@
       "state": "deferred",
       "updated_at": "2026-10-26",
       "note": "2019 ignore-comments vs Sass @import; root cause explained by community. question label was missing; suggested it (suggest:true) 2026-10-26. Do not re-label if removed again; revisit only on new activity."
+    },
+    {
+      "number": 881,
+      "state": "commented",
+      "updated_at": "2026-10-26",
+      "note": "only matched asset path substring. Fix PR from branch repo-assist/fix-issue-881-webpack-only-chunk-name (exact chunk.name). Commented with workaround only:[\"style/style.\"]."
+    },
+    {
+      "number": 998,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-26",
+      "note": "Reproduced. Posted verified workaround safelist.variables (needs config file; CLI -s is standard only). Fix idea: keep vars whose name is in content (extractor already returns --x); maintainer decision."
+    },
+    {
+      "number": 1229,
+      "state": "commented",
+      "updated_at": "2026-10-26",
+      "note": "Posted verified workarounds: Tailwind extractor or standard regex + top-level dynamicAttributes, or greedy /^data-loaded$/. Noted user config throws (greedy strings)."
+    },
+    {
+      "number": 1298,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-26",
+      "note": "Fixed in postcss-purgecss 8.0.0 (module.exports restored; checked 7.0.2 vs 8.0.0 tarballs). Recommended upgrade; close if no reply."
     }
   ],
   "fixes": [
@@ -102,6 +126,14 @@
       "status": "open",
       "updated_at": "2026-10-25",
       "note": "getPurgedCSS walks all css files, then removes unused vars/keyframes/font-faces once. Test multiple-css-files.test.ts. Changeset patch."
+    },
+    {
+      "issue": 881,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
+      "status": "open",
+      "updated_at": "2026-10-26",
+      "note": "Draft PR: compare only with chunk.name; test case only-chunk-name; docs EN/FR/README; patch changeset. Behaviour change flagged (path-substring configs stop matching)."
     }
   ],
   "checks": [
@@ -126,20 +158,26 @@
     {
       "area": "tests",
       "checked_at": "2026-10-26",
-      "result": "rollup: PR branch repo-assist/test-rollup-string-export covers README string export + output:false; made output optional in types (was required -> README example TS error). Rollup 78.8->87.9% stmts.",
+      "result": "rollup tests PR #1524 open (README string export, output optional). webpack only-chunk-name case added with #881 fix.",
       "follow_up": "rollup insert:true emits invalid JS (raw css as export default) + dest dead code. grunt 0% coverage (tests run built tasks/; could unit-test src with mock grunt). gulp stream-mode error path untested."
     },
     {
       "area": "code",
       "checked_at": "2026-10-26",
-      "result": "rollup options fix merged (#1522); trim rejected fix merged (#1521).",
-      "follow_up": null
+      "result": "safelist.deep/greedy take RegExp only; strings throw \"safelistItem.test is not a function\" (seen in #1229). Accepting exact strings (like standard/blocklist) overlaps #1258 (maintainer-assigned).",
+      "follow_up": "Propose only if maintainer picks a direction on #1258."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-10-26",
-      "result": "Deps current (patch/minor only; TS 7/@types/node 26 majors left for Dependabot). PR branch repo-assist/eng-unused-type-stubs-2026-10-26 removes unused @types/glob, @types/webpack-sources; stale msg 90->180 days.",
+      "result": "Unused @types/glob + @types/webpack-sources PR push failed; fallback issue #1525 (protected files). Maintainer must create PR from artifact bundle or close.",
       "follow_up": "dependabot.yml uses deprecated reviewers key + 2021 ignore rules (unverified offline). CI runs on push+pull_request (duplicate runs)."
+    },
+    {
+      "area": "release",
+      "checked_at": "2026-10-26",
+      "result": "8.0.0 released 2026-01-24. 7 changesets pending on main (commander-15, css vars spaces, grunt sources, rollup options, root pseudo-class, trim rejected, windows config).",
+      "follow_up": "Draft a release PR (pnpm run version-packages) when PR capacity allows or maintainer asks."
     }
   ],
   "completed_actions": [
@@ -161,12 +199,17 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "Never-addressed older bugs to investigate: #523, #803, #881 (webpack only uses name.includes), #998, #1036, #1115, #1123, #1131, #1156, #1229, #1298."
+      "note": "Never-addressed older issues: #523, #803, #1036, #1115, #1123, #1131, #1156. #1156 workaround verified: safelist greedy/deep [/^rte$/] keeps .rte a after Sass @extend."
     },
     {
       "task": 3,
       "item": "issue-913",
       "note": "If maintainer picks a direction (attribute value vs full selector), implement greedy/standard safelist matching for attribute values."
+    },
+    {
+      "task": 7,
+      "item": "docs-dynamic-class-names",
+      "note": "safelisting.md never says class names built at runtime (template literals, concatenation) are not detected. Add a section with safelist-pattern guidance; would answer #1131, helps #803/#1229."
     }
   ]
 }
