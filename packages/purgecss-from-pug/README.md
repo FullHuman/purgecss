@@ -4,7 +4,7 @@ A PurgeCSS extractor for PUG files that automatically generates a list of used C
 
 ## Usage
 
-```
+```js
 import { PurgeCSS } from 'purgecss'
 import { purgeCSSFromPug } from 'purgecss-from-pug'
 const options = {

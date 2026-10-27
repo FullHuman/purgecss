@@ -18,7 +18,7 @@ npm i --save-dev purgecss-with-wordpress
 
 ```js
 
-import PurgeCSS from 'purgecss'
+import { PurgeCSS } from 'purgecss'
 import purgecssWordpress from 'purgecss-with-wordpress'
 
 const purgeCSSResults = await new PurgeCSS().purge({
