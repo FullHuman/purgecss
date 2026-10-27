@@ -2,7 +2,7 @@
   "version": 1,
   "cursors": {
     "labelling_after": null,
-    "investigation_after": 1298
+    "investigation_after": null
   },
   "issues": [
     {
@@ -100,6 +100,24 @@
       "state": "resolution_recommended",
       "updated_at": "2026-10-26",
       "note": "Fixed in postcss-purgecss 8.0.0 (module.exports restored; checked 7.0.2 vs 8.0.0 tarballs). Recommended upgrade; close if no reply."
+    },
+    {
+      "number": 1156,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-27",
+      "note": "Sass @extend appends .rte a to the extended rule (outside ignore block). Posted verified workaround safelist greedy/deep [/^rte$/]; recommended closing."
+    },
+    {
+      "number": 1131,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-27",
+      "note": "Template-literal class names. Posted verified safelist [/^sign-btn-/] + full-name lookup; recommended closing."
+    },
+    {
+      "number": 1115,
+      "state": "commented",
+      "updated_at": "2026-10-27",
+      "note": "gulp content ../dist/*.js points to parent dir; unmatched globs skipped silently (warns only if no files at all). Verified; asked reporter to confirm."
     }
   ],
   "fixes": [
@@ -129,11 +147,11 @@
     },
     {
       "issue": 881,
-      "pr": null,
+      "pr": 1526,
       "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
       "status": "open",
-      "updated_at": "2026-10-26",
-      "note": "Draft PR: compare only with chunk.name; test case only-chunk-name; docs EN/FR/README; patch changeset. Behaviour change flagged (path-substring configs stop matching)."
+      "updated_at": "2026-10-27",
+      "note": "Draft PR #1526: compare only with chunk.name; test, EN/FR/README docs, patch changeset. Behaviour change flagged."
     }
   ],
   "checks": [
@@ -147,7 +165,7 @@
       "area": "build",
       "checked_at": "2026-10-24",
       "result": "postcss-purgecss CJS does module.exports=fn but d.ts says export default -> wrong ESM types under node16 (#1263). Needs exports map/per-condition types; maintainer assigned.",
-      "follow_up": "Only propose if maintainer asks; affects build of several packages."
+      "follow_up": "Only propose if maintainer asks. Caveat: lib/purgecss.esm.js uses import * as glob from fast-glob; glob.sync is undefined under Node ESM, so an exports map routing import to it would break."
     },
     {
       "area": "performance",
@@ -157,8 +175,8 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-26",
-      "result": "rollup tests PR #1524 open (README string export, output optional). webpack only-chunk-name case added with #881 fix.",
+      "checked_at": "2026-10-27",
+      "result": "rollup tests PR #1524 open. 2026-10-27 PR upkeep: bot PRs get only CodeQL; all 8 RA PRs merge clean with main e224150 and #1513/#1515/#1517/#1518/#1520 pass build+tests merged locally.",
       "follow_up": "rollup insert:true emits invalid JS (raw css as export default) + dest dead code. grunt 0% coverage (tests run built tasks/; could unit-test src with mock grunt). gulp stream-mode error path untested."
     },
     {
@@ -199,7 +217,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "Never-addressed older issues: #523, #803, #1036, #1115, #1123, #1131, #1156. #1156 workaround verified: safelist greedy/deep [/^rte$/] keeps .rte a after Sass @extend."
+      "note": "Never-addressed: #523, #803, #1036, #1123. #1036: webpack !! inline-loader prefix disables configured postcss-loader, so purgecss never runs; add postcss-loader to the chain + include primevue JS in content."
     },
     {
       "task": 3,
@@ -209,7 +227,7 @@
     {
       "task": 7,
       "item": "docs-dynamic-class-names",
-      "note": "safelisting.md never says class names built at runtime (template literals, concatenation) are not detected. Add a section with safelist-pattern guidance; would answer #1131, helps #803/#1229."
+      "note": "safelisting.md never says runtime-built class names are not detected. Add a section (answered #1131 in a comment 2026-10-27). PR when capacity allows."
     }
   ]
 }
