@@ -118,6 +118,24 @@
       "state": "commented",
       "updated_at": "2026-10-27",
       "note": "gulp content ../dist/*.js points to parent dir; unmatched globs skipped silently (warns only if no files at all). Verified; asked reporter to confirm."
+    },
+    {
+      "number": 1123,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-27",
+      "note": "Reproduced (webpack5/css-loader7): paths empty because path.join(__dirname,\"./src\") from config subdir, and css-loader modules hash Tailwind classes. Verified fix path.resolve(__dirname,\"..\",\"src\") + modules.auto:true. Labelled question; recommended closing."
+    },
+    {
+      "number": 1036,
+      "state": "commented",
+      "updated_at": "2026-10-27",
+      "note": "Reproduced: webpack !! inline prefix skips configured postcss-loader so PurgeCSS never runs. Suggested postcss-loader in inline chain + PrimeVue content/safelist /^p-/. Labelled question."
+    },
+    {
+      "number": 803,
+      "state": "awaiting_clarification",
+      "updated_at": "2026-10-27",
+      "note": "Custom extractor /[\\w-/:]+(?<!:)/g splits w-1.5, top-[3px], !mt-0 (verified). Suggested broader extractor + postcss-import first; asked for example class names."
     }
   ],
   "fixes": [
@@ -157,9 +175,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-26",
-      "result": "CLI --help docs fixed in PR #1512. Community PR #1523 fixes default import in purgecss README; commented that from-html/jsx/tsx/with-wordpress READMEs share it and wordpress README uses non-existent safelistPatterns.",
-      "follow_up": "If #1523 merges without the other READMEs, fix them in a docs PR."
+      "checked_at": "2026-10-27",
+      "result": "#1523 merged (b5c112b): fixed default import in purgecss/jsx/pug/tsx/wordpress READMEs. Still wrong: purgecss-from-html README default import; purgecss-with-wordpress README uses safelistPatterns (not exported, not an option).",
+      "follow_up": "Docs PR for the two README fixes when PR capacity allows (priority docs-readme-leftovers)."
     },
     {
       "area": "build",
@@ -176,7 +194,7 @@
     {
       "area": "tests",
       "checked_at": "2026-10-27",
-      "result": "rollup tests PR #1524 open. 2026-10-27 PR upkeep: bot PRs get only CodeQL; all 8 RA PRs merge clean with main e224150 and #1513/#1515/#1517/#1518/#1520 pass build+tests merged locally.",
+      "result": "rollup tests PR #1524 open.",
       "follow_up": "rollup insert:true emits invalid JS (raw css as export default) + dest dead code. grunt 0% coverage (tests run built tasks/; could unit-test src with mock grunt). gulp stream-mode error path untested."
     },
     {
@@ -196,6 +214,12 @@
       "checked_at": "2026-10-26",
       "result": "8.0.0 released 2026-01-24. 7 changesets pending on main (commander-15, css vars spaces, grunt sources, rollup options, root pseudo-class, trim rejected, windows config).",
       "follow_up": "Draft a release PR (pnpm run version-packages) when PR capacity allows or maintainer asks."
+    },
+    {
+      "area": "repo_assist_prs",
+      "checked_at": "2026-10-27",
+      "result": "8 open RA PRs (#1512,#1513,#1515,#1517,#1518,#1520,#1524,#1526) all merge clean with main b5c112b; CodeQL only CI on bot PRs, green; no reviews/comments.",
+      "follow_up": "Re-check merge-tree when main gets code changes; rerun build+tests on merged result."
     }
   ],
   "completed_actions": [
@@ -217,7 +241,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "Never-addressed: #523, #803, #1036, #1123. #1036: webpack !! inline-loader prefix disables configured postcss-loader, so purgecss never runs; add postcss-loader to the chain + include primevue JS in content."
+      "note": "Only #523 remains never-addressed: vue-cli-plugin install error is only in screenshots; skip unless new activity. #1036/#1123/#803 addressed 2026-10-27."
     },
     {
       "task": 3,
@@ -228,6 +252,11 @@
       "task": 7,
       "item": "docs-dynamic-class-names",
       "note": "safelisting.md never says runtime-built class names are not detected. Add a section (answered #1131 in a comment 2026-10-27). PR when capacity allows."
+    },
+    {
+      "task": 7,
+      "item": "docs-readme-leftovers",
+      "note": "Fix purgecss-from-html README (import { PurgeCSS }) and purgecss-with-wordpress README (drop safelistPatterns; package only exports safelist). One small docs PR."
     }
   ]
 }
