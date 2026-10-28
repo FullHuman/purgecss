@@ -136,6 +136,24 @@
       "state": "awaiting_clarification",
       "updated_at": "2026-10-27",
       "note": "Custom extractor /[\\w-/:]+(?<!:)/g splits w-1.5, top-[3px], !mt-0 (verified). Suggested broader extractor + postcss-import first; asked for example class names."
+    },
+    {
+      "number": 1265,
+      "state": "commented",
+      "updated_at": "2026-10-28",
+      "note": "Verified Angular application builder (CLI>=17.2) loads postcss.config.json/.postcssrc.json only; PurgeCSS 8.0.0 works (ng build repro, @angular/build 22.2.4). Needs safelist [\":host\"] on 8.0.0 (fixed on main). Labelled documentation."
+    },
+    {
+      "number": 895,
+      "state": "deferred",
+      "updated_at": "2026-10-28",
+      "note": "RegExp in dynamicAttributes: covered by community PR #1506 (Closes #895). Do not duplicate."
+    },
+    {
+      "number": 996,
+      "state": "deferred",
+      "updated_at": "2026-10-28",
+      "note": "Design-level feature request (auto-generate HTML lists), only still-relevant bumps; no question to answer. Revisit only on maintainer direction."
     }
   ],
   "fixes": [
@@ -195,7 +213,7 @@
       "area": "tests",
       "checked_at": "2026-10-27",
       "result": "rollup tests PR #1524 open.",
-      "follow_up": "rollup insert:true emits invalid JS (raw css as export default) + dest dead code. grunt 0% coverage (tests run built tasks/; could unit-test src with mock grunt). gulp stream-mode error path untested."
+      "follow_up": "No test for :host / :host(.x) kept (8.0.0 purges them; main keeps). rollup insert:true emits invalid JS + dest dead code. grunt 0% coverage. gulp stream-mode error path untested."
     },
     {
       "area": "code",
@@ -217,8 +235,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-27",
-      "result": "8 open RA PRs (#1512,#1513,#1515,#1517,#1518,#1520,#1524,#1526) all merge clean with main b5c112b; CodeQL only CI on bot PRs, green; no reviews/comments.",
+      "checked_at": "2026-10-28",
+      "result": "8 open RA PRs (#1512,#1513,#1515,#1517,#1518,#1520,#1524,#1526) merge clean with main b5c112b (unchanged); CodeQL green; no reviews/comments since creation.",
       "follow_up": "Re-check merge-tree when main gets code changes; rerun build+tests on merged result."
     }
   ],
@@ -241,7 +259,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "Only #523 remains never-addressed: vue-cli-plugin install error is only in screenshots; skip unless new activity. #1036/#1123/#803 addressed 2026-10-27."
+      "note": "All open issues addressed or deferred except #523 (install error only in screenshots; skip unless new activity). #1265 answered 2026-10-28."
     },
     {
       "task": 3,
@@ -257,6 +275,16 @@
       "task": 7,
       "item": "docs-readme-leftovers",
       "note": "Fix purgecss-from-html README (import { PurgeCSS }) and purgecss-with-wordpress README (drop safelistPatterns; package only exports safelist). One small docs PR."
+    },
+    {
+      "task": 7,
+      "item": "docs-angular-guide",
+      "note": "No Angular mention in docs. Add guide: postcss.config.json (JSON only, CLI>=17.2), content globs, safelist [\":host\"] until next release, no regex in JSON (#1258). See #1265 comment."
+    },
+    {
+      "task": 9,
+      "item": "test-host-pseudo",
+      "note": "Add pseudo-class.test.ts cases: bare :host and :host(.active) kept on main (purged in 8.0.0). Guards the Angular use case."
     }
   ]
 }
