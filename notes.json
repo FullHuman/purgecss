@@ -2,7 +2,7 @@
   "version": 1,
   "cursors": {
     "labelling_after": null,
-    "investigation_after": 1263
+    "investigation_after": null
   },
   "issues": [
     {
@@ -90,12 +90,6 @@
       "note": "Posted verified workarounds: Tailwind extractor or standard regex + top-level dynamicAttributes, or greedy /^data-loaded$/. Noted user config throws (greedy strings)."
     },
     {
-      "number": 1298,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-26",
-      "note": "Fixed in postcss-purgecss 8.0.0 (module.exports restored; checked 7.0.2 vs 8.0.0 tarballs). Recommended upgrade; close if no reply."
-    },
-    {
       "number": 1156,
       "state": "resolution_recommended",
       "updated_at": "2026-10-27",
@@ -152,8 +146,8 @@
     {
       "number": 1258,
       "state": "commented",
-      "updated_at": "2026-10-28",
-      "note": "Posted verified workaround (ng build, @angular/build 22.2.5): safelist RegExp in purgecss.config.js via exports.safelist; JSON must have no safelist key. module.exports={safelist:{..}} silently ignored (bug, see priorities)."
+      "updated_at": "2026-10-29",
+      "note": "Posted verified workaround (RegExp safelist in purgecss.config.js via exports.safelist). Fix for ignored module.exports/export default config: draft PR from branch repo-assist/fix-postcss-config-file-loading (Related to, not Closes). JSON RegExp part = maintainer."
     },
     {
       "number": 1263,
@@ -163,14 +157,6 @@
     }
   ],
   "fixes": [
-    {
-      "issue": 1153,
-      "pr": 1513,
-      "branch": "repo-assist/test-nested-hover-1153",
-      "status": "open",
-      "updated_at": "2026-10-24",
-      "note": "No code fix needed (already fixed by #1467); PR adds a regression test only."
-    },
     {
       "issue": 964,
       "pr": 1515,
@@ -194,14 +180,22 @@
       "status": "open",
       "updated_at": "2026-10-27",
       "note": "Draft PR #1526: compare only with chunk.name; test, EN/FR/README docs, patch changeset. Behaviour change flagged."
+    },
+    {
+      "issue": 1258,
+      "pr": null,
+      "branch": "repo-assist/fix-postcss-config-file-loading",
+      "status": "open",
+      "updated_at": "2026-10-29",
+      "note": "postcss-purgecss: import pathToFileURL + unwrap default (mirrors setOptions). Test it.each module.exports/export default fixture; patch changeset. Fixes config-file part only. Find PR number next run."
     }
   ],
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-27",
-      "result": "#1523 merged (b5c112b): fixed default import in purgecss/jsx/pug/tsx/wordpress READMEs. Still wrong: purgecss-from-html README default import; purgecss-with-wordpress README uses safelistPatterns (not exported, not an option).",
-      "follow_up": "Docs PR for the two README fixes when PR capacity allows (priority docs-readme-leftovers)."
+      "checked_at": "2026-10-29",
+      "result": "Docs PR from branch repo-assist/improve-docs-api-examples: safelisting/wordpress (EN+FR) new Purgecss({}) -> purge(), react PurgecssPlugin -> PurgeCSSPlugin, from-html named import, wordpress README safelistPatterns removed.",
+      "follow_up": "Razzle/Next/Gatsby guides use whitelist: third-party plugin APIs, left alone. Still todo: Angular guide, runtime class names section."
     },
     {
       "area": "build",
@@ -230,20 +224,20 @@
     {
       "area": "dependencies",
       "checked_at": "2026-10-26",
-      "result": "Unused @types/glob + @types/webpack-sources PR push failed; fallback issue #1525 (protected files). Maintainer must create PR from artifact bundle or close.",
+      "result": "Unused @types/glob + @types/webpack-sources: maintainer created PR #1527 from the #1525 bundle (2026-10-29). Close #1525 once #1527 merges.",
       "follow_up": "dependabot.yml uses deprecated reviewers key + 2021 ignore rules (unverified offline). CI runs on push+pull_request (duplicate runs)."
     },
     {
       "area": "release",
-      "checked_at": "2026-10-26",
-      "result": "8.0.0 released 2026-01-24. 7 changesets pending on main (commander-15, css vars spaces, grunt sources, rollup options, root pseudo-class, trim rejected, windows config).",
-      "follow_up": "Draft a release PR (pnpm run version-packages) when PR capacity allows or maintainer asks."
+      "checked_at": "2026-10-29",
+      "result": "8.0.0 released 2026-01-24. 8 changesets pending on main incl. commander-15 (major) and gulp-sourcemaps (#1518).",
+      "follow_up": "Draft a release PR (pnpm run version-packages) when PR capacity allows or maintainer asks. Next version will be 9.0.0."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-28",
-      "result": "8 open RA PRs (#1512,#1513,#1515,#1517,#1518,#1520,#1524,#1526) merge clean with main b5c112b (unchanged, rechecked 2 runs on 2026-10-28); no reviews/comments since creation.",
-      "follow_up": "Re-check merge-tree when main gets code changes; rerun build+tests on merged result."
+      "checked_at": "2026-10-29",
+      "result": "#1512,#1513,#1518 merged. Open RA PRs #1515,#1517,#1520,#1524,#1526 + #1527 (maintainer-made from #1525 bundle) merge clean with main 29c2f35. 2 new drafts this run (config loading, docs examples).",
+      "follow_up": "Find PR numbers for the 2 new drafts; re-check merge-tree when main changes."
     }
   ],
   "completed_actions": [
@@ -254,18 +248,34 @@
     {
       "key": "close-issue-1348",
       "completed_at": "2026-10-25"
+    },
+    {
+      "key": "review-pr-1512",
+      "completed_at": "2026-10-29"
+    },
+    {
+      "key": "review-pr-1513",
+      "completed_at": "2026-10-29"
+    },
+    {
+      "key": "review-pr-1518",
+      "completed_at": "2026-10-29"
+    },
+    {
+      "key": "close-issue-1298",
+      "completed_at": "2026-10-29"
     }
   ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release, recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
+      "note": "After next release (major: commander-15), recommend closing #978, #1282, #1153 (verified fixed on main; #1513 test merged). NOT #1197 (needs #1504)."
     },
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred except #523 (install error only in screenshots; skip unless new activity). #1258 and #1263 answered 2026-10-28."
+      "note": "All open issues addressed or deferred except #523 (install error only in screenshots; skip unless new activity). No new human activity as of 2026-10-29."
     },
     {
       "task": 3,
@@ -279,11 +289,6 @@
     },
     {
       "task": 7,
-      "item": "docs-readme-leftovers",
-      "note": "Fix purgecss-from-html README (import { PurgeCSS }) and purgecss-with-wordpress README (drop safelistPatterns; package only exports safelist). One small docs PR."
-    },
-    {
-      "task": 7,
       "item": "docs-angular-guide",
       "note": "No Angular mention in docs. Add guide: postcss.config.json (JSON only, CLI>=17.2), content globs, safelist [\":host\"] until next release, RegExp safelist via purgecss.config.js exports.safelist (#1258 comment)."
     },
@@ -291,11 +296,6 @@
       "task": 9,
       "item": "test-host-pseudo",
       "note": "Add pseudo-class.test.ts cases: bare :host and :host(.active) kept on main (purged in 8.0.0). Guards the Angular use case."
-    },
-    {
-      "task": 3,
-      "item": "postcss-config-default-unwrap",
-      "note": "postcss-purgecss loads purgecss.config.js via import(t) without .default unwrap/pathToFileURL, so module.exports={...} literal is ignored. Reuse purgecss setOptions logic + test. PR when capacity allows (#1258)."
     }
   ]
 }
