@@ -51,10 +51,9 @@ async function purgeCSS(
           ? importedConfig.default
           : importedConfig;
     } catch (err: unknown) {
-      throw new Error(
-        `Error loading the config file ${err instanceof Error ? err.message : err}`,
-        { cause: err },
-      );
+      throw new Error(`Error loading the config file ${t}: ${err}`, {
+        cause: err,
+      });
     }
   }
 

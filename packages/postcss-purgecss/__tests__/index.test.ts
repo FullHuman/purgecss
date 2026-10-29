@@ -101,6 +101,7 @@ describe("Purgecss postcss plugin", () => {
   it.each([
     ["module.exports", "config-test"],
     ["export default", "config-test-default-export"],
+    ["named exports", "config-test-named-exports"],
   ])(
     "should work with a purgecss config file using %s",
     async (_, configDirectory) => {
