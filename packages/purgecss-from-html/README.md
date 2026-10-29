@@ -15,7 +15,7 @@ npm install purgecss-from-html --save-dev
 ### With PurgeCSS
 
 ```js
-import PurgeCSS from "purgecss";
+import { PurgeCSS } from "purgecss";
 import purgeFromHtml from "purgecss-from-html";
 
 const result = await new PurgeCSS().purge({
