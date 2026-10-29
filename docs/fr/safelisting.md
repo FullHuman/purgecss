@@ -28,6 +28,35 @@ Cette documentation concerne PurgeCSS 3.0 et versions ultérieures. Pour consult
 
 Vous pouvez indiquer quels sélecteurs peuvent être conservés en toute sécurité dans le CSS final. Cela peut être accompli avec l'option PurgeCSS `safelist`, ou directement dans votre CSS avec un commentaire spécial.
 
+## Noms de classes construits à l'exécution
+
+PurgeCSS n'exécute pas votre code. Il lit vos fichiers de contenu comme du texte et conserve les sélecteurs dont les noms y apparaissent. Un nom de classe qui n'existe qu'à l'exécution de votre code, parce qu'il est construit avec un template literal ou en concaténant des chaînes de caractères, n'est jamais trouvé, et son CSS est supprimé.
+
+```js
+// PurgeCSS trouve `btn` et `btn-`, mais pas `btn-primary` ni `btn-danger`
+const className = `btn btn-${variant}`;
+```
+
+Écrivez les noms de classes complets dans vos fichiers de contenu, pour que PurgeCSS puisse les trouver :
+
+```js
+const variants = {
+  primary: "btn-primary",
+  danger: "btn-danger",
+};
+const className = `btn ${variants[variant]}`;
+```
+
+Ou, si vous ne pouvez pas les lister, ajoutez-les à la safelist avec un [motif](#motifs) :
+
+```js
+const purgeCSSResult = await new PurgeCSS().purge({
+    content: [], // contenu
+    css: [], // css
+    safelist: [/^btn-/]
+})
+```
+
 ## Sélecteurs spécifiques
 
 Vous pouvez ajouter des sélecteurs à la safelist avec `safelist`.

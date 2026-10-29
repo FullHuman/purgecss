@@ -28,6 +28,35 @@ The documentation is for PurgeCSS 3.0 and above. To see the documentation for Pu
 
 You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the PurgeCSS option `safelist`, or directly in your CSS with a special comment.
 
+## Class names built at runtime
+
+PurgeCSS does not run your code. It reads your content files as text and keeps the selectors whose names appear in them. A class name that only exists once your code runs, because it is built with a template literal or by concatenating strings, is never found, and its CSS is removed.
+
+```js
+// PurgeCSS finds `btn` and `btn-`, but not `btn-primary` or `btn-danger`
+const className = `btn btn-${variant}`;
+```
+
+Write the complete class names in your content files, so that PurgeCSS can find them:
+
+```js
+const variants = {
+  primary: "btn-primary",
+  danger: "btn-danger",
+};
+const className = `btn ${variants[variant]}`;
+```
+
+Or, if you can't list them, safelist them with a [pattern](#patterns):
+
+```js
+const purgeCSSResult = await new PurgeCSS().purge({
+    content: [], // content
+    css: [], // css
+    safelist: [/^btn-/]
+})
+```
+
 ## Specific selectors
 
 You can add selectors to the safelist with `safelist`. 
