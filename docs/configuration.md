@@ -363,8 +363,12 @@ Here, PurgeCSS will not scan anything in the "node_modules" and "components" fol
 
 - **dynamicAttributes**
 
-Option to add custom CSS attribute selectors like "aria-selected", "data-selected", ...etc. 
+Option to add custom CSS attribute selectors like "aria-selected", "data-selected", ...etc. Use it for attributes that are set at runtime, by your own JavaScript or by a component library, and do not appear in your content files. Selectors using these attributes are kept whatever the attribute value, as long as the rest of the selector is used.
+
+Strings match the attribute name exactly. Regular expressions are tested against the attribute name.
 
 ```js
-dynamicAttributes: ["aria-selected"]
+dynamicAttributes: ["aria-selected", /^data-/]
 ```
+
+In this example, `.menu-item[aria-selected="true"]` and `.menu-item[data-highlighted]` are kept if `menu-item` is found, and removed otherwise.

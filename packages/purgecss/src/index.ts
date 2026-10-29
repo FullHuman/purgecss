@@ -22,7 +22,7 @@ import {
   IGNORE_ANNOTATION_START,
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
-import { CSS_SAFELIST } from "./internal-safelist";
+import { CSS_SAFELIST, DYNAMIC_ATTRIBUTES } from "./internal-safelist";
 import { defaultOptions } from "./options";
 import {
   AtRules,
@@ -851,6 +851,31 @@ class PurgeCSS {
   }
 
   /**
+   * Check if the attribute is dynamic, i.e. it can be set or changed at runtime.
+   * Attribute selectors on dynamic attributes are always kept, whatever their
+   * value, as the attribute may not appear in the content files.
+   *
+   * `value` is highly used in input elements and can change based on the user,
+   * idem for `checked`, `selected` and `open`, so they are always dynamic.
+   * Other attributes can be added with the option dynamicAttributes.
+   *
+   * @param attributeName - name of the attribute, e.g. `aria-selected`
+   */
+  private isAttributeDynamic(attributeName: string): boolean {
+    return (
+      DYNAMIC_ATTRIBUTES.includes(attributeName) ||
+      this.options.dynamicAttributes.some((dynamicAttribute) => {
+        if (typeof dynamicAttribute === "string") {
+          return dynamicAttribute === attributeName;
+        }
+        // a regex with the g or y flag keeps its lastIndex between calls
+        dynamicAttribute.lastIndex = 0;
+        return dynamicAttribute.test(attributeName);
+      })
+    );
+  }
+
+  /**
    * Remove unused CSS
    *
    * @param userOptions - PurgeCSS options or path to the configuration file
@@ -1016,16 +1041,7 @@ class PurgeCSS {
       let isPresent: boolean;
       switch (selectorNode.type) {
         case "attribute":
-          // `value` is a dynamic attribute, highly used in input element
-          // the choice is to always leave `value` as it can change based on the user
-          // idem for `checked`, `selected`, `open`
-          isPresent = [
-            ...this.options.dynamicAttributes,
-            "value",
-            "checked",
-            "selected",
-            "open",
-          ].includes(selectorNode.attribute)
+          isPresent = this.isAttributeDynamic(selectorNode.attribute)
             ? true
             : isAttributeFound(selectorNode, selectorsFromExtractor);
           break;
