@@ -1,0 +1,111 @@
+/* at-rules kept by an ignore annotation */
+/* purgecss start ignore */
+@property --range-property {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes range-keyframes {
+  to {
+    opacity: 0;
+  }
+}
+
+@font-face {
+  font-family: "Range Font";
+  src: url("range.woff2");
+}
+/* purgecss end ignore */
+
+/* purgecss ignore */
+@property --next-property {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* purgecss ignore */
+@keyframes next-keyframes {
+  to {
+    opacity: 0;
+  }
+}
+
+/* at-rules only used by rules kept by an ignore annotation */
+@property --range-used {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 1px;
+}
+
+@property --next-used {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 1px;
+}
+
+@property --current-used {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 1px;
+}
+
+@keyframes range-animation {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes current-animation {
+  to {
+    opacity: 0;
+  }
+}
+
+@font-face {
+  font-family: "Range Used Font";
+  src: url("range-used.woff2");
+}
+
+:root {
+  --range-chained: 2px;
+}
+
+/* purgecss start ignore */
+.range-ignored {
+  --range-declared: var(--range-chained);
+  margin: var(--range-used);
+  animation: range-animation 1s;
+  font-family: "Range Used Font";
+}
+/* purgecss end ignore */
+
+/* purgecss ignore */
+.next-ignored {
+  margin: var(--next-used);
+}
+
+.current-ignored {
+  /* purgecss ignore current */
+  margin: var(--current-used);
+  animation: current-animation 1s;
+}
+
+/* unused at-rules */
+@property --unused-property {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes unused-keyframes {
+  to {
+    opacity: 0;
+  }
+}
+
+@font-face {
+  font-family: "Unused Font";
+  src: url("unused.woff2");
+}
