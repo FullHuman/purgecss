@@ -381,7 +381,7 @@ class PurgeCSS {
 
   private collectDeclarationsData(
     declaration: postcss.Declaration,
-    isIgnored = false,
+    isIgnored: boolean,
   ): void {
     const { prop, value } = declaration;
 
@@ -441,14 +441,13 @@ class PurgeCSS {
    * @param isIgnored - whether the node is kept by an ignore annotation
    */
   private collectDeclarationsDataOfNode(
-    node: postcss.Rule | postcss.AtRule,
+    node: postcss.Container,
     isIgnored = false,
   ): void {
-    if (!node.nodes) return;
-    for (const childNode of node.nodes) {
-      if (childNode.type !== "decl") continue;
+    node.each((childNode) => {
+      if (childNode.type !== "decl") return;
       this.collectDeclarationsData(childNode, isIgnored);
-    }
+    });
   }
 
   /**
