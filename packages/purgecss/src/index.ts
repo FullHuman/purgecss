@@ -41,6 +41,10 @@ import {
 } from "./types";
 
 import { VariablesStructure } from "./VariablesStructure";
+import {
+  getAttributeSelectorKey,
+  parseAttributeSelector,
+} from "./attribute-selector";
 
 export * from "./types";
 export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
@@ -373,6 +377,8 @@ class PurgeCSS {
 
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
+  private blocklistedAttributeSelectors: Set<string> = new Set();
+  private blocklistPatterns: RegExp[] = [];
   public selectorsRemoved: Set<string> = new Set();
   public removedNodes: postcss.Node[] = [];
   public variablesStructure: VariablesStructure = new VariablesStructure();
@@ -598,7 +604,11 @@ class PurgeCSS {
         if (selector.type !== "selector") {
           return;
         }
-        const keepSelector = this.shouldKeepSelector(selector, selectors);
+        const keepSelector = this.shouldKeepSelector(
+          selector,
+          selectors,
+          node.selector,
+        );
 
         if (!keepSelector) {
           // the whitespace after the previous comma belongs to the selector
@@ -761,8 +771,130 @@ class PurgeCSS {
     return this.options.blocklist.some((blocklistItem) => {
       return typeof blocklistItem === "string"
         ? blocklistItem === selector
-        : blocklistItem.test(selector);
+        : this.isBlocklistPatternMatching(blocklistItem, selector);
     });
+  }
+
+  /**
+   * Test each selector independently without changing a caller's regex state.
+   */
+  private isBlocklistPatternMatching(
+    pattern: RegExp,
+    selector: string,
+  ): boolean {
+    if (!pattern.global && !pattern.sticky) return pattern.test(selector);
+
+    const lastIndex = pattern.lastIndex;
+    try {
+      pattern.lastIndex = 0;
+      return pattern.test(selector);
+    } finally {
+      pattern.lastIndex = lastIndex;
+    }
+  }
+
+  /**
+   * Parse full attribute selector strings once per CSS traversal. Other strings
+   * remain literal selector names, and regexes retain their textual matching.
+   */
+  private prepareAttributeBlocklist(): void {
+    this.blocklistedAttributeSelectors.clear();
+    this.blocklistPatterns = [];
+
+    for (const item of this.options.blocklist) {
+      if (typeof item !== "string") {
+        this.blocklistPatterns.push(item);
+        continue;
+      }
+      const attribute = parseAttributeSelector(item);
+      if (attribute) {
+        this.blocklistedAttributeSelectors.add(
+          getAttributeSelectorKey(attribute),
+        );
+      }
+    }
+  }
+
+  /**
+   * Check if the attribute selector is blocklisted with the option blocklist
+   *
+   * Strings compare parsed attribute values. Regexes compare the original CSS
+   * and its unquoted, double-quoted and single-quoted forms, with original and
+   * normalized whitespace.
+   *
+   * @param attributeNode - node of type "attribute"
+   * @param source - original rule selector text
+   */
+  private isAttributeSelectorBlocklisted(
+    attributeNode: selectorParser.Attribute,
+    source: string,
+  ): boolean {
+    if (
+      this.blocklistedAttributeSelectors.size === 0 &&
+      this.blocklistPatterns.length === 0
+    )
+      return false;
+    const attribute = parseAttributeSelector(
+      source.slice(attributeNode.sourceIndex),
+      false,
+    );
+    if (!attribute) return false;
+    if (
+      this.blocklistedAttributeSelectors.size > 0 &&
+      this.blocklistedAttributeSelectors.has(getAttributeSelectorKey(attribute))
+    ) {
+      return true;
+    }
+    if (this.blocklistPatterns.length === 0) {
+      return false;
+    }
+
+    const { operator, value } = attribute;
+    const attributeSelectors = new Set([attribute.raw]);
+    const quotedAttribute = attributeNode.clone();
+    // Repair decoded fields for generated regex candidates without changing the
+    // AST that will be serialized into the output stylesheet.
+    if (quotedAttribute.attribute !== attribute.attribute)
+      quotedAttribute.attribute = attribute.attribute;
+    if (quotedAttribute.namespace !== attribute.namespace)
+      quotedAttribute.namespace = attribute.namespace ?? "";
+    if (
+      attribute.namespace === "*" &&
+      !attribute.wildcardNamespace &&
+      !("namespace" in quotedAttribute.raws && quotedAttribute.raws.namespace)
+    ) {
+      Object.assign(quotedAttribute.raws, { namespace: "\\*" });
+    }
+    quotedAttribute.operator = operator;
+    quotedAttribute.insensitive = attribute.modifier === "i";
+    Object.assign(quotedAttribute.raws, {
+      insensitiveFlag: attribute.rawModifier,
+    });
+    const normalizedAttribute = quotedAttribute.clone({
+      spaces: { before: "", after: "" },
+    });
+    delete normalizedAttribute.raws.spaces;
+    // The parser stores an explicit case-sensitive flag in raws.
+    if (attribute.modifier) {
+      normalizedAttribute.spaces.value = { after: " " };
+    }
+
+    if (operator && value !== undefined) {
+      for (const quoteMark of [null, '"', "'"] as const) {
+        // Let the parser escape each value while retaining namespaces and flags.
+        quotedAttribute.setValue(value, { quoteMark });
+        attributeSelectors.add(quotedAttribute.toString().trim());
+        normalizedAttribute.setValue(value, { quoteMark });
+        attributeSelectors.add(normalizedAttribute.toString());
+      }
+    } else {
+      attributeSelectors.add(normalizedAttribute.toString());
+    }
+    return [...attributeSelectors].some((attributeSelector) =>
+      this.blocklistPatterns.some((pattern) =>
+        this.isBlocklistPatternMatching(pattern, attributeSelector),
+      ),
+    );
   }
 
   /**
@@ -911,12 +1043,14 @@ class PurgeCSS {
    *
    * @param selector - set of css selectors found in the content files or string
    * @param selectorsFromExtractor - selectors in the css rule
+   * @param source - original rule selector text
    *
    * @returns true if the selector should be kept in the processed CSS
    */
   private shouldKeepSelector(
     selector: selectorParser.Selector,
     selectorsFromExtractor: ExtractorResultSets,
+    source: string,
   ): boolean {
     // selectors in pseudo classes are ignored except :where() and :is(). For those pseudo-classes, we are treating the selectors inside the same way as they would be outside.
     if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
@@ -962,6 +1096,14 @@ class PurgeCSS {
 
       // The selector is present in the blocklist
       if (selectorValue && this.isSelectorBlocklisted(selectorValue)) {
+        return false;
+      }
+
+      // The attribute selector, with its value, is present in the blocklist
+      if (
+        selectorNode.type === "attribute" &&
+        this.isAttributeSelectorBlocklisted(selectorNode, source)
+      ) {
         return false;
       }
 
@@ -1017,6 +1159,7 @@ class PurgeCSS {
     root: PostCSSRoot,
     selectors: ExtractorResultSets,
   ): void {
+    this.prepareAttributeBlocklist();
     root.walk((node) => {
       if (node.type === "rule") {
         return this.evaluateRule(node, selectors);

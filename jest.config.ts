@@ -11,6 +11,10 @@ const config: JestConfigWithTsJest = {
   },
   testMatch: ["<rootDir>/__tests__/**/*test.ts"],
   transform: {
+    "node_modules/@csstools/css-tokenizer/.+\\.mjs$": [
+      "ts-jest",
+      { useESM: false, tsconfig: { allowJs: true } },
+    ],
     "^.+\\.tsx?$": ["ts-jest", {}],
     "node_modules/(parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype|commander)/.+\\.js$":
       ["ts-jest", { useESM: false }],
@@ -18,7 +22,7 @@ const config: JestConfigWithTsJest = {
   // `\\.pnpm` keeps pnpm's virtual store (node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>)
   // from being ignored before the package name can be matched
   transformIgnorePatterns: [
-    "node_modules/(?!(\\.pnpm|parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype|commander)/)",
+    "node_modules/(?!(\\.pnpm|@csstools/css-tokenizer|parse5|parse5-htmlparser2-tree-adapter|entities|domhandler|domelementtype|commander)/)",
   ],
 };
 
