@@ -77,7 +77,7 @@ Maintenant, modifiez le fichier `config/webpack.prod.conf.js` en ajoutant le cod
 
 ```js
 // importer le plugin webpack PurgeCSS et glob-all
-const { PurgecssPlugin } = require("purgecss-webpack-plugin");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 const glob = require("glob-all");
 ```
 
@@ -87,7 +87,7 @@ const glob = require("glob-all");
     // Supprimer le CSS inutilisé avec PurgeCSS. Voir https://github.com/FullHuman/purgecss
     // pour plus d'informations sur PurgeCSS.
     // Spécifiez le chemin des fichiers html et des fichiers sources
-    new PurgecssPlugin({
+    new PurgeCSSPlugin({
       paths: [paths.appHtml, ...glob.sync(`${paths.appSrc}/**/*`, { nodir: true })]
     }),
 ```

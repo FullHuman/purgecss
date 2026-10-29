@@ -266,6 +266,23 @@ describe("root-level pseudo-class selectors", () => {
   });
 });
 
+describe("native CSS nesting with a pseudo-class (#1153)", () => {
+  const purge = async (css: string, raw: string): Promise<string> => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw, extension: "html" }],
+      css: [{ raw: css }],
+      rejected: true,
+    });
+    return resultsPurge[0].css;
+  };
+
+  it("keeps a bare &:hover nested inside a used selector", async () => {
+    const css = "a:hover{background-color:green} a{&:hover{color:red}}";
+    const result = await purge(css, "<a href='/'>GitHub</a>");
+    expect(result).toContain("&:hover");
+  });
+});
+
 describe("root-level pseudo-class selectors with a blocklist", () => {
   let purgedCSS: string;
   beforeAll(async () => {

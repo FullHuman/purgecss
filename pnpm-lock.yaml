@@ -294,9 +294,6 @@ importers:
       '@types/event-stream':
         specifier: ^4.0.6
         version: 4.0.6
-      '@types/glob':
-        specifier: ^9.0.0
-        version: 9.0.0
       '@types/through2':
         specifier: ^2.0.41
         version: 2.0.41
@@ -397,9 +394,6 @@ importers:
         specifier: ^5.111.1
         version: 5.111.1(lightningcss@1.33.0)(postcss@8.5.29)(uglify-js@3.19.3)
     devDependencies:
-      '@types/webpack-sources':
-        specifier: ^3.2.3
-        version: 3.2.3
       css-loader:
         specifier: ^7.1.5
         version: 7.1.5(webpack@5.111.1(lightningcss@1.33.0)(postcss@8.5.29)(uglify-js@3.19.3))
@@ -1450,10 +1444,6 @@ packages:
   '@types/fs-extra@11.0.4':
     resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
 
-  '@types/glob@9.0.0':
-    resolution: {integrity: sha512-00UxlRaIUvYm4R4W9WYkN8/J+kV8fmOQ7okeH6YFtGWFMt3odD45tpG5yA5wnL7HE6lLgjaTW5n14ju2hl2NNA==}
-    deprecated: This is a stub types definition. glob provides its own type definitions, so you do not need this installed.
-
   '@types/grunt@0.4.32':
     resolution: {integrity: sha512-PJy6K4u35RMhBD/rc9xoUFip5bnZNZZqTZoNYsqsadFAsPzs6C24xYe/0QYX/NfuCKPiP6/vSi3R5skIgRp3hQ==}
 
@@ -1511,9 +1501,6 @@ packages:
   '@types/sax@1.2.7':
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
 
-  '@types/source-list-map@0.1.6':
-    resolution: {integrity: sha512-5JcVt1u5HDmlXkwOD2nslZVllBBc7HDuOICfiZah2Z0is8M8g+ddAEawbmd3VjedfDHBzxCaXLs07QEmb7y54g==}
-
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
@@ -1528,9 +1515,6 @@ packages:
 
   '@types/web-bluetooth@0.0.21':
     resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
-
-  '@types/webpack-sources@3.2.3':
-    resolution: {integrity: sha512-4nZOdMwSPHZ4pTEZzSp0AsTM4K7Qmu40UKW4tJDiOVs20UzYF9l+qUe4s0ftfN0pin06n+5cWWDJXH+sbhAiDw==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -4235,10 +4219,6 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  source-map@0.7.6:
-    resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
-    engines: {node: '>= 12'}
-
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
 
@@ -5889,10 +5869,6 @@ snapshots:
       '@types/jsonfile': 6.1.4
       '@types/node': 25.9.9
 
-  '@types/glob@9.0.0':
-    dependencies:
-      glob: 13.0.6
-
   '@types/grunt@0.4.32':
     dependencies:
       '@types/node': 25.9.9
@@ -5957,8 +5933,6 @@ snapshots:
     dependencies:
       '@types/node': 25.9.9
 
-  '@types/source-list-map@0.1.6': {}
-
   '@types/stack-utils@2.0.3': {}
 
   '@types/through2@2.0.41':
@@ -5973,12 +5947,6 @@ snapshots:
       '@types/node': 25.9.9
 
   '@types/web-bluetooth@0.0.21': {}
-
-  '@types/webpack-sources@3.2.3':
-    dependencies:
-      '@types/node': 25.9.9
-      '@types/source-list-map': 0.1.6
-      source-map: 0.7.6
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -9113,8 +9081,6 @@ snapshots:
   source-map@0.5.7: {}
 
   source-map@0.6.1: {}
-
-  source-map@0.7.6: {}
 
   space-separated-tokens@2.0.2: {}
 

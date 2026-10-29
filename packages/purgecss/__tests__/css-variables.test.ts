@@ -38,3 +38,48 @@ describe.each([
     expect(purgedCSS).toContain("--outline-color:");
   });
 });
+
+describe("purge CSS variables used in keyframes correctly", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [`${ROOT_TEST_EXAMPLES}css-variables/keyframes.html`],
+      css: [`${ROOT_TEST_EXAMPLES}css-variables/keyframes.css`],
+      variables: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps `--used-color`", () => {
+    expect(purgedCSS.includes("--used-color:")).toBe(true);
+    expect(purgedCSS.includes("var(--used-color)")).toBe(true);
+  });
+
+  it("removes `--unused-color`", () => {
+    expect(purgedCSS.includes("--unused-color")).toBe(false);
+  });
+});
+
+describe("purge CSS variables declared in keyframes", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        `${ROOT_TEST_EXAMPLES}css-variables/keyframes-custom-properties.html`,
+      ],
+      css: [
+        `${ROOT_TEST_EXAMPLES}css-variables/keyframes-custom-properties.css`,
+      ],
+      variables: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps `--angle` animated inside keyframes", () => {
+    expect(purgedCSS).toContain("--angle: 360deg");
+  });
+
+  it("removes `--unused-angle`", () => {
+    expect(purgedCSS).not.toContain("--unused-angle");
+  });
+});
