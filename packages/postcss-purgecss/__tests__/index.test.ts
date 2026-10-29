@@ -98,25 +98,35 @@ describe("Purgecss postcss plugin", () => {
     expect(result.warnings().length).toBe(0);
   });
 
-  it("should work with a purgecss config file", async () => {
-    const cwd = process.cwd();
-    const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
-    process.chdir(configTestDirectory);
+  it.each([
+    ["module.exports", "config-test"],
+    ["export default", "config-test-default-export"],
+  ])(
+    "should work with a purgecss config file using %s",
+    async (_, configDirectory) => {
+      const cwd = process.cwd();
+      const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
+      process.chdir(`${__dirname}/fixtures/src/${configDirectory}/`);
 
-    const input = fs.readFileSync(`${configTestDirectory}index.css`).toString();
-    const output = fs
-      .readFileSync(`${configTestDirectory}expected.css`)
-      .toString();
+      const input = fs
+        .readFileSync(`${configTestDirectory}index.css`)
+        .toString();
+      const output = fs
+        .readFileSync(`${configTestDirectory}expected.css`)
+        .toString();
 
-    const result = await postcss([
-      purgeCSSPlugin({
-        keyframes: true,
-      }),
-    ]).process(input, { from: undefined });
+      try {
+        const result = await postcss([
+          purgeCSSPlugin({
+            keyframes: true,
+          }),
+        ]).process(input, { from: undefined });
 
-    expect(result.css).toBe(output);
-    expect(result.warnings().length).toBe(0);
-
-    process.chdir(cwd);
-  });
+        expect(result.css).toBe(output);
+        expect(result.warnings().length).toBe(0);
+      } finally {
+        process.chdir(cwd);
+      }
+    },
+  );
 });

@@ -9,6 +9,7 @@
 
 import * as path from "path";
 import * as postcss from "postcss";
+import { pathToFileURL } from "url";
 import {
   PurgeCSS,
   defaultOptions,
@@ -39,7 +40,12 @@ async function purgeCSS(
   let configFileOptions: UserDefinedOptions | undefined;
   try {
     const t = path.resolve(process.cwd(), "purgecss.config.js");
-    configFileOptions = await import(t);
+    const importedConfig = await import(pathToFileURL(t).href);
+    // Handle both ES modules (direct export) and CommonJS (default export)
+    configFileOptions =
+      importedConfig.default && typeof importedConfig.default === "object"
+        ? importedConfig.default
+        : importedConfig;
   } catch {
     // no config file present
   }

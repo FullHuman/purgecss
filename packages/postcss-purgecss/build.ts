@@ -15,6 +15,7 @@ import * as path from "path";
     "postcss",
     "purgecss",
     "path",
+    "url",
   ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);
