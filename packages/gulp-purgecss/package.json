@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/event-stream": "^4.0.6",
-    "@types/glob": "^9.0.0",
     "@types/through2": "^2.0.41",
     "@types/vinyl": "^2.0.12",
     "event-stream": "^4.0.1",

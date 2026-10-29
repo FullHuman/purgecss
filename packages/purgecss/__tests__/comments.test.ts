@@ -45,6 +45,65 @@ describe("ignore comment range", () => {
   });
 });
 
+describe("ignore comment with at-rules", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        `${ROOT_TEST_EXAMPLES}comments-at-rules/ignore_comment_at_rules.html`,
+      ],
+      css: [
+        `${ROOT_TEST_EXAMPLES}comments-at-rules/ignore_comment_at_rules.css`,
+      ],
+      variables: true,
+      keyframes: true,
+      fontFace: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps the at-rules inside an ignore range", () => {
+    expect(purgedCSS).toContain("@property --range-property");
+    expect(purgedCSS).toContain("@keyframes range-keyframes");
+    expect(purgedCSS).toContain('src: url("range.woff2")');
+  });
+
+  it("keeps the at-rules after an ignore comment", () => {
+    expect(purgedCSS).toContain("@property --next-property");
+    expect(purgedCSS).toContain("@keyframes next-keyframes");
+  });
+
+  it("keeps the at-rules used by ignored rules", () => {
+    findInCSS(
+      expect,
+      [
+        "@property --range-used",
+        "@property --next-used",
+        "@property --current-used",
+        "@keyframes range-animation",
+        "@keyframes current-animation",
+        'src: url("range-used.woff2")',
+      ],
+      purgedCSS,
+    );
+  });
+
+  it("keeps the variables declared and used by ignored rules", () => {
+    expect(purgedCSS).toContain("--range-declared: var(--range-chained)");
+    expect(purgedCSS).toContain("--range-chained: 2px");
+  });
+
+  it("removes the unused at-rules", () => {
+    expect(purgedCSS).not.toContain("--unused-property");
+    expect(purgedCSS).not.toContain("unused-keyframes");
+    expect(purgedCSS).not.toContain("unused.woff2");
+  });
+
+  it("removes the comments", () => {
+    expect(purgedCSS).not.toContain("purgecss");
+  });
+});
+
 describe("ignore comment range starting in a purged media query", () => {
   let purgedCSS: string;
   beforeAll(async () => {

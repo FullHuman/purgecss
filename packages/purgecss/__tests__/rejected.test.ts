@@ -56,4 +56,14 @@ describe("rejected", () => {
       "[href^='#']",
     ]);
   });
+
+  it("trims the whitespace around the rejected selectors", async () => {
+    expect.assertions(1);
+    const purgecssResult = await new PurgeCSS().purge({
+      content: [{ raw: "<em>Italic</em>", extension: "html" }],
+      css: [{ raw: "em,\nstrong {\n  font-size: 2em;\n}\nem , i {}" }],
+      rejected: true,
+    });
+    expect(purgecssResult[0].rejected).toEqual(["strong", "i"]);
+  });
 });
