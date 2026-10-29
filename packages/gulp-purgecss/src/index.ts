@@ -17,6 +17,23 @@ function getFiles(contentArray: string[], ignore?: string[]): string[] {
   }, []);
 }
 
+// generate a separate source map describing only this step, without any
+// annotation in the css, so that it can be chained with gulp-sourcemaps
+function getSourceMapOptions(file: VinylFile): UserDefinedOptions["sourceMap"] {
+  return file.sourceMap
+    ? { inline: false, annotation: false, prev: false }
+    : false;
+}
+
+function applyPurgedSourceMap(file: VinylFile, sourceMap?: string): void {
+  if (!file.sourceMap || !sourceMap) return;
+  const map = JSON.parse(sourceMap);
+  // the css is purged as a raw string, so the source map has no file name
+  map.file = file.relative;
+  map.sources = map.sources.map(() => file.relative);
+  applySourceMap(file, map);
+}
+
 /**
  *
  * @param options - options
@@ -40,7 +57,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             },
           ],
           stdin: true,
-          sourceMap: !!file.sourceMap,
+          sourceMap: getSourceMapOptions(file),
         };
         const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
         const purge = purgedCSSResults[0];
@@ -51,9 +68,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
         file.contents = Buffer.from(result, "utf-8");
 
         // apply source map to the chain
-        if (file.sourceMap) {
-          applySourceMap(file, purge.sourceMap);
-        }
+        applyPurgedSourceMap(file, purge.sourceMap);
         callback(null, file);
       } catch (e: unknown) {
         if (e instanceof Error) {
@@ -77,7 +92,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
                   raw: css,
                 },
               ],
-              sourceMap: !!file.sourceMap,
+              sourceMap: getSourceMapOptions(file),
             };
 
             const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
@@ -91,9 +106,7 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             streamResult.write(Buffer.from(result, "utf-8"));
             file.contents = file.contents.pipe(streamResult);
             // apply source map to the chain
-            if (file.sourceMap) {
-              applySourceMap(file, purge.sourceMap);
-            }
+            applyPurgedSourceMap(file, purge.sourceMap);
             callback(null, file);
           } catch (e: unknown) {
             if (e instanceof Error) {
