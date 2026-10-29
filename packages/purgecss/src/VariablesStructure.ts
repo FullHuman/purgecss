@@ -60,6 +60,11 @@ export class VariablesStructure {
       if (this.nodes.has(variableName)) {
         const usedVariableNodes = this.nodes.get(variableName);
         nodes?.forEach((node) => {
+          // only the node of this declaration depends on the variables it
+          // uses. Linking every earlier declaration of `prop` again on each
+          // redefinition would add duplicate dependencies and slow down large
+          // stylesheets.
+          if (node.value !== declaration) return;
           usedVariableNodes?.forEach((usedVariableNode) => {
             node.nodes.push(usedVariableNode);
           });
@@ -86,7 +91,11 @@ export class VariablesStructure {
         const currentNode = queue.pop();
         if (currentNode && !currentNode.isUsed) {
           currentNode.isUsed = true;
-          queue.push(...currentNode.nodes);
+          // push one by one, spreading a large array of dependencies
+          // as arguments can exceed the maximum call stack size
+          for (const node of currentNode.nodes) {
+            queue.push(node);
+          }
         }
       }
     }
