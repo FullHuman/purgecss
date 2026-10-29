@@ -19,6 +19,7 @@ export class VariableNode {
  */
 export class VariablesStructure {
   public nodes: Map<string, VariableNode[]> = new Map();
+  public properties: Map<string, postcss.AtRule[]> = new Map();
   public usedVariables: Set<string> = new Set();
   public safelist: StringRegExpArray = [];
 
@@ -32,6 +33,18 @@ export class VariablesStructure {
       const variableNodes = this.nodes.get(prop) || [];
       this.nodes.set(prop, [...variableNodes, node]);
     }
+  }
+
+  /**
+   * Register an `@property` at-rule so it can be removed along with the
+   * declarations of the variable it defines
+   *
+   * @param atRule - `@property` at-rule
+   */
+  addProperty(atRule: postcss.AtRule): void {
+    const name = atRule.params.trim();
+    const properties = this.properties.get(name) || [];
+    this.properties.set(name, [...properties, atRule]);
   }
 
   addVariableUsage(
@@ -104,6 +117,14 @@ export class VariablesStructure {
       for (const declaration of declarations) {
         if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
           declaration.value.remove();
+        }
+      }
+    }
+
+    for (const [name, properties] of this.properties) {
+      if (!this.usedVariables.has(name) && !this.isVariablesSafelisted(name)) {
+        for (const property of properties) {
+          property.remove();
         }
       }
     }

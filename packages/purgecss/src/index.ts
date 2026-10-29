@@ -524,6 +524,16 @@ class PurgeCSS {
       }
     }
 
+    // @property rules of css variables
+    if (
+      this.options.variables &&
+      node.name === "property" &&
+      node.params.trim().startsWith("--")
+    ) {
+      this.variablesStructure.addProperty(node);
+      return;
+    }
+
     // keyframes
     if (this.options.keyframes && node.name.endsWith("keyframes")) {
       this.atRules.keyframes.push(node);
