@@ -112,6 +112,8 @@ h6 {
 /* purgecss end ignore */
 ```
 
+Lorsque les options `keyframes`, `fontFace` ou `variables` sont activées, les règles `@keyframes`, `@font-face` et `@property` ajoutées à la safelist par ces commentaires ne sont pas supprimées, pas plus que les keyframes, polices et variables CSS utilisées par les règles de la safelist.
+
 ### Points d'attention
 
 Certains outils d'optimisation CSS tels que PostCSS ou cssnano suppriment les commentaires avant que PurgeCSS ne s'exécute dans votre processus de build. Cela peut passer inaperçu car ces étapes sont souvent désactivées en développement. Pour éviter que ces commentaires soient supprimés, vous pouvez les marquer comme importants avec un point d'exclamation.

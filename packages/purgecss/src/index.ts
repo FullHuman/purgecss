@@ -379,7 +379,10 @@ class PurgeCSS {
 
   public options: Options = defaultOptions;
 
-  private collectDeclarationsData(declaration: postcss.Declaration): void {
+  private collectDeclarationsData(
+    declaration: postcss.Declaration,
+    isIgnored = false,
+  ): void {
     const { prop, value } = declaration;
 
     // collect css properties data
@@ -387,7 +390,9 @@ class PurgeCSS {
       const usedVariablesMatchesInDeclaration = value.matchAll(
         /\bvar\(\s*(.+?)\s*[,)]/g,
       );
-      if (prop.startsWith("--")) {
+      // custom properties kept by an ignore annotation are not registered so
+      // they are never removed, but the variables they use still count as used
+      if (prop.startsWith("--") && !isIgnored) {
         this.variablesStructure.addVariable(declaration);
         this.variablesStructure.addVariableUsage(
           declaration,
@@ -427,6 +432,46 @@ class PurgeCSS {
       }
       return;
     }
+  }
+
+  /**
+   * Collect the data of the declarations directly inside a node
+   *
+   * @param node - rule or at-rule of postcss AST
+   * @param isIgnored - whether the node is kept by an ignore annotation
+   */
+  private collectDeclarationsDataOfNode(
+    node: postcss.Rule | postcss.AtRule,
+    isIgnored = false,
+  ): void {
+    if (!node.nodes) return;
+    for (const childNode of node.nodes) {
+      if (childNode.type !== "decl") continue;
+      this.collectDeclarationsData(childNode, isIgnored);
+    }
+  }
+
+  /**
+   * Check if a node is kept by an ignore annotation: inside an ignore range,
+   * or right after an ignore next line comment, which is then removed
+   *
+   * @param node - node of postcss AST
+   */
+  private isIgnored(node: postcss.Node): boolean {
+    if (this.ignore) {
+      return true;
+    }
+
+    const annotation = node.prev();
+    if (
+      isPostCSSComment(annotation) &&
+      isIgnoreAnnotation(annotation, "next")
+    ) {
+      annotation.remove();
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -511,17 +556,20 @@ class PurgeCSS {
    * @param node - node of postcss AST
    */
   private evaluateAtRule(node: postcss.AtRule): void {
+    const isIgnored = this.isIgnored(node);
+
     // when tracking variables, collect var() usages from declarations
     // nested inside at-rules (e.g. @media, @supports, ...)
     if (
       this.options.variables &&
-      (node.name === "media" || node.name === "supports") &&
-      node.nodes
+      (node.name === "media" || node.name === "supports")
     ) {
-      for (const childNode of node.nodes) {
-        if (childNode.type !== "decl") continue;
-        this.collectDeclarationsData(childNode);
-      }
+      this.collectDeclarationsDataOfNode(node, isIgnored);
+    }
+
+    // exit if it is kept by an ignore annotation
+    if (isIgnored) {
+      return;
     }
 
     // @property rules of css variables
@@ -562,18 +610,10 @@ class PurgeCSS {
     node: postcss.Node,
     selectors: ExtractorResultSets,
   ): void {
-    // exit if is in ignoring state activated by an ignore comment
-    if (this.ignore) {
-      return;
-    }
-
-    // exit if the previous annotation is a ignore next line comment
-    const annotation = node.prev();
-    if (
-      isPostCSSComment(annotation) &&
-      isIgnoreAnnotation(annotation, "next")
-    ) {
-      annotation.remove();
+    // exit if it is kept by an ignore annotation (ignore range or ignore next
+    // line comment), still collecting what its declarations use
+    if (this.isIgnored(node)) {
+      if (isPostCSSRule(node)) this.collectDeclarationsDataOfNode(node, true);
       return;
     }
 
@@ -584,13 +624,7 @@ class PurgeCSS {
       node.parent.name.endsWith("keyframes")
     ) {
       // declarations inside keyframes rules
-      if (isPostCSSRule(node) && node.nodes) {
-        for (const childNode of node.nodes) {
-          if (childNode.type !== "decl") continue;
-          this.collectDeclarationsData(childNode);
-        }
-      }
-
+      if (isPostCSSRule(node)) this.collectDeclarationsDataOfNode(node);
       return;
     }
 
@@ -599,8 +633,10 @@ class PurgeCSS {
       return;
     }
 
-    // exit if it has an ignore rule comment inside
+    // exit if it has an ignore rule comment inside, still collecting what its
+    // declarations use
     if (hasIgnoreAnnotation(node)) {
+      this.collectDeclarationsDataOfNode(node, true);
       return;
     }
 
@@ -650,12 +686,7 @@ class PurgeCSS {
     }).processSync(node.selector);
 
     // declarations
-    if (node.selector && node.nodes) {
-      for (const childNode of node.nodes) {
-        if (childNode.type !== "decl") continue;
-        this.collectDeclarationsData(childNode);
-      }
-    }
+    if (node.selector) this.collectDeclarationsDataOfNode(node);
 
     // remove empty rules
     const parent = node.parent;

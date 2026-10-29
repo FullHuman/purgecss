@@ -112,6 +112,8 @@ h6 {
 /* purgecss end ignore */
 ```
 
+When the `keyframes`, `fontFace` or `variables` options are enabled, the `@keyframes`, `@font-face` and `@property` rules safelisted by these comments are not removed, and neither are the keyframes, font faces and CSS variables used by the safelisted rules.
+
 ### Gotchas
 
 Some CSS optimising tools such as PostCSS or cssnano will strip comments before PurgeCSS runs in your build process, this can go unnoticed as often these steps are disabled in development. To prevent these comments being removed you can mark as important with an exclamation mark.
