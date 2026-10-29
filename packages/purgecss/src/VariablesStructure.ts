@@ -53,18 +53,18 @@ export class VariablesStructure {
     matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
     const { prop } = declaration;
-    // only the node of this declaration depends on the variables it uses.
-    // Linking every earlier declaration of `prop` again on each redefinition
-    // would add duplicate dependencies and slow down large stylesheets.
-    const nodes = this.nodes
-      .get(prop)
-      ?.filter((node) => node.value === declaration);
+    const nodes = this.nodes.get(prop);
     for (const variableMatch of matchedVariables) {
       // capturing group containing the variable is in index 1
       const variableName = variableMatch[1];
       if (this.nodes.has(variableName)) {
         const usedVariableNodes = this.nodes.get(variableName);
         nodes?.forEach((node) => {
+          // only the node of this declaration depends on the variables it
+          // uses. Linking every earlier declaration of `prop` again on each
+          // redefinition would add duplicate dependencies and slow down large
+          // stylesheets.
+          if (node.value !== declaration) return;
           usedVariableNodes?.forEach((usedVariableNode) => {
             node.nodes.push(usedVariableNode);
           });
