@@ -83,3 +83,26 @@ describe("purge CSS variables declared in keyframes", () => {
     expect(purgedCSS).not.toContain("--unused-angle");
   });
 });
+
+describe("VariablesStructure", () => {
+  it("marks the variables used through other variables, without dependencies between declarations", async () => {
+    const purgeCSS = new PurgeCSS();
+    await purgeCSS.purge({
+      content: [{ raw: '<div class="a"></div>', extension: "html" }],
+      css: [{ raw: ".a { --a: 1px; --b: var(--a); color: var(--b); }" }],
+      variables: true,
+    });
+    const { nodes } = purgeCSS.variablesStructure;
+    const [a] = nodes.get("--a") ?? [];
+    const [b] = nodes.get("--b") ?? [];
+    expect(a.isUsed).toBe(true);
+    expect(b.isUsed).toBe(true);
+
+    // deprecated, it no longer records anything
+    purgeCSS.variablesStructure.addVariableUsage(
+      b.value,
+      b.value.value.matchAll(/var\((.+?)\)/g),
+    );
+    expect(b.nodes).toEqual([]);
+  });
+});

@@ -6,6 +6,12 @@ import { matchesPattern } from "./utils";
  * @public
  */
 export class VariableNode {
+  /**
+   * @deprecated The dependencies between declarations are no longer
+   * recorded, so this list is always empty. The variables used by a used
+   * variable are found by name in `VariablesStructure.removeUnused`. It will
+   * be removed in the next major version.
+   */
   public nodes: VariableNode[] = [];
   public value: postcss.Declaration;
   public isUsed = false;
@@ -26,13 +32,13 @@ export class VariablesStructure {
 
   addVariable(declaration: postcss.Declaration): void {
     const { prop } = declaration;
-    if (!this.nodes.has(prop)) {
-      const node = new VariableNode(declaration);
-      this.nodes.set(prop, [node]);
+    const node = new VariableNode(declaration);
+    // push in place, copying the list on each redefinition would be quadratic
+    const variableNodes = this.nodes.get(prop);
+    if (variableNodes) {
+      variableNodes.push(node);
     } else {
-      const node = new VariableNode(declaration);
-      const variableNodes = this.nodes.get(prop) || [];
-      this.nodes.set(prop, [...variableNodes, node]);
+      this.nodes.set(prop, [node]);
     }
   }
 
@@ -48,29 +54,19 @@ export class VariablesStructure {
     this.properties.set(name, [...properties, atRule]);
   }
 
+  /**
+   * @deprecated The variables used by a custom property are found by name in
+   * `removeUnused`, so the dependencies between declarations are no longer
+   * recorded and this method does nothing. It will be removed in the next
+   * major version.
+   */
   addVariableUsage(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     declaration: postcss.Declaration,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
-    const { prop } = declaration;
-    const nodes = this.nodes.get(prop);
-    for (const variableMatch of matchedVariables) {
-      // capturing group containing the variable is in index 1
-      const variableName = variableMatch[1];
-      if (this.nodes.has(variableName)) {
-        const usedVariableNodes = this.nodes.get(variableName);
-        nodes?.forEach((node) => {
-          // only the node of this declaration depends on the variables it
-          // uses. Linking every earlier declaration of `prop` again on each
-          // redefinition would add duplicate dependencies and slow down large
-          // stylesheets.
-          if (node.value !== declaration) return;
-          usedVariableNodes?.forEach((usedVariableNode) => {
-            node.nodes.push(usedVariableNode);
-          });
-        });
-      }
-    }
+    // nothing to record
   }
 
   addVariableUsageInProperties(
@@ -83,26 +79,23 @@ export class VariablesStructure {
     }
   }
 
+  /**
+   * Mark every declaration of the variable as used. The variables it uses are
+   * not marked, `removeUnused` adds them to the used variables first.
+   *
+   * @param variableName - name of the variable, e.g. `--color`
+   */
   setAsUsed(variableName: string): void {
-    const nodes = this.nodes.get(variableName);
-    if (nodes) {
-      const queue = [...nodes];
-      while (queue.length !== 0) {
-        const currentNode = queue.pop();
-        if (currentNode && !currentNode.isUsed) {
-          currentNode.isUsed = true;
-          // push one by one, spreading a large array of dependencies
-          // as arguments can exceed the maximum call stack size
-          for (const node of currentNode.nodes) {
-            queue.push(node);
-          }
-        }
-      }
+    for (const node of this.nodes.get(variableName) ?? []) {
+      node.isUsed = true;
     }
   }
 
   removeUnused(): void {
-    // check unordered usage
+    // add the variables used by the used variables, by reading every
+    // declaration of each used variable. The set also iterates over the
+    // variables added during the loop, so variables used through other
+    // variables are found too, whatever the order of the declarations
     for (const used of this.usedVariables) {
       const usedNodes = this.nodes.get(used);
       if (usedNodes) {
