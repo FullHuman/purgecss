@@ -1,5 +1,6 @@
 import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
+import { matchesPattern } from "./utils";
 
 /**
  * @public
@@ -131,10 +132,8 @@ export class VariablesStructure {
   }
 
   isVariablesSafelisted(variable: string): boolean {
-    return this.safelist.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === variable
-        : safelistItem.test(variable);
-    });
+    return this.safelist.some((safelistItem) =>
+      matchesPattern(safelistItem, variable),
+    );
   }
 }

@@ -39,6 +39,7 @@ import {
   UserDefinedOptions,
   UserDefinedSafelist,
 } from "./types";
+import { matchesPattern } from "./utils";
 
 import { VariablesStructure } from "./VariablesStructure";
 
@@ -793,11 +794,9 @@ class PurgeCSS {
    * @param keyframesName - name of the keyframe animation
    */
   private isKeyframesSafelisted(keyframesName: string): boolean {
-    return this.options.safelist.keyframes.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === keyframesName
-        : safelistItem.test(keyframesName);
-    });
+    return this.options.safelist.keyframes.some((safelistItem) =>
+      matchesPattern(safelistItem, keyframesName),
+    );
   }
 
   /**
@@ -806,11 +805,9 @@ class PurgeCSS {
    * @param selector - css selector
    */
   private isSelectorBlocklisted(selector: string): boolean {
-    return this.options.blocklist.some((blocklistItem) => {
-      return typeof blocklistItem === "string"
-        ? blocklistItem === selector
-        : blocklistItem.test(selector);
-    });
+    return this.options.blocklist.some((blocklistItem) =>
+      matchesPattern(blocklistItem, selector),
+    );
   }
 
   /**
@@ -819,11 +816,9 @@ class PurgeCSS {
    * @param selector - css selector
    */
   private isSelectorSafelisted(selector: string): boolean {
-    const isSafelisted = this.options.safelist.standard.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === selector
-        : safelistItem.test(selector);
-    });
+    const isSafelisted = this.options.safelist.standard.some((safelistItem) =>
+      matchesPattern(safelistItem, selector),
+    );
     const isPseudoElement = /^::.*/.test(selector);
     return CSS_SAFELIST.includes(selector) || isPseudoElement || isSafelisted;
   }
@@ -835,7 +830,7 @@ class PurgeCSS {
    */
   private isSelectorSafelistedDeep(selector: string): boolean {
     return this.options.safelist.deep.some((safelistItem) =>
-      safelistItem.test(selector),
+      matchesPattern(safelistItem, selector),
     );
   }
 
@@ -846,7 +841,7 @@ class PurgeCSS {
    */
   private isSelectorSafelistedGreedy(selector: string): boolean {
     return this.options.safelist.greedy.some((safelistItem) =>
-      safelistItem.test(selector),
+      matchesPattern(safelistItem, selector),
     );
   }
 
@@ -864,14 +859,9 @@ class PurgeCSS {
   private isAttributeDynamic(attributeName: string): boolean {
     return (
       DYNAMIC_ATTRIBUTES.includes(attributeName) ||
-      this.options.dynamicAttributes.some((dynamicAttribute) => {
-        if (typeof dynamicAttribute === "string") {
-          return dynamicAttribute === attributeName;
-        }
-        // a regex with the g or y flag keeps its lastIndex between calls
-        dynamicAttribute.lastIndex = 0;
-        return dynamicAttribute.test(attributeName);
-      })
+      this.options.dynamicAttributes.some((dynamicAttribute) =>
+        matchesPattern(dynamicAttribute, attributeName),
+      )
     );
   }
 
