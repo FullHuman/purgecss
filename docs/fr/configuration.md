@@ -361,8 +361,12 @@ Ici, PurgeCSS n'analysera rien dans les dossiers "node_modules" et "components".
 
 - **dynamicAttributes**
 
-Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc.
+Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc. Utilisez-la pour les attributs définis à l'exécution, par votre propre JavaScript ou par une bibliothèque de composants, et qui n'apparaissent pas dans vos fichiers de contenu. Les sélecteurs utilisant ces attributs sont conservés quelle que soit la valeur de l'attribut, tant que le reste du sélecteur est utilisé.
+
+Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut.
 
 ```js
-dynamicAttributes: ["aria-selected"]
+dynamicAttributes: ["aria-selected", /^data-/]
 ```
+
+Dans cet exemple, `.menu-item[aria-selected="true"]` et `.menu-item[data-highlighted]` sont conservés si `menu-item` est trouvé, et supprimés sinon.
