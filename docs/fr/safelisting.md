@@ -33,7 +33,7 @@ Vous pouvez indiquer quels sélecteurs peuvent être conservés en toute sécuri
 Vous pouvez ajouter des sélecteurs à la safelist avec `safelist`.
 
 ```js
-const purgecss = new Purgecss({
+const purgeCSSResult = await new PurgeCSS().purge({
     content: [], // contenu
     css: [], // css
     safelist: ['random', 'yep', 'button']
@@ -47,7 +47,7 @@ Dans cet exemple, les sélecteurs `.random`, `#yep`, `button` seront conservés 
 Vous pouvez ajouter des sélecteurs à la safelist en fonction d'une expression régulière avec `safelist.standard`, `safelist.deep` et `safelist.greedy`.
 
 ```js
-const purgecss = new Purgecss({
+const purgeCSSResult = await new PurgeCSS().purge({
     content: [], // contenu
     css: [], // css
     safelist: {
