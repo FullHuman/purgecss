@@ -388,20 +388,15 @@ class PurgeCSS {
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration = value.matchAll(
-        /\bvar\(\s*(.+?)\s*[,)]/g,
-      );
       // custom properties kept by an ignore annotation are not registered so
-      // they are never removed, but the variables they use still count as used
+      // they are never removed, but the variables they use still count as used.
+      // The variables used by a registered custom property are read from its
+      // value when removing the unused variables, if it is used itself
       if (prop.startsWith("--") && !isIgnored) {
         this.variablesStructure.addVariable(declaration);
-        this.variablesStructure.addVariableUsage(
-          declaration,
-          usedVariablesMatchesInDeclaration,
-        );
       } else {
         this.variablesStructure.addVariableUsageInProperties(
-          usedVariablesMatchesInDeclaration,
+          value.matchAll(/\bvar\(\s*(.+?)\s*[,)]/g),
         );
       }
     }
