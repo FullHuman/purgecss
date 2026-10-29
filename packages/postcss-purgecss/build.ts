@@ -14,6 +14,7 @@ import * as path from "path";
   const rollupConfig = createRollupConfig("postcss-purgecss", [
     "postcss",
     "purgecss",
+    "fs",
     "path",
     "url",
   ]);

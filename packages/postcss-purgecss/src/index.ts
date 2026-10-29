@@ -7,6 +7,7 @@
  * @packageDocumentation
  */
 
+import * as fs from "fs";
 import * as path from "path";
 import * as postcss from "postcss";
 import { pathToFileURL } from "url";
@@ -38,25 +39,39 @@ async function purgeCSS(
   const purgeCSS = new PurgeCSS();
 
   let configFileOptions: UserDefinedOptions | undefined;
-  try {
-    const t = path.resolve(process.cwd(), "purgecss.config.js");
-    const importedConfig = await import(pathToFileURL(t).href);
-    // Handle both ES modules (direct export) and CommonJS (default export)
-    configFileOptions =
-      importedConfig.default && typeof importedConfig.default === "object"
-        ? importedConfig.default
-        : importedConfig;
-  } catch {
-    // no config file present
+  const t = path.resolve(process.cwd(), "purgecss.config.js");
+  // the config file is optional, but an existing one that fails to load
+  // (e.g. a syntax error) is reported instead of being silently ignored
+  if (fs.existsSync(t)) {
+    try {
+      const importedConfig = await import(pathToFileURL(t).href);
+      // Handle both ES modules (direct export) and CommonJS (default export)
+      configFileOptions =
+        importedConfig.default && typeof importedConfig.default === "object"
+          ? importedConfig.default
+          : importedConfig;
+    } catch (err: unknown) {
+      throw new Error(
+        `Error loading the config file ${err instanceof Error ? err.message : err}`,
+        { cause: err },
+      );
+    }
   }
 
+  // the safelists of the config file and of the plugin options add up
+  const configFileSafelist = standardizeSafelist(configFileOptions?.safelist);
+  const pluginSafelist = standardizeSafelist(opts?.safelist);
   const options = {
     ...defaultOptions,
     ...configFileOptions,
     ...opts,
-    safelist: standardizeSafelist(
-      opts?.safelist || configFileOptions?.safelist,
-    ),
+    safelist: {
+      standard: [...configFileSafelist.standard, ...pluginSafelist.standard],
+      deep: [...configFileSafelist.deep, ...pluginSafelist.deep],
+      greedy: [...configFileSafelist.greedy, ...pluginSafelist.greedy],
+      keyframes: [...configFileSafelist.keyframes, ...pluginSafelist.keyframes],
+      variables: [...configFileSafelist.variables, ...pluginSafelist.variables],
+    },
   };
 
   if (opts && typeof opts.contentFunction === "function") {

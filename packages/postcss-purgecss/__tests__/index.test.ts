@@ -129,4 +129,48 @@ describe("Purgecss postcss plugin", () => {
       }
     },
   );
+
+  it("should report a purgecss config file that fails to load", async () => {
+    const cwd = process.cwd();
+    process.chdir(`${__dirname}/fixtures/src/config-test-invalid/`);
+    try {
+      await expect(async () => {
+        await postcss([purgeCSSPlugin({})]).process(".a{}", {
+          from: undefined,
+        });
+      }).rejects.toThrow("Error loading the config file");
+    } finally {
+      process.chdir(cwd);
+    }
+  });
+
+  it.each([
+    ["an empty safelist", {}, ["from-config"], ["from-plugin"]],
+    [
+      "a safelist",
+      { standard: ["from-plugin"] },
+      ["from-config", "from-plugin"],
+      [],
+    ],
+  ])(
+    "should add up the safelist of the config file and %s in the options",
+    async (_, safelist, kept, removed) => {
+      const cwd = process.cwd();
+      process.chdir(`${__dirname}/fixtures/src/config-test-safelist/`);
+      try {
+        const result = await postcss([purgeCSSPlugin({ safelist })]).process(
+          ".from-config{color:red}.from-plugin{color:blue}.unused{color:green}",
+          { from: undefined },
+        );
+        for (const selector of kept) {
+          expect(result.css).toContain(`.${selector}`);
+        }
+        for (const selector of [...removed, "unused"]) {
+          expect(result.css).not.toContain(`.${selector}`);
+        }
+      } finally {
+        process.chdir(cwd);
+      }
+    },
+  );
 });
