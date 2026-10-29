@@ -1,0 +1,55 @@
+@property --used-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --unused-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --initial-only {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 4px;
+}
+
+@property --unused-initial-only {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 4px;
+}
+
+@property --nested-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+@property --safelisted-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+.used-class {
+  --used-angle: 45deg;
+  --gradient: conic-gradient(from var(--used-angle), var(--nested-color), white);
+  background: var(--gradient);
+  margin: var(--initial-only);
+}
+
+.unused-class {
+  --unused-angle: 90deg;
+  rotate: var(--unused-angle);
+  padding: var(--unused-initial-only);
+}
+
+@layer properties {
+  @property --layered-unused {
+    syntax: "*";
+    inherits: false;
+  }
+}

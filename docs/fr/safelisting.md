@@ -33,7 +33,7 @@ Vous pouvez indiquer quels sélecteurs peuvent être conservés en toute sécuri
 Vous pouvez ajouter des sélecteurs à la safelist avec `safelist`.
 
 ```js
-const purgecss = new Purgecss({
+const purgeCSSResult = await new PurgeCSS().purge({
     content: [], // contenu
     css: [], // css
     safelist: ['random', 'yep', 'button']
@@ -47,7 +47,7 @@ Dans cet exemple, les sélecteurs `.random`, `#yep`, `button` seront conservés 
 Vous pouvez ajouter des sélecteurs à la safelist en fonction d'une expression régulière avec `safelist.standard`, `safelist.deep` et `safelist.greedy`.
 
 ```js
-const purgecss = new Purgecss({
+const purgeCSSResult = await new PurgeCSS().purge({
     content: [], // contenu
     css: [], // css
     safelist: {
@@ -111,6 +111,8 @@ h6 {
 
 /* purgecss end ignore */
 ```
+
+Lorsque les options `keyframes`, `fontFace` ou `variables` sont activées, les règles `@keyframes`, `@font-face` et `@property` ajoutées à la safelist par ces commentaires ne sont pas supprimées, pas plus que les keyframes, polices et variables CSS utilisées par les règles de la safelist.
 
 ### Points d'attention
 
