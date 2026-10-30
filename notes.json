@@ -44,8 +44,8 @@
     {
       "number": 964,
       "state": "commented",
-      "updated_at": "2026-10-25",
-      "note": "Fix PR #1515 open (remove comment-only / nested emptied at-rules). Await review."
+      "updated_at": "2026-10-30",
+      "note": "#1515 polluted: bot merge-push was squashed, so 60 files shown + conflicts again. Replacement draft PR from branch repo-assist/fix-issue-964-empty-at-rules (2026-10-30). Recommend closing #1515."
     },
     {
       "number": 1262,
@@ -110,8 +110,8 @@
     {
       "number": 1265,
       "state": "commented",
-      "updated_at": "2026-10-29",
-      "note": "Verified Angular application builder (CLI>=17.2) loads postcss.config.json only; 8.0.0 works but needs safelist [\":host\"] (fixed on main). :host test PR from branch repo-assist/test-host-pseudo-class (2026-10-29). Angular guide still todo."
+      "updated_at": "2026-10-30",
+      "note": "Angular guide draft PR (EN+FR, Closes #1265) from branch repo-assist/basics-docs-angular-guide; verified with ng build on 8.0.0 and main (2026-10-30)."
     },
     {
       "number": 996,
@@ -122,8 +122,8 @@
     {
       "number": 1258,
       "state": "commented",
-      "updated_at": "2026-10-29",
-      "note": "Config-file part: PR #1528 (maintainer pushed commits 2026-10-29: errors reported, safelists combined). JSON RegExp part: maintainer PR #1534 (/regex/ strings, Fixes #1258). Nothing left for RA."
+      "updated_at": "2026-10-30",
+      "note": "Config-file part fixed by #1528 (merged 2026-10-29). JSON RegExp part: maintainer PR #1534 (Fixes #1258). Nothing left for RA."
     },
     {
       "number": 1263,
@@ -135,11 +135,11 @@
   "fixes": [
     {
       "issue": 964,
-      "pr": 1515,
-      "branch": "repo-assist/fix-issue-964-empty-media-queries",
+      "pr": null,
+      "branch": "repo-assist/fix-issue-964-empty-at-rules",
       "status": "open",
-      "updated_at": "2026-10-25",
-      "note": "Draft PR #1515: isRuleEmpty treats comment-only rules/at-rules as empty and removes emptied ancestors."
+      "updated_at": "2026-10-30",
+      "note": "Replaces #1515 (old branch repo-assist/fix-issue-964-empty-media-queries). Same 5-file diff on main a6131eb; 201 purgecss tests pass."
     },
     {
       "issue": 1262,
@@ -158,20 +158,20 @@
       "note": "Draft PR #1526: compare only with chunk.name; test, EN/FR/README docs, patch changeset. Behaviour change flagged."
     },
     {
-      "issue": 1258,
-      "pr": 1528,
-      "branch": "repo-assist/fix-postcss-config-file-loading",
+      "issue": 1265,
+      "pr": null,
+      "branch": "repo-assist/basics-docs-angular-guide",
       "status": "open",
-      "updated_at": "2026-10-29",
-      "note": "PR #1528 not draft; maintainer merged main + pushed 2 commits (config errors reported, safelists combined). Leave to maintainer."
+      "updated_at": "2026-10-30",
+      "note": "Draft docs PR: docs/guides/angular.md + FR, sidebars, READMEs. exports.safelist form works on 8.0.0 and main. No changeset."
     }
   ],
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-29",
-      "result": "#1529 merged (API examples). Draft PR from branch repo-assist/basics-docs-runtime-class-names: Class names built at runtime section (EN+FR) in safelisting.md; merges clean with #1534.",
-      "follow_up": "Angular guide still todo. Razzle/Next/Gatsby whitelist = third-party APIs, leave."
+      "checked_at": "2026-10-30",
+      "result": "#1536 merged (runtime class names). Angular guide draft PR from branch repo-assist/basics-docs-angular-guide; docs:build OK, anchors resolve.",
+      "follow_up": "If #1534 merges, add \"/regex/\" JSON strings to the Angular guide RegExp section. Razzle/Next/Gatsby whitelist = third-party APIs, leave."
     },
     {
       "area": "build",
@@ -187,33 +187,33 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-29",
-      "result": "Draft PR from branch repo-assist/test-host-pseudo-class: 6 :host tests in pseudo-class.test.ts, 3 fail on pre-#1467 src.",
-      "follow_up": "rollup insert:true emits invalid JS + dest never set (needs design). grunt 0% coverage. gulp stream-mode error path untested. :host(.unused) kept on main (not pinned)."
+      "checked_at": "2026-10-30",
+      "result": ":host tests PR #1535 open. grunt-purgecss 0% coverage is reporting only: tests run npx grunt in a subprocess; 6 behaviour tests incl. missing-source error.",
+      "follow_up": "rollup insert:true emits invalid JS + dest never set (needs design). gulp stream-mode error path untested. In-process grunt tests risky (grunt.fail exits)."
     },
     {
       "area": "code",
-      "checked_at": "2026-10-29",
-      "result": "Since #1532 deep/greedy strings no longer throw (match nothing). Maintainer PR #1534 adds \"/regex/\" strings for all pattern options.",
+      "checked_at": "2026-10-30",
+      "result": "VariablesStructure.addVariable already in-place (#1533). addProperty still copies per redefinition; rare, skipped. #1534 adds \"/regex/\" strings.",
       "follow_up": "None unless maintainer asks."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-10-29",
-      "result": "#1527 merged, #1525 closed. pnpm outdated: only minor/patch (eslint, rollup, webpack, postcss) + majors typescript 7, @types/node 26, through2 5. No open Dependabot PRs.",
+      "checked_at": "2026-10-30",
+      "result": "pnpm outdated: minor/patch only (eslint, rollup, webpack, postcss, sass-embedded) + majors typescript 7, @types/node 26, through2 5. No open Dependabot PRs.",
       "follow_up": "package.json/.github edits are protected (PR falls back to issue). dependabot.yml deprecated reviewers key + 2021 ignore rules; CI on push+pull_request duplicates runs. Propose via issue only if valuable."
     },
     {
       "area": "release",
-      "checked_at": "2026-10-29",
-      "result": "8.0.0 released 2026-01-24. 15 changesets pending on main (1 major commander-15, 3 minor). Next = 9.0.0.",
+      "checked_at": "2026-10-30",
+      "result": "8.0.0 released 2026-01-24. 16 changesets pending on main (1 major commander-15, 3 minor, 12 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-29",
-      "result": "main 04bd732. #1515 had conflict in comments.test.ts (from #1531): pushed merge commit 30843c7, 201 purgecss tests pass. #1517/#1524/#1526 merge clean + pass tests merged with main. #1528 handled by maintainer. NOTE: bot pushes do not trigger Build/Test CI (maintainer, #1528).",
-      "follow_up": "Find PR numbers for 2 new drafts (repo-assist/test-host-pseudo-class, repo-assist/basics-docs-runtime-class-names). Re-check merge-tree when main changes; only push for real conflicts."
+      "checked_at": "2026-10-30",
+      "result": "main a6131eb (#1528, #1536 merged). #1517/#1524/#1526/#1535 merge clean. push_to_pull_request_branch squashes merge commits (signed), so merge-base never moves: merging main pollutes the PR diff and conflicts return.",
+      "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
       "area": "ci",
@@ -293,14 +293,14 @@
       "note": "If maintainer picks a direction (attribute value vs full selector), implement greedy/standard safelist matching for attribute values."
     },
     {
-      "task": 7,
-      "item": "docs-angular-guide",
-      "note": "No Angular mention in docs. Add guide: postcss.config.json (JSON only, CLI>=17.2), content globs, safelist [\":host\"] until next release, RegExp safelist via purgecss.config.js exports.safelist (#1258 comment)."
-    },
-    {
       "task": 6,
       "item": "pr-1502-note",
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
+    },
+    {
+      "task": 6,
+      "item": "pr-1515-close",
+      "note": "Recommend maintainer close #1515 (superseded by replacement PR from branch repo-assist/fix-issue-964-empty-at-rules). Record new PR numbers next run."
     }
   ]
 }
