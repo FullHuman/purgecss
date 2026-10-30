@@ -45,7 +45,7 @@
       "number": 964,
       "state": "commented",
       "updated_at": "2026-10-30",
-      "note": "#1515 polluted: bot merge-push was squashed, so 60 files shown + conflicts again. Replacement draft PR from branch repo-assist/fix-issue-964-empty-at-rules (2026-10-30). Recommend closing #1515."
+      "note": "#1515 polluted (squashed merge push). Replacement draft PR #1537 (branch repo-assist/fix-issue-964-empty-at-rules). Recommend closing #1515."
     },
     {
       "number": 1262,
@@ -111,7 +111,7 @@
       "number": 1265,
       "state": "commented",
       "updated_at": "2026-10-30",
-      "note": "Angular guide draft PR (EN+FR, Closes #1265) from branch repo-assist/basics-docs-angular-guide; verified with ng build on 8.0.0 and main (2026-10-30)."
+      "note": "Angular guide draft PR #1538 (EN+FR, Closes #1265); verified with ng build on 8.0.0 and main (2026-10-30)."
     },
     {
       "number": 996,
@@ -130,16 +130,22 @@
       "state": "commented",
       "updated_at": "2026-10-28",
       "note": "8.0.0: module.exports=fn but d.ts export default; maintainer .default workaround crashes at runtime. Posted portable cast (PluginCreator<UserDefinedOptions>) verified nodenext/bundler/node10 on 7.0.2+8.0.0. Fix = maintainer."
+    },
+    {
+      "number": 523,
+      "state": "resolution_recommended",
+      "updated_at": "2026-10-30",
+      "note": "Screenshot: yarn tarball download from registry.npm.taobao.org failed (unexpected end of file) = mirror/network, not PurgeCSS. Plugin 8.0.0 installs+runs with Vue CLI 5.0.9. Commented, recommended closing."
     }
   ],
   "fixes": [
     {
       "issue": 964,
-      "pr": null,
+      "pr": 1537,
       "branch": "repo-assist/fix-issue-964-empty-at-rules",
       "status": "open",
       "updated_at": "2026-10-30",
-      "note": "Replaces #1515 (old branch repo-assist/fix-issue-964-empty-media-queries). Same 5-file diff on main a6131eb; 201 purgecss tests pass."
+      "note": "Draft PR #1537 replaces #1515 (old branch repo-assist/fix-issue-964-empty-media-queries). 5 files on main a6131eb; 201 purgecss tests pass."
     },
     {
       "issue": 1262,
@@ -159,11 +165,19 @@
     },
     {
       "issue": 1265,
-      "pr": null,
+      "pr": 1538,
       "branch": "repo-assist/basics-docs-angular-guide",
       "status": "open",
       "updated_at": "2026-10-30",
       "note": "Draft docs PR: docs/guides/angular.md + FR, sidebars, READMEs. exports.safelist form works on 8.0.0 and main. No changeset."
+    },
+    {
+      "issue": 523,
+      "pr": null,
+      "branch": "repo-assist/fix-vue-cli-plugin-postcss-purgecss-version",
+      "status": "open",
+      "updated_at": "2026-10-30",
+      "note": "Not a #523 fix; found while checking it. vue-cli generator added postcss-purgecss ^4.0.0 -> now ^own version (changesets fixed group). README vue add purgecss (404) fixed. E2E Vue CLI 5.0.9. Record PR number."
     }
   ],
   "checks": [
@@ -200,7 +214,7 @@
     {
       "area": "dependencies",
       "checked_at": "2026-10-30",
-      "result": "pnpm outdated: minor/patch only (eslint, rollup, webpack, postcss, sass-embedded) + majors typescript 7, @types/node 26, through2 5. No open Dependabot PRs.",
+      "result": "2026-10-30 x2: minor/patch only + majors typescript 7, @types/node 26, through2 5. No open Dependabot PRs. rollup-pluginutils is deprecated (-> @rollup/pluginutils).",
       "follow_up": "package.json/.github edits are protected (PR falls back to issue). dependabot.yml deprecated reviewers key + 2021 ignore rules; CI on push+pull_request duplicates runs. Propose via issue only if valuable."
     },
     {
@@ -212,7 +226,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-10-30",
-      "result": "main a6131eb (#1528, #1536 merged). #1517/#1524/#1526/#1535 merge clean. push_to_pull_request_branch squashes merge commits (signed), so merge-base never moves: merging main pollutes the PR diff and conflicts return.",
+      "result": "main a6131eb unchanged. #1537/#1538 based on it. #1524 marked ready for review by maintainer 2026-10-29. push_to_pull_request_branch squashes merge commits, so merging main pollutes PR diffs.",
       "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
@@ -220,6 +234,12 @@
       "checked_at": "2026-10-29",
       "result": "Corepack in sandbox needs NODE_USE_ENV_PROXY=1 and --install-directory /tmp/gh-aw/agent/bin; pre-commit hook runs prettier via pnpm (needs pnpm on PATH or commit fails silently).",
       "follow_up": "Reuse this setup next run."
+    },
+    {
+      "area": "qa",
+      "checked_at": "2026-10-30",
+      "result": "Vue CLI plugin E2E (Vue CLI 5.0.9, npm pack, vue invoke, vue-cli-service build): generated postcss.config.js works with postcss-purgecss 8.0.0 and main. Setup reusable under /tmp/gh-aw/agent (recreate).",
+      "follow_up": "Vue CLI plugin has no test suite (needs package.json test script, protected). READMEs still say vue-cli 3."
     }
   ],
   "completed_actions": [
@@ -285,7 +305,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred except #523 (install error only in screenshots; skip unless new activity). No new human activity as of 2026-10-29."
+      "note": "All open issues addressed or deferred (#523 commented 2026-10-30). No new human activity as of 2026-10-30 18:19 UTC."
     },
     {
       "task": 3,
@@ -300,7 +320,7 @@
     {
       "task": 6,
       "item": "pr-1515-close",
-      "note": "Recommend maintainer close #1515 (superseded by replacement PR from branch repo-assist/fix-issue-964-empty-at-rules). Record new PR numbers next run."
+      "note": "Recommend maintainer close #1515 (superseded by #1537)."
     }
   ]
 }
