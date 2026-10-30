@@ -103,3 +103,28 @@ describe("ignore comment with at-rules", () => {
     expect(purgedCSS).not.toContain("purgecss");
   });
 });
+
+describe("ignore comment range starting in a purged media query", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: "<div></div>", extension: "html" }],
+      css: [
+        {
+          raw: `@media (max-width: 600px) {
+  .unused { color: black; }
+  /* purgecss start ignore */
+}
+.ignored { color: black; }
+/* purgecss end ignore */`,
+        },
+      ],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("still applies the ignore comment", () => {
+    expect(purgedCSS.includes(".ignored")).toBe(true);
+    expect(purgedCSS.includes(".unused")).toBe(false);
+  });
+});
