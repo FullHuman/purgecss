@@ -91,6 +91,20 @@ Dans cet exemple, les sélecteurs se terminant par `red` comme `.bg-red`, les s�
 
 Les motifs sont des expressions régulières. Vous pouvez utiliser [regexr](https://regexr.com) pour vérifier que les expressions régulières correspondent à ce que vous recherchez.
 
+Si votre configuration ne peut pas contenir d'expressions régulières, par exemple un fichier JSON comme `postcss.config.json`, écrivez l'expression régulière sous forme de chaîne de caractères entre barres obliques. Les drapeaux se placent après la dernière barre oblique. Toute autre chaîne de caractères correspond toujours exactement à un sélecteur.
+
+```json
+{
+  "safelist": {
+    "standard": ["/red$/", "/^btn-/i", "active"],
+    "deep": ["/blue$/"],
+    "greedy": ["/yellow$/"]
+  }
+}
+```
+
+Les chaînes entre barres obliques fonctionnent dans toutes les options qui acceptent des expressions régulières : `safelist`, `blocklist` et `dynamicAttributes`.
+
 ## Directement dans le CSS
 
 Vous pouvez ajouter des éléments à la safelist directement dans votre CSS avec un commentaire spécial.
