@@ -729,6 +729,13 @@ class PurgeCSS {
       }
     }
 
+    const purgedRoots: {
+      root: PostCSSRoot;
+      from: string | undefined;
+      file: string | undefined;
+      rejected?: string[];
+      rejectedCss?: string;
+    }[] = [];
     for (const option of processedOptions) {
       const cssContent =
         typeof option === "string"
@@ -737,30 +744,51 @@ class PurgeCSS {
             : await asyncFs.readFile(option, "utf-8")
           : option.raw;
       const isFromFile = typeof option === "string" && !this.options.stdin;
-      const root = postcss.parse(cssContent, {
-        from: isFromFile ? option : undefined,
-      });
+      const from = isFromFile ? option : undefined;
+      const root = postcss.parse(cssContent, { from });
 
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
 
-      if (this.options.fontFace) this.removeUnusedFontFaces();
-      if (this.options.keyframes) this.removeUnusedKeyframes();
-      if (this.options.variables) this.removeUnusedCSSVariables();
+      const purgedRoot: (typeof purgedRoots)[number] = {
+        root,
+        from,
+        file: typeof option === "string" ? option : option.name,
+      };
 
+      if (this.options.rejected) {
+        purgedRoot.rejected = Array.from(this.selectorsRemoved);
+        this.selectorsRemoved.clear();
+      }
+
+      if (this.options.rejectedCss) {
+        purgedRoot.rejectedCss = postcss
+          .root({ nodes: this.removedNodes })
+          .toString();
+      }
+
+      purgedRoots.push(purgedRoot);
+    }
+
+    // remove unused font faces, keyframes and variables only once every css
+    // file has been walked through, so that a font face, keyframes or variable
+    // defined in one file and used in another one is kept
+    if (this.options.fontFace) this.removeUnusedFontFaces();
+    if (this.options.keyframes) this.removeUnusedKeyframes();
+    if (this.options.variables) this.removeUnusedCSSVariables();
+
+    for (const { root, from, file, rejected, rejectedCss } of purgedRoots) {
       const postCSSResult = root.toResult({
         map: this.options.sourceMap,
         to:
           typeof this.options.sourceMap === "object" &&
           this.options.sourceMap.to
             ? this.options.sourceMap.to
-            : isFromFile
-              ? option
-              : undefined,
+            : from,
       });
       const result: ResultPurge = {
         css: postCSSResult.toString(),
-        file: typeof option === "string" ? option : option.name,
+        file,
       };
 
       if (this.options.sourceMap) {
@@ -768,14 +796,11 @@ class PurgeCSS {
       }
 
       if (this.options.rejected) {
-        result.rejected = Array.from(this.selectorsRemoved);
-        this.selectorsRemoved.clear();
+        result.rejected = rejected;
       }
 
       if (this.options.rejectedCss) {
-        result.rejectedCss = postcss
-          .root({ nodes: this.removedNodes })
-          .toString();
+        result.rejectedCss = rejectedCss;
       }
 
       sources.push(result);
