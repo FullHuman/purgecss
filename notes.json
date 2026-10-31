@@ -18,12 +18,6 @@
       "note": "Bare pseudo-classes (:hover, :not(:hover), :where(:hover)) re-verified kept on main. Pending release."
     },
     {
-      "number": 1197,
-      "state": "commented",
-      "updated_at": "2026-10-24",
-      "note": "Earlier \"fixed on main\" claim was WRONG (only mirror :where(:not()) fixed). .root :not(:where(.unused)) still purged on main; posted correction. Community PR #1504 fixes it. Not closable on release."
-    },
-    {
       "number": 1153,
       "state": "resolution_recommended",
       "updated_at": "2026-10-24",
@@ -40,12 +34,6 @@
       "state": "deferred",
       "updated_at": "2026-10-24",
       "note": "Covered by maintainer PR #1495 (blocklist attribute selectors with value). Do not duplicate."
-    },
-    {
-      "number": 964,
-      "state": "commented",
-      "updated_at": "2026-10-31",
-      "note": "Fix lives in draft PR #1537 (branch repo-assist/fix-issue-964-empty-at-rules); #1515 closed by maintainer 2026-10-30."
     },
     {
       "number": 1262,
@@ -128,14 +116,6 @@
   ],
   "fixes": [
     {
-      "issue": 964,
-      "pr": 1537,
-      "branch": "repo-assist/fix-issue-964-empty-at-rules",
-      "status": "open",
-      "updated_at": "2026-10-30",
-      "note": "Draft PR #1537 replaces #1515 (old branch repo-assist/fix-issue-964-empty-media-queries). 5 files on main a6131eb; 201 purgecss tests pass."
-    },
-    {
       "issue": 1262,
       "pr": 1517,
       "branch": "repo-assist/fix-issue-1262-cross-file-variables",
@@ -158,20 +138,28 @@
       "status": "open",
       "updated_at": "2026-10-30",
       "note": "Draft docs PR: docs/guides/angular.md + FR, sidebars, READMEs. exports.safelist form works on 8.0.0 and main. No changeset."
+    },
+    {
+      "issue": 964,
+      "pr": null,
+      "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal",
+      "status": "open",
+      "updated_at": "2026-10-31",
+      "note": "Follow-up to merged #1537: at-rules left empty by removed @keyframes/@font-face/@property (removeEmptyParents helper). 6 tests in media-queries.test.ts; patch changeset. Draft PR created 2026-10-31 17:35 run."
     }
   ],
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-30",
-      "result": "#1536 merged (runtime class names). Angular guide draft PR from branch repo-assist/basics-docs-angular-guide; docs:build OK, anchors resolve.",
-      "follow_up": "If #1534 merges, add \"/regex/\" JSON strings to the Angular guide RegExp section. Razzle/Next/Gatsby whitelist = third-party APIs, leave."
+      "checked_at": "2026-10-31",
+      "result": "Getting Started + plugins/postcss PostCSS examples broken (named import, undefined purgecss(), import+module.exports); draft PR from branch repo-assist/basics-docs-postcss-config-examples (EN+FR, + FR @property/online-demo sync).",
+      "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release (8.0.0 ignores module.exports configs). If #1534 merges, add \"/regex/\" to Angular guide RegExp section."
     },
     {
       "area": "build",
-      "checked_at": "2026-10-24",
-      "result": "postcss-purgecss CJS does module.exports=fn but d.ts says export default -> wrong ESM types under node16 (#1263). Needs exports map/per-condition types; maintainer assigned.",
-      "follow_up": "Only propose if maintainer asks. Caveat: lib/purgecss.esm.js uses import * as glob from fast-glob; glob.sync is undefined under Node ESM, so an exports map routing import to it would break."
+      "checked_at": "2026-10-31",
+      "result": "Build warnings: ae-forgotten-export (UserDefinedOptions_2, RawContent) in gulp/rollup and ae-wrong-input-file-type constants.ts are cosmetic; d.ts declare the types inline. #1263 ESM types still maintainer-owned.",
+      "follow_up": "Only propose #1263 fix if maintainer asks. Caveat: purgecss.esm.js uses import * as glob from fast-glob; glob.sync undefined under Node ESM."
     },
     {
       "area": "performance",
@@ -188,8 +176,8 @@
     {
       "area": "code",
       "checked_at": "2026-10-31",
-      "result": "CLI: main() did not await run() (stack traces), write errors exit 0. Draft PR from branch repo-assist/fix-cli-error-handling (2026-10-31).",
-      "follow_up": "bin getOptions mutates exported defaultOptions (cli-options.test passes only via that; skippedContentGlobs missing in expected). Single-file -o does not mkdir parent."
+      "result": "CLI error PR #1540 open. Empty at-rule follow-up PR (keyframes/font-face/@property) open. Rules emptied by variable removal stay (:root {}) - not fixed: walk would reach @keyframes; empty @keyframes still fires animation events.",
+      "follow_up": "After #1540: getOptions mutates exported defaultOptions; single-file -o does not mkdir parent. Variables empty-rule cleanup must skip @keyframes."
     },
     {
       "area": "dependencies",
@@ -200,13 +188,13 @@
     {
       "area": "release",
       "checked_at": "2026-10-31",
-      "result": "8.0.0 released 2026-01-24. 17 changesets on main (1 major commander-15, 3 minor, 13 patch). Next = 9.0.0.",
+      "result": "8.0.0 released 2026-01-24. 19 changesets on main (1 major commander-15, 3 minor, 15 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-10-31",
-      "result": "main 88bb113 (#1539 vue-cli fix merged). #1517 #1524 #1526 #1535 #1537 #1538 all merge cleanly, CodeQL green, no review comments. push_to_pull_request_branch squashes merge commits.",
+      "result": "main 59d91c3 (#1504, #1537 merged). #1517 #1524 #1526 #1535 #1538 #1540 merge cleanly; #1517 passes 222 purgecss tests on merge. push_to_pull_request_branch squashes merge commits.",
       "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
@@ -217,8 +205,8 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-10-30",
-      "result": "Vue CLI plugin E2E (Vue CLI 5.0.9, npm pack, vue invoke, vue-cli-service build): generated postcss.config.js works with postcss-purgecss 8.0.0 and main. Setup reusable under /tmp/gh-aw/agent (recreate).",
+      "checked_at": "2026-10-31",
+      "result": "postcss-cli 11 QA (8.0.0 npm + pnpm pack of main) under /tmp/gh-aw/agent/qa-postcss*: ESM default import + export default and CJS require both work; .js ESM in typeless pkg warns MODULE_TYPELESS_PACKAGE_JSON.",
       "follow_up": "Vue CLI plugin has no test suite (needs package.json test script, protected). READMEs still say vue-cli 3."
     }
   ],
@@ -290,18 +278,26 @@
     {
       "key": "close-issue-1156",
       "completed_at": "2026-10-31"
+    },
+    {
+      "key": "review-pr-1504",
+      "completed_at": "2026-10-31"
+    },
+    {
+      "key": "review-pr-1537",
+      "completed_at": "2026-10-31"
     }
   ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 17 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
+      "note": "After next release (9.0.0, 19 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). #1197 and #964 already closed."
     },
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-10-31 06:16 UTC."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-10-31 17:35 UTC."
     },
     {
       "task": 3,
@@ -314,9 +310,9 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 9,
-      "item": "cli-error-pr",
-      "note": "Record PR number for draft from branch repo-assist/fix-cli-error-handling (CLI await run + write errors exit 1, no issue)."
+      "task": 6,
+      "item": "record-new-pr-numbers",
+      "note": "Record PR numbers for drafts from branches repo-assist/basics-docs-postcss-config-examples (docs) and repo-assist/fix-empty-at-rules-after-at-rule-removal (fixes[964]); CLI PR is #1540."
     }
   ]
 }
