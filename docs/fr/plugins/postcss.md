@@ -42,6 +42,20 @@ Dans `postcss.config.js` :
 ```js
 import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
+export default {
+  plugins: [
+    purgeCSSPlugin({
+      content: ['./**/*.html']
+    })
+  ]
+}
+```
+
+Si votre configuration PostCSS est un module CommonJS, utilisez plutôt `require` :
+
+```js
+const purgeCSSPlugin = require('@fullhuman/postcss-purgecss');
+
 module.exports = {
   plugins: [
     purgeCSSPlugin({

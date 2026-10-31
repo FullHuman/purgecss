@@ -42,11 +42,11 @@ yarn add @fullhuman/postcss-purgecss --dev
 et ajoutez le plugin PurgeCSS à la configuration PostCSS :
 
 ```js{1,5-7}
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
-module.exports = {
+export default {
   plugins: [
-    purgecss({
+    purgeCSSPlugin({
       content: ['./**/*.html']
     })
   ]
