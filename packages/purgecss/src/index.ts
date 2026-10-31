@@ -1005,7 +1005,10 @@ class PurgeCSS {
 
     // :where() and :is() inside :not() are kept as a whole, otherwise the
     // emptied pseudo class would drop the negated rule
-    if (isInPseudoClassWhereOrIs(selector) && isInsideNotPseudoClass(selector)) {
+    if (
+      isInPseudoClassWhereOrIs(selector) &&
+      isInsideNotPseudoClass(selector)
+    ) {
       return true;
     }
 
