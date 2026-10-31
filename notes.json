@@ -44,8 +44,8 @@
     {
       "number": 964,
       "state": "commented",
-      "updated_at": "2026-10-30",
-      "note": "#1515 polluted (squashed merge push). Replacement draft PR #1537 (branch repo-assist/fix-issue-964-empty-at-rules). Recommend closing #1515."
+      "updated_at": "2026-10-31",
+      "note": "Fix lives in draft PR #1537 (branch repo-assist/fix-issue-964-empty-at-rules); #1515 closed by maintainer 2026-10-30."
     },
     {
       "number": 1262,
@@ -76,12 +76,6 @@
       "state": "commented",
       "updated_at": "2026-10-29",
       "note": "Posted verified workarounds (Tailwind extractor / dynamicAttributes / greedy /^data-loaded$/). User config used greedy strings: since #1532 they match nothing; #1534 adds \"/regex/\" strings."
-    },
-    {
-      "number": 1156,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-27",
-      "note": "Sass @extend appends .rte a to the extended rule (outside ignore block). Posted verified workaround safelist greedy/deep [/^rte$/]; recommended closing."
     },
     {
       "number": 1115,
@@ -130,12 +124,6 @@
       "state": "commented",
       "updated_at": "2026-10-28",
       "note": "8.0.0: module.exports=fn but d.ts export default; maintainer .default workaround crashes at runtime. Posted portable cast (PluginCreator<UserDefinedOptions>) verified nodenext/bundler/node10 on 7.0.2+8.0.0. Fix = maintainer."
-    },
-    {
-      "number": 523,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-30",
-      "note": "Screenshot: yarn tarball download from registry.npm.taobao.org failed (unexpected end of file) = mirror/network, not PurgeCSS. Plugin 8.0.0 installs+runs with Vue CLI 5.0.9. Commented, recommended closing."
     }
   ],
   "fixes": [
@@ -170,14 +158,6 @@
       "status": "open",
       "updated_at": "2026-10-30",
       "note": "Draft docs PR: docs/guides/angular.md + FR, sidebars, READMEs. exports.safelist form works on 8.0.0 and main. No changeset."
-    },
-    {
-      "issue": 523,
-      "pr": null,
-      "branch": "repo-assist/fix-vue-cli-plugin-postcss-purgecss-version",
-      "status": "open",
-      "updated_at": "2026-10-30",
-      "note": "Not a #523 fix; found while checking it. vue-cli generator added postcss-purgecss ^4.0.0 -> now ^own version (changesets fixed group). README vue add purgecss (404) fixed. E2E Vue CLI 5.0.9. Record PR number."
     }
   ],
   "checks": [
@@ -201,15 +181,15 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-30",
-      "result": ":host tests PR #1535 open. grunt-purgecss 0% coverage is reporting only: tests run npx grunt in a subprocess; 6 behaviour tests incl. missing-source error.",
-      "follow_up": "rollup insert:true emits invalid JS + dest never set (needs design). gulp stream-mode error path untested. In-process grunt tests risky (grunt.fail exits)."
+      "checked_at": "2026-10-31",
+      "result": "bin.ts 77%->90% lines via cli-errors.test.ts (CLI PR). Jest realm: Node fs/module errors not instanceof Error in tests -> use built-CLI subprocess. :host tests PR #1535 open.",
+      "follow_up": "rollup insert:true emits invalid JS + dest never set (needs design). gulp stream-mode rejected/error paths untested (low value)."
     },
     {
       "area": "code",
-      "checked_at": "2026-10-30",
-      "result": "VariablesStructure.addVariable already in-place (#1533). addProperty still copies per redefinition; rare, skipped. #1534 adds \"/regex/\" strings.",
-      "follow_up": "None unless maintainer asks."
+      "checked_at": "2026-10-31",
+      "result": "CLI: main() did not await run() (stack traces), write errors exit 0. Draft PR from branch repo-assist/fix-cli-error-handling (2026-10-31).",
+      "follow_up": "bin getOptions mutates exported defaultOptions (cli-options.test passes only via that; skippedContentGlobs missing in expected). Single-file -o does not mkdir parent."
     },
     {
       "area": "dependencies",
@@ -219,14 +199,14 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-10-30",
-      "result": "8.0.0 released 2026-01-24. 16 changesets pending on main (1 major commander-15, 3 minor, 12 patch). Next = 9.0.0.",
+      "checked_at": "2026-10-31",
+      "result": "8.0.0 released 2026-01-24. 17 changesets on main (1 major commander-15, 3 minor, 13 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-30",
-      "result": "main a6131eb unchanged. #1537/#1538 based on it. #1524 marked ready for review by maintainer 2026-10-29. push_to_pull_request_branch squashes merge commits, so merging main pollutes PR diffs.",
+      "checked_at": "2026-10-31",
+      "result": "main 88bb113 (#1539 vue-cli fix merged). #1517 #1524 #1526 #1535 #1537 #1538 all merge cleanly, CodeQL green, no review comments. push_to_pull_request_branch squashes merge commits.",
       "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
@@ -294,18 +274,34 @@
     {
       "key": "close-issue-1131",
       "completed_at": "2026-10-29"
+    },
+    {
+      "key": "review-pr-1539",
+      "completed_at": "2026-10-31"
+    },
+    {
+      "key": "close-issue-523",
+      "completed_at": "2026-10-31"
+    },
+    {
+      "key": "close-pr-1515",
+      "completed_at": "2026-10-31"
+    },
+    {
+      "key": "close-issue-1156",
+      "completed_at": "2026-10-31"
     }
   ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 15 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
+      "note": "After next release (9.0.0, 17 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). NOT #1197 (needs #1504)."
     },
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred (#523 commented 2026-10-30). No new human activity as of 2026-10-30 18:19 UTC."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-10-31 06:16 UTC."
     },
     {
       "task": 3,
@@ -318,9 +314,9 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 6,
-      "item": "pr-1515-close",
-      "note": "Recommend maintainer close #1515 (superseded by #1537)."
+      "task": 9,
+      "item": "cli-error-pr",
+      "note": "Record PR number for draft from branch repo-assist/fix-cli-error-handling (CLI await run + write errors exit 1, no issue)."
     }
   ]
 }
