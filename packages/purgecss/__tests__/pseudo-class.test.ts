@@ -351,4 +351,36 @@ describe(":where inside :not pseudo class", () => {
     });
     expect(resultsPurge[0].css).toContain(".root :not(:where(.unused))");
   });
+
+  const purge = async (css: string, options = {}): Promise<string> => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="root"></div>', extension: "html" }],
+      css: [{ raw: css }],
+      ...options,
+    });
+    return resultsPurge[0].css;
+  };
+
+  it.each([
+    ".root :not(:is(.unused))",
+    ".root:not(:where(.unused))",
+    ":not(:where(.unused))",
+    ".root :not(:where(.root, .unused))",
+    ".root :not(:is(:where(.unused)))",
+  ])("keeps %s", async (selector) => {
+    expect(await purge(`${selector}{color:red}`)).toContain(selector);
+  });
+
+  it("still removes the rule when the selector before :not() is unused", async () => {
+    expect(await purge(".missing :not(:where(.unused)){color:red}")).toBe("");
+  });
+
+  it("treats a blocklisted class inside :not(:where()) like one inside :not()", async () => {
+    const result = await purge(
+      ".root :not(.blocked){color:red} .root :not(:where(.blocked)){color:blue}",
+      { blocklist: ["blocked"] },
+    );
+    expect(result).toContain(".root :not(.blocked)");
+    expect(result).toContain(".root :not(:where(.blocked))");
+  });
 });
