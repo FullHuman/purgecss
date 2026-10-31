@@ -9,16 +9,6 @@ import {
 } from "./index";
 import { Options } from "./types";
 
-async function writeCSSToFile(filePath: string, css: string) {
-  try {
-    await fs.promises.writeFile(filePath, css);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error(err.message);
-    }
-  }
-}
-
 async function read(stream: NodeJS.ReadStream) {
   const chunks = [];
   for await (const chunk of stream) chunks.push(chunk);
@@ -150,7 +140,7 @@ export async function run(program: Command) {
   // output results in specified directory
   if (options.output) {
     if (purged.length === 1 && options.output.endsWith(".css")) {
-      await writeCSSToFile(options.output, purged[0].css);
+      await fs.promises.writeFile(options.output, purged[0].css);
       return;
     }
 
@@ -167,7 +157,7 @@ export async function run(program: Command) {
       // Ensure the directory exists
       const dir = outputPath.substring(0, outputPath.lastIndexOf("/"));
       await fs.promises.mkdir(dir, { recursive: true });
-      await writeCSSToFile(outputPath, purgedResult.css);
+      await fs.promises.writeFile(outputPath, purgedResult.css);
     }
   } else {
     console.log(JSON.stringify(purged));
@@ -178,7 +168,7 @@ export async function main() {
   try {
     const program = parseCommandOptions(new Command());
     program.parse(process.argv);
-    run(program);
+    await run(program);
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message);
