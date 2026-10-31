@@ -342,3 +342,13 @@ describe(":is pseudo class", () => {
     );
   });
 });
+
+describe(":where inside :not pseudo class", () => {
+  it("keeps the rule when the :where selector inside :not is unused", async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="root"></div>', extension: "html" }],
+      css: [{ raw: ".root :not(:where(.unused)) { color: purple; }" }],
+    });
+    expect(resultsPurge[0].css).toContain(".root :not(:where(.unused))");
+  });
+});

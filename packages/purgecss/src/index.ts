@@ -313,6 +313,23 @@ function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
 }
 
 /**
+ * Returns true if the selector is nested anywhere inside a :not() pseudo class.
+ * Removing a selector there changes the meaning of the negation, so it is kept.
+ *
+ * @param selector - selector
+ */
+function isInsideNotPseudoClass(selector: selectorParser.Node): boolean {
+  let node = selector.parent;
+  while (node) {
+    if (node.type === "pseudo" && node.value === ":not") {
+      return true;
+    }
+    node = node.parent;
+  }
+  return false;
+}
+
+/**
  * Returns true if the selector is a pseudo class at the root level
  * Pseudo classes checked: :where, :is, :has, :not
  * @param selector - selector
@@ -983,6 +1000,12 @@ class PurgeCSS {
 
     // keep the blocklist from matching the pseudo class name itself (":is", ":not", …)
     if (isPseudoClassAtRootLevel(selector)) {
+      return true;
+    }
+
+    // :where() and :is() inside :not() are kept as a whole, otherwise the
+    // emptied pseudo class would drop the negated rule
+    if (isInPseudoClassWhereOrIs(selector) && isInsideNotPseudoClass(selector)) {
       return true;
     }
 
