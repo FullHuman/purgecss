@@ -184,6 +184,28 @@ function isRuleEmpty(node?: postcss.Container): boolean {
 }
 
 /**
+ * Remove the rules and at-rules left empty after one of their children was
+ * removed, going up through nested rules and at-rules (e.g. `@supports`
+ * inside `@media`) but not past the root
+ *
+ * @param parent - parent of the removed node
+ */
+function removeEmptyParents(
+  parent?: postcss.Container | postcss.Document,
+): void {
+  let emptyCandidate = parent;
+  while (
+    (isPostCSSRule(emptyCandidate) || isPostCSSAtRule(emptyCandidate)) &&
+    isRuleEmpty(emptyCandidate)
+  ) {
+    const grandParent: postcss.Container | postcss.Document | undefined =
+      emptyCandidate.parent;
+    emptyCandidate.remove();
+    emptyCandidate = grandParent;
+  }
+}
+
+/**
  * Check if the node has a css comment indicating to ignore the current selector rule
  *
  * @param rule - rule of postcss AST
@@ -724,17 +746,7 @@ class PurgeCSS {
     if (!node.selector) {
       node.remove();
     }
-    // remove the parents left empty, going up through nested rules and
-    // at-rules (e.g. @supports inside @media) but not past the root
-    let emptyCandidate = parent;
-    while (emptyCandidate && isRuleEmpty(emptyCandidate)) {
-      const grandParent = emptyCandidate.parent;
-      emptyCandidate.remove();
-      emptyCandidate =
-        isPostCSSRule(grandParent) || isPostCSSAtRule(grandParent)
-          ? grandParent
-          : undefined;
-    }
+    removeEmptyParents(parent);
 
     // rebuild the rule with the removed selectors and optionally its parent
     if (this.options.rejectedCss) {
@@ -973,7 +985,12 @@ class PurgeCSS {
    * Remove unused CSS variables
    */
   public removeUnusedCSSVariables(): void {
+    // the at-rules left empty by the removed `@property` rules are removed too
+    const propertyParents = [...this.variablesStructure.properties.values()]
+      .flat()
+      .map((atRule) => atRule.parent);
     this.variablesStructure.removeUnused();
+    for (const parent of propertyParents) removeEmptyParents(parent);
   }
 
   /**
@@ -982,7 +999,9 @@ class PurgeCSS {
   public removeUnusedFontFaces(): void {
     for (const { name, node } of this.atRules.fontFace) {
       if (!this.usedFontFaces.has(name)) {
+        const parent = node.parent;
         node.remove();
+        removeEmptyParents(parent);
       }
     }
   }
@@ -996,7 +1015,9 @@ class PurgeCSS {
         !this.usedAnimations.has(node.params) &&
         !this.isKeyframesSafelisted(node.params)
       ) {
+        const parent = node.parent;
         node.remove();
+        removeEmptyParents(parent);
       }
     }
   }
