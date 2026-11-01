@@ -112,6 +112,12 @@
       "state": "commented",
       "updated_at": "2026-10-28",
       "note": "8.0.0: module.exports=fn but d.ts export default; maintainer .default workaround crashes at runtime. Posted portable cast (PluginCreator<UserDefinedOptions>) verified nodenext/bundler/node10 on 7.0.2+8.0.0. Fix = maintainer."
+    },
+    {
+      "number": 1545,
+      "state": "commented",
+      "updated_at": "2026-11-01",
+      "note": "CLI run(program) not awaited -> stack trace. Reproduced on main; verified RA PR #1540 (await run) prints one-line message, exit 1. Commented + labelled bug. Maintainer may add Closes #1545 to #1540."
     }
   ],
   "fixes": [
@@ -176,8 +182,8 @@
     {
       "area": "code",
       "checked_at": "2026-11-01",
-      "result": "rejectedCss bug (8.0.0 + main): removedNodes never cleared per file; nested rejected rules (in @media) leak into later files rejectedCss. Top-level ones do not (Root clones emptied on append). No PR (maintenance-only). Not reported elsewhere.",
-      "follow_up": "Fix: this.removedNodes = [] after computing rejectedCss (same code as #1517; do after it). Also: getOptions mutates defaultOptions; -o no mkdir; variables empty-rule cleanup must skip @keyframes."
+      "result": "Run 2: draft PRs from branches repo-assist/fix-rejected-css-across-files (reset removedNodes per file before walk) and repo-assist/fix-webpack-plugin-forward-options (forward dynamicAttributes). Both merge clean with all open PRs.",
+      "follow_up": "webpack skippedContentGlobs cannot work (paths must exist; core applies it to glob patterns only). getOptions mutates defaultOptions; -o no mkdir (do after #1540). variables :root{} cleanup after #1543."
     },
     {
       "area": "dependencies",
@@ -187,14 +193,14 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-10-31",
-      "result": "8.0.0 released 2026-01-24. 19 changesets on main (1 major commander-15, 3 minor, 15 patch). Next = 9.0.0.",
+      "checked_at": "2026-11-01",
+      "result": "8.0.0 released 2026-01-24. 20 changesets on main (1 major commander-15, 3 minor, 16 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-01",
-      "result": "main 59d91c3. All 8 RA PRs (#1517 #1524 #1526 #1535 #1538 #1540 #1542 #1543) merge cleanly pairwise; all 8 merged together: build + all tests pass (purgecss 237/237). push_to_pull_request_branch squashes merge commits.",
+      "result": "#1524 and #1542 merged 2026-11-01. Open RA PRs: #1517 #1526 #1535 #1538 #1540 #1543 + 2 drafts created 2026-11-01 run 2 (8 total -> maintenance-only next).",
       "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
@@ -286,13 +292,21 @@
     {
       "key": "review-pr-1537",
       "completed_at": "2026-10-31"
+    },
+    {
+      "key": "review-pr-1542",
+      "completed_at": "2026-11-01"
+    },
+    {
+      "key": "review-pr-1524",
+      "completed_at": "2026-11-01"
     }
   ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 19 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). #1197 and #964 already closed."
+      "note": "After next release (9.0.0, 20 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). #1197 and #964 already closed."
     },
     {
       "task": 3,
@@ -305,14 +319,14 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 3,
-      "item": "rejectedcss-leak",
-      "note": "When PR capacity allows (and after #1517 review): clear removedNodes per file in getPurgedCSS; test 2 files with @media-nested rejected rule. Repro in checks.code."
-    },
-    {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-01 06:42 UTC. Monthly issue 2026-11 created; #1514 closed."
+      "note": "All open issues addressed or deferred. #1545 (new 2026-11-01) commented: #1540 fixes it. No other new human activity as of 2026-11-01 18:15 UTC."
+    },
+    {
+      "task": 6,
+      "item": "record-new-pr-numbers",
+      "note": "Look up PR numbers for branches repo-assist/fix-rejected-css-across-files* and repo-assist/fix-webpack-plugin-forward-options* (created 2026-11-01 run 2); add to monthly issue + checks.code."
     }
   ]
 }
