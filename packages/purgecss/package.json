@@ -43,7 +43,7 @@
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
     "postcss": "^8.5.29",
-    "postcss-selector-parser": "^7.1.6"
+    "postcss-selector-parser": "^7.1.7"
   },
   "devDependencies": {
     "purgecss-from-html": "workspace:^"
