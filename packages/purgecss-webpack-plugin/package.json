@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "purgecss": "workspace:^",
-    "webpack": "^5.111.1"
+    "webpack": "^5.112.2"
   },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
