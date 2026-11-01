@@ -13,7 +13,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
-    "@typescript-eslint/parser": "^8.71.1",
+    "@typescript-eslint/parser": "^8.72.1",
     "@vuepress/bundler-vite": "^2.0.0-rc.31",
     "@vuepress/plugin-markdown-tab": "^2.0.0-rc.137",
     "@vuepress/plugin-search": "^2.0.0-rc.137",
