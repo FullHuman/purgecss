@@ -141,18 +141,18 @@
     },
     {
       "issue": 964,
-      "pr": null,
+      "pr": 1543,
       "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal",
       "status": "open",
-      "updated_at": "2026-10-31",
-      "note": "Follow-up to merged #1537: at-rules left empty by removed @keyframes/@font-face/@property (removeEmptyParents helper). 6 tests in media-queries.test.ts; patch changeset. Draft PR created 2026-10-31 17:35 run."
+      "updated_at": "2026-11-01",
+      "note": "Draft PR #1543: at-rules left empty by removed @keyframes/@font-face/@property (removeEmptyParents helper). Tests in media-queries.test.ts; patch changeset."
     }
   ],
   "checks": [
     {
       "area": "docs",
       "checked_at": "2026-10-31",
-      "result": "Getting Started + plugins/postcss PostCSS examples broken (named import, undefined purgecss(), import+module.exports); draft PR from branch repo-assist/basics-docs-postcss-config-examples (EN+FR, + FR @property/online-demo sync).",
+      "result": "PostCSS config examples fix = draft PR #1542 (EN+FR). Angular guide = #1538.",
       "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release (8.0.0 ignores module.exports configs). If #1534 merges, add \"/regex/\" to Angular guide RegExp section."
     },
     {
@@ -175,9 +175,9 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-10-31",
-      "result": "CLI error PR #1540 open. Empty at-rule follow-up PR (keyframes/font-face/@property) open. Rules emptied by variable removal stay (:root {}) - not fixed: walk would reach @keyframes; empty @keyframes still fires animation events.",
-      "follow_up": "After #1540: getOptions mutates exported defaultOptions; single-file -o does not mkdir parent. Variables empty-rule cleanup must skip @keyframes."
+      "checked_at": "2026-11-01",
+      "result": "rejectedCss bug (8.0.0 + main): removedNodes never cleared per file; nested rejected rules (in @media) leak into later files rejectedCss. Top-level ones do not (Root clones emptied on append). No PR (maintenance-only). Not reported elsewhere.",
+      "follow_up": "Fix: this.removedNodes = [] after computing rejectedCss (same code as #1517; do after it). Also: getOptions mutates defaultOptions; -o no mkdir; variables empty-rule cleanup must skip @keyframes."
     },
     {
       "area": "dependencies",
@@ -193,8 +193,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-31",
-      "result": "main 59d91c3 (#1504, #1537 merged). #1517 #1524 #1526 #1535 #1538 #1540 merge cleanly; #1517 passes 222 purgecss tests on merge. push_to_pull_request_branch squashes merge commits.",
+      "checked_at": "2026-11-01",
+      "result": "main 59d91c3. All 8 RA PRs (#1517 #1524 #1526 #1535 #1538 #1540 #1542 #1543) merge cleanly pairwise; all 8 merged together: build + all tests pass (purgecss 237/237). push_to_pull_request_branch squashes merge commits.",
       "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
     },
     {
@@ -295,11 +295,6 @@
       "note": "After next release (9.0.0, 19 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). #1197 and #964 already closed."
     },
     {
-      "task": 2,
-      "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-10-31 17:35 UTC."
-    },
-    {
       "task": 3,
       "item": "issue-913",
       "note": "If maintainer picks a direction (attribute value vs full selector), implement greedy/standard safelist matching for attribute values."
@@ -310,9 +305,14 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 6,
-      "item": "record-new-pr-numbers",
-      "note": "Record PR numbers for drafts from branches repo-assist/basics-docs-postcss-config-examples (docs) and repo-assist/fix-empty-at-rules-after-at-rule-removal (fixes[964]); CLI PR is #1540."
+      "task": 3,
+      "item": "rejectedcss-leak",
+      "note": "When PR capacity allows (and after #1517 review): clear removedNodes per file in getPurgedCSS; test 2 files with @media-nested rejected rule. Repro in checks.code."
+    },
+    {
+      "task": 2,
+      "item": "untouched-older-issues",
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-01 06:42 UTC. Monthly issue 2026-11 created; #1514 closed."
     }
   ]
 }
