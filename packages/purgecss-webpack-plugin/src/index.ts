@@ -75,6 +75,7 @@ function getPurgeCSSOptions(
     variables: options.variables,
     safelist: options.safelist,
     blocklist: options.blocklist,
+    dynamicAttributes: options.dynamicAttributes,
     sourceMap: sourceMap ? { inline: false, to: fileName } : false,
   };
 }
