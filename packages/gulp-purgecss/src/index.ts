@@ -2,7 +2,7 @@ import glob from "fast-glob";
 import PluginError from "plugin-error";
 import { PurgeCSS } from "purgecss";
 import * as internal from "stream";
-import through from "through2";
+import { objectTransform, transform } from "through2";
 import VinylFile from "vinyl";
 import applySourceMap from "vinyl-sourcemaps-apply";
 import { UserDefinedOptions } from "./types";
@@ -34,6 +34,22 @@ function applyPurgedSourceMap(file: VinylFile, sourceMap?: string): void {
   applySourceMap(file, map);
 }
 
+function readStream(stream: NodeJS.ReadableStream): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let css = "";
+    stream
+      .on("data", (buffer: string | Buffer) => {
+        css += buffer.toString();
+      })
+      .on("end", () => resolve(css))
+      .on("error", reject);
+  });
+}
+
+function toPluginError(e: unknown): unknown {
+  return e instanceof Error ? new PluginError(PLUGIN_NAME, e.message) : e;
+}
+
 /**
  *
  * @param options - options
@@ -42,9 +58,12 @@ function applyPurgedSourceMap(file: VinylFile, sourceMap?: string): void {
  * @public
  */
 function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
-  return through.obj(async function (file: VinylFile, _encoding, callback) {
+  // through2 v5 dispatches on the function kind: an async transform receives
+  // no callback, pushes its resolved value and turns a rejection into a
+  // stream error
+  return objectTransform(async function (file: VinylFile) {
     // empty
-    if (file.isNull()) return callback(null, file);
+    if (file.isNull()) return file;
     // buffer
     if (file.isBuffer()) {
       try {
@@ -69,51 +88,41 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
 
         // apply source map to the chain
         applyPurgedSourceMap(file, purge.sourceMap);
-        callback(null, file);
+        return file;
       } catch (e: unknown) {
-        if (e instanceof Error) {
-          this.emit("error", new PluginError(PLUGIN_NAME, e.message));
-        }
+        throw toPluginError(e);
       }
     }
     // stream
     if (file.isStream()) {
-      let css = "";
-      file.contents
-        .on("data", (buffer: string | Buffer) => {
-          css += buffer.toString();
-        })
-        .on("end", async () => {
-          try {
-            const optionsGulp = {
-              ...options,
-              css: [
-                {
-                  raw: css,
-                },
-              ],
-              sourceMap: getSourceMapOptions(file),
-            };
+      try {
+        const css = await readStream(file.contents);
+        const optionsGulp = {
+          ...options,
+          css: [
+            {
+              raw: css,
+            },
+          ],
+          sourceMap: getSourceMapOptions(file),
+        };
 
-            const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
-            const purge = purgedCSSResults[0];
-            const result =
-              optionsGulp.rejected && purge.rejected
-                ? purge.rejected.join(" {}\n") + " {}"
-                : purge.css;
+        const purgedCSSResults = await new PurgeCSS().purge(optionsGulp);
+        const purge = purgedCSSResults[0];
+        const result =
+          optionsGulp.rejected && purge.rejected
+            ? purge.rejected.join(" {}\n") + " {}"
+            : purge.css;
 
-            const streamResult = through();
-            streamResult.write(Buffer.from(result, "utf-8"));
-            file.contents = file.contents.pipe(streamResult);
-            // apply source map to the chain
-            applyPurgedSourceMap(file, purge.sourceMap);
-            callback(null, file);
-          } catch (e: unknown) {
-            if (e instanceof Error) {
-              this.emit("error", new PluginError(PLUGIN_NAME, e.message));
-            }
-          }
-        });
+        const streamResult = transform();
+        streamResult.write(Buffer.from(result, "utf-8"));
+        file.contents = file.contents.pipe(streamResult);
+        // apply source map to the chain
+        applyPurgedSourceMap(file, purge.sourceMap);
+        return file;
+      } catch (e: unknown) {
+        throw toPluginError(e);
+      }
     }
   });
 }
