@@ -1,5 +1,5 @@
 import { PurgeCSS } from "./../src/index";
-import { ROOT_TEST_EXAMPLES } from "./utils";
+import { findInCSS, notFindInCSS, ROOT_TEST_EXAMPLES } from "./utils";
 
 describe("rejectedCss", () => {
   it("returns the rejected css as part of the result", async () => {
@@ -47,5 +47,31 @@ describe("rejectedCss", () => {
       rejectedCss: true,
     });
     expect(resultsPurge[0].rejectedCss).toBe("strong {\n  font-size: 2em;\n}");
+  });
+  it("returns only the rules rejected from each css file", async () => {
+    expect.assertions(9);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [
+        {
+          raw: ".unused-a { color: red; }\n@media (min-width: 1px) { .unused-media-a { color: red; } }",
+          name: "a.css",
+        },
+        {
+          raw: "@media (min-width: 1px) { .unused-media-b { color: red; } }\n.unused-b { color: red; }",
+          name: "b.css",
+        },
+        { raw: ".used { color: red; }", name: "c.css" },
+      ],
+      rejectedCss: true,
+    });
+    const [rejectedCssA, rejectedCssB, rejectedCssC] = resultsPurge.map(
+      (result) => result.rejectedCss,
+    );
+    findInCSS(expect, [".unused-a", ".unused-media-a"], rejectedCssA ?? "");
+    notFindInCSS(expect, [".unused-b", ".unused-media-b"], rejectedCssA ?? "");
+    findInCSS(expect, [".unused-b", ".unused-media-b"], rejectedCssB ?? "");
+    notFindInCSS(expect, [".unused-a", ".unused-media-a"], rejectedCssB ?? "");
+    expect(rejectedCssC).toBe("");
   });
 });
