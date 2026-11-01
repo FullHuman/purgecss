@@ -26,7 +26,7 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "rollup": "^4.64.0",
     "sass-embedded": "^1.105.1",
     "ts-jest": "^29.4.14",
