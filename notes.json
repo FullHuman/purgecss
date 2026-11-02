@@ -135,7 +135,7 @@
       "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
       "status": "open",
       "updated_at": "2026-11-02",
-      "note": "Draft PR #1526: compare only with chunk.name. Conflicts with main since #1558 (one line in cases list: dynamic-attributes, only-chunk-name). Resolution verified 5/5 + posted on PR 2026-11-02; maintainer to resolve."
+      "note": "Draft PR #1526: compare only with chunk.name. Conflicts with main since #1558 (one line in cases list: keep dynamic-attributes + only-chunk-name). Resolution posted on PR 2026-11-02; re-verified 2026-11-02 21:55 (webpack 7/7 with all RA PRs). Maintainer to resolve."
     },
     {
       "issue": 1265,
@@ -158,7 +158,7 @@
     {
       "area": "docs",
       "checked_at": "2026-11-02",
-      "result": "Webpack docs QA: draft PR from branch repo-assist/basics-webpack-plugin-options (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
+      "result": "Webpack docs QA: draft PR #1560 (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
       "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release. If #1534 merges, add \"/regex/\" to Angular guide RegExp section. postcss.md type block is stale (main options only)."
     },
     {
@@ -200,7 +200,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-02",
-      "result": "#1558 (dynamicAttributes) merged 2026-11-02; rejectedCss draft = #1557. Open RA PRs: #1517 #1526 #1535 #1538(ready) #1540 #1543 #1557 + new webpack types/docs draft = 8 -> maintenance-only next. Only #1526 conflicts with main.",
+      "result": "2026-11-02 21:55, main f5be4e2: all 8 open RA PRs merged together (with #1526 one-line test-list fix): build ok, all tests pass (purgecss 238/238, webpack 7/7). #1517/#1543/#1557 merge cleanly together. #1557/#1560 CI action_required (needs approval). No review comments.",
       "follow_up": "Do NOT merge main into PR branches (merge carries protected package.json/lockfile/.github). For a real conflict, post the resolution or open a replacement PR off main."
     },
     {
@@ -213,7 +213,7 @@
       "area": "qa",
       "checked_at": "2026-11-02",
       "result": "Webpack plugin: tsc --strict rejected every documented PurgeCSSPlugin({...}) (safelist/blocklist required) -> fixed in draft. glob 13 ignores noDir. Webpack purgecss.config.js loading: {...await import(t)} has only default/module.exports under Node 24 -> no options picked up.",
-      "follow_up": "Fix webpack config-file loading like #1528 (pathToFileURL + default). Vue CLI plugin has no test suite. READMEs still say vue-cli 3."
+      "follow_up": "Fix webpack config-file loading like #1528 (pathToFileURL + default); auto-loading is undocumented for webpack, so PR rather than issue when a slot frees. Vue CLI plugin has no test suite. READMEs still say vue-cli 3."
     }
   ],
   "completed_actions": [
@@ -319,11 +319,6 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 6,
-      "item": "record-new-pr-number",
-      "note": "Look up PR number for branch repo-assist/basics-webpack-plugin-options* (created 2026-11-02); put it in monthly issue + checks.docs."
-    },
-    {
       "task": 3,
       "item": "webpack-config-file",
       "note": "purgecss-webpack-plugin initializePlugin spreads await import(t) namespace: purgecss.config.js options never applied under Node (verified CJS+ESM, Node 24). Fix like #1528 (existsSync, pathToFileURL, default). Needs a free PR slot."
@@ -331,7 +326,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-02 06:45 UTC."
+      "note": "All open issues addressed or deferred. No new human issue/PR activity as of 2026-11-02 21:55 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
     }
   ]
 }
