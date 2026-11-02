@@ -134,8 +134,8 @@
       "pr": 1526,
       "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
       "status": "open",
-      "updated_at": "2026-10-27",
-      "note": "Draft PR #1526: compare only with chunk.name; test, EN/FR/README docs, patch changeset. Behaviour change flagged."
+      "updated_at": "2026-11-02",
+      "note": "Draft PR #1526: compare only with chunk.name. Conflicts with main since #1558 (one line in cases list: dynamic-attributes, only-chunk-name). Resolution verified 5/5 + posted on PR 2026-11-02; maintainer to resolve."
     },
     {
       "issue": 1265,
@@ -157,9 +157,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-10-31",
-      "result": "PostCSS config examples fix = draft PR #1542 (EN+FR). Angular guide = #1538.",
-      "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release (8.0.0 ignores module.exports configs). If #1534 merges, add \"/regex/\" to Angular guide RegExp section."
+      "checked_at": "2026-11-02",
+      "result": "Webpack docs QA: draft PR from branch repo-assist/basics-webpack-plugin-options (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
+      "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release. If #1534 merges, add \"/regex/\" to Angular guide RegExp section. postcss.md type block is stale (main options only)."
     },
     {
       "area": "build",
@@ -181,8 +181,8 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-01",
-      "result": "Run 2: draft PRs from branches repo-assist/fix-rejected-css-across-files (reset removedNodes per file before walk) and repo-assist/fix-webpack-plugin-forward-options (forward dynamicAttributes). Both merge clean with all open PRs.",
+      "checked_at": "2026-11-02",
+      "result": "rejectedCss leak fix = #1557 (open). Webpack dynamicAttributes forwarding = #1558 (merged).",
       "follow_up": "webpack skippedContentGlobs cannot work (paths must exist; core applies it to glob patterns only). getOptions mutates defaultOptions; -o no mkdir (do after #1540). variables :root{} cleanup after #1543."
     },
     {
@@ -193,15 +193,15 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-01",
-      "result": "8.0.0 released 2026-01-24. 20 changesets on main (1 major commander-15, 3 minor, 16 patch). Next = 9.0.0.",
+      "checked_at": "2026-11-02",
+      "result": "8.0.0 released 2026-01-24. 22 changesets on main (2 major: commander-15, gulp through2 5; 3 minor; 17 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-01",
-      "result": "#1524 and #1542 merged 2026-11-01. Open RA PRs: #1517 #1526 #1535 #1538 #1540 #1543 + 2 drafts created 2026-11-01 run 2 (8 total -> maintenance-only next).",
-      "follow_up": "Do NOT merge main into PR branches. For a real conflict, open a replacement PR off main and ask to close the old one."
+      "checked_at": "2026-11-02",
+      "result": "#1558 (dynamicAttributes) merged 2026-11-02; rejectedCss draft = #1557. Open RA PRs: #1517 #1526 #1535 #1538(ready) #1540 #1543 #1557 + new webpack types/docs draft = 8 -> maintenance-only next. Only #1526 conflicts with main.",
+      "follow_up": "Do NOT merge main into PR branches (merge carries protected package.json/lockfile/.github). For a real conflict, post the resolution or open a replacement PR off main."
     },
     {
       "area": "ci",
@@ -211,9 +211,9 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-10-31",
-      "result": "postcss-cli 11 QA (8.0.0 npm + pnpm pack of main) under /tmp/gh-aw/agent/qa-postcss*: ESM default import + export default and CJS require both work; .js ESM in typeless pkg warns MODULE_TYPELESS_PACKAGE_JSON.",
-      "follow_up": "Vue CLI plugin has no test suite (needs package.json test script, protected). READMEs still say vue-cli 3."
+      "checked_at": "2026-11-02",
+      "result": "Webpack plugin: tsc --strict rejected every documented PurgeCSSPlugin({...}) (safelist/blocklist required) -> fixed in draft. glob 13 ignores noDir. Webpack purgecss.config.js loading: {...await import(t)} has only default/module.exports under Node 24 -> no options picked up.",
+      "follow_up": "Fix webpack config-file loading like #1528 (pathToFileURL + default). Vue CLI plugin has no test suite. READMEs still say vue-cli 3."
     }
   ],
   "completed_actions": [
@@ -306,7 +306,7 @@
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 20 changesets), recommend closing #978, #1282, #1153 (verified fixed on main). #1197 and #964 already closed."
+      "note": "After next release (9.0.0, 22 changesets), recommend closing #978, #1282, #1153 (verified fixed on main)."
     },
     {
       "task": 3,
@@ -319,14 +319,19 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 2,
-      "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. #1545 (new 2026-11-01) commented: #1540 fixes it. No other new human activity as of 2026-11-01 18:15 UTC."
+      "task": 6,
+      "item": "record-new-pr-number",
+      "note": "Look up PR number for branch repo-assist/basics-webpack-plugin-options* (created 2026-11-02); put it in monthly issue + checks.docs."
     },
     {
-      "task": 6,
-      "item": "record-new-pr-numbers",
-      "note": "Look up PR numbers for branches repo-assist/fix-rejected-css-across-files* and repo-assist/fix-webpack-plugin-forward-options* (created 2026-11-01 run 2); add to monthly issue + checks.code."
+      "task": 3,
+      "item": "webpack-config-file",
+      "note": "purgecss-webpack-plugin initializePlugin spreads await import(t) namespace: purgecss.config.js options never applied under Node (verified CJS+ESM, Node 24). Fix like #1528 (existsSync, pathToFileURL, default). Needs a free PR slot."
+    },
+    {
+      "task": 2,
+      "item": "untouched-older-issues",
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-02 06:45 UTC."
     }
   ]
 }
