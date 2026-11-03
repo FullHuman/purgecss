@@ -187,8 +187,8 @@
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-10-30",
-      "result": "2026-10-30 x2: minor/patch only + majors typescript 7, @types/node 26, through2 5. No open Dependabot PRs. rollup-pluginutils is deprecated (-> @rollup/pluginutils).",
+      "checked_at": "2026-11-03",
+      "result": "Dependabot #1561 (fast-uri, via ajv) + #1562 (undici, docs via cheerio): lockfile-only transitive, CI green Node 22/24/26, merge cleanly together; listed as Merge PR in monthly issue. Earlier: majors typescript 7, @types/node 26; rollup-pluginutils deprecated.",
       "follow_up": "package.json/.github edits are protected (PR falls back to issue). dependabot.yml deprecated reviewers key + 2021 ignore rules; CI on push+pull_request duplicates runs. Propose via issue only if valuable."
     },
     {
@@ -200,7 +200,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-03",
-      "result": "2026-11-03 07:10, main f5be4e2 unchanged: no new review comments or CI failures. #1526 conflict removed by appending its test case (no protected files). #1557/#1560 CI still action_required (Build/Test awaiting approval).",
+      "result": "2026-11-03 19:46, main f5be4e2 unchanged: all 8 RA PRs merge cleanly, no review comments/CI failures, no pushes. #1557/#1560 Build/Test still action_required.",
       "follow_up": "Do NOT merge main into PR branches (carries protected package.json/lockfile/.github). For list-insertion conflicts, move the PR line >=1 unchanged line away from main change; else post resolution."
     },
     {
@@ -326,7 +326,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue/PR activity as of 2026-11-03 07:10 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-03 19:46 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
     }
   ]
 }
