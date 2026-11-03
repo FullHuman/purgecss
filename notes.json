@@ -134,8 +134,8 @@
       "pr": 1526,
       "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
       "status": "open",
-      "updated_at": "2026-11-02",
-      "note": "Draft PR #1526: compare only with chunk.name. Conflicts with main since #1558 (one line in cases list: keep dynamic-attributes + only-chunk-name). Resolution posted on PR 2026-11-02; re-verified 2026-11-02 21:55 (webpack 7/7 with all RA PRs). Maintainer to resolve."
+      "updated_at": "2026-11-03",
+      "note": "Draft PR #1526: compare only with chunk.name. 2026-11-03 pushed commit moving only-chunk-name to END of webpack cases list -> merges cleanly with main and all RA PRs (merged tree: purgecss 209/209, webpack 5/5). Earlier resolution comment now obsolete."
     },
     {
       "issue": 1265,
@@ -199,9 +199,9 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-02",
-      "result": "2026-11-02 21:55, main f5be4e2: all 8 open RA PRs merged together (with #1526 one-line test-list fix): build ok, all tests pass (purgecss 238/238, webpack 7/7). #1517/#1543/#1557 merge cleanly together. #1557/#1560 CI action_required (needs approval). No review comments.",
-      "follow_up": "Do NOT merge main into PR branches (merge carries protected package.json/lockfile/.github). For a real conflict, post the resolution or open a replacement PR off main."
+      "checked_at": "2026-11-03",
+      "result": "2026-11-03 07:10, main f5be4e2 unchanged: no new review comments or CI failures. #1526 conflict removed by appending its test case (no protected files). #1557/#1560 CI still action_required (Build/Test awaiting approval).",
+      "follow_up": "Do NOT merge main into PR branches (carries protected package.json/lockfile/.github). For list-insertion conflicts, move the PR line >=1 unchanged line away from main change; else post resolution."
     },
     {
       "area": "ci",
@@ -326,7 +326,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue/PR activity as of 2026-11-02 21:55 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
+      "note": "All open issues addressed or deferred. No new human issue/PR activity as of 2026-11-03 07:10 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
     }
   ]
 }
