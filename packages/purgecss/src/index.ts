@@ -787,6 +787,9 @@ class PurgeCSS {
         from: isFromFile ? option : undefined,
       });
 
+      // the rejected css of a file only contains the rules removed from it
+      this.removedNodes = [];
+
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
 
