@@ -99,12 +99,11 @@ export async function setOptions(
         ? importedConfig.default
         : importedConfig;
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`, {
-        cause: err,
-      });
-    }
-    throw new Error(undefined, { cause: err });
+    // a config file can throw any value, e.g. `throw "error"`
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${message}`, {
+      cause: err,
+    });
   }
   return {
     ...defaultOptions,

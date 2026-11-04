@@ -170,9 +170,8 @@ export async function main() {
     program.parse(process.argv);
     await run(program);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
+    // a config file or an extractor can throw any value, e.g. `throw "error"`
+    console.error(error instanceof Error ? error.message : String(error));
     process.exit(1);
   }
 }
