@@ -78,7 +78,7 @@ to filter out directories see the glob-all documentation [here](https://www.npmj
 
 ### Options
 
-The options available in purgecss [Configuration](https://www.purgecss.com/configuration.html) are also available in the webpack plugin with the exception of css and content.
+The webpack plugin passes the following options of the purgecss [Configuration](https://www.purgecss.com/configuration.html) to PurgeCSS: `defaultExtractor`, `extractors`, `fontFace`, `keyframes`, `variables`, `safelist`, `blocklist`, `dynamicAttributes` and `rejected`. The plugin purges the CSS assets of the compilation and uses `paths` as the content, so it doesn't take the `css` and `content` options. Source maps are generated when the webpack `devtool` option is set. Other options, such as `rejectedCss` or `skippedContentGlobs`, have no effect.
 
 - #### paths
 

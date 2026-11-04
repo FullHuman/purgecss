@@ -101,13 +101,13 @@ pour filtrer les répertoires, consultez la documentation de glob-all [ici](http
 
 ## Options
 
-Les options disponibles dans la [Configuration](https://www.purgecss.com/fr/configuration.html) de purgecss sont également disponibles dans le plugin webpack, à l'exception des options `css` et `content`.
+Le plugin webpack transmet à PurgeCSS les options suivantes de la [Configuration](https://www.purgecss.com/fr/configuration.html) de purgecss : `defaultExtractor`, `extractors`, `fontFace`, `keyframes`, `variables`, `safelist`, `blocklist`, `dynamicAttributes` et `rejected`. Le plugin purge les ressources CSS de la compilation et utilise `paths` comme contenu, il ne prend donc pas les options `css` et `content`. Les source maps sont générées lorsque l'option `devtool` de webpack est définie. Les autres options, comme `rejectedCss` ou `skippedContentGlobs`, n'ont aucun effet.
 
 - #### paths
 
 Avec le plugin webpack, vous pouvez spécifier le contenu qui doit être analysé par purgecss en fournissant un tableau de noms de fichiers. Il peut s'agir de fichiers html, pug, blade, etc. Vous pouvez également utiliser un module comme `glob` ou `glob-all` pour obtenir facilement une liste de fichiers.
 
-> Vous devrez probablement passer `{ noDir: true }` comme option à `glob.sync()` car `glob.sync` correspond à un répertoire sur lequel le plugin ne peut pas opérer.
+> Vous devrez probablement passer `{ nodir: true }` comme option à `glob.sync()` car `glob.sync` correspond à un répertoire sur lequel le plugin ne peut pas opérer.
 
 ```js
 const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
