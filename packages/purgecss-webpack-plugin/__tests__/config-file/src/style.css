@@ -1,0 +1,11 @@
+.used {
+  color: red;
+}
+
+.from-config {
+  color: blue;
+}
+
+.unused {
+  color: green;
+}

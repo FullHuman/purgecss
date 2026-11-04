@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { pathToFileURL } from "url";
 import {
   PurgeCSS,
   ResultPurge,
@@ -131,11 +132,22 @@ export class PurgeCSSPlugin {
   initializePlugin(compilation: Compilation): void {
     compilation.hooks.additionalAssets.tapPromise(pluginName, async () => {
       let configFileOptions: UserDefinedOptions | undefined;
-      try {
-        const t = path.resolve(process.cwd(), "purgecss.config.js");
-        configFileOptions = await import(t);
-      } catch {
-        // no config file present
+      const t = path.resolve(process.cwd(), "purgecss.config.js");
+      // the config file is optional, but an existing one that fails to load
+      // (e.g. a syntax error) is reported instead of being silently ignored
+      if (fs.existsSync(t)) {
+        try {
+          const importedConfig = await import(pathToFileURL(t).href);
+          // Handle both ES modules (direct export) and CommonJS (default export)
+          configFileOptions =
+            importedConfig.default && typeof importedConfig.default === "object"
+              ? importedConfig.default
+              : importedConfig;
+        } catch (err: unknown) {
+          throw new Error(`Error loading the config file ${t}: ${err}`, {
+            cause: err,
+          });
+        }
       }
       this.options = {
         ...(configFileOptions ? configFileOptions : {}),
