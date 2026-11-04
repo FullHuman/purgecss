@@ -48,6 +48,76 @@ describe("rejectedCss", () => {
     });
     expect(resultsPurge[0].rejectedCss).toBe("strong {\n  font-size: 2em;\n}");
   });
+  it.each([
+    [
+      "an at-rule nested in an at-rule",
+      "@supports (display: grid) { @media (min-width: 1px) { .unused { color: red; } } }",
+    ],
+    [
+      "an at-rule nested in a cascade layer",
+      "@layer base { @media print { .unused { color: red; } } }",
+    ],
+    [
+      "an at-rule nested in a rule",
+      ".used { @media (min-width: 1px) { .unused { color: red; } } }",
+    ],
+  ])("keeps all the ancestors of a rejected rule in %s", async (_, css) => {
+    expect.assertions(2);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [{ raw: css }],
+      rejectedCss: true,
+    });
+    expect(resultsPurge[0].css).toBe("");
+    expect(resultsPurge[0].rejectedCss).toBe(css);
+  });
+  it("only keeps the rejected rules in the ancestors of a rejected rule", async () => {
+    expect.assertions(2);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [
+        {
+          raw: ".used { color: red; @media print { .unused { color: blue; } .used { color: green; } } }",
+        },
+      ],
+      rejectedCss: true,
+    });
+    expect(resultsPurge[0].css).toBe(
+      ".used { color: red; @media print { .used { color: green; } } }",
+    );
+    expect(resultsPurge[0].rejectedCss).toBe(
+      ".used { @media print { .unused { color: blue; } } }",
+    );
+  });
+  it("does not repeat the rules nested in a rejected rule", async () => {
+    expect.assertions(2);
+    const css =
+      ".unused { color: red; .nested { color: blue; } @media print { .nested { color: green; } } }";
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [{ raw: css }],
+      rejectedCss: true,
+    });
+    expect(resultsPurge[0].css).toBe("");
+    expect(resultsPurge[0].rejectedCss).toBe(css);
+  });
+  it("keeps the rejected rules nested in a rule that is partially rejected", async () => {
+    expect.assertions(2);
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [
+        {
+          raw: ".used, .unused { color: red; @media print { .nested { color: blue; } } }",
+        },
+      ],
+      rejectedCss: true,
+    });
+    expect(resultsPurge[0].css).toBe(".used { color: red }");
+    expect(resultsPurge[0].rejectedCss).toBe(
+      ".unused { color: red; @media print { .nested { color: blue; } } }" +
+        ".used { @media print { .nested { color: blue; } } }",
+    );
+  });
   it("returns only the rules rejected from each css file", async () => {
     expect.assertions(9);
     const resultsPurge = await new PurgeCSS().purge({

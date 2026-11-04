@@ -184,6 +184,36 @@ function isRuleEmpty(node?: postcss.Container): boolean {
 }
 
 /**
+ * Build the rejected css of a rule: a copy of the rule with only its rejected
+ * selectors, wrapped in empty copies of all its ancestors (at-rules and nested
+ * rules) so that it keeps the context it applies in, e.g.
+ * `@supports (display: grid) { @media print { .rejected {} } }`.
+ *
+ * Returns `undefined` when an ancestor was already removed from the tree: the
+ * ancestor was rejected with all its content, which already contains the rule.
+ *
+ * @param rule - rule with rejected selectors
+ * @param rejectedSelectors - selectors removed from the rule
+ */
+function getRejectedNode(
+  rule: postcss.Rule,
+  rejectedSelectors: string[],
+): postcss.Node | undefined {
+  const rejectedRule = rule.clone();
+  rejectedRule.selectors = rejectedSelectors;
+
+  let rejectedNode: postcss.Node = rejectedRule;
+  let ancestor = rule.parent;
+  while (isPostCSSRule(ancestor) || isPostCSSAtRule(ancestor)) {
+    rejectedNode = ancestor.clone().removeAll().append(rejectedNode);
+    ancestor = ancestor.parent;
+  }
+
+  // the chain of ancestors stops at the root unless one of them was removed
+  return ancestor ? rejectedNode : undefined;
+}
+
+/**
  * Check if the node has a css comment indicating to ignore the current selector rule
  *
  * @param rule - rule of postcss AST
@@ -719,6 +749,13 @@ class PurgeCSS {
     // declarations
     if (node.selector) this.collectDeclarationsDataOfNode(node);
 
+    // rebuild the rule with the removed selectors, before the rule and its
+    // emptied parents are detached from the tree
+    if (this.options.rejectedCss && selectorsRemovedFromRule.length > 0) {
+      const rejectedNode = getRejectedNode(node, selectorsRemovedFromRule);
+      if (rejectedNode) this.removedNodes.push(rejectedNode);
+    }
+
     // remove empty rules
     const parent = node.parent;
     if (!node.selector) {
@@ -734,17 +771,6 @@ class PurgeCSS {
         isPostCSSRule(grandParent) || isPostCSSAtRule(grandParent)
           ? grandParent
           : undefined;
-    }
-
-    // rebuild the rule with the removed selectors and optionally its parent
-    if (this.options.rejectedCss) {
-      if (selectorsRemovedFromRule.length > 0) {
-        const clone = node.clone();
-        const parentClone = parent?.clone().removeAll().append(clone);
-        clone.selectors = selectorsRemovedFromRule;
-        const nodeToPreserve = parentClone ? parentClone : clone;
-        this.removedNodes.push(nodeToPreserve);
-      }
     }
   }
 
