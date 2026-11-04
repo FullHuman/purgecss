@@ -159,7 +159,7 @@
       "area": "docs",
       "checked_at": "2026-11-02",
       "result": "Webpack docs QA: draft PR #1560 (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
-      "follow_up": "Document postcss plugin auto-loading purgecss.config.js after release. If #1534 merges, add \"/regex/\" to Angular guide RegExp section. postcss.md type block is stale (main options only)."
+      "follow_up": "Document postcss+webpack plugin auto-loading purgecss.config.js after release. If #1534 merges, add \"/regex/\" to Angular guide RegExp section. postcss.md options block says main options + links full list: not stale, skip."
     },
     {
       "area": "build",
@@ -187,20 +187,20 @@
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-03",
-      "result": "Dependabot #1561 (fast-uri, via ajv) + #1562 (undici, docs via cheerio): lockfile-only transitive, CI green Node 22/24/26, merge cleanly together; listed as Merge PR in monthly issue. Earlier: majors typescript 7, @types/node 26; rollup-pluginutils deprecated.",
+      "checked_at": "2026-11-04",
+      "result": "2026-11-04: Dependabot #1563 (vite, docs only) + #1565 (launch-editor) lockfile-only, CI green, merge cleanly; listed as Merge PR. No bundle (merged individually; lockfile protected). Majors: typescript 7.",
       "follow_up": "package.json/.github edits are protected (PR falls back to issue). dependabot.yml deprecated reviewers key + 2021 ignore rules; CI on push+pull_request duplicates runs. Propose via issue only if valuable."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-02",
-      "result": "8.0.0 released 2026-01-24. 22 changesets on main (2 major: commander-15, gulp through2 5; 3 minor; 17 patch). Next = 9.0.0.",
+      "checked_at": "2026-11-04",
+      "result": "8.0.0 released 2026-01-24. 24 changesets on main (2 major, 3 minor, 19 patch). Next = 9.0.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-04",
-      "result": "2026-11-04 06:52 UTC, main f5be4e2 unchanged since 2026-11-02: no pushes/reviews/CI failures on the 8 RA PRs (CodeQL green); #1557/#1560 Build/Test still action_required. Noop run.",
+      "result": "2026-11-04 20:08 UTC, main ef33918 (#1557/#1560/#1561/#1562/#1564 merged): 6 RA PRs + new webpack config-file draft all merge cleanly with main and each other. 7 open RA PRs.",
       "follow_up": "Do NOT merge main into PR branches (carries protected package.json/lockfile/.github). For list-insertion conflicts, move the PR line >=1 unchanged line away from main change; else post resolution."
     },
     {
@@ -211,9 +211,9 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-11-02",
-      "result": "Webpack plugin: tsc --strict rejected every documented PurgeCSSPlugin({...}) (safelist/blocklist required) -> fixed in draft. glob 13 ignores noDir. Webpack purgecss.config.js loading: {...await import(t)} has only default/module.exports under Node 24 -> no options picked up.",
-      "follow_up": "Fix webpack config-file loading like #1528 (pathToFileURL + default); auto-loading is undocumented for webpack, so PR rather than issue when a slot frees. Vue CLI plugin has no test suite. READMEs still say vue-cli 3."
+      "checked_at": "2026-11-04",
+      "result": "Webpack config-file loading fixed in draft PR (2026-11-04). webpack lib .esm.js fails under Node ESM (import { sources } from webpack CJS) - only bundlers use it (no exports field); noted, no action.",
+      "follow_up": "Vue CLI plugin has no test suite. READMEs still say vue-cli 3. Document config auto-loading (postcss+webpack) after release."
     }
   ],
   "completed_actions": [
@@ -300,13 +300,29 @@
     {
       "key": "review-pr-1524",
       "completed_at": "2026-11-01"
+    },
+    {
+      "key": "review-pr-1560",
+      "completed_at": "2026-11-04"
+    },
+    {
+      "key": "review-pr-1557",
+      "completed_at": "2026-11-04"
+    },
+    {
+      "key": "merge-pr-1562",
+      "completed_at": "2026-11-04"
+    },
+    {
+      "key": "merge-pr-1561",
+      "completed_at": "2026-11-04"
     }
   ],
   "priorities": [
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 22 changesets), recommend closing #978, #1282, #1153 (verified fixed on main)."
+      "note": "After next release (9.0.0, 24 changesets as of 2026-11-04), recommend closing #978, #1282, #1153 (verified fixed on main)."
     },
     {
       "task": 3,
@@ -319,14 +335,14 @@
       "note": "Community PR #1502 conflicts with main; main case fixed by #1501. Remaining value: drop vars used only by removed keyframes (main keeps --spin-angle). Mentioned in monthly issue only."
     },
     {
-      "task": 3,
-      "item": "webpack-config-file",
-      "note": "purgecss-webpack-plugin initializePlugin spreads await import(t) namespace: purgecss.config.js options never applied under Node (verified CJS+ESM, Node 24). Fix like #1528 (existsSync, pathToFileURL, default). Needs a free PR slot."
-    },
-    {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue/PR activity as of 2026-11-04 06:52 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts)."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-04 20:08 UTC. #1534 merges cleanly; #1495 still conflicts (docs/configuration.md, jest.config.ts, purgecss/src/index.ts)."
+    },
+    {
+      "task": 6,
+      "item": "pr-webpack-config-file",
+      "note": "Draft PR 2026-11-04 (no issue), branch repo-assist/fix-webpack-config-file-loading: pathToFileURL + default unwrap, error on load failure (like #1528). Test config-file.test.ts. Merges with #1526. Find PR number next run."
     }
   ]
 }
