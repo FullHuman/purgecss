@@ -1,0 +1,50 @@
+/* set at runtime by a component library */
+.menu-item[data-highlighted] {
+  color: red;
+}
+
+.popover[data-side="top"] {
+  color: red;
+}
+
+/* set at runtime on the document */
+html[data-theme="dark"] .menu-item {
+  color: red;
+}
+
+/* the class is not used, the selector is removed even with a dynamic attribute */
+.unused-item[data-highlighted] {
+  color: red;
+}
+
+/* not matched by the dynamic attributes */
+.menu-item[aria-invented] {
+  color: red;
+}
+
+/* a class that looks like an attribute name is not affected */
+.data-table {
+  color: red;
+}
+
+/* set at runtime, listed as a string */
+.option[aria-selected="true"] {
+  color: red;
+}
+
+/* always dynamic, even when dynamicAttributes is set */
+.option[value="1"] {
+  color: red;
+}
+
+.option[checked] {
+  color: red;
+}
+
+.option[selected] {
+  color: red;
+}
+
+.popover[open] {
+  color: red;
+}

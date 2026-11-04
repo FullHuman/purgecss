@@ -19,7 +19,7 @@ To install the PurgeCSS plugin simply navigate to your application folder and ad
 ```bash
 cd my-app
 
-vue add purgecss
+vue add @fullhuman/purgecss
 ```
 
 ### Usage

@@ -1,0 +1,15 @@
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.spinner {
+  background: conic-gradient(from var(--angle), red, blue);
+  animation: spin 1s infinite;
+}
+@keyframes spin {
+  to {
+    --angle: 360deg;
+    --unused-angle: 1deg;
+  }
+}

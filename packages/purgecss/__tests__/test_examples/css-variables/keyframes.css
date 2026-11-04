@@ -1,0 +1,12 @@
+:root {
+  --unused-color: blue;
+  --used-color: red;
+}
+.component {
+  animation: fadeIn 0.4s;
+}
+@keyframes fadeIn {
+  from {
+    background: var(--used-color);
+  }
+}

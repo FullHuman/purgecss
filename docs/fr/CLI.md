@@ -43,15 +43,15 @@ Remove unused css selectors
 
 Options:
   -V, --version                        output the version number
-  -con, --content <files...>           glob of content files
-  -css, --css <files...>               glob of css files
+  --content <files...>                 glob of content files
+  --css <files...>                     glob of css files
   -c, --config <path>                  path to the configuration file
   -o, --output <path>                  file path directory to write purged css files to
-  -font, --font-face                   option to remove unused font-faces
-  -keyframes, --keyframes              option to remove unused keyframes
+  -f, --font-face                      option to remove unused font-faces
+  -K, --keyframes                      option to remove unused keyframes
   -v, --variables                      option to remove unused variables
-  -rejected, --rejected                option to output rejected selectors
-  -rejected-css, --rejected-css        option to output rejected css
+  -r, --rejected                       option to output rejected selectors
+  -R, --rejected-css                   option to output rejected css
   -s, --safelist <list...>             list of classes that should not be removed
   -b, --blocklist <list...>            list of selectors that should be removed
   -k, --skippedContentGlobs <list...>  list of glob patterns for folders/files that should not be scanned

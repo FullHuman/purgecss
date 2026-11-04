@@ -232,6 +232,8 @@ await new PurgeCSS().purge({
 
 Si vous utilisez des propriétés personnalisées (variables CSS), ou une bibliothèque qui les utilise comme Bootstrap, vous pouvez supprimer les variables CSS inutilisées en définissant l'option `variables` à `true`.
 
+Les règles [`@property`](https://developer.mozilla.org/fr/docs/Web/CSS/@property) qui déclarent des variables inutilisées sont également supprimées.
+
 ```js
 await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
@@ -361,8 +363,12 @@ Ici, PurgeCSS n'analysera rien dans les dossiers "node_modules" et "components".
 
 - **dynamicAttributes**
 
-Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc.
+Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc. Utilisez-la pour les attributs définis à l'exécution, par votre propre JavaScript ou par une bibliothèque de composants, et qui n'apparaissent pas dans vos fichiers de contenu. Les sélecteurs utilisant ces attributs sont conservés quelle que soit la valeur de l'attribut, tant que le reste du sélecteur est utilisé.
+
+Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut.
 
 ```js
-dynamicAttributes: ["aria-selected"]
+dynamicAttributes: ["aria-selected", /^data-/]
 ```
+
+Dans cet exemple, `.menu-item[aria-selected="true"]` et `.menu-item[data-highlighted]` sont conservés si `menu-item` est trouvé, et supprimés sinon.

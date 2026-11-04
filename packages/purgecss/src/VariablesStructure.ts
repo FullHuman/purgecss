@@ -1,10 +1,17 @@
 import * as postcss from "postcss";
 import { StringRegExpArray } from "./types";
+import { matchesPattern } from "./utils";
 
 /**
  * @public
  */
 export class VariableNode {
+  /**
+   * @deprecated The dependencies between declarations are no longer
+   * recorded, so this list is always empty. The variables used by a used
+   * variable are found by name in `VariablesStructure.removeUnused`. It will
+   * be removed in the next major version.
+   */
   public nodes: VariableNode[] = [];
   public value: postcss.Declaration;
   public isUsed = false;
@@ -19,39 +26,47 @@ export class VariableNode {
  */
 export class VariablesStructure {
   public nodes: Map<string, VariableNode[]> = new Map();
+  public properties: Map<string, postcss.AtRule[]> = new Map();
   public usedVariables: Set<string> = new Set();
   public safelist: StringRegExpArray = [];
 
   addVariable(declaration: postcss.Declaration): void {
     const { prop } = declaration;
-    if (!this.nodes.has(prop)) {
-      const node = new VariableNode(declaration);
-      this.nodes.set(prop, [node]);
+    const node = new VariableNode(declaration);
+    // push in place, copying the list on each redefinition would be quadratic
+    const variableNodes = this.nodes.get(prop);
+    if (variableNodes) {
+      variableNodes.push(node);
     } else {
-      const node = new VariableNode(declaration);
-      const variableNodes = this.nodes.get(prop) || [];
-      this.nodes.set(prop, [...variableNodes, node]);
+      this.nodes.set(prop, [node]);
     }
   }
 
+  /**
+   * Register an `@property` at-rule so it can be removed along with the
+   * declarations of the variable it defines
+   *
+   * @param atRule - `@property` at-rule
+   */
+  addProperty(atRule: postcss.AtRule): void {
+    const name = atRule.params.trim();
+    const properties = this.properties.get(name) || [];
+    this.properties.set(name, [...properties, atRule]);
+  }
+
+  /**
+   * @deprecated The variables used by a custom property are found by name in
+   * `removeUnused`, so the dependencies between declarations are no longer
+   * recorded and this method does nothing. It will be removed in the next
+   * major version.
+   */
   addVariableUsage(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     declaration: postcss.Declaration,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
-    const { prop } = declaration;
-    const nodes = this.nodes.get(prop);
-    for (const variableMatch of matchedVariables) {
-      // capturing group containing the variable is in index 1
-      const variableName = variableMatch[1];
-      if (this.nodes.has(variableName)) {
-        const usedVariableNodes = this.nodes.get(variableName);
-        nodes?.forEach((node) => {
-          usedVariableNodes?.forEach((usedVariableNode) => {
-            node.nodes.push(usedVariableNode);
-          });
-        });
-      }
-    }
+    // nothing to record
   }
 
   addVariableUsageInProperties(
@@ -64,22 +79,23 @@ export class VariablesStructure {
     }
   }
 
+  /**
+   * Mark every declaration of the variable as used. The variables it uses are
+   * not marked, `removeUnused` adds them to the used variables first.
+   *
+   * @param variableName - name of the variable, e.g. `--color`
+   */
   setAsUsed(variableName: string): void {
-    const nodes = this.nodes.get(variableName);
-    if (nodes) {
-      const queue = [...nodes];
-      while (queue.length !== 0) {
-        const currentNode = queue.pop();
-        if (currentNode && !currentNode.isUsed) {
-          currentNode.isUsed = true;
-          queue.push(...currentNode.nodes);
-        }
-      }
+    for (const node of this.nodes.get(variableName) ?? []) {
+      node.isUsed = true;
     }
   }
 
   removeUnused(): void {
-    // check unordered usage
+    // add the variables used by the used variables, by reading every
+    // declaration of each used variable. The set also iterates over the
+    // variables added during the loop, so variables used through other
+    // variables are found too, whatever the order of the declarations
     for (const used of this.usedVariables) {
       const usedNodes = this.nodes.get(used);
       if (usedNodes) {
@@ -107,13 +123,19 @@ export class VariablesStructure {
         }
       }
     }
+
+    for (const [name, properties] of this.properties) {
+      if (!this.usedVariables.has(name) && !this.isVariablesSafelisted(name)) {
+        for (const property of properties) {
+          property.remove();
+        }
+      }
+    }
   }
 
   isVariablesSafelisted(variable: string): boolean {
-    return this.safelist.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === variable
-        : safelistItem.test(variable);
-    });
+    return this.safelist.some((safelistItem) =>
+      matchesPattern(safelistItem, variable),
+    );
   }
 }

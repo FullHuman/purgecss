@@ -28,7 +28,9 @@ function pluginPurgeCSS(options: UserDefinedOptions): Plugin {
       if (!filter(id)) return null;
 
       const v = await new PurgeCSS().purge({
-        content: options.content,
+        ...options,
+        // `output` is an option of the plugin, not of PurgeCSS
+        output: undefined,
         css: [
           {
             raw: code,

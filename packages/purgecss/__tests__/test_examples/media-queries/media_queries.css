@@ -32,3 +32,25 @@
     color: black;
   }
 }
+
+@media (max-width: 77777px){
+  /* only this comment is left once the rule is removed */
+  .unused-class {
+    color: black;
+  }
+}
+
+@media (max-width: 88888px){
+  @supports (display: grid) {
+    .unused-class {
+      color: black;
+    }
+  }
+}
+
+@media (max-width: 99999px){
+  /* this comment stays with the used rule */
+  .alone {
+    color: black;
+  }
+}

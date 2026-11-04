@@ -47,7 +47,7 @@ export type UserDefinedOptions = Omit<
   paths: string[] | PathFunction;
   moduleExtensions?: string[];
   verbose?: boolean;
-  safelist: PurgeCSSUserDefinedOptions["safelist"] | SafelistFunction;
-  blocklist: PurgeCSSUserDefinedOptions["blocklist"] | BlocklistFunction;
+  safelist?: PurgeCSSUserDefinedOptions["safelist"] | SafelistFunction;
+  blocklist?: PurgeCSSUserDefinedOptions["blocklist"] | BlocklistFunction;
   only?: string[];
 };

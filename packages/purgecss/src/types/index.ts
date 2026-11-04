@@ -150,7 +150,7 @@ export interface UserDefinedOptions {
   /** {@inheritDoc purgecss#Options.skippedContentGlobs} */
   skippedContentGlobs?: Array<string>;
   /** {@inheritDoc purgecss#Options.dynamicAttributes} */
-  dynamicAttributes?: string[];
+  dynamicAttributes?: StringRegExpArray;
 }
 
 /**
@@ -252,10 +252,21 @@ export interface Options {
    */
   skippedContentGlobs: Array<string>;
   /**
-   * Option to add custom CSS attribute selectors like "aria-selected",
-   * "data-selected", ...etc.
+   * Attributes that are set or changed at runtime, e.g. by JavaScript, and
+   * therefore may not appear in the content files. Attribute selectors on
+   * these attributes are kept whatever their value. Strings match the
+   * attribute name exactly, regular expressions are tested against it.
+   *
+   * @example
+   * ```ts
+   * await new PurgeCSS().purge({
+   *   content: ['index.html'],
+   *   css: ['css/app.css'],
+   *   dynamicAttributes: ['aria-selected', /^data-/]
+   * })
+   * ```
    */
-  dynamicAttributes: string[];
+  dynamicAttributes: StringRegExpArray;
 }
 
 /**

@@ -22,7 +22,7 @@ import {
   IGNORE_ANNOTATION_START,
 } from "./constants";
 import ExtractorResultSets from "./ExtractorResultSets";
-import { CSS_SAFELIST } from "./internal-safelist";
+import { CSS_SAFELIST, DYNAMIC_ATTRIBUTES } from "./internal-safelist";
 import { defaultOptions } from "./options";
 import {
   AtRules,
@@ -39,6 +39,7 @@ import {
   UserDefinedOptions,
   UserDefinedSafelist,
 } from "./types";
+import { matchesPattern } from "./utils";
 
 import { VariablesStructure } from "./VariablesStructure";
 
@@ -98,12 +99,11 @@ export async function setOptions(
         ? importedConfig.default
         : importedConfig;
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${err.message}`, {
-        cause: err,
-      });
-    }
-    throw new Error(undefined, { cause: err });
+    // a config file can throw any value, e.g. `throw "error"`
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`${ERROR_CONFIG_FILE_LOADING} ${message}`, {
+      cause: err,
+    });
   }
   return {
     ...defaultOptions,
@@ -145,6 +145,23 @@ function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
 }
 
 /**
+ * Check if the node is a comment that can be removed along with its parent
+ * when the parent has nothing else left. PurgeCSS ignore annotations are
+ * kept since they still need to be processed.
+ *
+ * @param node - node of postcss AST
+ * @returns true if the node is a removable comment
+ */
+function isRemovableComment(node: postcss.ChildNode): boolean {
+  return (
+    isPostCSSComment(node) &&
+    !isIgnoreAnnotation(node, "next") &&
+    !isIgnoreAnnotation(node, "start") &&
+    !isIgnoreAnnotation(node, "end")
+  );
+}
+
+/**
  * Check if the node correspond to an empty css rule
  *
  * @param node - node of postcss AST
@@ -154,6 +171,8 @@ function isRuleEmpty(node?: postcss.Container): boolean {
   if (
     (isPostCSSRule(node) && !node.selector) ||
     (node?.nodes && !node.nodes.length) ||
+    ((isPostCSSRule(node) || isPostCSSAtRule(node)) &&
+      node.nodes?.every(isRemovableComment)) ||
     (isPostCSSAtRule(node) &&
       ((!node.nodes && !node.params) ||
         (!node.params && node.nodes && !node.nodes.length)))
@@ -161,6 +180,36 @@ function isRuleEmpty(node?: postcss.Container): boolean {
     return true;
   }
   return false;
+}
+
+/**
+ * Build the rejected css of a rule: a copy of the rule with only its rejected
+ * selectors, wrapped in empty copies of all its ancestors (at-rules and nested
+ * rules) so that it keeps the context it applies in, e.g.
+ * `@supports (display: grid) { @media print { .rejected {} } }`.
+ *
+ * Returns `undefined` when an ancestor was already removed from the tree: the
+ * ancestor was rejected with all its content, which already contains the rule.
+ *
+ * @param rule - rule with rejected selectors
+ * @param rejectedSelectors - selectors removed from the rule
+ */
+function getRejectedNode(
+  rule: postcss.Rule,
+  rejectedSelectors: string[],
+): postcss.Node | undefined {
+  const rejectedRule = rule.clone();
+  rejectedRule.selectors = rejectedSelectors;
+
+  let rejectedNode: postcss.Node = rejectedRule;
+  let ancestor = rule.parent;
+  while (isPostCSSRule(ancestor) || isPostCSSAtRule(ancestor)) {
+    rejectedNode = ancestor.clone().removeAll().append(rejectedNode);
+    ancestor = ancestor.parent;
+  }
+
+  // the chain of ancestors stops at the root unless one of them was removed
+  return ancestor ? rejectedNode : undefined;
 }
 
 /**
@@ -312,6 +361,23 @@ function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
 }
 
 /**
+ * Returns true if the selector is nested anywhere inside a :not() pseudo class.
+ * Removing a selector there changes the meaning of the negation, so it is kept.
+ *
+ * @param selector - selector
+ */
+function isInsideNotPseudoClass(selector: selectorParser.Node): boolean {
+  let node = selector.parent;
+  while (node) {
+    if (node.type === "pseudo" && node.value === ":not") {
+      return true;
+    }
+    node = node.parent;
+  }
+  return false;
+}
+
+/**
  * Returns true if the selector is a pseudo class at the root level
  * Pseudo classes checked: :where, :is, :has, :not
  * @param selector - selector
@@ -379,23 +445,23 @@ class PurgeCSS {
 
   public options: Options = defaultOptions;
 
-  private collectDeclarationsData(declaration: postcss.Declaration): void {
+  private collectDeclarationsData(
+    declaration: postcss.Declaration,
+    isIgnored: boolean,
+  ): void {
     const { prop, value } = declaration;
 
     // collect css properties data
     if (this.options.variables) {
-      const usedVariablesMatchesInDeclaration = value.matchAll(
-        /\bvar\(\s*(.+?)\s*[,)]/g,
-      );
-      if (prop.startsWith("--")) {
+      // custom properties kept by an ignore annotation are not registered so
+      // they are never removed, but the variables they use still count as used.
+      // The variables used by a registered custom property are read from its
+      // value when removing the unused variables, if it is used itself
+      if (prop.startsWith("--") && !isIgnored) {
         this.variablesStructure.addVariable(declaration);
-        this.variablesStructure.addVariableUsage(
-          declaration,
-          usedVariablesMatchesInDeclaration,
-        );
       } else {
         this.variablesStructure.addVariableUsageInProperties(
-          usedVariablesMatchesInDeclaration,
+          value.matchAll(/\bvar\(\s*(.+?)\s*[,)]/g),
         );
       }
     }
@@ -427,6 +493,45 @@ class PurgeCSS {
       }
       return;
     }
+  }
+
+  /**
+   * Collect the data of the declarations directly inside a node
+   *
+   * @param node - rule or at-rule of postcss AST
+   * @param isIgnored - whether the node is kept by an ignore annotation
+   */
+  private collectDeclarationsDataOfNode(
+    node: postcss.Container,
+    isIgnored = false,
+  ): void {
+    node.each((childNode) => {
+      if (childNode.type !== "decl") return;
+      this.collectDeclarationsData(childNode, isIgnored);
+    });
+  }
+
+  /**
+   * Check if a node is kept by an ignore annotation: inside an ignore range,
+   * or right after an ignore next line comment, which is then removed
+   *
+   * @param node - node of postcss AST
+   */
+  private isIgnored(node: postcss.Node): boolean {
+    if (this.ignore) {
+      return true;
+    }
+
+    const annotation = node.prev();
+    if (
+      isPostCSSComment(annotation) &&
+      isIgnoreAnnotation(annotation, "next")
+    ) {
+      annotation.remove();
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -511,17 +616,30 @@ class PurgeCSS {
    * @param node - node of postcss AST
    */
   private evaluateAtRule(node: postcss.AtRule): void {
+    const isIgnored = this.isIgnored(node);
+
     // when tracking variables, collect var() usages from declarations
     // nested inside at-rules (e.g. @media, @supports, ...)
     if (
       this.options.variables &&
-      (node.name === "media" || node.name === "supports") &&
-      node.nodes
+      (node.name === "media" || node.name === "supports")
     ) {
-      for (const childNode of node.nodes) {
-        if (childNode.type !== "decl") continue;
-        this.collectDeclarationsData(childNode);
-      }
+      this.collectDeclarationsDataOfNode(node, isIgnored);
+    }
+
+    // exit if it is kept by an ignore annotation
+    if (isIgnored) {
+      return;
+    }
+
+    // @property rules of css variables
+    if (
+      this.options.variables &&
+      node.name === "property" &&
+      node.params.trim().startsWith("--")
+    ) {
+      this.variablesStructure.addProperty(node);
+      return;
     }
 
     // keyframes
@@ -552,27 +670,21 @@ class PurgeCSS {
     node: postcss.Node,
     selectors: ExtractorResultSets,
   ): void {
-    // exit if is in ignoring state activated by an ignore comment
-    if (this.ignore) {
+    // exit if it is kept by an ignore annotation (ignore range or ignore next
+    // line comment), still collecting what its declarations use
+    if (this.isIgnored(node)) {
+      if (isPostCSSRule(node)) this.collectDeclarationsDataOfNode(node, true);
       return;
     }
 
-    // exit if the previous annotation is a ignore next line comment
-    const annotation = node.prev();
-    if (
-      isPostCSSComment(annotation) &&
-      isIgnoreAnnotation(annotation, "next")
-    ) {
-      annotation.remove();
-      return;
-    }
-
-    // exit if it is inside a keyframes
+    // collect variables and exit if it is inside a keyframes
     if (
       node.parent &&
       isPostCSSAtRule(node.parent) &&
       node.parent.name.endsWith("keyframes")
     ) {
+      // declarations inside keyframes rules
+      if (isPostCSSRule(node)) this.collectDeclarationsDataOfNode(node);
       return;
     }
 
@@ -581,8 +693,10 @@ class PurgeCSS {
       return;
     }
 
-    // exit if it has an ignore rule comment inside
+    // exit if it has an ignore rule comment inside, still collecting what its
+    // declarations use
     if (hasIgnoreAnnotation(node)) {
+      this.collectDeclarationsDataOfNode(node, true);
       return;
     }
 
@@ -601,11 +715,13 @@ class PurgeCSS {
         const keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
+          // the whitespace after the previous comma belongs to the selector
+          const removedSelector = selector.toString().trim();
           if (this.options.rejected) {
-            this.selectorsRemoved.add(selector.toString());
+            this.selectorsRemoved.add(removedSelector);
           }
           if (this.options.rejectedCss) {
-            selectorsRemovedFromRule.push(selector.toString());
+            selectorsRemovedFromRule.push(removedSelector);
           }
           selector.remove();
         }
@@ -630,11 +746,13 @@ class PurgeCSS {
     }).processSync(node.selector);
 
     // declarations
-    if (node.selector && node.nodes) {
-      for (const childNode of node.nodes) {
-        if (childNode.type !== "decl") continue;
-        this.collectDeclarationsData(childNode);
-      }
+    if (node.selector) this.collectDeclarationsDataOfNode(node);
+
+    // rebuild the rule with the removed selectors, before the rule and its
+    // emptied parents are detached from the tree
+    if (this.options.rejectedCss && selectorsRemovedFromRule.length > 0) {
+      const rejectedNode = getRejectedNode(node, selectorsRemovedFromRule);
+      if (rejectedNode) this.removedNodes.push(rejectedNode);
     }
 
     // remove empty rules
@@ -642,17 +760,16 @@ class PurgeCSS {
     if (!node.selector) {
       node.remove();
     }
-    if (isRuleEmpty(parent)) parent?.remove();
-
-    // rebuild the rule with the removed selectors and optionally its parent
-    if (this.options.rejectedCss) {
-      if (selectorsRemovedFromRule.length > 0) {
-        const clone = node.clone();
-        const parentClone = parent?.clone().removeAll().append(clone);
-        clone.selectors = selectorsRemovedFromRule;
-        const nodeToPreserve = parentClone ? parentClone : clone;
-        this.removedNodes.push(nodeToPreserve);
-      }
+    // remove the parents left empty, going up through nested rules and
+    // at-rules (e.g. @supports inside @media) but not past the root
+    let emptyCandidate = parent;
+    while (emptyCandidate && isRuleEmpty(emptyCandidate)) {
+      const grandParent = emptyCandidate.parent;
+      emptyCandidate.remove();
+      emptyCandidate =
+        isPostCSSRule(grandParent) || isPostCSSAtRule(grandParent)
+          ? grandParent
+          : undefined;
     }
   }
 
@@ -700,6 +817,9 @@ class PurgeCSS {
       const isFromFile = typeof option === "string" && !this.options.stdin;
       const from = isFromFile ? option : undefined;
       const root = postcss.parse(cssContent, { from });
+
+      // the rejected css of a file only contains the rules removed from it
+      this.removedNodes = [];
 
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
@@ -768,11 +888,9 @@ class PurgeCSS {
    * @param keyframesName - name of the keyframe animation
    */
   private isKeyframesSafelisted(keyframesName: string): boolean {
-    return this.options.safelist.keyframes.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === keyframesName
-        : safelistItem.test(keyframesName);
-    });
+    return this.options.safelist.keyframes.some((safelistItem) =>
+      matchesPattern(safelistItem, keyframesName),
+    );
   }
 
   /**
@@ -781,11 +899,9 @@ class PurgeCSS {
    * @param selector - css selector
    */
   private isSelectorBlocklisted(selector: string): boolean {
-    return this.options.blocklist.some((blocklistItem) => {
-      return typeof blocklistItem === "string"
-        ? blocklistItem === selector
-        : blocklistItem.test(selector);
-    });
+    return this.options.blocklist.some((blocklistItem) =>
+      matchesPattern(blocklistItem, selector),
+    );
   }
 
   /**
@@ -794,11 +910,9 @@ class PurgeCSS {
    * @param selector - css selector
    */
   private isSelectorSafelisted(selector: string): boolean {
-    const isSafelisted = this.options.safelist.standard.some((safelistItem) => {
-      return typeof safelistItem === "string"
-        ? safelistItem === selector
-        : safelistItem.test(selector);
-    });
+    const isSafelisted = this.options.safelist.standard.some((safelistItem) =>
+      matchesPattern(safelistItem, selector),
+    );
     const isPseudoElement = /^::.*/.test(selector);
     return CSS_SAFELIST.includes(selector) || isPseudoElement || isSafelisted;
   }
@@ -810,7 +924,7 @@ class PurgeCSS {
    */
   private isSelectorSafelistedDeep(selector: string): boolean {
     return this.options.safelist.deep.some((safelistItem) =>
-      safelistItem.test(selector),
+      matchesPattern(safelistItem, selector),
     );
   }
 
@@ -821,7 +935,27 @@ class PurgeCSS {
    */
   private isSelectorSafelistedGreedy(selector: string): boolean {
     return this.options.safelist.greedy.some((safelistItem) =>
-      safelistItem.test(selector),
+      matchesPattern(safelistItem, selector),
+    );
+  }
+
+  /**
+   * Check if the attribute is dynamic, i.e. it can be set or changed at runtime.
+   * Attribute selectors on dynamic attributes are always kept, whatever their
+   * value, as the attribute may not appear in the content files.
+   *
+   * `value` is highly used in input elements and can change based on the user,
+   * idem for `checked`, `selected` and `open`, so they are always dynamic.
+   * Other attributes can be added with the option dynamicAttributes.
+   *
+   * @param attributeName - name of the attribute, e.g. `aria-selected`
+   */
+  private isAttributeDynamic(attributeName: string): boolean {
+    return (
+      DYNAMIC_ATTRIBUTES.includes(attributeName) ||
+      this.options.dynamicAttributes.some((dynamicAttribute) =>
+        matchesPattern(dynamicAttribute, attributeName),
+      )
     );
   }
 
@@ -951,6 +1085,15 @@ class PurgeCSS {
       return true;
     }
 
+    // :where() and :is() inside :not() are kept as a whole, otherwise the
+    // emptied pseudo class would drop the negated rule
+    if (
+      isInPseudoClassWhereOrIs(selector) &&
+      isInsideNotPseudoClass(selector)
+    ) {
+      return true;
+    }
+
     // if there is any greedy safelist pattern, run all the selector parts through them
     // if there is any match, return true
     if (this.options.safelist.greedy.length > 0) {
@@ -991,16 +1134,7 @@ class PurgeCSS {
       let isPresent: boolean;
       switch (selectorNode.type) {
         case "attribute":
-          // `value` is a dynamic attribute, highly used in input element
-          // the choice is to always leave `value` as it can change based on the user
-          // idem for `checked`, `selected`, `open`
-          isPresent = [
-            ...this.options.dynamicAttributes,
-            "value",
-            "checked",
-            "selected",
-            "open",
-          ].includes(selectorNode.attribute)
+          isPresent = this.isAttributeDynamic(selectorNode.attribute)
             ? true
             : isAttributeFound(selectorNode, selectorsFromExtractor);
           break;

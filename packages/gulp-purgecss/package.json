@@ -39,13 +39,12 @@
     "fast-glob": "^3.3.3",
     "plugin-error": "^2.0.1",
     "purgecss": "workspace:^",
-    "through2": "^4.0.2",
+    "through2": "^5.0.12",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
     "@types/event-stream": "^4.0.6",
-    "@types/glob": "^9.0.0",
-    "@types/through2": "^2.0.41",
+    "@types/readable-stream": "^4.0.25",
     "@types/vinyl": "^2.0.12",
     "event-stream": "^4.0.1",
     "vinyl": "^3.0.1"

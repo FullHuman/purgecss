@@ -29,6 +29,8 @@ Lorsque vous construisez un site web, vous pouvez décider d'utiliser un framewo
 
 C'est là que PurgeCSS entre en jeu. PurgeCSS analyse votre contenu et vos fichiers CSS. Ensuite, il fait correspondre les sélecteurs utilisés dans vos fichiers avec ceux de vos fichiers de contenu. Il supprime les sélecteurs inutilisés de votre CSS, ce qui résulte en des fichiers CSS plus légers.
 
+Vous pouvez essayer PurgeCSS en ligne sur [purgecss.full-human.com](https://purgecss.full-human.com).
+
 ## Sponsors 🥰
 
 [<img src="https://avatars.githubusercontent.com/u/133211198?v=4" height="85" style="margin-right: 10px" alt="BairesDev - Sponsor">](https://www.bairesdev.com/sponsoring-open-source-projects/)

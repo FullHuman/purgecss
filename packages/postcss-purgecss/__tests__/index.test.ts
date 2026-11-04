@@ -98,25 +98,80 @@ describe("Purgecss postcss plugin", () => {
     expect(result.warnings().length).toBe(0);
   });
 
-  it("should work with a purgecss config file", async () => {
+  it.each([
+    ["module.exports", "config-test"],
+    ["export default", "config-test-default-export"],
+    ["named exports", "config-test-named-exports"],
+  ])(
+    "should work with a purgecss config file using %s",
+    async (_, configDirectory) => {
+      const cwd = process.cwd();
+      const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
+      process.chdir(`${__dirname}/fixtures/src/${configDirectory}/`);
+
+      const input = fs
+        .readFileSync(`${configTestDirectory}index.css`)
+        .toString();
+      const output = fs
+        .readFileSync(`${configTestDirectory}expected.css`)
+        .toString();
+
+      try {
+        const result = await postcss([
+          purgeCSSPlugin({
+            keyframes: true,
+          }),
+        ]).process(input, { from: undefined });
+
+        expect(result.css).toBe(output);
+        expect(result.warnings().length).toBe(0);
+      } finally {
+        process.chdir(cwd);
+      }
+    },
+  );
+
+  it("should report a purgecss config file that fails to load", async () => {
     const cwd = process.cwd();
-    const configTestDirectory = `${__dirname}/fixtures/src/config-test/`;
-    process.chdir(configTestDirectory);
-
-    const input = fs.readFileSync(`${configTestDirectory}index.css`).toString();
-    const output = fs
-      .readFileSync(`${configTestDirectory}expected.css`)
-      .toString();
-
-    const result = await postcss([
-      purgeCSSPlugin({
-        keyframes: true,
-      }),
-    ]).process(input, { from: undefined });
-
-    expect(result.css).toBe(output);
-    expect(result.warnings().length).toBe(0);
-
-    process.chdir(cwd);
+    process.chdir(`${__dirname}/fixtures/src/config-test-invalid/`);
+    try {
+      await expect(async () => {
+        await postcss([purgeCSSPlugin({})]).process(".a{}", {
+          from: undefined,
+        });
+      }).rejects.toThrow("Error loading the config file");
+    } finally {
+      process.chdir(cwd);
+    }
   });
+
+  it.each([
+    ["an empty safelist", {}, ["from-config"], ["from-plugin"]],
+    [
+      "a safelist",
+      { standard: ["from-plugin"] },
+      ["from-config", "from-plugin"],
+      [],
+    ],
+  ])(
+    "should add up the safelist of the config file and %s in the options",
+    async (_, safelist, kept, removed) => {
+      const cwd = process.cwd();
+      process.chdir(`${__dirname}/fixtures/src/config-test-safelist/`);
+      try {
+        const result = await postcss([purgeCSSPlugin({ safelist })]).process(
+          ".from-config{color:red}.from-plugin{color:blue}.unused{color:green}",
+          { from: undefined },
+        );
+        for (const selector of kept) {
+          expect(result.css).toContain(`.${selector}`);
+        }
+        for (const selector of [...removed, "unused"]) {
+          expect(result.css).not.toContain(`.${selector}`);
+        }
+      } finally {
+        process.chdir(cwd);
+      }
+    },
+  );
 });

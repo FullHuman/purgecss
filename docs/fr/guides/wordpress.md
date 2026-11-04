@@ -37,16 +37,15 @@ npm i --save-dev purgecss-with-wordpress
 
 ## Utilisation
 
-```js{2,7,8}
-import Purgecss from 'purgecss'
+```js{2,7}
+import { PurgeCSS } from 'purgecss'
 import purgecssWordpress from 'purgecss-with-wordpress'
 
-const purgeCss = new Purgecss({
+const purgeCSSResult = await new PurgeCSS().purge({
   content: ['**/*.html'],
   css: ['**/*.css'],
   safelist: purgecssWordpress.safelist
 })
-const result = purgecss.purge()
 ```
 
 Si vous avez des classes supplémentaires que vous souhaitez inclure, vous pouvez les inclure en utilisant l'opérateur de décomposition :

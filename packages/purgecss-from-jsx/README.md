@@ -15,7 +15,7 @@ npm install @fullhuman/purgecss-from-jsx --save-dev
 ### With PurgeCSS
 
 ```js
-import PurgeCSS from "purgecss";
+import { PurgeCSS } from "purgecss";
 import purgeFromJsx from "@fullhuman/purgecss-from-jsx";
 
 const result = await new PurgeCSS().purge({
