@@ -13,8 +13,13 @@ describe("purge multiple css files", () => {
 :root {
   --used-color: red;
   --unused-color: blue;
+  --chained-color: var(--chained-base);
+  --chained-base: green;
 }
 @keyframes used-animation {
+  from { opacity: 0; }
+}
+@keyframes animation-in-variable {
   from { opacity: 0; }
 }
 @keyframes unused-animation {
@@ -36,8 +41,13 @@ describe("purge multiple css files", () => {
     raw: `
 .button {
   color: var(--used-color);
+  background: var(--chained-color);
   animation: used-animation 1s;
   font-family: "Used Font", sans-serif;
+}
+.icon {
+  --icon-animation: animation-in-variable 1s;
+  animation: var(--icon-animation);
 }
 .unused-usage { color: black; }
 `,
@@ -55,10 +65,14 @@ describe("purge multiple css files", () => {
     ["usages before definitions", [usages, definitions]],
   ])("with %s", (_, css) => {
     let purgedDefinitions: string | undefined;
+    let purgedUsages: string | undefined;
     beforeAll(async () => {
       const resultsPurge = await new PurgeCSS().purge({ ...options, css });
       purgedDefinitions = resultsPurge.find(
         (result) => result.file === "definitions.css",
+      )?.css;
+      purgedUsages = resultsPurge.find(
+        (result) => result.file === "usages.css",
       )?.css;
     });
 
@@ -68,8 +82,15 @@ describe("purge multiple css files", () => {
     it("removes an unused variable", () => {
       expect(purgedDefinitions).not.toContain("--unused-color");
     });
+    it("keeps the variables used by a variable used in another file", () => {
+      expect(purgedDefinitions).toContain("--chained-color:");
+      expect(purgedDefinitions).toContain("--chained-base:");
+    });
     it("keeps keyframes used in another file", () => {
       expect(purgedDefinitions).toContain("@keyframes used-animation");
+    });
+    it("keeps keyframes used through a variable in another file", () => {
+      expect(purgedDefinitions).toContain("@keyframes animation-in-variable");
     });
     it("removes unused keyframes", () => {
       expect(purgedDefinitions).not.toContain("@keyframes unused-animation");
@@ -79,6 +100,11 @@ describe("purge multiple css files", () => {
     });
     it("removes an unused font face", () => {
       expect(purgedDefinitions).not.toContain('font-family: "Unused Font"');
+    });
+    it("only removes the unused rules of the file using the definitions", () => {
+      expect(purgedUsages).toContain(".button {");
+      expect(purgedUsages).toContain("--icon-animation:");
+      expect(purgedUsages).not.toContain(".unused-usage");
     });
   });
 
@@ -92,5 +118,21 @@ describe("purge multiple css files", () => {
       [".unused-definition"],
       [".unused-usage"],
     ]);
+  });
+
+  it.each([
+    ["removing unused definitions", options],
+    ["without removing unused definitions", { content }],
+  ])("returns the source map of each file, %s", async (_, purgeOptions) => {
+    const resultsPurge = await new PurgeCSS().purge({
+      ...purgeOptions,
+      css: [definitions, usages],
+      sourceMap: { inline: false },
+    });
+    expect(
+      resultsPurge.map(
+        (result) => JSON.parse(result.sourceMap ?? "{}").sourcesContent,
+      ),
+    ).toEqual([[definitions.raw], [usages.raw]]);
   });
 });
