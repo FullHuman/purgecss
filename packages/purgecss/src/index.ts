@@ -417,6 +417,17 @@ function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
 }
 
 /**
+ * A css file walked through, before it is turned back into css
+ */
+interface PurgedRoot {
+  root: PostCSSRoot;
+  from: string | undefined;
+  file: string | undefined;
+  rejected?: string[];
+  rejectedCss?: string;
+}
+
+/**
  * Class used to instantiate PurgeCSS and can then be used
  * to purge CSS files.
  *
@@ -800,6 +811,13 @@ class PurgeCSS {
       }
     }
 
+    // unused font faces, keyframes and variables are removed once every css
+    // file has been walked through, so that a font face, keyframes or variable
+    // defined in one file and used in another one is kept. The files are kept
+    // in memory until then, and only when one of these options is enabled
+    const removesUnusedAcrossFiles =
+      this.options.fontFace || this.options.keyframes || this.options.variables;
+    const purgedRoots: PurgedRoot[] = [];
     for (const option of processedOptions) {
       const cssContent =
         typeof option === "string"
@@ -808,9 +826,8 @@ class PurgeCSS {
             : await asyncFs.readFile(option, "utf-8")
           : option.raw;
       const isFromFile = typeof option === "string" && !this.options.stdin;
-      const root = postcss.parse(cssContent, {
-        from: isFromFile ? option : undefined,
-      });
+      const from = isFromFile ? option : undefined;
+      const root = postcss.parse(cssContent, { from });
 
       // the rejected css of a file only contains the rules removed from it
       this.removedNodes = [];
@@ -818,43 +835,77 @@ class PurgeCSS {
       // purge unused selectors
       this.walkThroughCSS(root, selectors);
 
-      if (this.options.fontFace) this.removeUnusedFontFaces();
-      if (this.options.keyframes) this.removeUnusedKeyframes();
-      if (this.options.variables) this.removeUnusedCSSVariables();
-
-      const postCSSResult = root.toResult({
-        map: this.options.sourceMap,
-        to:
-          typeof this.options.sourceMap === "object" &&
-          this.options.sourceMap.to
-            ? this.options.sourceMap.to
-            : isFromFile
-              ? option
-              : undefined,
-      });
-      const result: ResultPurge = {
-        css: postCSSResult.toString(),
+      const purgedRoot: PurgedRoot = {
+        root,
+        from,
         file: typeof option === "string" ? option : option.name,
       };
 
-      if (this.options.sourceMap) {
-        result.sourceMap = postCSSResult.map?.toString();
-      }
-
       if (this.options.rejected) {
-        result.rejected = Array.from(this.selectorsRemoved);
+        purgedRoot.rejected = Array.from(this.selectorsRemoved);
         this.selectorsRemoved.clear();
       }
 
       if (this.options.rejectedCss) {
-        result.rejectedCss = postcss
+        purgedRoot.rejectedCss = postcss
           .root({ nodes: this.removedNodes })
           .toString();
       }
 
-      sources.push(result);
+      if (removesUnusedAcrossFiles) {
+        purgedRoots.push(purgedRoot);
+      } else {
+        sources.push(this.getResultPurge(purgedRoot));
+      }
+    }
+
+    if (this.options.fontFace) this.removeUnusedFontFaces();
+    if (this.options.keyframes) this.removeUnusedKeyframes();
+    if (this.options.variables) this.removeUnusedCSSVariables();
+
+    for (const purgedRoot of purgedRoots) {
+      sources.push(this.getResultPurge(purgedRoot));
     }
     return sources;
+  }
+
+  /**
+   * Build the result of a purged css file
+   *
+   * @param purgedRoot - purged css file
+   */
+  private getResultPurge({
+    root,
+    from,
+    file,
+    rejected,
+    rejectedCss,
+  }: PurgedRoot): ResultPurge {
+    const postCSSResult = root.toResult({
+      map: this.options.sourceMap,
+      to:
+        typeof this.options.sourceMap === "object" && this.options.sourceMap.to
+          ? this.options.sourceMap.to
+          : from,
+    });
+    const result: ResultPurge = {
+      css: postCSSResult.toString(),
+      file,
+    };
+
+    if (this.options.sourceMap) {
+      result.sourceMap = postCSSResult.map?.toString();
+    }
+
+    if (this.options.rejected) {
+      result.rejected = rejected;
+    }
+
+    if (this.options.rejectedCss) {
+      result.rejectedCss = rejectedCss;
+    }
+
+    return result;
   }
 
   /**
