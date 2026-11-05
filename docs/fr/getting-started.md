@@ -26,6 +26,8 @@ meta:
 
 La plupart des bundlers et frameworks pour construire des sites web utilisent PostCSS. La façon la plus simple de configurer PurgeCSS est avec son plugin PostCSS.
 
+PurgeCSS nécessite Node.js 22.12 ou une version ultérieure.
+
 Installez le plugin PostCSS :
 
 :::: code-tabs

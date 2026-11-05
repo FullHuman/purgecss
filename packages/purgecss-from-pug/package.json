@@ -5,6 +5,9 @@
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/purgecss-from-pug.js",
   "directories": {
     "lib": "lib",

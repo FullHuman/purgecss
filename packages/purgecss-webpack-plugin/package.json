@@ -18,6 +18,9 @@
     "purify"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/purgecss-webpack-plugin.js",
   "module": "./lib/purgecss-webpack-plugin.esm.js",
   "types": "./lib/purgecss-webpack-plugin.d.ts",
