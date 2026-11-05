@@ -390,9 +390,6 @@ importers:
       purgecss:
         specifier: workspace:^
         version: link:../purgecss
-      webpack:
-        specifier: ^5.112.2
-        version: 5.112.2(lightningcss@1.33.0)(postcss@8.5.29)(uglify-js@3.19.3)
     devDependencies:
       css-loader:
         specifier: ^7.1.5
@@ -403,6 +400,9 @@ importers:
       mini-css-extract-plugin:
         specifier: ^2.10.2
         version: 2.10.2(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.29)(uglify-js@3.19.3))
+      webpack:
+        specifier: ^5.112.2
+        version: 5.112.2(lightningcss@1.33.0)(postcss@8.5.29)(uglify-js@3.19.3)
 
   packages/purgecss-with-wordpress: {}
 
