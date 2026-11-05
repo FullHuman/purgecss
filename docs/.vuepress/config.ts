@@ -77,6 +77,10 @@ const getEnglishSidebar = () => [
         link: "/guides/react",
       },
       {
+        text: "Angular",
+        link: "/guides/angular",
+      },
+      {
         text: "Next.js",
         link: "/guides/next",
       },
@@ -186,6 +190,10 @@ const getFrenchSidebar = () => [
       {
         text: "React",
         link: "/fr/guides/react",
+      },
+      {
+        text: "Angular",
+        link: "/fr/guides/angular",
       },
       {
         text: "Next.js",

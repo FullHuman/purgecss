@@ -62,6 +62,7 @@ footer: MIT Licensed | Copyright © 2018-present Full Human LTD
 - [Vue.js](guides/vue.md)
 - [Nuxt.js](guides/nuxt.md)
 - [React.js](guides/react.md)
+- [Angular](guides/angular.md)
 - [Next.js](guides/next.md)
 - [Razzle](guides/razzle.md)
 - [WordPress](guides/wordpress.md)
