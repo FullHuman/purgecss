@@ -78,8 +78,8 @@ type StringRegExpArray = Array<RegExp | string>;
 
 type ComplexSafelist = {
   standard?: StringRegExpArray;
-  deep?: RegExp[];
-  greedy?: RegExp[];
+  deep?: StringRegExpArray;
+  greedy?: StringRegExpArray;
   variables?: StringRegExpArray;
   keyframes?: StringRegExpArray;
 };
@@ -277,6 +277,8 @@ safelist: ['random', 'yep', 'button', /^nav-/]
 
 In this form, safelist is an array that can take a string or a regex.
 
+A string written between slashes, such as `"/^nav-/"`, is parsed as a regular expression. Configuration files that cannot contain regular expressions, such as `postcss.config.json`, can use patterns this way. See [Patterns](./safelisting.md#patterns).
+
 The _complex_ form is:
 
 ```js
@@ -352,6 +354,8 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Even if nav-links and usedClass are found by an extractor, they will be removed.
 
+A string written between slashes, such as `"/^nav-/"`, is parsed as a regular expression, like in `safelist`.
+
 - **skippedContentGlobs**
 
 If you provide globs for the `content` parameter, you can use this option to exclude certain files or folders that would otherwise be scanned. Pass an array of globs matching items that should be excluded. (Note: this option has no effect if `content` is not globs.)
@@ -365,7 +369,7 @@ Here, PurgeCSS will not scan anything in the "node_modules" and "components" fol
 
 Option to add custom CSS attribute selectors like "aria-selected", "data-selected", ...etc. Use it for attributes that are set at runtime, by your own JavaScript or by a component library, and do not appear in your content files. Selectors using these attributes are kept whatever the attribute value, as long as the rest of the selector is used.
 
-Strings match the attribute name exactly. Regular expressions are tested against the attribute name.
+Strings match the attribute name exactly. Regular expressions are tested against the attribute name. A string written between slashes, such as `"/^data-/"`, is parsed as a regular expression.
 
 ```js
 dynamicAttributes: ["aria-selected", /^data-/]

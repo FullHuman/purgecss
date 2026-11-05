@@ -78,8 +78,8 @@ type StringRegExpArray = Array<RegExp | string>;
 
 type ComplexSafelist = {
   standard?: StringRegExpArray;
-  deep?: RegExp[];
-  greedy?: RegExp[];
+  deep?: StringRegExpArray;
+  greedy?: StringRegExpArray;
   variables?: StringRegExpArray;
   keyframes?: StringRegExpArray;
 };
@@ -277,6 +277,8 @@ safelist: ['random', 'yep', 'button', /^nav-/]
 
 Sous cette forme, safelist est un tableau qui peut contenir une chaîne de caractères ou une expression régulière.
 
+Une chaîne de caractères écrite entre barres obliques, comme `"/^nav-/"`, est interprétée comme une expression régulière. Les fichiers de configuration qui ne peuvent pas contenir d'expressions régulières, comme `postcss.config.json`, peuvent ainsi utiliser des motifs. Voir [Motifs](./safelisting.md#motifs).
+
 La forme _complexe_ est :
 
 ```js
@@ -352,6 +354,8 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Même si nav-links et usedClass sont trouvés par un extracteur, ils seront supprimés.
 
+Une chaîne de caractères écrite entre barres obliques, comme `"/^nav-/"`, est interprétée comme une expression régulière, comme dans `safelist`.
+
 - **skippedContentGlobs**
 
 Si vous fournissez des globs pour le paramètre `content`, vous pouvez utiliser cette option pour exclure certains fichiers ou dossiers qui seraient autrement analysés. Passez un tableau de globs correspondant aux éléments qui doivent être exclus. (Note : cette option n'a aucun effet si `content` n'utilise pas de globs.)
@@ -365,7 +369,7 @@ Ici, PurgeCSS n'analysera rien dans les dossiers "node_modules" et "components".
 
 Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc. Utilisez-la pour les attributs définis à l'exécution, par votre propre JavaScript ou par une bibliothèque de composants, et qui n'apparaissent pas dans vos fichiers de contenu. Les sélecteurs utilisant ces attributs sont conservés quelle que soit la valeur de l'attribut, tant que le reste du sélecteur est utilisé.
 
-Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut.
+Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut. Une chaîne de caractères écrite entre barres obliques, comme `"/^data-/"`, est interprétée comme une expression régulière.
 
 ```js
 dynamicAttributes: ["aria-selected", /^data-/]

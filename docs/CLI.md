@@ -116,3 +116,9 @@ If you wish to prevent PurgeCSS from removing a specific CSS selector, you can a
 ```sh
 purgecss --css css/app.css --content src/index.html --safelist classnameToSafelist
 ```
+
+A string written between slashes is parsed as a regular expression:
+
+```sh
+purgecss --css css/app.css --content src/index.html --safelist "/^btn-/" classnameToSafelist
+```

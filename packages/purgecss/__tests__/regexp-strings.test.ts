@@ -32,9 +32,7 @@ describe("regular expressions written as strings", () => {
   it("matches the selectors of safelist deep and greedy", async () => {
     const css = await purge(
       ".modal-header .title {} .btn-primary.unused {} .unused .title {}",
-      {
-        safelist: { deep: ["/^modal-/"], greedy: ["/^btn-/"] },
-      } as unknown as Partial<UserDefinedOptions>,
+      { safelist: { deep: ["/^modal-/"], greedy: ["/^btn-/"] } },
     );
     expect(css).toBe(".modal-header .title {} .btn-primary.unused {}");
   });
