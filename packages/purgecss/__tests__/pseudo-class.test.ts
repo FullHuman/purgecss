@@ -266,6 +266,58 @@ describe("root-level pseudo-class selectors", () => {
   });
 });
 
+describe(":host pseudo-class in component styles", () => {
+  const purge = async (css: string, raw: string): Promise<string> => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw, extension: "html" }],
+      css: [{ raw: css }],
+    });
+    return resultsPurge[0].css;
+  };
+
+  it("keeps a bare :host rule", async () => {
+    expect(
+      await purge(":host{display:block}", "<h1 class='title'></h1>"),
+    ).toContain(":host{display:block}");
+  });
+
+  it("keeps :host(.x) when the class is used", async () => {
+    expect(
+      await purge(":host(.active){color:red}", "<h1 class='active'></h1>"),
+    ).toContain(":host(.active)");
+  });
+
+  it("keeps :host combined with a user action pseudo-class", async () => {
+    const result = await purge(
+      ":host:hover{color:red} :host(:focus-within){color:blue}",
+      "<h1></h1>",
+    );
+    expect(result).toContain(":host:hover");
+    expect(result).toContain(":host(:focus-within)");
+  });
+
+  it("keeps :host .x when the class is used", async () => {
+    expect(
+      await purge(":host .title{color:red}", "<h1 class='title'></h1>"),
+    ).toContain(":host .title");
+  });
+
+  it("keeps :host-context(.x) .y when the classes are used", async () => {
+    expect(
+      await purge(
+        ":host-context(.dark) .title{color:red}",
+        "<h1 class='title dark'></h1>",
+      ),
+    ).toContain(":host-context(.dark) .title");
+  });
+
+  it("removes :host .x when the class is unused", async () => {
+    expect(
+      await purge(":host .unused{color:red}", "<h1 class='title'></h1>"),
+    ).toBe("");
+  });
+});
+
 describe("native CSS nesting with a pseudo-class (#1153)", () => {
   const purge = async (css: string, raw: string): Promise<string> => {
     const resultsPurge = await new PurgeCSS().purge({
