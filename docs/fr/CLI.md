@@ -116,3 +116,9 @@ Si vous souhaitez empêcher PurgeCSS de supprimer un sélecteur CSS spécifique,
 ```sh
 purgecss --css css/app.css --content src/index.html --safelist classnameToSafelist
 ```
+
+Une chaîne de caractères écrite entre barres obliques est interprétée comme une expression régulière :
+
+```sh
+purgecss --css css/app.css --content src/index.html --safelist "/^btn-/" classnameToSafelist
+```

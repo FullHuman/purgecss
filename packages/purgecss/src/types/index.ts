@@ -71,6 +71,12 @@ export interface Extractors {
 export type IgnoreType = "end" | "start" | "next";
 
 /**
+ * Strings and regular expressions an option is matched against. A string
+ * matches a value exactly, except a string written between slashes, like
+ * `"/^btn-/"` or `"/^btn-/i"`, which is parsed as a regular expression. This
+ * form lets configuration files that cannot contain regular expressions, such
+ * as `postcss.config.json`, use patterns.
+ *
  * @public
  */
 export type StringRegExpArray = Array<RegExp | string>;
@@ -100,8 +106,29 @@ export type ComplexSafelist = {
    * in the final CSS, even if `child-of-bg` is not found.
    *
    */
-  deep?: RegExp[];
-  greedy?: RegExp[];
+  deep?: StringRegExpArray;
+  /**
+   * You can safelist whole selectors if any part of that selector matches a
+   * pattern with `safelist.greedy`
+   *
+   * @example
+   *
+   * ```ts
+   * const purgecss = await new PurgeCSS().purge({
+   *   content: [],
+   *   css: [],
+   *   safelist: {
+   *     greedy: [/red$/]
+   *   }
+   * })
+   * ```
+   *
+   * In this example, selectors such as `button.bg-red.nonexistent-class`
+   * will be left in the final CSS, even if `button` and `nonexistent-class`
+   * are not found.
+   *
+   */
+  greedy?: StringRegExpArray;
   variables?: StringRegExpArray;
   keyframes?: StringRegExpArray;
 };
