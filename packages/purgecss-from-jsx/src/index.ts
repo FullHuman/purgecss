@@ -112,6 +112,26 @@ function purgeFromJsx(options?: acorn.Options) {
             state.strings?.push(node.value.cooked);
           }
         },
+        // keys of the objects in a className or id expression, e.g.
+        // clsx({ active: isActive, "is-open": isOpen })
+        Property(
+          acornNode: acorn.Node,
+          state: NodeState,
+          callback: (node: acorn.Node, state: NodeState) => void,
+        ) {
+          const node = acornNode as acorn.Property;
+          if (
+            state.strings &&
+            !node.computed &&
+            node.key.type === "Identifier"
+          ) {
+            state.strings.push(node.key.name);
+          } else {
+            // a string key is a Literal, a computed key any expression
+            callback(node.key, state);
+          }
+          callback(node.value, state);
+        },
       } as unknown as walk.RecursiveVisitors<NodeState>,
       { ...walk.base },
     );

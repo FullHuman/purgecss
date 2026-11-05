@@ -83,4 +83,25 @@ describe("purgeFromJsx", () => {
     const received = plugin(`const a = <svg:rect xlink:href="#shape" />;`);
     expect(received).toEqual(["svg:rect"]);
   });
+
+  it("finds the object keys of a className expression", () => {
+    const received = plugin(
+      `const a = <div className={clsx("btn", { active: isActive, loading, "btn-lg btn-block": large, [styles.x]: y })} />;`,
+    );
+    expect(received).toEqual([
+      "div",
+      "btn",
+      "active",
+      "loading",
+      "btn-lg",
+      "btn-block",
+    ]);
+  });
+
+  it("ignores the object keys of other attributes", () => {
+    const received = plugin(
+      `const a = <div style={{ color: "red" }} data={{ active: 1 }} className="x" />;`,
+    );
+    expect(received).toEqual(["div", "x"]);
+  });
 });
