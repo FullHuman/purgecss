@@ -184,6 +184,26 @@ function isRuleEmpty(node?: postcss.Container): boolean {
 }
 
 /**
+ * Check if the node has a css comment indicating to ignore the current selector rule
+ *
+ * @param rule - rule of postcss AST
+ */
+function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
+  let found = false;
+  rule.walkComments((node) => {
+    if (
+      node &&
+      node.type === "comment" &&
+      node.text.includes(IGNORE_ANNOTATION_CURRENT)
+    ) {
+      found = true;
+      node.remove();
+    }
+  });
+  return found;
+}
+
+/**
  * Remove the rules and at-rules left empty after one of their children was
  * removed, going up through nested rules and at-rules (e.g. `@supports`
  * inside `@media`) but not past the root
@@ -203,26 +223,6 @@ function removeEmptyParents(
     emptyCandidate.remove();
     emptyCandidate = grandParent;
   }
-}
-
-/**
- * Check if the node has a css comment indicating to ignore the current selector rule
- *
- * @param rule - rule of postcss AST
- */
-function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
-  let found = false;
-  rule.walkComments((node) => {
-    if (
-      node &&
-      node.type === "comment" &&
-      node.text.includes(IGNORE_ANNOTATION_CURRENT)
-    ) {
-      found = true;
-      node.remove();
-    }
-  });
-  return found;
 }
 
 /**
@@ -745,8 +745,9 @@ class PurgeCSS {
     const parent = node.parent;
     if (!node.selector) {
       node.remove();
+      // a parent can only be left empty once the rule is removed
+      removeEmptyParents(parent);
     }
-    removeEmptyParents(parent);
 
     // rebuild the rule with the removed selectors and optionally its parent
     if (this.options.rejectedCss) {
