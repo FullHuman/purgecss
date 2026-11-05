@@ -9,6 +9,9 @@
     "lib": "lib",
     "test": "__tests__"
   },
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "ts-node build.ts",
     "test": "jest"
@@ -34,8 +37,14 @@
   },
   "homepage": "https://purgecss.com",
   "dependencies": {
-    "purgecss": "workspace:^",
-    "rollup-pluginutils": "^2.8.2"
+    "@rollup/pluginutils": "^5.4.0",
+    "purgecss": "workspace:^"
+  },
+  "devDependencies": {
+    "rollup": "^4.66.0"
+  },
+  "peerDependencies": {
+    "rollup": "^3.0.0 || ^4.0.0"
   },
   "publishConfig": {
     "access": "public",

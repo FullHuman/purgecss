@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { PurgeCSS } from "purgecss";
 import { Plugin } from "rollup";
-import { createFilter } from "rollup-pluginutils";
+import { createFilter } from "@rollup/pluginutils";
 import { UserDefinedOptions } from "./types";
 
 export * from "./types";
