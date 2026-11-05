@@ -89,7 +89,7 @@ The extractor parses JSX and extracts:
 2. **className values** - String values from `className` attributes, split by whitespace
 3. **id values** - String values from `id` attributes
 
-When `className` or `id` is an expression, every string in it is extracted, as well as the static parts of template literals. For example, `className={active ? "on" : "off"}` gives `on` and `off`, and ``className={`card ${size}`}`` gives `card`.
+When `className` or `id` is an expression, every string in it is extracted, as well as the static parts of template literals and the keys of object literals. For example, `className={active ? "on" : "off"}` gives `on` and `off`, ``className={`card ${size}`}`` gives `card`, and `className={clsx({ active: isActive })}` gives `active`.
 
 ### Example
 
@@ -106,7 +106,6 @@ Extracted selectors: `["Card", "card", "card-primary", "featured-card", "CardHea
 
 - Only extracts static string values from `className` and `id`
 - Values computed at runtime, like `className={styles.container}` or the `size` of ``className={`btn-${size}`}``, are not extracted
-- Object keys are not extracted either, e.g. `active` in `className={clsx({ active: isActive })}`
 - For dynamic class names, consider using PurgeCSS's [safelist](https://purgecss.com/safelisting.html) option
 
 ## License
