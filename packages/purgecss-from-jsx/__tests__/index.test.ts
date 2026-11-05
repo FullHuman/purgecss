@@ -39,3 +39,48 @@ describe("purgePug", () => {
     });
   });
 });
+
+describe("purgeFromJsx", () => {
+  it("splits class names on any whitespace", () => {
+    const received = plugin(`const a = <div className="flex
+      items-center	gap-2" />;`);
+    expect(received).toEqual(["div", "flex", "items-center", "gap-2"]);
+  });
+
+  it("finds every string of a className expression", () => {
+    expect(
+      plugin(`const a = <div className={on ? "is-on" : "is-off"} />;`),
+    ).toEqual(["div", "is-on", "is-off"]);
+    expect(
+      plugin(`const a = <div className={clsx("btn", "btn-primary")} />;`),
+    ).toEqual(["div", "btn", "btn-primary"]);
+  });
+
+  it("finds the static parts of a template literal", () => {
+    const received = plugin(
+      'const a = <div className={`card ${active ? "active" : ""}`} />;',
+    );
+    expect(received).toEqual(["div", "card", "active"]);
+  });
+
+  it("finds the JSX elements in the value of other attributes", () => {
+    expect(
+      plugin(`const a = <Button icon={<Icon className="icon-star" />} />;`),
+    ).toEqual(["Button", "Icon", "icon-star"]);
+    expect(
+      plugin(`const a = <Route render={() => <Page id="page" />} />;`),
+    ).toEqual(["Route", "Page", "page"]);
+  });
+
+  it("ignores the strings of other attributes", () => {
+    const received = plugin(
+      `const a = <a href="#top" title="Top" className="link" />;`,
+    );
+    expect(received).toEqual(["a", "link"]);
+  });
+
+  it("finds namespaced element names", () => {
+    const received = plugin(`const a = <svg:rect xlink:href="#shape" />;`);
+    expect(received).toEqual(["svg:rect"]);
+  });
+});

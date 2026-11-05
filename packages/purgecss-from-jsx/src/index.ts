@@ -5,6 +5,7 @@ import jsx, {
   JSXNamespacedName,
   JSXOpeningElement,
   Literal,
+  TemplateElement,
 } from "acorn-jsx";
 import { extend } from "acorn-jsx-walk";
 import * as walk from "acorn-walk";
@@ -12,6 +13,7 @@ import * as walk from "acorn-walk";
 type NodeState = {
   selectors?: string[];
   text?: string;
+  strings?: string[];
 };
 
 extend<NodeState>(walk.base);
@@ -72,17 +74,19 @@ function purgeFromJsx(options?: acorn.Options) {
             case "id":
             case "className":
               {
-                // Get text in node.value
-                const valueState: NodeState = {};
+                // Get all the strings in node.value, e.g. both strings of
+                // className={active ? "on" : "off"}
+                const valueState: NodeState = { strings: [] };
                 callback(node.value, valueState);
 
-                // node.value is not empty
-                if (valueState.text) {
-                  state.selectors?.push(...valueState.text.split(" "));
+                for (const text of valueState.strings ?? []) {
+                  state.selectors?.push(...text.split(/\s+/).filter(Boolean));
                 }
               }
               break;
             default:
+              // the value can contain JSX elements, e.g. icon={<Icon />}
+              callback(node.value, { selectors: state.selectors });
               break;
           }
         },
@@ -94,11 +98,18 @@ function purgeFromJsx(options?: acorn.Options) {
           const node = acornNode as JSXNamespacedName;
           state.text = node.namespace.name + ":" + node.name.name;
         },
-        // Only handle Literal for now, not JSXExpressionContainer | JSXElement
+        // Only static strings are collected, not values computed at runtime
         Literal(acornNode: acorn.Node, state: NodeState) {
           const node = acornNode as Literal;
           if (typeof node.value === "string") {
-            state.text = node.value;
+            state.strings?.push(node.value);
+          }
+        },
+        // static parts of a template literal, e.g. `btn btn-${size}`
+        TemplateElement(acornNode: acorn.Node, state: NodeState) {
+          const node = acornNode as TemplateElement;
+          if (node.value.cooked) {
+            state.strings?.push(node.value.cooked);
           }
         },
       } as unknown as walk.RecursiveVisitors<NodeState>,
