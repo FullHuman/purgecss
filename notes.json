@@ -42,12 +42,6 @@
       "note": "2019 ignore-comments vs Sass @import; root cause explained by community. question label was missing; suggested it (suggest:true) 2026-10-26. Do not re-label if removed again; revisit only on new activity."
     },
     {
-      "number": 881,
-      "state": "commented",
-      "updated_at": "2026-10-26",
-      "note": "only matched asset path substring. Fix PR from branch repo-assist/fix-issue-881-webpack-only-chunk-name (exact chunk.name). Commented with workaround only:[\"style/style.\"]."
-    },
-    {
       "number": 998,
       "state": "awaiting_approval",
       "updated_at": "2026-10-26",
@@ -84,22 +78,10 @@
       "note": "Custom extractor /[\\w-/:]+(?<!:)/g splits w-1.5, top-[3px], !mt-0 (verified). Suggested broader extractor + postcss-import first; asked for example class names."
     },
     {
-      "number": 1265,
-      "state": "commented",
-      "updated_at": "2026-10-30",
-      "note": "Angular guide draft PR #1538 (EN+FR, Closes #1265); verified with ng build on 8.0.0 and main (2026-10-30)."
-    },
-    {
       "number": 996,
       "state": "deferred",
       "updated_at": "2026-10-28",
       "note": "Design-level feature request (auto-generate HTML lists), only still-relevant bumps; no question to answer. Revisit only on maintainer direction."
-    },
-    {
-      "number": 1258,
-      "state": "commented",
-      "updated_at": "2026-10-30",
-      "note": "Config-file part fixed by #1528 (merged 2026-10-29). JSON RegExp part: maintainer PR #1534 (Fixes #1258). Nothing left for RA."
     },
     {
       "number": 1263,
@@ -116,28 +98,12 @@
   ],
   "fixes": [
     {
-      "issue": 881,
-      "pr": 1526,
-      "branch": "repo-assist/fix-issue-881-webpack-only-chunk-name",
-      "status": "open",
-      "updated_at": "2026-11-03",
-      "note": "Draft PR #1526: compare only with chunk.name. 2026-11-03 pushed commit moving only-chunk-name to END of webpack cases list -> merges cleanly with main and all RA PRs (merged tree: purgecss 209/209, webpack 5/5). Earlier resolution comment now obsolete."
-    },
-    {
-      "issue": 1265,
-      "pr": 1538,
-      "branch": "repo-assist/basics-docs-angular-guide",
-      "status": "open",
-      "updated_at": "2026-10-30",
-      "note": "Draft docs PR: docs/guides/angular.md + FR, sidebars, READMEs. exports.safelist form works on 8.0.0 and main. No changeset."
-    },
-    {
       "issue": 964,
       "pr": 1543,
-      "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal",
+      "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal-24e127f20522718e",
       "status": "open",
       "updated_at": "2026-11-05",
-      "note": "Draft PR #1543. 2026-11-05 pushed f56ad22: conflict with #1567 fixed by moving removeEmptyParents below hasIgnoreAnnotation and keeping evaluateRule inline loop. Branch 215/215, merged w/ main 249/249. Follow-up after merge: evaluateRule -> removeEmptyParents(parent)."
+      "note": "Draft PR #1543. 11-05 07:25 push FAILED (tool could not resolve branch). 11-05 20:20 pushed 34f2403: removeEmptyParents below hasIgnoreAnnotation, called inside if(!node.selector) in evaluateRule. Merges cleanly with main 3fe20bd; merged tree 262/262, branch 215/215."
     }
   ],
   "checks": [
@@ -145,7 +111,7 @@
       "area": "docs",
       "checked_at": "2026-11-02",
       "result": "Webpack docs QA: draft PR #1560 (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
-      "follow_up": "Document postcss+webpack plugin auto-loading purgecss.config.js after release. If #1534 merges, add \"/regex/\" to Angular guide RegExp section. postcss.md options block says main options + links full list: not stale, skip."
+      "follow_up": "Document postcss+webpack plugin auto-loading purgecss.config.js after release. Angular guide already has \"/regex/\" (done by maintainer)."
     },
     {
       "area": "build",
@@ -162,14 +128,14 @@
     {
       "area": "tests",
       "checked_at": "2026-11-05",
-      "result": "JSX extractor: missed multi-line/tab class names, ternary/clsx (last string only), template literals, JSX inside other attributes -> draft PR 2026-11-05. Coverage gaps left: grunt 0% (tests run built tasks/, not instrumented), rollup 72-76 (insert:true design), webpack 25/64/209, postcss 85/140.",
-      "follow_up": "JSX object keys clsx({active:x}) not extracted (documented limitation; possible follow-up). rollup insert:true needs design. purgecss-from-tsx branch 18-23 = options?. defaults (low value)."
+      "result": "2026-11-05 20:2x: postcss-purgecss tests for variables option, config+plugin safelist.variables, no-options throw -> draft PR (branch repo-assist/test-postcss-purgecss-variables); pp stmts 100%. JSX gaps fixed (#1569 merged; object keys #1572 by maintainer).",
+      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, webpack plugin lines 25/64/209 (need webpack builds)."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-02",
-      "result": "rejectedCss leak fix = #1557 (open). Webpack dynamicAttributes forwarding = #1558 (merged).",
-      "follow_up": "webpack skippedContentGlobs cannot work (paths must exist; core applies it to glob patterns only). CLI (unblocked, #1540 merged): getOptions mutates defaultOptions; -o no mkdir. variables :root{} cleanup after #1543."
+      "checked_at": "2026-11-05",
+      "result": "2026-11-05: safelist.variables kept the var but removed vars it uses (dangling var()) -> draft PR branch repo-assist/fix-safelisted-variables-dependencies; flips 2020 assertion (--tertiary-color) in safelist.test.ts.",
+      "follow_up": "CLI getOptions mutates defaultOptions; -o no mkdir. variables :root{} cleanup after #1543. #998 (keep vars named in content) still maintainer decision."
     },
     {
       "area": "dependencies",
@@ -180,14 +146,14 @@
     {
       "area": "release",
       "checked_at": "2026-11-05",
-      "result": "8.0.0 released 2026-01-24. 29 changesets on main (2 major, 3 minor, 24 patch). Next = 9.0.0.",
+      "result": "8.0.0 released 2026-01-24. 39 changesets on main (4 major, 6 minor, 29 patch) as of 2026-11-05 20:28. Maintainer prepping v9 (#1573).",
       "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-05",
-      "result": "2026-11-05 07:20 UTC, main 86bfcb7 (#1517/#1540/#1566/#1567/#1568 merged): #1543 conflicted (fixed by push), #1526/#1535/#1538 + #1534 merge cleanly. #1495 conflicts (docs/configuration.md, jest.config.ts, purgecss/src/index.ts). 5 open RA PRs incl new JSX draft.",
-      "follow_up": "Do NOT merge main into PR branches (carries protected package.json/lockfile/.github). For list-insertion conflicts, move the PR line >=1 unchanged line away from main change; else post resolution."
+      "result": "2026-11-05 20:20 UTC main 3fe20bd: #1526/#1535/#1538/#1569 merged. #1543 conflict fixed by push (merges cleanly). 2 new drafts (safelist vars fix, postcss variables tests). #1495 still conflicts.",
+      "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches. Changesets count as protected files (request-review caution) but maintainer merges anyway."
     },
     {
       "area": "ci",
@@ -203,90 +169,6 @@
     }
   ],
   "completed_actions": [
-    {
-      "key": "close-issue-1324",
-      "completed_at": "2026-10-25"
-    },
-    {
-      "key": "close-issue-1348",
-      "completed_at": "2026-10-25"
-    },
-    {
-      "key": "review-pr-1512",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1513",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1518",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "close-issue-1298",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1520",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1506",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1503",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1529",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "close-issue-1525",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "close-issue-1318",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "close-issue-1131",
-      "completed_at": "2026-10-29"
-    },
-    {
-      "key": "review-pr-1539",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "close-issue-523",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "close-pr-1515",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "close-issue-1156",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "review-pr-1504",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "review-pr-1537",
-      "completed_at": "2026-10-31"
-    },
-    {
-      "key": "review-pr-1542",
-      "completed_at": "2026-11-01"
-    },
-    {
-      "key": "review-pr-1524",
-      "completed_at": "2026-11-01"
-    },
     {
       "key": "review-pr-1560",
       "completed_at": "2026-11-04"
@@ -332,7 +214,7 @@
     {
       "task": 2,
       "item": "release-closures",
-      "note": "After next release (9.0.0, 29 changesets as of 2026-11-05), recommend closing #978, #1282, #1153 (verified fixed on main)."
+      "note": "After next release (9.0.0, 39 changesets as of 2026-11-05), recommend closing #978, #1282, #1153, #1545 (verified fixed on main)."
     },
     {
       "task": 3,
@@ -347,12 +229,17 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-05 07:20 UTC. #1545 fixed on main (close suggested)."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-05 20:20 UTC."
     },
     {
       "task": 6,
-      "item": "pr-jsx-extractor",
-      "note": "New JSX extractor draft 2026-11-05 (branch repo-assist/fix-jsx-extractor-missed-class-names). Find PR number; check CI."
+      "item": "new-drafts-2026-11-05",
+      "note": "Find PR numbers for drafts on repo-assist/fix-safelisted-variables-dependencies and repo-assist/test-postcss-purgecss-variables (created 2026-11-05 ~20:25); check CI."
+    },
+    {
+      "task": 2,
+      "item": "close-1570",
+      "note": "Failure issue #1570 (07:25 push to #1543 failed on branch name) resolved by 20:20 push; suggested closing in monthly issue."
     }
   ]
 }
