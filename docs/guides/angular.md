@@ -67,7 +67,24 @@ Things to know:
 
 ## Safelisting with regular expressions
 
-JSON can't hold regular expressions. To safelist [class names built at runtime](../safelisting.md#class-names-built-at-runtime) or added by a component library with a pattern, write the safelist in a `purgecss.config.js` file, in the folder where you run `ng build`. Remove `safelist` from `postcss.config.json`:
+PurgeCSS parses a string written between slashes as a regular expression, so you can safelist [class names built at runtime](../safelisting.md#class-names-built-at-runtime), or added by a component library, from `postcss.config.json`:
+
+```json
+{
+  "plugins": {
+    "@fullhuman/postcss-purgecss": {
+      "content": ["./src/**/*.html", "./src/**/*.ts"],
+      "safelist": [":host", "/^btn-/"]
+    }
+  }
+}
+```
+
+Flags go after the last slash, as in `"/^btn-/i"`. Any other string still matches a selector exactly. See [Patterns](../safelisting.md#patterns).
+
+### Up to version 8.0.0
+
+Version 8.0.0 and earlier compare every string exactly, so `"/^btn-/"` safelists nothing. With these versions, write the safelist in a `purgecss.config.js` file, in the folder where you run `ng build`, and remove `safelist` from `postcss.config.json`:
 
 ```js
 // purgecss.config.js

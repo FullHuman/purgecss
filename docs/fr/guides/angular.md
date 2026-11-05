@@ -67,7 +67,24 @@ Les règles sur `:host` et `:host(...)` ne correspondent à aucun élément de v
 
 ## Safelist avec des expressions régulières
 
-JSON ne peut pas contenir d'expressions régulières. Pour mettre dans la safelist, avec un motif, des [noms de classes construits à l'exécution](../safelisting.md#noms-de-classes-construits-a-l-execution) ou ajoutés par une bibliothèque de composants, écrivez la safelist dans un fichier `purgecss.config.js`, dans le dossier où vous lancez `ng build`. Retirez `safelist` de `postcss.config.json` :
+PurgeCSS interprète une chaîne de caractères écrite entre barres obliques comme une expression régulière. Vous pouvez donc mettre dans la safelist, depuis `postcss.config.json`, des [noms de classes construits à l'exécution](../safelisting.md#noms-de-classes-construits-a-l-execution) ou ajoutés par une bibliothèque de composants :
+
+```json
+{
+  "plugins": {
+    "@fullhuman/postcss-purgecss": {
+      "content": ["./src/**/*.html", "./src/**/*.ts"],
+      "safelist": [":host", "/^btn-/"]
+    }
+  }
+}
+```
+
+Les drapeaux se placent après la dernière barre oblique, comme dans `"/^btn-/i"`. Toute autre chaîne de caractères correspond toujours exactement à un sélecteur. Voir [Motifs](../safelisting.md#motifs).
+
+### Jusqu'à la version 8.0.0
+
+La version 8.0.0 et les précédentes comparent chaque chaîne de caractères telle quelle : `"/^btn-/"` ne met rien dans la safelist. Avec ces versions, écrivez la safelist dans un fichier `purgecss.config.js`, dans le dossier où vous lancez `ng build`, et retirez `safelist` de `postcss.config.json` :
 
 ```js
 // purgecss.config.js
