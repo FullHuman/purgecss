@@ -17,6 +17,9 @@
     "uncss"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/gulp-purgecss.js",
   "module": "./lib/gulp-purgecss.esm.js",
   "types": "./lib/gulp-purgecss.d.ts",

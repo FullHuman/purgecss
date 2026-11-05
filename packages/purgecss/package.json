@@ -17,6 +17,9 @@
     "purify"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/purgecss.js",
   "module": "./lib/purgecss.esm.js",
   "types": "./lib/purgecss.d.ts",

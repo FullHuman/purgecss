@@ -57,6 +57,8 @@ You can find the PurgeCSS documentation on [this website](https://purgecss.com).
 
 #### Installation
 
+PurgeCSS requires Node.js 22.12 or later.
+
 ```sh
 npm install purgecss --save-dev
 ```
