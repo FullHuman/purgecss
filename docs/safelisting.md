@@ -91,6 +91,20 @@ In the example, selectors ending with `red` such as `.bg-red`, selectors ending 
 
 Patterns are regular expressions. You can use [regexr](https://regexr.com) to verify the regular expressions correspond to what you are looking for.
 
+If your configuration cannot contain regular expressions, for example a JSON file such as `postcss.config.json`, write the regular expression as a string between slashes. Flags go after the last slash. Any other string still matches a selector exactly.
+
+```json
+{
+  "safelist": {
+    "standard": ["/red$/", "/^btn-/i", "active"],
+    "deep": ["/blue$/"],
+    "greedy": ["/yellow$/"]
+  }
+}
+```
+
+Strings between slashes work in every option that accepts regular expressions: `safelist`, `blocklist` and `dynamicAttributes`.
+
 ## In the CSS directly
 
 You can safelist directly in your CSS with a special comment.
