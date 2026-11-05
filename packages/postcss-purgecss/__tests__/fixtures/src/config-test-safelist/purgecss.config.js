@@ -1,4 +1,4 @@
 module.exports = {
   content: [`${__dirname}/../config-test/index.html`],
-  safelist: { standard: ["from-config"] },
+  safelist: { standard: ["from-config"], variables: ["--from-config"] },
 };

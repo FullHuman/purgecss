@@ -174,4 +174,46 @@ describe("Purgecss postcss plugin", () => {
       }
     },
   );
+
+  it("removes the unused css variables with the variables option", async () => {
+    const result = await postcss([
+      purgeCSSPlugin({
+        content: [{ raw: '<div class="used"></div>', extension: "html" }],
+        variables: true,
+        safelist: { variables: ["--safelisted"] },
+      }),
+    ]).process(
+      ":root{--used:red;--unused:blue;--safelisted:green}.used{color:var(--used)}",
+      { from: undefined },
+    );
+
+    expect(result.css).toBe(
+      ":root{--used:red;--safelisted:green}.used{color:var(--used)}",
+    );
+  });
+
+  it("should add up the safelisted variables of the config file and of the options", async () => {
+    const cwd = process.cwd();
+    process.chdir(`${__dirname}/fixtures/src/config-test-safelist/`);
+    try {
+      const result = await postcss([
+        purgeCSSPlugin({
+          variables: true,
+          safelist: { variables: ["--from-plugin"] },
+        }),
+      ]).process(":root{--from-config:red;--from-plugin:blue;--unused:green}", {
+        from: undefined,
+      });
+
+      expect(result.css).toBe(":root{--from-config:red;--from-plugin:blue}");
+    } finally {
+      process.chdir(cwd);
+    }
+  });
+
+  it("throws when the plugin is called without options", () => {
+    expect(() => purgeCSSPlugin()).toThrow(
+      "PurgeCSS plugin does not have the correct options",
+    );
+  });
 });
