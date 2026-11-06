@@ -92,6 +92,13 @@ export class VariablesStructure {
   }
 
   removeUnused(): void {
+    // the safelisted variables are used, so the variables they use are kept
+    for (const name of this.nodes.keys()) {
+      if (this.isVariablesSafelisted(name)) {
+        this.usedVariables.add(name);
+      }
+    }
+
     // add the variables used by the used variables, by reading every
     // declaration of each used variable. The set also iterates over the
     // variables added during the loop, so variables used through other

@@ -172,8 +172,47 @@ describe("safelist option: variables", () => {
     findInCSS(expect, ["--unused-color", "--button-color"], purgedCSS);
   });
 
+  it("finds the css variables used by safelisted css variables", () => {
+    findInCSS(expect, ["--tertiary-color:"], purgedCSS);
+  });
+
   it("excludes non-safelisted css variables", () => {
-    notFindInCSS(expect, ["--tertiary-color:"], purgedCSS);
+    notFindInCSS(expect, ["--quaternary-color"], purgedCSS);
+  });
+});
+
+describe("safelist option: variables used by safelisted variables", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: '<div class="used"></div>', extension: "html" }],
+      css: [
+        {
+          raw: `@property --brand { syntax: "<color>"; inherits: true; initial-value: red; }
+@property --unused { syntax: "<length>"; inherits: false; initial-value: 0px; }
+:root { --theme: var(--accent); --accent: var(--brand); --brand: red; --gap: calc(var(--spacing) * 2); --spacing: 4px; --unused: 1px; }`,
+        },
+      ],
+      variables: true,
+      safelist: { variables: ["--theme", /^--gap$/] },
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps the variables used by safelisted variables, through other variables", () => {
+    findInCSS(
+      expect,
+      ["--theme:", "--accent:", "--brand:", "--gap:", "--spacing:"],
+      purgedCSS,
+    );
+  });
+
+  it("keeps the @property rules of the variables used by safelisted variables", () => {
+    findInCSS(expect, ["@property --brand"], purgedCSS);
+  });
+
+  it("removes the variables that are neither used nor safelisted", () => {
+    notFindInCSS(expect, ["--unused"], purgedCSS);
   });
 });
 
