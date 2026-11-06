@@ -5,6 +5,7 @@ packages/grunt-purgecss/tasks/
 docs/.vuepress/dist/
 .firebase/
 .firebaserc
+.vercel/
 
 .DS_Store
 
