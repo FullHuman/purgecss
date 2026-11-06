@@ -476,8 +476,10 @@ input:focus-visible {
     font-size: 0.9375rem;
   }
 
+  // No zebra stripes: rows are divided by hairlines. `:nth-child(n)` outranks
+  // the theme's `tbody tr:nth-child(2n + 1)`.
   tr,
-  tr:nth-child(2n) {
+  tbody tr:nth-child(n) {
     border: none;
     background-color: transparent;
   }
