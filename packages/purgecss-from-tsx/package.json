@@ -1,6 +1,6 @@
 {
   "name": "@fullhuman/purgecss-from-tsx",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "TSX extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",

@@ -1,3 +1,26 @@
+# [9.0.0](https://github.com/FullHuman/purgecss/compare/v8.0.0...v9.0.0)
+
+From this release, each package has its own changelog, generated from the changesets: see `packages/<name>/CHANGELOG.md`, for example [purgecss](packages/purgecss/CHANGELOG.md), [@fullhuman/postcss-purgecss](packages/postcss-purgecss/CHANGELOG.md) and [purgecss-webpack-plugin](packages/purgecss-webpack-plugin/CHANGELOG.md). All packages are released together with the same version.
+
+### BREAKING CHANGES
+
+- **Node.js 22.12 or later** is required by every package, and the `purgecss` command line is built on commander 15, which has the same requirement.
+- **purgecss-webpack-plugin**: `webpack` is a peer dependency (`^5.0.0`) instead of a dependency, so it must be installed in your project. The `only` option is compared with the chunk names, as documented, instead of with the asset paths: list the chunk names (for an entrypoint, its key in `entry`) rather than file names or folders.
+- **gulp-purgecss**: through2 v5 is an ES module, so the CommonJS build needs a Node.js version that supports `require()` of ES modules (included in the requirement above). A file that fails to purge now ends the stream with a plugin error instead of leaving the stream waiting.
+- **rollup-plugin-purgecss**: `rollup` is a peer dependency, and only the `lib` folder is published.
+- **@fullhuman/postcss-purgecss** and **purgecss-webpack-plugin**: a `purgecss.config.js` that exists but fails to load now fails the build instead of being silently ignored, and in the PostCSS plugin the `safelist` of the config file and of the plugin options are combined instead of the plugin option replacing it.
+
+### Highlights
+
+- Regular expressions can be written as strings between slashes, such as `"/^btn-/"`, in `safelist`, `blocklist` and `dynamicAttributes`, so JSON configurations like `postcss.config.json` can use patterns. `safelist.deep` and `safelist.greedy` accept strings as well.
+- `dynamicAttributes` accepts regular expressions.
+- Root-level selectors made only of pseudo-classes, such as `:where(.used):hover` or `:host`, are kept when what they depend on is used.
+- The `variables` option scales linearly with the number of custom properties, keeps variables used across CSS files or only inside `@keyframes`, and removes the `@property` rules of unused variables.
+- Keyframes, font faces and variables defined in one CSS file and used in another are kept regardless of the order of the `css` option.
+- The CLI reports errors with their message and exits with code 1.
+- The JSX and TSX extractors find class names in template literals, conditional expressions, nested JSX and `clsx`-style object keys.
+- Fixes for `rejected` and `rejectedCss` (ancestors of nested rules, per-file results, trimmed selectors), source maps in gulp-purgecss, config loading on Windows, options forwarding in the rollup and webpack plugins, and the Vue CLI plugin's installed version.
+
 # [8.0.0](https://github.com/FullHuman/purgecss/compare/v7.0.2...v8.0.0)
 
 ### BREAKING CHANGES

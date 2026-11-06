@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-purgecss",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "Rollup plugin for purgecss",
   "main": "lib/rollup-plugin-purgecss.js",
   "module": "./lib/rollup-plugin-purgecss.esm.js",
