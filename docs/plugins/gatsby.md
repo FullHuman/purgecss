@@ -1,25 +1,7 @@
 ---
 title: Gatsby
+description: "PurgeCSS can be used with Gatsby with the plugin gatsby-plugin-purgecss."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS can be used with Gatsby with the plugin gatsby-plugin-purgecss.
-  - itemprop: description
-    content: PurgeCSS can be used with Gatsby with the plugin gatsby-plugin-purgecss.
-  - property: og:url
-    content:  https://www.purgecss.com/plugins/gatbsy
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS can be used with Gatsby with the plugin gatsby-plugin-purgecss.
 ---
 
 # Gatsby

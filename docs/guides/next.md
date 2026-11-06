@@ -1,25 +1,7 @@
 ---
 title: Next.js
+description: "PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
-  - itemprop: description
-    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
-  - property: og:url
-    content:  https://www.purgecss.com/guides/next
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
 ---
 
 # Next.js

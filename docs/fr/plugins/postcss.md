@@ -1,25 +1,7 @@
 ---
 title: PostCSS
+description: "Supprimez le CSS inutilisé dans PostCSS avec @fullhuman/postcss-purgecss : installation, configuration du contenu et des listes blanches, et options du plugin."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec postcss grâce à un plugin.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec postcss grâce à un plugin.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/plugins/postcss
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec postcss grâce à un plugin.
 ---
 
 # PostCSS

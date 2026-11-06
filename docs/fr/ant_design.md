@@ -1,23 +1,7 @@
 ---
 title: Ant Design
+description: "PurgeCSS peut être utilisé avec Ant Design mais nécessite de créer un extracteur CSS personnalisé."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS peut être utilisé avec Ant Design mais nécessite de créer un extracteur CSS personnalisé.
-  - itemprop: description
-    content: PurgeCSS peut être utilisé avec Ant Design mais nécessite de créer un extracteur CSS personnalisé.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/ant_design
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS peut être utilisé avec Ant Design mais nécessite de créer un extracteur CSS personnalisé.
 ---
 
 # Comment utiliser avec Ant Design

@@ -1,23 +1,7 @@
 ---
 title: Configuration
+description: "PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - itemprop: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/configuration
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
 ---
 
 # Configuration

@@ -1,23 +1,7 @@
 ---
-title: CLI
+title: Command Line Interface
+description: "Run PurgeCSS from the command line: install the purgecss CLI and use its options for content, CSS, output, safelists, font faces, keyframes and variables."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its command line interface to use it as part of your development workflow.
-  - itemprop: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its command line interface to use it as part of your development workflow.
-  - property: og:url
-    content:  https://www.purgecss.com/CLI
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its command line interface to use it as part of your development workflow.
 ---
 
 # CLI

@@ -1,23 +1,7 @@
 ---
 title: Safelisting
+description: "Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist."
 lang: fr-FR
-meta:
-  - name: description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
-  - itemprop: description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/safelisting
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
 ---
 
 ::: tip

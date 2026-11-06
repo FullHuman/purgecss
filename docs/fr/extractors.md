@@ -1,23 +1,7 @@
 ---
-title: Extractors
+title: Extracteurs
+description: "PurgeCSS s'appuie sur des extractors pour obtenir la liste des sélecteurs utilisés dans un fichier. Il existe plusieurs types de fichiers pouvant contenir des sélecteurs, tels que les fichiers HTML, les fichiers de templates comme Pug, ou même les fichiers JavaScript."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS s'appuie sur des extractors pour obtenir la liste des sélecteurs utilisés dans un fichier. Il existe plusieurs types de fichiers pouvant contenir des sélecteurs, tels que les fichiers HTML, les fichiers de templates comme Pug, ou même les fichiers JavaScript.
-  - itemprop: description
-    content: PurgeCSS s'appuie sur des extractors pour obtenir la liste des sélecteurs utilisés dans un fichier. Il existe plusieurs types de fichiers pouvant contenir des sélecteurs, tels que les fichiers HTML, les fichiers de templates comme Pug, ou même les fichiers JavaScript.
-  - property: og:url
-    content: https://www.purgecss.com/fr/extractors
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS s'appuie sur des extractors pour obtenir la liste des sélecteurs utilisés dans un fichier. Il existe plusieurs types de fichiers pouvant contenir des sélecteurs, tels que les fichiers HTML, les fichiers de templates comme Pug, ou même les fichiers JavaScript.
 ---
 
 # Extractors

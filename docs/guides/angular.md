@@ -1,25 +1,7 @@
 ---
 title: Angular
+description: "PurgeCSS can be used with Angular through its PostCSS plugin and a postcss.config.json file."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS can be used with Angular through its PostCSS plugin and a postcss.config.json file.
-  - itemprop: description
-    content: PurgeCSS can be used with Angular through its PostCSS plugin and a postcss.config.json file.
-  - property: og:url
-    content:  https://www.purgecss.com/guides/angular
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS can be used with Angular through its PostCSS plugin and a postcss.config.json file.
 ---
 
 # Angular
