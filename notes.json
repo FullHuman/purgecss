@@ -133,15 +133,15 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-05",
-      "result": "2026-11-05: safelist.variables kept the var but removed vars it uses (dangling var()) -> draft PR branch repo-assist/fix-safelisted-variables-dependencies; flips 2020 assertion (--tertiary-color) in safelist.test.ts.",
-      "follow_up": "CLI getOptions mutates defaultOptions; -o no mkdir. variables :root{} cleanup after #1543. #998 (keep vars named in content) still maintainer decision."
+      "checked_at": "2026-11-06",
+      "result": "2026-11-06: CLI -o file.css skipped mkdir (ENOENT; dir output did mkdir) -> draft PR branch repo-assist/fix-cli-output-file-mkdir (mkdir dirname, docs EN/FR, patch changeset; cli-errors regex +EEXIST).",
+      "follow_up": "CLI getOptions mutates defaultOptions (no-config path); cli-options.test passes only because of it (expected omits skippedContentGlobs). Low value; bin bundle is isolated. variables :root{} cleanup after #1543. #998 maintainer."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-04",
-      "result": "2026-11-04: Dependabot #1563 (vite, docs only) + #1565 (launch-editor) lockfile-only, CI green, merge cleanly; listed as Merge PR. No bundle (merged individually; lockfile protected). Majors: typescript 7.",
-      "follow_up": "package.json/.github edits are protected (PR falls back to issue). dependabot.yml deprecated reviewers key + 2021 ignore rules; CI on push+pull_request duplicates runs. Propose via issue only if valuable."
+      "checked_at": "2026-11-06",
+      "result": "2026-11-06: prod audit clean. Dev-only glob 10.5.0/13.0.6 (jest) GHSA-3g3m-2fjr-6pw4 (moderate). Verified override glob@>=9 <14.0.2: ^14.0.2 in pnpm-workspace.yaml: build/lint/test --coverage/docs pass, lockfile -119 lines. Suggested in monthly issue. deepmerge low has no patch.",
+      "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
     },
     {
       "area": "release",
@@ -151,9 +151,9 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-05",
-      "result": "2026-11-05 20:20 UTC main 3fe20bd: #1526/#1535/#1538/#1569 merged. #1543 conflict fixed by push (merges cleanly). 2 new drafts (safelist vars fix, postcss variables tests). #1495 still conflicts.",
-      "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches. Changesets count as protected files (request-review caution) but maintainer merges anyway."
+      "checked_at": "2026-11-06",
+      "result": "2026-11-06 07:18 UTC main 3fe20bd: #1543 (head bc762d6), #1577, #1578 merge cleanly; only CodeQL runs on bot PRs (green). New draft: CLI output mkdir. #1495 still conflicts.",
+      "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
       "area": "ci",
@@ -229,17 +229,17 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-05 20:20 UTC."
-    },
-    {
-      "task": 6,
-      "item": "new-drafts-2026-11-05",
-      "note": "Find PR numbers for drafts on repo-assist/fix-safelisted-variables-dependencies and repo-assist/test-postcss-purgecss-variables (created 2026-11-05 ~20:25); check CI."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-06 07:18 UTC."
     },
     {
       "task": 2,
       "item": "close-1570",
       "note": "Failure issue #1570 (07:25 push to #1543 failed on branch name) resolved by 20:20 push; suggested closing in monthly issue."
+    },
+    {
+      "task": 6,
+      "item": "cli-output-draft",
+      "note": "Find PR number for draft on repo-assist/fix-cli-output-file-mkdir (created 2026-11-06 07:1x); check it merges with other drafts (touches bin.ts, cli tests, docs/CLI.md)."
     }
   ]
 }
