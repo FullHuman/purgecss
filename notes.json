@@ -127,9 +127,9 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-05",
-      "result": "2026-11-05 20:2x: postcss-purgecss tests for variables option, config+plugin safelist.variables, no-options throw -> draft PR (branch repo-assist/test-postcss-purgecss-variables); pp stmts 100%. JSX gaps fixed (#1569 merged; object keys #1572 by maintainer).",
-      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, webpack plugin lines 25/64/209 (need webpack builds)."
+      "checked_at": "2026-11-06",
+      "result": "2026-11-06 19:4x: pug extractor kept quotes of single-quoted/backtick/!= attribute values (class=card -> card; e2e purged all). Draft PR branch repo-assist/fix-pug-quoted-attribute-values (literal regex, fallback strip quotes; 5 tests fail on main; pug 100%). #1578 merged.",
+      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, webpack plugin lines 25/64/209. Pug/html split on \" \" only (tabs/newlines); low value. vue-cli plugin no tests."
     },
     {
       "area": "code",
@@ -152,7 +152,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-06",
-      "result": "2026-11-06 07:18 UTC main 3fe20bd: #1543 (head bc762d6), #1577, #1578 merge cleanly; only CodeQL runs on bot PRs (green). New draft: CLI output mkdir. #1495 still conflicts.",
+      "result": "2026-11-06 19:4x main ae638aa: #1543 (bc762d6), #1577 (8ab7e8a), #1579 (e289e12) merge cleanly with main and pairwise; only bot protected-file reviews; CodeQL green. New draft: pug quotes.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -208,6 +208,14 @@
     {
       "key": "check-comment-1262",
       "completed_at": "2026-11-05"
+    },
+    {
+      "key": "review-pr-1578",
+      "completed_at": "2026-11-06"
+    },
+    {
+      "key": "close-issue-1570",
+      "completed_at": "2026-11-06"
     }
   ],
   "priorities": [
@@ -229,17 +237,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-06 07:18 UTC."
-    },
-    {
-      "task": 2,
-      "item": "close-1570",
-      "note": "Failure issue #1570 (07:25 push to #1543 failed on branch name) resolved by 20:20 push; suggested closing in monthly issue."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-06 19:44 UTC."
     },
     {
       "task": 6,
-      "item": "cli-output-draft",
-      "note": "Find PR number for draft on repo-assist/fix-cli-output-file-mkdir (created 2026-11-06 07:1x); check it merges with other drafts (touches bin.ts, cli tests, docs/CLI.md)."
+      "item": "pug-quotes-draft",
+      "note": "Find PR number for draft on repo-assist/fix-pug-quoted-attribute-values (created 2026-11-06 19:4x) and list it in monthly issue."
     }
   ]
 }
