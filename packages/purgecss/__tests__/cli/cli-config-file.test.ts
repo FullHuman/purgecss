@@ -1,19 +1,26 @@
 import { execFileSync } from "child_process";
 import { Command } from "commander";
 import * as fs from "fs";
+import * as os from "os";
 import * as path from "path";
 import { parseCommandOptions, getOptions } from "../../src/bin";
 import { setOptions } from "../../src";
 
 describe("PurgeCSS CLI config file loading", () => {
-  const testDir = path.join(__dirname, "../test_examples/config-loading");
-  const cjsConfigPath = path.join(testDir, "purgecss.config.cjs");
-  const cssPath = path.join(testDir, "test.css");
-  const htmlPath = path.join(testDir, "test.html");
+  // Kept out of __tests__/test_examples: performance.test.ts globs
+  // test_examples/*/*.css and would fail with ENOENT if it globbed test.css
+  // just before afterAll deletes it.
+  let testDir: string;
+  let cjsConfigPath: string;
+  let cssPath: string;
+  let htmlPath: string;
 
   beforeAll(() => {
     // Create test directory and files
-    fs.mkdirSync(testDir, { recursive: true });
+    testDir = fs.mkdtempSync(path.join(os.tmpdir(), "purgecss-config-"));
+    cjsConfigPath = path.join(testDir, "purgecss.config.cjs");
+    cssPath = path.join(testDir, "test.css");
+    htmlPath = path.join(testDir, "test.html");
 
     // CommonJS config with module.exports
     // This tests the fix for: https://github.com/FullHuman/purgecss/issues/XXX
@@ -101,10 +108,11 @@ describe("PurgeCSS CLI config file loading", () => {
   // a `#` in a folder name made the config file fail to load.
   describe("built CLI", () => {
     const binPath = path.join(__dirname, "../../bin/purgecss.js");
-    const configDir = path.join(testDir, "c#");
-    const configPath = path.join(configDir, "purgecss.config.js");
+    let configPath: string;
 
     beforeAll(() => {
+      const configDir = path.join(testDir, "c#");
+      configPath = path.join(configDir, "purgecss.config.js");
       fs.mkdirSync(configDir, { recursive: true });
       fs.writeFileSync(
         configPath,
