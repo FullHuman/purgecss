@@ -53,7 +53,7 @@ purgecss --css css/app.css css/palette.css --content src/index.html
 
 ### --content
 
-You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). These files can be HTML, Pug, Blade, etc.
+You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). These files can be HTML, Pug, Blade, etc.
 
 ```sh
 purgecss --css css/app.css --content src/index.html src/**/*.js

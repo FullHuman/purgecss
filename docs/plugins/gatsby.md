@@ -17,7 +17,7 @@ You can remove unused css from css/sass/less/stylus files and modules in your Ga
 This is NOT an install and forget type plugin. By default, it may remove required styles too.  
 :::
 
-📘 [Read the latest docs here.](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md) • [Changelog](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/CHANGELOG.md) • 
+📘 [Read the latest docs here.](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md) • [Changelog](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/CHANGELOG.md) • 
 
 ### Demo
 When used in [gatsby-starter-bootstrap](https://github.com/jaxx2104/gatsby-starter-bootstrap)
@@ -70,12 +70,12 @@ module.exports = {
 
 ## TLDR
 * Define options in `gatsby-config.js`, not `purgecss.config.js`.
-* If using tailwindcss, use the [`tailwind: true` option](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md#tailwind).
-* Use [`printRejected: true`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md#printrejected) option to print the removed selectors.
+* If using tailwindcss, use the [`tailwind: true` option](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md#tailwind).
+* Use [`printRejected: true`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md#printrejected) option to print the removed selectors.
 * Only files processed by Webpack will be purged.
 * `my-selector` will not match `mySelector`.
-* Whitelist required selectors or ignore files/folder using the [Whitelist Solutions](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md#whitelist-solutions) guide.
-* Ignore complete packages with [`ignore: ['packagename/']`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md#ignore).
-* To only purge specific files/packages use [`purgeOnly: ['fileOrPackage/']`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/README.md#purgeOnly).
+* Whitelist required selectors or ignore files/folder using the [Whitelist Solutions](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md#whitelist-solutions) guide.
+* Ignore complete packages with [`ignore: ['packagename/']`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md#ignore).
+* To only purge specific files/packages use [`purgeOnly: ['fileOrPackage/']`](https://github.com/anantoghosh/gatsby-plugin-purgecss/blob/master/packages/gatsby-plugin-purgecss/README.md#purgeonly).
 * Only `js, jsx, ts, tsx` files are scanned for selectors by default. If you want to add `md` or `mdx` use `content: [path.join(process.cwd(), 'src/**/!(*.d).{ts,js,jsx,tsx,md,mdx}')]` or better, just whitelist the required selectors.
 

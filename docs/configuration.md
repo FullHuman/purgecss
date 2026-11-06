@@ -73,7 +73,7 @@ type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 
 - **content**
 
-You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). The files can be HTML, Pug, Blade, etc.
+You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). The files can be HTML, Pug, Blade, etc.
 
 ```js
 await new PurgeCSS().purge({
@@ -106,7 +106,7 @@ await new PurgeCSS().purge({
 
 - **css**
 
-Similar to `content`, you can specify css that should be processed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer).
+Similar to `content`, you can specify css that should be processed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer).
 
 ```js
 await new PurgeCSS().purge({

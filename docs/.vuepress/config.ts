@@ -81,6 +81,9 @@ const apiReferenceMetaPlugin: PluginObject = {
   name: "purgecss-api-reference-meta",
   extendsPage: (page) => {
     if (!page.path.startsWith("/api-reference/")) return;
+    // The markdown is generated and gitignored, so "Edit this page" would
+    // link to a file that does not exist on GitHub.
+    page.frontmatter.editLink = false;
     const heading = page.headers[0]?.title;
     const [packageName, member] = page.path
       .slice("/api-reference/".length)

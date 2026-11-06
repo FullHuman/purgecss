@@ -153,4 +153,4 @@ HUGO_ENVIRONMENT=production
 
 ## References
 
-- <https://gohugo.io/hugo-pipes/postprocess/>
+- <https://gohugo.io/functions/resources/postprocess/>
