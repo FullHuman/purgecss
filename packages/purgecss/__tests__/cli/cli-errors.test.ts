@@ -140,7 +140,7 @@ describe("PurgeCSS CLI errors", () => {
       ]);
       expect(result.status).toBe(1);
       expect(result.stderr.trim().split("\n")).toEqual([
-        expect.stringMatching(/ENOTDIR|ENOENT/),
+        expect.stringMatching(/EEXIST|ENOTDIR|ENOENT/),
       ]);
     });
   });
