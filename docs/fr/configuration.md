@@ -1,23 +1,7 @@
 ---
 title: Configuration
+description: "PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - itemprop: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/configuration
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
 ---
 
 # Configuration
@@ -89,7 +73,7 @@ type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 
 - **content**
 
-Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). Les fichiers peuvent être HTML, Pug, Blade, etc.
+Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). Les fichiers peuvent être HTML, Pug, Blade, etc.
 
 ```js
 await new PurgeCSS().purge({
@@ -122,7 +106,7 @@ await new PurgeCSS().purge({
 
 - **css**
 
-Similaire à `content`, vous pouvez spécifier le CSS qui doit être traité par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer).
+Similaire à `content`, vous pouvez spécifier le CSS qui doit être traité par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer).
 
 ```js
 await new PurgeCSS().purge({

@@ -39,6 +39,7 @@
     "build": "pnpm -r run build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
+    "docs:build:all": "pnpm run build && pnpm run generate-api-reference && pnpm run docs:build",
     "generate-api-reference": "api-documenter markdown -i ./docs/.vuepress/.temp/api-reference/ -o ./docs/api-reference/",
     "lint": "eslint . --fix --ignore-pattern **/lib/** --ignore-pattern **/bin/**",
     "prettier": "prettier --write --parser typescript '**/*.ts'",

@@ -1,23 +1,7 @@
 ---
-title: CLI
+title: Interface en ligne de commande
+description: "Utilisez PurgeCSS en ligne de commande : installation du CLI purgecss et options pour le contenu, le CSS, la sortie, les listes blanches, les polices, les keyframes et les variables."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/CLI
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
 ---
 
 # CLI
@@ -69,7 +53,7 @@ purgecss --css css/app.css css/palette.css --content src/index.html
 
 ### --content
 
-Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). Ces fichiers peuvent être HTML, Pug, Blade, etc.
+Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). Ces fichiers peuvent être HTML, Pug, Blade, etc.
 
 ```sh
 purgecss --css css/app.css --content src/index.html src/**/*.js

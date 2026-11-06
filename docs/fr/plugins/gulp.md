@@ -1,25 +1,7 @@
 ---
 title: Gulp
+description: "Supprimez le CSS inutilisé dans vos tâches gulp avec gulp-purgecss : installation, utilisation dans un pipe et options du plugin."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/plugins/gulp
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
 ---
 
 # Gulp

@@ -1,23 +1,7 @@
 ---
 title: Configuration
+description: "PurgeCSS has a list of options that allow you to customize its behavior. Customization can improve the performance and efficiency of PurgeCSS. Details about the configuration of PurgeCSS and options available."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS has a list of options that allow you to customize its behavior. Customization can improve the performance and efficiency of PurgeCSS. Details about the configuration of PurgeCSS and options available.
-  - itemprop: description
-    content: PurgeCSS has a list of options that allow you to customize its behavior. Customization can improve the performance and efficiency of PurgeCSS. Details about the configuration of PurgeCSS and options available.
-  - property: og:url
-    content:  https://www.purgecss.com/configuration
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS has a list of options that allow you to customize its behavior. Customization can improve the performance and efficiency of PurgeCSS. Details about the configuration of PurgeCSS and options available.
 ---
 
 # Configuration
@@ -89,7 +73,7 @@ type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 
 - **content**
 
-You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). The files can be HTML, Pug, Blade, etc.
+You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). The files can be HTML, Pug, Blade, etc.
 
 ```js
 await new PurgeCSS().purge({
@@ -122,7 +106,7 @@ await new PurgeCSS().purge({
 
 - **css**
 
-Similar to `content`, you can specify css that should be processed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer).
+Similar to `content`, you can specify css that should be processed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer).
 
 ```js
 await new PurgeCSS().purge({

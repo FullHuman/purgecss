@@ -1,25 +1,7 @@
 ---
 title: Hugo
+description: "PurgeCSS can be used with Hugo via Hugo Pipes asset processing"
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS can be used with Hugo via Hugo Pipes asset processing
-  - itemprop: description
-    content: PurgeCSS can be used with Hugo via Hugo Pipes asset processing
-  - property: og:url
-    content: https://www.purgecss.com/guides/hugo
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS can be used with Hugo via Hugo Pipes asset processing
 ---
 
 # Hugo
@@ -171,4 +153,4 @@ HUGO_ENVIRONMENT=production
 
 ## References
 
-- <https://gohugo.io/hugo-pipes/postprocess/>
+- <https://gohugo.io/functions/resources/postprocess/>

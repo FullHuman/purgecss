@@ -2,9 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run docs:build",
+  "buildCommand": "pnpm run docs:build:all",
   "outputDirectory": "docs/.vuepress/dist",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- docs/ package.json pnpm-lock.yaml vercel.json",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- docs/ packages/ scripts/ package.json pnpm-lock.yaml vercel.json",
   "cleanUrls": true,
   "trailingSlash": false
 }

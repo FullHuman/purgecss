@@ -1,23 +1,7 @@
 ---
 title: Comparison
+description: "Comparison between PurgeCSS and similar tools such as UnCSS and PurifyCSS."
 lang: en-US
-meta:
-  - name: description
-    content: Comparison between PurgeCSS and similar tools such as UnCSS and PurifyCSS.
-  - itemprop: description
-    content: Comparison between PurgeCSS and similar tools such as UnCSS and PurifyCSS.
-  - property: og:url
-    content:  https://www.purgecss.com/comparison
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: Comparison between PurgeCSS and similar tools such as UnCSS and PurifyCSS.
 ---
 
 # Comparison

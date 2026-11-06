@@ -1,25 +1,7 @@
 ---
 title: Introduction
+description: "PurgeCSS analyse votre contenu et vos fichiers CSS, compare les sélecteurs utilisés dans vos fichiers à ceux de votre CSS et supprime les sélecteurs inutilisés."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Il peut être utilisé dans votre flux de développement. PurgeCSS est disponible avec une API JavaScript, un CLI, et des plugins pour les outils de build populaires.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Il peut être utilisé dans votre flux de développement. PurgeCSS est disponible avec une API JavaScript, un CLI, et des plugins pour les outils de build populaires.
-  - property: og:url
-    content: https://www.purgecss.com
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Il peut être utilisé dans votre flux de développement. PurgeCSS est disponible avec une API JavaScript, un CLI, et des plugins pour les outils de build populaires.
 ---
 
 # À propos de PurgeCSS

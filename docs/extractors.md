@@ -1,23 +1,7 @@
 ---
 title: Extractors
+description: "PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
-  - itemprop: description
-    content: PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
-  - property: og:url
-    content: https://www.purgecss.com/extractors
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
 ---
 
 # Extractors

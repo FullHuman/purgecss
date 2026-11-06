@@ -1,23 +1,7 @@
 ---
 title: API Programmatique
+description: "Utilisez l'API JavaScript de PurgeCSS dans Node.js : créez une instance PurgeCSS, purgez vos fichiers de contenu et CSS, et récupérez le CSS obtenu."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/api
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
 ---
 
 # API Programmatique

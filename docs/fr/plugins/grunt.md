@@ -1,25 +1,7 @@
 ---
 title: Grunt
+description: "Supprimez le CSS inutilisé dans vos builds Grunt avec grunt-purgecss : installation, configuration de la tâche purgecss et options."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec grunt grâce à un plugin.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec grunt grâce à un plugin.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/plugins/grunt
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec grunt grâce à un plugin.
 ---
 
 # Grunt

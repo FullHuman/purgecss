@@ -1,25 +1,7 @@
 ---
 title: Razzle
+description: "PurgeCSS peut être utilisé avec Razzle grâce au plugin razzle-plugin-purgecss ou au plugin PostCSS."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS peut être utilisé avec Razzle grâce au plugin razzle-plugin-purgecss ou au plugin PostCSS.
-  - itemprop: description
-    content: PurgeCSS peut être utilisé avec Razzle grâce au plugin razzle-plugin-purgecss ou au plugin PostCSS.
-  - property: og:url
-    content:  https://www.purgecss.com/fr/guides/razzle
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS peut être utilisé avec Razzle grâce au plugin razzle-plugin-purgecss ou au plugin PostCSS.
 ---
 
 # Razzle

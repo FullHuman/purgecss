@@ -1,23 +1,7 @@
 ---
 title: Programmatic API
+description: "Use the PurgeCSS JavaScript API in Node.js: create a PurgeCSS instance, purge your content and CSS files, and read the resulting CSS."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
-  - itemprop: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
-  - property: og:url
-    content:  https://www.purgecss.com/api
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its programmatic API to use it as part of your development workflow.
 ---
 
 # Programmatic API

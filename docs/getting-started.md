@@ -1,25 +1,7 @@
 ---
 title: Getting Started
+description: "Install PurgeCSS and remove unused CSS with the command line, the JavaScript API, or a plugin for PostCSS, webpack, Gulp or Grunt."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
-  - itemprop: description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
-  - property: og:url
-    content: https://www.purgecss.com
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
 ---
 
 # Getting Started
