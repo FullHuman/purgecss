@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with webpack with a plugin.
   - property: og:url
-    content: https://purgecss.com/plugins/webpack
+    content: https://www.purgecss.com/plugins/webpack
   - property: og:site_name
     content: purgecss.com
   - property: og:type

@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé pour le développement WordPress. Un module existe pour faciliter le processus et fournir des éléments de safelist courants.
   - property: og:url
-    content:  https://purgecss.com/fr/guides/wordpress
+    content:  https://www.purgecss.com/fr/guides/wordpress
   - property: og:site_name
     content: purgecss.com
   - property: og:type

@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec React.js en utilisant craco, un script postbuild ou en éjectant create-react-app.
   - property: og:url
-    content: https://purgecss.com/fr/guides/react
+    content: https://www.purgecss.com/fr/guides/react
   - property: og:site_name
     content: purgecss.com
   - property: og:type

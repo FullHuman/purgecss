@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with postcss with a plugin.
   - property: og:url
-    content:  https://purgecss.com/plugins/postcss
+    content:  https://www.purgecss.com/plugins/postcss
   - property: og:site_name
     content: purgecss.com
   - property: og:type

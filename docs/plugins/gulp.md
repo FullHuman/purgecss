@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool to remove unused CSS from your project. You can use it with gulp plugin.
   - property: og:url
-    content:  https://purgecss.com/plugins/gulp
+    content:  https://www.purgecss.com/plugins/gulp
   - property: og:site_name
     content: purgecss.com
   - property: og:type

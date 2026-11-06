@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS s'appuie sur des extractors pour obtenir la liste des sélecteurs utilisés dans un fichier. Il existe plusieurs types de fichiers pouvant contenir des sélecteurs, tels que les fichiers HTML, les fichiers de templates comme Pug, ou même les fichiers JavaScript.
   - property: og:url
-    content: https://purgecss.com/fr/extractors
+    content: https://www.purgecss.com/fr/extractors
   - property: og:site_name
     content: purgecss.com
   - property: og:image

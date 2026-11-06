@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez l'utiliser avec grunt grâce à un plugin.
   - property: og:url
-    content:  https://purgecss.com/fr/plugins/grunt
+    content:  https://www.purgecss.com/fr/plugins/grunt
   - property: og:site_name
     content: purgecss.com
   - property: og:type

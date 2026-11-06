@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS can be used with Vue with the webpack plugin.
   - property: og:url
-    content: https://purgecss.com/guides/vue
+    content: https://www.purgecss.com/guides/vue
   - property: og:site_name
     content: purgecss.com
   - property: og:type

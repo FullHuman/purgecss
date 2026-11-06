@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Angular grâce à son plugin PostCSS et un fichier postcss.config.json.
   - property: og:url
-    content:  https://purgecss.com/fr/guides/angular
+    content:  https://www.purgecss.com/fr/guides/angular
   - property: og:site_name
     content: purgecss.com
   - property: og:type
