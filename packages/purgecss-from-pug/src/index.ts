@@ -11,13 +11,20 @@
 import lex from "pug-lexer";
 import type { ExtractorResultDetailed } from "purgecss";
 
+// an attribute value is a JavaScript expression, usually a string written
+// with double quotes, single quotes or backticks
+const STRING_LITERAL = /^(?:"([^"]*)"|'([^']*)'|`([^`]*)`)$/;
+
 const getAttributeTokenValues = (token: lex.AttributeToken): string[] => {
-  if (typeof token.val === "string") {
-    return (token.mustEscape ? token.val.replace(/"/g, "") : token.val).split(
-      " ",
-    );
+  if (typeof token.val !== "string") {
+    return [];
   }
-  return [];
+  const literal = STRING_LITERAL.exec(token.val);
+  // for other expressions, e.g. `active ? "on" : "off"`, keep the words
+  const value = literal
+    ? (literal[1] ?? literal[2] ?? literal[3])
+    : token.val.replace(/["'`]/g, "");
+  return value.split(" ");
 };
 /**
  * Get the potential selectors from Pug code
