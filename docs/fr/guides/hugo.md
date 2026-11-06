@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Hugo via le traitement des assets Hugo Pipes
   - property: og:url
-    content: https://purgecss.com/fr/guides/hugo
+    content: https://www.purgecss.com/fr/guides/hugo
   - property: og:site_name
     content: purgecss.com
   - property: og:type

@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS can be used with Next.js with the plugin next-purgecss or with the postcss plugin.
   - property: og:url
-    content:  https://purgecss.com/guides/next
+    content:  https://www.purgecss.com/guides/next
   - property: og:site_name
     content: purgecss.com
   - property: og:type

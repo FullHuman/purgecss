@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec les modules CSS en modifiant la configuration webpack.
   - property: og:url
-    content:  https://purgecss.com/fr/css_modules
+    content:  https://www.purgecss.com/fr/css_modules
   - property: og:site_name
     content: purgecss.com
   - property: og:image

@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
   - property: og:url
-    content:  https://purgecss.com/fr/safelisting
+    content:  https://www.purgecss.com/fr/safelisting
   - property: og:site_name
     content: purgecss.com
   - property: og:image

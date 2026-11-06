@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
   - property: og:url
-    content:  https://purgecss.com/safelisting
+    content:  https://www.purgecss.com/safelisting
   - property: og:site_name
     content: purgecss.com
   - property: og:image

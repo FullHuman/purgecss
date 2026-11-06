@@ -12,7 +12,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Nuxt.js grâce au plugin nuxt-purgecss ou au plugin PostCSS.
   - property: og:url
-    content:  https://purgecss.com/fr/guides/nuxt
+    content:  https://www.purgecss.com/fr/guides/nuxt
   - property: og:site_name
     content: purgecss.com
   - property: og:type

@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Ant Design mais nécessite de créer un extracteur CSS personnalisé.
   - property: og:url
-    content:  https://purgecss.com/fr/ant_design
+    content:  https://www.purgecss.com/fr/ant_design
   - property: og:site_name
     content: purgecss.com
   - property: og:image

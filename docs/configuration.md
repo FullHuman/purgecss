@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS has a list of options that allow you to customize its behavior. Customization can improve the performance and efficiency of PurgeCSS. Details about the configuration of PurgeCSS and options available.
   - property: og:url
-    content:  https://purgecss.com/configuration
+    content:  https://www.purgecss.com/configuration
   - property: og:site_name
     content: purgecss.com
   - property: og:image

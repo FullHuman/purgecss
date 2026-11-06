@@ -256,13 +256,16 @@ export default defineUserConfig({
   },
   head: [
     // Canonical URL
-    ["link", { rel: "canonical", href: "https://purgecss.com" }],
+    ["link", { rel: "canonical", href: "https://www.purgecss.com" }],
     // Open Graph meta tags
     ["meta", { property: "og:site_name", content: "PurgeCSS" }],
     ["meta", { property: "og:type", content: "website" }],
     [
       "meta",
-      { property: "og:image", content: "https://purgecss.com/og-image.png" },
+      {
+        property: "og:image",
+        content: "https://www.purgecss.com/og-image.png",
+      },
     ],
     ["meta", { property: "og:image:width", content: "1200" }],
     ["meta", { property: "og:image:height", content: "630" }],
@@ -292,7 +295,7 @@ export default defineUserConfig({
       "meta",
       {
         name: "twitter:image",
-        content: "https://purgecss.com/og-image.png",
+        content: "https://www.purgecss.com/og-image.png",
       },
     ],
     // Additional SEO meta tags
@@ -420,7 +423,7 @@ export default defineUserConfig({
       tabs: true,
     }),
     sitemapPlugin({
-      hostname: "https://purgecss.com",
+      hostname: "https://www.purgecss.com",
       changefreq: "weekly",
     }),
   ],

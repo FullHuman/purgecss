@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Gatsby grâce au plugin gatsby-plugin-purgecss.
   - property: og:url
-    content:  https://purgecss.com/fr/plugins/gatbsy
+    content:  https://www.purgecss.com/fr/plugins/gatbsy
   - property: og:site_name
     content: purgecss.com
   - property: og:type

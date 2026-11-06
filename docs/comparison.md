@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: Comparison between PurgeCSS and similar tools such as UnCSS and PurifyCSS.
   - property: og:url
-    content:  https://purgecss.com/comparison
+    content:  https://www.purgecss.com/comparison
   - property: og:site_name
     content: purgecss.com
   - property: og:image

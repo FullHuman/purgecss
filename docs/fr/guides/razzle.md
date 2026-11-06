@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS peut être utilisé avec Razzle grâce au plugin razzle-plugin-purgecss ou au plugin PostCSS.
   - property: og:url
-    content:  https://purgecss.com/fr/guides/razzle
+    content:  https://www.purgecss.com/fr/guides/razzle
   - property: og:site_name
     content: purgecss.com
   - property: og:type

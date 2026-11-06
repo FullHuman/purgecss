@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS relies on extractors to get the list of selector used in a file. There are multiples types of files that can contains selectors such as html files, templating files like pug, or even javascript file.
   - property: og:url
-    content: https://purgecss.com/extractors
+    content: https://www.purgecss.com/extractors
   - property: og:site_name
     content: purgecss.com
   - property: og:image

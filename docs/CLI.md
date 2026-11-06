@@ -7,7 +7,7 @@ meta:
   - itemprop: description
     content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use its command line interface to use it as part of your development workflow.
   - property: og:url
-    content:  https://purgecss.com/CLI
+    content:  https://www.purgecss.com/CLI
   - property: og:site_name
     content: purgecss.com
   - property: og:image
