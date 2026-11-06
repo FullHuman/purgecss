@@ -484,6 +484,8 @@ export default defineUserConfig({
     repo: "FullHuman/purgecss",
     docsDir: "docs",
     docsBranch: "main",
+    // No per-page list of git contributors in the page footer.
+    contributors: false,
     // Lab Report has one light theme.
     colorMode: "light",
     colorModeSwitch: false,
