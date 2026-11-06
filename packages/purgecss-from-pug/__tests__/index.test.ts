@@ -46,4 +46,54 @@ describe("purgeCSSFromPug", () => {
       }
     });
   });
+
+  describe("attribute values", () => {
+    it("removes single quotes", () => {
+      expect(purgeCSSFromPug(`div(class='card active' id='main')`)).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "card", "active", "main"],
+        },
+        classes: ["card", "active"],
+        ids: ["main"],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("removes the quotes of unescaped attributes", () => {
+      const received = purgeCSSFromPug(
+        `a(class!="button" id!='link' data-state!="open")`,
+      );
+      expect(received.classes).toEqual(["button"]);
+      expect(received.ids).toEqual(["link"]);
+      expect(received.attributes.values).toEqual([
+        "true",
+        "false",
+        "button",
+        "link",
+        "open",
+      ]);
+    });
+
+    it("removes the backticks of template literals", () => {
+      expect(purgeCSSFromPug("div(class=`card active`)").classes).toEqual([
+        "card",
+        "active",
+      ]);
+    });
+
+    it("keeps quotes inside a string", () => {
+      expect(
+        purgeCSSFromPug(`img(alt="It's a cat" title='say "hi"')`).attributes
+          .values,
+      ).toEqual(["true", "false", "It's", "a", "cat", "say", '"hi"']);
+    });
+
+    it("finds the strings of an expression", () => {
+      expect(
+        purgeCSSFromPug(`div(class=active ? "is-on" : 'is-off')`).classes,
+      ).toEqual(["active", "?", "is-on", ":", "is-off"]);
+    });
+  });
 });
