@@ -1,5 +1,9 @@
 # purgecss-with-wordpress
 
+## 9.1.0
+
+No changes in this release.
+
 ## 9.0.0
 
 ### Major Changes

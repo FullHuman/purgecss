@@ -1,6 +1,6 @@
 {
   "name": "grunt-purgecss",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "description": "Grunt plugin for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
