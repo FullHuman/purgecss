@@ -18,6 +18,12 @@ import {
   standardizeSafelist,
   RawContent,
 } from "purgecss";
+import {
+  createRunContentCache,
+  pruneSharedContentCache,
+} from "./content-cache";
+import { getCSSModulesClassNames } from "./css-modules";
+import { getContentDependencies } from "./dependencies";
 import { UserDefinedOptions } from "./types";
 
 export * from "./types";
@@ -87,6 +93,59 @@ async function purgeCSS(
 
   const { content, extractors } = options;
 
+  // the selectors of the content files are shared with the other runs,
+  // unless the option contentCache is false
+  const contentCache = createRunContentCache(options.contentCache !== false);
+  purgeCSS.contentCache = contentCache;
+
+  // found while the content is extracted, the messages are added once the
+  // content files are read. Bundlers only read the messages of a successful
+  // run: if the extraction fails, the error is reported alone.
+  const dependencies =
+    options.dependencies !== false && options.dependencies !== null
+      ? getContentDependencies(
+          content,
+          typeof options.dependencies === "object" ? options.dependencies : {},
+        )
+      : undefined;
+  // still awaited below: only avoids an unhandled rejection if the
+  // extraction fails first
+  dependencies?.catch(() => undefined);
+
+  await purgeContent(purgeCSS, root, result, content, extractors);
+  if (dependencies) {
+    // let the dev servers run the plugin again when the content changes
+    result.messages.push(
+      ...(await dependencies).getMessages(result.opts.from, contentCache.files),
+    );
+  }
+
+  if (options.contentCache !== false) {
+    const contentKey = JSON.stringify([
+      process.cwd(),
+      options.skippedContentGlobs,
+      content.filter((entry) => typeof entry === "string"),
+    ]);
+    pruneSharedContentCache(contentKey, contentCache.files);
+  }
+}
+
+/**
+ * Remove the unused CSS of the postCSS root node
+ *
+ * @param purgeCSS - PurgeCSS instance with its options
+ * @param root - root node of postCSS
+ * @param result - result of postCSS
+ * @param content - content option of PurgeCSS
+ * @param extractors - extractors option of PurgeCSS
+ */
+async function purgeContent(
+  purgeCSS: PurgeCSS,
+  root: postcss.Root,
+  result: postcss.Result,
+  content: Array<string | RawContent>,
+  extractors: UserDefinedOptions["extractors"] = [],
+): Promise<void> {
   const fileFormatContents = content.filter(
     (o) => typeof o === "string",
   ) as string[];
@@ -104,6 +163,42 @@ async function purgeCSS(
   );
 
   const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
+
+  // CSS modules scoped by an earlier plugin (postcss-modules in Vite): the
+  // content and the options use the local names of the classes, not their
+  // scoped names
+  const cssModulesClassNames = getCSSModulesClassNames(
+    root,
+    result.messages,
+    selectors,
+    purgeCSS.options,
+  );
+  if (
+    cssModulesClassNames.used.length > 0 ||
+    cssModulesClassNames.usedIds.length > 0
+  ) {
+    selectors.merge({
+      attributes: { names: [], values: [] },
+      classes: cssModulesClassNames.used,
+      ids: cssModulesClassNames.usedIds,
+      tags: [],
+      undetermined: [],
+    });
+  }
+  const { safelist, blocklist } = purgeCSS.options;
+  purgeCSS.options = {
+    ...purgeCSS.options,
+    safelist: {
+      ...safelist,
+      standard: [
+        ...safelist.standard,
+        ...cssModulesClassNames.safelist.standard,
+      ],
+      deep: [...safelist.deep, ...cssModulesClassNames.safelist.deep],
+      greedy: [...safelist.greedy, ...cssModulesClassNames.safelist.greedy],
+    },
+    blocklist: [...blocklist, ...cssModulesClassNames.blocklist],
+  };
 
   //purge unused selectors
   purgeCSS.walkThroughCSS(root, selectors);

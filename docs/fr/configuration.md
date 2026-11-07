@@ -59,6 +59,7 @@ interface RawContent {
 
 interface RawCSS {
   raw: string
+  name?: string
 }
 
 type StringRegExpArray = Array<RegExp | string>;
@@ -138,6 +139,8 @@ await new PurgeCSS().purge({
   ]
 })
 ```
+
+Le css brut peut avoir un `name`. Il est renvoyé comme `file` de son résultat, et il est utilisé comme chemin du css dans les source maps, comme le chemin d'un fichier css : les `sources` de la map sont relatives au répertoire de `sourceMap.to`, qui vaut par défaut le nom. Par exemple, `{ raw, name: 'static/css/main.css' }` donne une map avec `sources: ['main.css']`.
 
 - **defaultExtractor**
 

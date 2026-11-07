@@ -44,6 +44,7 @@ footer: MIT Licensed · Copyright © 2018–present Full Human LTD
 
 - [PostCSS](plugins/postcss.md)
 - [Webpack](plugins/webpack.md)
+- [Rollup](plugins/rollup.md)
 - [Gulp](plugins/gulp.md)
 - [Grunt](plugins/grunt.md)
 - [Gatsby](plugins/gatsby.md)

@@ -1,0 +1,7 @@
+.unused-global {
+  color: blue;
+}
+
+.used-global {
+  color: red;
+}

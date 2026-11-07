@@ -21,6 +21,7 @@ import {
   IGNORE_ANNOTATION_NEXT,
   IGNORE_ANNOTATION_START,
 } from "./constants";
+import { ContentCache } from "./ContentCache";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { CSS_SAFELIST, DYNAMIC_ATTRIBUTES } from "./internal-safelist";
 import { defaultOptions } from "./options";
@@ -43,14 +44,100 @@ import { matchesPattern } from "./utils";
 
 import { VariablesStructure } from "./VariablesStructure";
 
+export * from "./ContentCache";
 export * from "./types";
-export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
+export {
+  defaultOptions,
+  ExtractorResultSets,
+  matchesPattern,
+  PurgeCSS,
+  VariablesStructure,
+};
 export * from "./VariablesStructure";
 
 const asyncFs = {
   access: promisify(fs.access),
   readFile: promisify(fs.readFile),
+  stat: promisify(fs.stat),
 };
+
+/**
+ * Maximum number of content files read at the same time, by all the PurgeCSS
+ * runs of the process together
+ */
+const CONTENT_FILES_CONCURRENCY = 32;
+
+/**
+ * Create a limiter that runs at most `concurrency` tasks at the same time.
+ * The tasks start in the order they were given to the limiter.
+ *
+ * @param concurrency - maximum number of pending tasks
+ */
+function createLimiter(
+  concurrency: number,
+): <R>(task: () => Promise<R>) => Promise<R> {
+  let pending = 0;
+  const queue: (() => void)[] = [];
+  return async <R>(task: () => Promise<R>): Promise<R> => {
+    if (pending < concurrency) {
+      pending++;
+    } else {
+      // the slot is handed over by the task that ends
+      await new Promise<void>((resolve) => queue.push(resolve));
+    }
+    try {
+      return await task();
+    } finally {
+      const next = queue.shift();
+      if (next) next();
+      else pending--;
+    }
+  };
+}
+
+/**
+ * Limiter shared by all the PurgeCSS instances, so that concurrent runs do
+ * not open more files at the same time than a single run
+ */
+const limitContentFile = createLimiter(CONTENT_FILES_CONCURRENCY);
+
+/**
+ * Call an async function for each item, through the content files limiter.
+ * The calls start in the order of the items but can end in any order.
+ *
+ * Once a call fails, no other call starts. The returned promise rejects, once
+ * the pending calls are over, with the error of the first item that failed in
+ * the order of the items: as the calls start in order, it is the error that
+ * calling the function on the items one after the other would give.
+ *
+ * @param items - items to call the function on
+ * @param callback - async function called for each item
+ */
+async function forEachContentFile<T>(
+  items: T[],
+  callback: (item: T) => Promise<void>,
+): Promise<void> {
+  // index and error of the first item that failed, in the order of the items
+  let failedIndex = items.length;
+  let failedError: unknown;
+  await Promise.all(
+    items.map((item, index) =>
+      limitContentFile(async () => {
+        // do not start once an item failed
+        if (failedIndex < items.length) return;
+        try {
+          await callback(item);
+        } catch (error) {
+          if (index < failedIndex) {
+            failedIndex = index;
+            failedError = error;
+          }
+        }
+      }),
+    ),
+  );
+  if (failedIndex < items.length) throw failedError;
+}
 
 /**
  * Format the user defined safelist into a standardized safelist object
@@ -162,24 +249,272 @@ function isRemovableComment(node: postcss.ChildNode): boolean {
 }
 
 /**
- * Check if the node correspond to an empty css rule
+ * Internal state of a postcss container, missing from the type definitions
+ */
+interface PostCSSContainerInternals {
+  nodes: postcss.ChildNode[] | undefined;
+  /** index of the current child of each running `each` or `walk` */
+  indexes?: Record<string, number>;
+  markDirty(): void;
+}
+
+/**
+ * The node itself when it is a proxy, as the nodes passed to postcss plugin
+ * visitors are
  *
  * @param node - node of postcss AST
- * @returns true if the rule is empty
  */
-function isRuleEmpty(node?: postcss.Container): boolean {
-  if (
-    (isPostCSSRule(node) && !node.selector) ||
-    (node?.nodes && !node.nodes.length) ||
-    ((isPostCSSRule(node) || isPostCSSAtRule(node)) &&
-      node.nodes?.every(isRemovableComment)) ||
-    (isPostCSSAtRule(node) &&
-      ((!node.nodes && !node.params) ||
-        (!node.params && node.nodes && !node.nodes.length)))
-  ) {
-    return true;
+function getRawNode<T extends postcss.Node>(node: T): T {
+  return (node as T & { proxyOf?: T }).proxyOf ?? node;
+}
+
+/**
+ * Children of a node, from the node itself when it is a proxy
+ *
+ * @param node - node of postcss AST
+ */
+function getRawChildren(node: postcss.Node): postcss.ChildNode[] | undefined {
+  return (getRawNode(node) as unknown as PostCSSContainerInternals).nodes;
+}
+
+/**
+ * Removals of nodes made while walking through the css, applied all at once
+ * once the walk is over.
+ *
+ * Removing a node from a postcss container is a splice of its children
+ * array, which is linear in the number of children: removing the unused
+ * rules one by one from a big stylesheet is quadratic. The removals are
+ * recorded instead, and this class answers the questions the walk asks about
+ * the tree (parent, previous sibling, empty container) as if the recorded
+ * nodes were already removed. `apply` then removes them in one pass per
+ * container, which gives the same tree as removing them one by one.
+ */
+class DeferredRemovals {
+  private removed = new Set<postcss.Node>();
+  /**
+   * For each container that was checked for emptiness, the number of its
+   * children not removed, and the number of those that are not removable
+   * comments. Computed on the first check, then kept up to date.
+   */
+  private counts = new Map<postcss.Node, { live: number; kept: number }>();
+  /**
+   * For a removed node, the index of a sibling before it from which to
+   * continue looking for the previous sibling not removed. All the siblings
+   * in between are removed.
+   */
+  private skips = new Map<postcss.Node, number>();
+  /**
+   * For each root that had children removed, the index of its first child
+   * that may not be removed. All the children before it are removed.
+   */
+  private firstChildren = new Map<postcss.Node, number>();
+
+  /**
+   * Record the removal of a node. Like `node.remove()`, it does nothing if the
+   * node has no parent or is already removed.
+   *
+   * @param node - node to remove
+   */
+  remove(node: postcss.Node): void {
+    const raw = getRawNode(node);
+    const parent = raw.parent;
+    if (!parent || this.removed.has(raw)) return;
+    if (parent.type === "root") this.moveRootSpacing(parent, raw);
+    this.removed.add(raw);
+    const counts = this.counts.get(getRawNode(parent));
+    if (counts) {
+      counts.live--;
+      if (!isRemovableComment(raw as postcss.ChildNode)) counts.kept--;
+    }
   }
-  return false;
+
+  /**
+   * When the first child of a root is removed, `Root.removeChild` gives the
+   * spacing before it to the next child: do the same at the time of the
+   * removal, as the next child can be copied as is in the rejected css
+   *
+   * @param root - parent of the node
+   * @param node - node about to be removed
+   */
+  private moveRootSpacing(root: postcss.Node, node: postcss.Node): void {
+    const children = getRawChildren(root);
+    if (!children) return;
+    const rawRoot = getRawNode(root);
+    let first = this.firstChildren.get(rawRoot) ?? 0;
+    while (first < children.length && this.removed.has(children[first])) {
+      first++;
+    }
+    this.firstChildren.set(rawRoot, first);
+    if (children[first] !== node) return;
+
+    let next = first + 1;
+    while (next < children.length && this.removed.has(children[next])) {
+      next++;
+    }
+    if (next < children.length) {
+      children[next].raws.before = node.raws.before;
+    }
+  }
+
+  /**
+   * Remove a node from the tree right away. Only used for nodes in containers
+   * that have not been walked through yet, as it shifts the children indexes.
+   *
+   * @param node - node to remove
+   */
+  removeNow(node: postcss.Node): void {
+    const parent = node.parent;
+    if (parent) this.counts.delete(getRawNode(parent));
+    node.remove();
+  }
+
+  /**
+   * Parent of the node, `undefined` if the node is removed
+   *
+   * @param node - node of postcss AST
+   */
+  parentOf(
+    node: postcss.Node,
+  ): postcss.Container | postcss.Document | undefined {
+    const raw = getRawNode(node);
+    return this.removed.has(raw) ? undefined : raw.parent;
+  }
+
+  /**
+   * Previous sibling of the node not removed, like `node.prev()`
+   *
+   * @param node - node of postcss AST, not removed
+   * @param index - index of the node in the children of its parent
+   */
+  previousSibling(
+    node: postcss.ChildNode,
+    index: number,
+  ): postcss.ChildNode | undefined {
+    const raw = getRawNode(node);
+    const parent = raw.parent;
+    if (!parent) return undefined;
+    const nodes = getRawChildren(parent);
+    if (!nodes) return undefined;
+    if (nodes[index] !== raw) index = nodes.indexOf(raw);
+
+    let i = index - 1;
+    const skipped: postcss.Node[] = [];
+    while (i >= 0 && this.removed.has(nodes[i])) {
+      skipped.push(nodes[i]);
+      i = this.skips.get(nodes[i]) ?? i - 1;
+    }
+    // nodes are never added back: jump straight there next time
+    for (const skippedNode of skipped) this.skips.set(skippedNode, i);
+    return i >= 0 ? nodes[i] : undefined;
+  }
+
+  private countsOf(
+    container: postcss.Container | postcss.Document,
+    children: postcss.ChildNode[],
+  ): {
+    live: number;
+    kept: number;
+  } {
+    const raw = getRawNode(container);
+    let counts = this.counts.get(raw);
+    if (!counts) {
+      counts = { live: 0, kept: 0 };
+      for (const child of children) {
+        if (this.removed.has(child)) continue;
+        counts.live++;
+        if (!isRemovableComment(child)) counts.kept++;
+      }
+      this.counts.set(raw, counts);
+    }
+    return counts;
+  }
+
+  /**
+   * Check if the container corresponds to an empty css rule, once the
+   * recorded nodes are removed
+   *
+   * @param node - container of postcss AST
+   * @returns true if the rule is empty
+   */
+  isEmpty(node: postcss.Container | postcss.Document): boolean {
+    if (isPostCSSRule(node) && !node.selector) return true;
+    const children = getRawChildren(node);
+    if (!children) {
+      return isPostCSSAtRule(node) && !node.params;
+    }
+    const { live, kept } = this.countsOf(node, children);
+    if (live === 0) return true;
+    // only comments that can be removed along with it are left
+    return (isPostCSSRule(node) || isPostCSSAtRule(node)) && kept === 0;
+  }
+
+  /**
+   * Remove the recorded nodes from the tree, in one pass per container
+   */
+  apply(): void {
+    const parents = new Set<postcss.Node>();
+    for (const node of this.removed) {
+      if (node.parent) parents.add(getRawNode(node.parent));
+    }
+    for (const parent of parents) {
+      const container = parent as unknown as PostCSSContainerInternals;
+      const nodes = container.nodes ?? [];
+      const kept: postcss.ChildNode[] = [];
+      // positions of the removed children, to update the running iterators
+      // like `removeChild` does
+      const removedPositions: number[] = [];
+      for (let i = 0; i < nodes.length; i++) {
+        if (this.removed.has(nodes[i])) {
+          removedPositions.push(i);
+        } else {
+          kept.push(nodes[i]);
+        }
+      }
+      container.nodes = kept;
+      if (container.indexes) {
+        for (const id in container.indexes) {
+          const index = container.indexes[id];
+          let shift = 0;
+          while (
+            shift < removedPositions.length &&
+            removedPositions[shift] <= index
+          ) {
+            shift++;
+          }
+          container.indexes[id] = index - shift;
+        }
+      }
+    }
+    for (const node of this.removed) {
+      node.parent = undefined;
+    }
+    for (const parent of parents) {
+      (parent as unknown as PostCSSContainerInternals).markDirty();
+    }
+    this.removed.clear();
+    this.counts.clear();
+    this.skips.clear();
+    this.firstChildren.clear();
+  }
+}
+
+/**
+ * Copy of a container without its children
+ *
+ * @param container - rule or at-rule of postcss AST
+ */
+function cloneWithoutChildren<T extends postcss.Rule | postcss.AtRule>(
+  container: T,
+): T {
+  const raw = getRawNode(container) as T;
+  const nodes = raw.nodes;
+  // the children are not cloned only to be thrown away
+  raw.nodes = [];
+  try {
+    return raw.clone() as T;
+  } finally {
+    raw.nodes = nodes;
+  }
 }
 
 /**
@@ -193,19 +528,21 @@ function isRuleEmpty(node?: postcss.Container): boolean {
  *
  * @param rule - rule with rejected selectors
  * @param rejectedSelectors - selectors removed from the rule
+ * @param removals - removals recorded during the walk
  */
 function getRejectedNode(
   rule: postcss.Rule,
   rejectedSelectors: string[],
+  removals: DeferredRemovals,
 ): postcss.Node | undefined {
   const rejectedRule = rule.clone();
   rejectedRule.selectors = rejectedSelectors;
 
   let rejectedNode: postcss.Node = rejectedRule;
-  let ancestor = rule.parent;
+  let ancestor = removals.parentOf(rule);
   while (isPostCSSRule(ancestor) || isPostCSSAtRule(ancestor)) {
-    rejectedNode = ancestor.clone().removeAll().append(rejectedNode);
-    ancestor = ancestor.parent;
+    rejectedNode = cloneWithoutChildren(ancestor).append(rejectedNode);
+    ancestor = removals.parentOf(ancestor);
   }
 
   // the chain of ancestors stops at the root unless one of them was removed
@@ -216,8 +553,12 @@ function getRejectedNode(
  * Check if the node has a css comment indicating to ignore the current selector rule
  *
  * @param rule - rule of postcss AST
+ * @param removals - removals recorded during the walk
  */
-function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
+function hasIgnoreAnnotation(
+  rule: postcss.Rule,
+  removals: DeferredRemovals,
+): boolean {
   let found = false;
   rule.walkComments((node) => {
     if (
@@ -226,7 +567,8 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
       node.text.includes(IGNORE_ANNOTATION_CURRENT)
     ) {
       found = true;
-      node.remove();
+      // the content of the rule is not walked through yet
+      removals.removeNow(node);
     }
   });
   return found;
@@ -456,6 +798,20 @@ class PurgeCSS {
 
   public options: Options = defaultOptions;
 
+  /** removals of nodes made during the walk through the css */
+  private removals = new DeferredRemovals();
+
+  /**
+   * Cache of the selectors extracted from the content files. When set, a
+   * content file is only read and extracted again if it changed since the
+   * cache got its selectors, see {@link ContentCache}. The same cache can be
+   * set on several PurgeCSS instances, running one after the other or at the
+   * same time.
+   *
+   * @defaultValue `undefined`, the content files are read on every run
+   */
+  public contentCache?: ContentCache;
+
   private collectDeclarationsData(
     declaration: postcss.Declaration,
     isIgnored: boolean,
@@ -527,18 +883,19 @@ class PurgeCSS {
    * or right after an ignore next line comment, which is then removed
    *
    * @param node - node of postcss AST
+   * @param index - index of the node in the children of its parent
    */
-  private isIgnored(node: postcss.Node): boolean {
+  private isIgnored(node: postcss.ChildNode, index: number): boolean {
     if (this.ignore) {
       return true;
     }
 
-    const annotation = node.prev();
+    const annotation = this.removals.previousSibling(node, index);
     if (
       isPostCSSComment(annotation) &&
       isIgnoreAnnotation(annotation, "next")
     ) {
-      annotation.remove();
+      this.removals.remove(annotation);
       return true;
     }
 
@@ -594,12 +951,50 @@ class PurgeCSS {
     if (files.length > 0 && filesNames.length === 0) {
       console.warn("No files found from the passed PurgeCSS option 'content'.");
     }
-    for (const file of filesNames) {
+    // files are read and extracted concurrently, and the selectors of each
+    // file are merged as soon as they are extracted, so that they are not
+    // kept in memory until every file is done. The merged sets are the same
+    // whatever the order.
+    await forEachContentFile(filesNames, async (file) => {
+      selectors.merge(await this.extractSelectorsFromFile(file, extractors));
+    });
+    return selectors;
+  }
+
+  /**
+   * Extract the selectors present in a file, reusing the selectors of the
+   * content cache when the file did not change
+   *
+   * @param file - path of the file
+   * @param extractors - Array of extractors
+   */
+  private async extractSelectorsFromFile(
+    file: string,
+    extractors: Extractors[],
+  ): Promise<ExtractorResultSets> {
+    const extractor = this.getFileExtractor(file, extractors);
+    const contentCache = this.contentCache;
+    if (!contentCache) {
       const content = await asyncFs.readFile(file, "utf-8");
-      const extractor = this.getFileExtractor(file, extractors);
-      const extractedSelectors = await extractSelectors(content, extractor);
-      selectors.merge(extractedSelectors);
+      return extractSelectors(content, extractor);
     }
+
+    const filePath = path.resolve(file);
+    // the file is stat before being read: if it changes in between, the
+    // stored stats are the old ones and it is read again next time
+    const checkedAt = Date.now();
+    const { mtimeMs, ctimeMs, size, ino } = await asyncFs.stat(filePath);
+    const stats = { mtimeMs, ctimeMs, size, ino };
+    const cachedSelectors = contentCache.get(filePath, stats, extractor);
+    if (cachedSelectors) {
+      return cachedSelectors;
+    }
+    // stored before being awaited, so that the runs at the same time wait
+    // for this extraction instead of starting their own
+    const selectors = asyncFs
+      .readFile(filePath, "utf-8")
+      .then((content) => extractSelectors(content, extractor));
+    contentCache.set(filePath, { ...stats, extractor, selectors, checkedAt });
     return selectors;
   }
 
@@ -625,9 +1020,10 @@ class PurgeCSS {
   /**
    * Evaluate at-rule and register it for future reference
    * @param node - node of postcss AST
+   * @param index - index of the node in the children of its parent
    */
-  private evaluateAtRule(node: postcss.AtRule): void {
-    const isIgnored = this.isIgnored(node);
+  private evaluateAtRule(node: postcss.AtRule, index: number): void {
+    const isIgnored = this.isIgnored(node, index);
 
     // when tracking variables, collect var() usages from declarations
     // nested inside at-rules (e.g. @media, @supports, ...)
@@ -675,15 +1071,17 @@ class PurgeCSS {
    * Evaluate css selector and decide if it should be removed or not
    *
    * @param node - node of postcss AST
+   * @param index - index of the node in the children of its parent
    * @param selectors - selectors used in content files
    */
   private evaluateRule(
-    node: postcss.Node,
+    node: postcss.Rule,
+    index: number,
     selectors: ExtractorResultSets,
   ): void {
     // exit if it is kept by an ignore annotation (ignore range or ignore next
     // line comment), still collecting what its declarations use
-    if (this.isIgnored(node)) {
+    if (this.isIgnored(node, index)) {
       if (isPostCSSRule(node)) this.collectDeclarationsDataOfNode(node, true);
       return;
     }
@@ -706,7 +1104,7 @@ class PurgeCSS {
 
     // exit if it has an ignore rule comment inside, still collecting what its
     // declarations use
-    if (hasIgnoreAnnotation(node)) {
+    if (hasIgnoreAnnotation(node, this.removals)) {
       this.collectDeclarationsDataOfNode(node, true);
       return;
     }
@@ -762,21 +1160,25 @@ class PurgeCSS {
     // rebuild the rule with the removed selectors, before the rule and its
     // emptied parents are detached from the tree
     if (this.options.rejectedCss && selectorsRemovedFromRule.length > 0) {
-      const rejectedNode = getRejectedNode(node, selectorsRemovedFromRule);
+      const rejectedNode = getRejectedNode(
+        node,
+        selectorsRemovedFromRule,
+        this.removals,
+      );
       if (rejectedNode) this.removedNodes.push(rejectedNode);
     }
 
     // remove empty rules
-    const parent = node.parent;
+    const parent = this.removals.parentOf(node);
     if (!node.selector) {
-      node.remove();
+      this.removals.remove(node);
     }
     // remove the parents left empty, going up through nested rules and
     // at-rules (e.g. @supports inside @media) but not past the root
     let emptyCandidate = parent;
-    while (emptyCandidate && isRuleEmpty(emptyCandidate)) {
-      const grandParent = emptyCandidate.parent;
-      emptyCandidate.remove();
+    while (emptyCandidate && this.removals.isEmpty(emptyCandidate)) {
+      const grandParent = this.removals.parentOf(emptyCandidate);
+      this.removals.remove(emptyCandidate);
       emptyCandidate =
         isPostCSSRule(grandParent) || isPostCSSAtRule(grandParent)
           ? grandParent
@@ -825,8 +1227,15 @@ class PurgeCSS {
             ? option
             : await asyncFs.readFile(option, "utf-8")
           : option.raw;
-      const isFromFile = typeof option === "string" && !this.options.stdin;
-      const from = isFromFile ? option : undefined;
+      // the name of raw css is used as its path in the source maps, like
+      // the path of a css file: the map sources are relative to the
+      // directory of `sourceMap.to`, which defaults to that path
+      const from =
+        typeof option === "string"
+          ? this.options.stdin
+            ? undefined
+            : option
+          : option.name || undefined;
       const root = postcss.parse(cssContent, { from });
 
       // the rejected css of a file only contains the rules removed from it
@@ -1200,24 +1609,29 @@ class PurgeCSS {
     root: PostCSSRoot,
     selectors: ExtractorResultSets,
   ): void {
-    root.walk((node) => {
-      if (node.type === "rule") {
-        return this.evaluateRule(node, selectors);
-      }
-      if (node.type === "atrule") {
-        return this.evaluateAtRule(node);
-      }
-      if (node.type === "comment") {
-        if (isIgnoreAnnotation(node, "start")) {
-          this.ignore = true;
-          // remove ignore annotation
-          node.remove();
-        } else if (isIgnoreAnnotation(node, "end")) {
-          this.ignore = false;
-          // remove ignore annotation
-          node.remove();
+    // the nodes are removed once the whole tree has been walked through
+    try {
+      root.walk((node, index) => {
+        if (node.type === "rule") {
+          return this.evaluateRule(node, index, selectors);
         }
-      }
-    });
+        if (node.type === "atrule") {
+          return this.evaluateAtRule(node, index);
+        }
+        if (node.type === "comment") {
+          if (isIgnoreAnnotation(node, "start")) {
+            this.ignore = true;
+            // remove ignore annotation
+            this.removals.remove(node);
+          } else if (isIgnoreAnnotation(node, "end")) {
+            this.ignore = false;
+            // remove ignore annotation
+            this.removals.remove(node);
+          }
+        }
+      });
+    } finally {
+      this.removals.apply();
+    }
   }
 }
