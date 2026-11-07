@@ -81,6 +81,23 @@ new PurgeCSSPlugin({
 
 pour filtrer les répertoires, consultez la documentation de glob-all [ici](https://www.npmjs.com/package/glob-all#filtering-out-directories).
 
+## Fichier de configuration
+
+Le plugin lit aussi les options de `purgecss.config.js` si ce fichier se trouve dans le répertoire de travail, le dossier où vous lancez webpack. Les options passées au plugin ont la priorité sur celles du fichier de configuration, `safelist` comprise : une `safelist` dans les options du plugin remplace celle de `purgecss.config.js`. Comme pour les options du plugin, `content` et `css` ne sont pas utilisées, le contenu vient de `paths`.
+
+```js
+// purgecss.config.js
+module.exports = {
+  safelist: ['active', /^modal-/]
+}
+```
+
+Si `purgecss.config.js` existe mais ne peut pas être chargé, par exemple à cause d'une erreur de syntaxe, le build échoue avec `Error loading the config file ...`.
+
+::: warning
+Jusqu'à la version 8.0.0, les options exportées avec `module.exports = { ... }` ou `export default { ... }` sont ignorées, tout comme un fichier de configuration qui ne peut pas être chargé.
+:::
+
 ## Options
 
 Le plugin webpack transmet à PurgeCSS les options suivantes de la [Configuration](https://www.purgecss.com/fr/configuration.html) de purgecss : `defaultExtractor`, `extractors`, `fontFace`, `keyframes`, `variables`, `safelist`, `blocklist`, `dynamicAttributes` et `rejected`. Le plugin purge les ressources CSS de la compilation et utilise `paths` comme contenu, il ne prend donc pas les options `css` et `content`. Les source maps sont générées lorsque l'option `devtool` de webpack est définie. Les autres options, comme `rejectedCss` ou `skippedContentGlobs`, n'ont aucun effet.

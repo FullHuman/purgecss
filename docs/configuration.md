@@ -10,7 +10,7 @@ PurgeCSS has a list of options that allow you to customize its behavior. Customi
 
 ## Configuration file
 
-The configuration file is a simple JavaScript file. By default, the JavaScript API will look for `purgecss.config.js`.
+The configuration file is a simple JavaScript file. By default, the JavaScript API will look for `purgecss.config.js`. The [PostCSS plugin](plugins/postcss.md#configuration-file) and the [webpack plugin](plugins/webpack.md#configuration-file) also read it from the working directory.
 
 ```js
 module.exports = {
