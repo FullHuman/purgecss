@@ -42,11 +42,14 @@ interface UserDefinedOptions {
   output?: string;
   rejected?: boolean;
   rejectedCss?: boolean;
+  sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
+  skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: StringRegExpArray;
 }
 
 interface RawContent {
@@ -248,6 +251,24 @@ await new PurgeCSS().purge({
   rejectedCss: true
 })
 ```
+
+- **sourceMap \(par défaut : false\)**
+
+Définissez `sourceMap` à `true` pour générer une source map du CSS purgé. Par défaut, la source map est intégrée à la fin du CSS, dans un commentaire `sourceMappingURL`. Si le fichier CSS a déjà une source map, par exemple générée par Sass, la nouvelle source map pointe vers les sources d'origine.
+
+`sourceMap` accepte aussi les [options de source map de PostCSS](https://github.com/postcss/postcss/blob/main/docs/source-maps.md), comme `inline` ou `annotation`, ainsi qu'une option `to`. Quand la source map n'est pas intégrée, par exemple avec `inline: false`, elle est renvoyée dans la propriété `sourceMap` du résultat. `to` est le chemin du fichier CSS de sortie : il définit le champ `file` de la source map, et les `sources` sont relatives à ce chemin.
+
+```js
+const [result] = await new PurgeCSS().purge({
+  content: ['index.html'],
+  css: ['css/app.css'],
+  sourceMap: { inline: false, to: 'dist/app.css' }
+})
+// result.css se termine par /*# sourceMappingURL=app.css.map */
+// result.sourceMap est la source map à écrire dans dist/app.css.map
+```
+
+Le [plugin gulp](plugins/gulp.md) et le [plugin webpack](plugins/webpack.md) définissent cette option eux-mêmes.
 
 - **safelist**
 
