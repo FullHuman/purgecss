@@ -61,6 +61,35 @@ postcss([
 
 See [PostCSS](https://github.com/postcss/postcss) documentation for examples for your environment.
 
+## Configuration file
+
+The plugin also reads the options of `purgecss.config.js` if this file is in the working directory, the folder where you run the build. The options passed to the plugin take precedence over the ones in the config file, except `safelist`: the safelists of both are combined.
+
+```js
+// purgecss.config.js
+module.exports = {
+  content: ['./src/**/*.html'],
+  safelist: ['active', /^modal-/]
+}
+```
+
+```js
+// postcss.config.js
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
+
+export default {
+  plugins: [
+    purgeCSSPlugin({})
+  ]
+}
+```
+
+The plugin needs an options object, even an empty one, when all the options are in `purgecss.config.js`. If `purgecss.config.js` exists but fails to load, for example because of a syntax error, the build fails with `Error loading the config file ...`.
+
+::: warning
+Up to version 8.0.0, options exported with `module.exports = { ... }` or `export default { ... }` are ignored, a config file that fails to load is ignored too, and a `safelist` in the plugin options replaces the one in `purgecss.config.js` instead of adding to it.
+:::
+
 ## Options
 
 All of the options of PurgeCSS are available to use with the plugins.

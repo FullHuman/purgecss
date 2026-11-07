@@ -28,6 +28,10 @@ postcss([
 
 See [PostCSS] docs for examples for your environment.
 
+## Configuration file
+
+The plugin also reads the options of `purgecss.config.js` if this file is in the working directory. The options passed to the plugin take precedence, except `safelist`: the safelists of both are combined. When all the options are in `purgecss.config.js`, pass an empty object to the plugin: `purgecss({})`. A `purgecss.config.js` that fails to load fails the build. See the [documentation](https://www.purgecss.com/plugins/postcss.html#configuration-file).
+
 ## Options
 
 All of the options of purgecss are available to use with the plugins.
