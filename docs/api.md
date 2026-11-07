@@ -68,8 +68,11 @@ interface ResultPurge {
   file?: string;
   rejected?: string[];
   rejectedCss?: string;
+  sourceMap?: string;
 }
 ```
+
+`rejected` and `rejectedCss` are set when the options of the same name are enabled. `sourceMap` is set when the [`sourceMap`](configuration.md#options) option generates a source map that isn't inlined in the CSS, for example with `inline: false`.
 
 ## Reusing extracted content across runs
 
