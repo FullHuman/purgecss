@@ -144,6 +144,14 @@ export async function run(program: Command) {
       return;
     }
 
+    // the css read from stdin, or a raw css without a name, has no file name
+    // to use in the output folder. Check every result before writing any file
+    if (purged.some((purgedResult) => !purgedResult.file)) {
+      throw new Error(
+        `Cannot write the purged CSS to the folder "${options.output}": the CSS read from stdin, or a raw CSS without a name, has no file name. Use an --output path ending with .css, or give the raw CSS a name.`,
+      );
+    }
+
     for (const purgedResult of purged) {
       let outputPath: string;
       if (preservePaths && purgedResult?.file) {
