@@ -8,20 +8,14 @@
     {
       "number": 978,
       "state": "resolution_recommended",
-      "updated_at": "2026-10-24",
-      "note": "Root-level :is/:where fix (#1467, #1509) re-verified on main 2026-10-24; not on npm yet (8.0.0). Recommend closing after next release."
-    },
-    {
-      "number": 1282,
-      "state": "resolution_recommended",
-      "updated_at": "2026-10-24",
-      "note": "Bare pseudo-classes (:hover, :not(:hover), :where(:hover)) re-verified kept on main. Pending release."
+      "updated_at": "2026-11-07",
+      "note": "All thread repros (incl. :any-link, :where(body), Radix :where(:not())) verified kept on npm purgecss@9.0.0 2026-11-07. Listed Close issue in monthly; no new comment (maintainer closed #1282 at release)."
     },
     {
       "number": 1153,
       "state": "resolution_recommended",
-      "updated_at": "2026-10-24",
-      "note": "&:hover nested in a used rule kept on main (side effect of #1467). Regression test PR #1513. Pending release."
+      "updated_at": "2026-11-07",
+      "note": "Exact repro gives expected output on npm purgecss@9.0.0 (verified 2026-11-07). Listed Close issue in monthly; no new comment."
     },
     {
       "number": 913,
@@ -50,8 +44,8 @@
     {
       "number": 1229,
       "state": "commented",
-      "updated_at": "2026-10-29",
-      "note": "Posted verified workarounds (Tailwind extractor / dynamicAttributes / greedy /^data-loaded$/). User config used greedy strings: since #1532 they match nothing; #1534 adds \"/regex/\" strings."
+      "updated_at": "2026-11-07",
+      "note": "2026-11-07 correction comment: on 9.0.0 reporter config keeps rule (greedy string exact match, #1574); /[data-loaded=true]$/ is a char class keeping unrelated rules. Suggested close in monthly."
     },
     {
       "number": 1115,
@@ -86,14 +80,8 @@
     {
       "number": 1263,
       "state": "commented",
-      "updated_at": "2026-10-28",
-      "note": "8.0.0: module.exports=fn but d.ts export default; maintainer .default workaround crashes at runtime. Posted portable cast (PluginCreator<UserDefinedOptions>) verified nodenext/bundler/node10 on 7.0.2+8.0.0. Fix = maintainer."
-    },
-    {
-      "number": 1545,
-      "state": "resolution_recommended",
-      "updated_at": "2026-11-05",
-      "note": "Fixed on main by #1540+#1568 (merged 2026-11-04); repro prints one-line error, exit 1 (verified 2026-11-05). Listed as Close issue; no new comment."
+      "updated_at": "2026-11-07",
+      "note": "Still present in published 9.0.0 (module.exports=fn, d.ts export default). Posted portable cast PluginCreator<UserDefinedOptions> earlier. Fix = maintainer."
     }
   ],
   "fixes": [
@@ -109,9 +97,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-11-02",
-      "result": "Webpack docs QA: draft PR #1560 (types safelist?/blocklist?, forwarded-options list, noDir->nodir; EN/FR/README; patch changeset). Angular guide = #1538.",
-      "follow_up": "Document postcss+webpack plugin auto-loading purgecss.config.js after release. Angular guide already has \"/regex/\" (done by maintainer)."
+      "checked_at": "2026-11-07",
+      "result": "2026-11-07: draft PR branch repo-assist/docs-plugins-config-file: Configuration file section for postcss+webpack plugins (EN/FR/READMEs, configuration.md link). Verified on npm 9.0.0: postcss combines safelists, webpack replaces.",
+      "follow_up": "READMEs still say vue-cli 3. postcss README says content required (config file can provide it)."
     },
     {
       "area": "build",
@@ -128,7 +116,7 @@
     {
       "area": "tests",
       "checked_at": "2026-11-06",
-      "result": "2026-11-06 19:4x: pug extractor kept quotes of single-quoted/backtick/!= attribute values (class=card -> card; e2e purged all). Draft PR branch repo-assist/fix-pug-quoted-attribute-values (literal regex, fallback strip quotes; 5 tests fail on main; pug 100%). #1578 merged.",
+      "result": "2026-11-06 19:4x: pug extractor kept quotes of single-quoted/backtick/!= attribute values (class=card -> card; e2e purged all). PR #1580 (literal regex, fallback strip quotes; 5 tests fail on main; pug 100%). #1578 merged.",
       "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, webpack plugin lines 25/64/209. Pug/html split on \" \" only (tabs/newlines); low value. vue-cli plugin no tests."
     },
     {
@@ -139,25 +127,25 @@
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-06",
-      "result": "2026-11-06: prod audit clean. Dev-only glob 10.5.0/13.0.6 (jest) GHSA-3g3m-2fjr-6pw4 (moderate). Verified override glob@>=9 <14.0.2: ^14.0.2 in pnpm-workspace.yaml: build/lint/test --coverage/docs pass, lockfile -119 lines. Suggested in monthly issue. deepmerge low has no patch.",
+      "checked_at": "2026-11-07",
+      "result": "2026-11-07 (post-9.0.0): prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 still (suggestion in monthly), deepmerge low no patch. pnpm outdated: only minor/patch; Dependabot monthly covers them. CI actions current.",
       "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-05",
-      "result": "8.0.0 released 2026-01-24. 39 changesets on main (4 major, 6 minor, 29 patch) as of 2026-11-05 20:28. Maintainer prepping v9 (#1573).",
-      "follow_up": "Release PR touches package.json (protected) -> suggest to maintainer instead of drafting."
+      "checked_at": "2026-11-07",
+      "result": "9.0.0 released 2026-11-06 21:31 UTC (39 changesets). Maintainer closed #1282/#1545 with comments; #978/#1153 left open (listed Close issue).",
+      "follow_up": "Open PR changesets (#1543/#1577/#1579/#1580) will form 9.0.1; release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-06",
-      "result": "2026-11-06 19:4x main ae638aa: #1543 (bc762d6), #1577 (8ab7e8a), #1579 (e289e12) merge cleanly with main and pairwise; only bot protected-file reviews; CodeQL green. New draft: pug quotes.",
+      "checked_at": "2026-11-07",
+      "result": "2026-11-07 main 834d7ff (post-release): #1543, #1577, #1579, #1580 merge cleanly; #1580 CodeQL green. #1495 still conflicts (index.ts, docs/configuration EN/FR, jest.config.ts). New docs draft this run.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
       "area": "ci",
-      "checked_at": "2026-10-29",
+      "checked_at": "2026-11-07",
       "result": "Corepack in sandbox needs NODE_USE_ENV_PROXY=1 and --install-directory /tmp/gh-aw/agent/bin; pre-commit hook runs prettier via pnpm (needs pnpm on PATH or commit fails silently).",
       "follow_up": "Reuse this setup next run."
     },
@@ -165,7 +153,7 @@
       "area": "qa",
       "checked_at": "2026-11-04",
       "result": "Webpack config-file loading fixed in draft PR (2026-11-04). webpack lib .esm.js fails under Node ESM (import { sources } from webpack CJS) - only bundlers use it (no exports field); noted, no action.",
-      "follow_up": "Vue CLI plugin has no test suite. READMEs still say vue-cli 3. Document config auto-loading (postcss+webpack) after release."
+      "follow_up": "Vue CLI plugin has no test suite. webpack plugin merges config into this.options each compilation (watch-mode config edits ignored; import() cached anyway) - low value."
     }
   ],
   "completed_actions": [
@@ -220,11 +208,6 @@
   ],
   "priorities": [
     {
-      "task": 2,
-      "item": "release-closures",
-      "note": "After next release (9.0.0, 39 changesets as of 2026-11-05), recommend closing #978, #1282, #1153, #1545 (verified fixed on main)."
-    },
-    {
       "task": 3,
       "item": "issue-913",
       "note": "If maintainer picks a direction (attribute value vs full selector), implement greedy/standard safelist matching for attribute values."
@@ -237,12 +220,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-06 19:44 UTC."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-07 06:30 UTC; #978/#1153/#1229 suggested for closing."
     },
     {
       "task": 6,
-      "item": "pug-quotes-draft",
-      "note": "Find PR number for draft on repo-assist/fix-pug-quoted-attribute-values (created 2026-11-06 19:4x) and list it in monthly issue."
+      "item": "docs-config-draft",
+      "note": "Find PR number for draft on repo-assist/docs-plugins-config-file (created 2026-11-07 06:2x) and list it in monthly issue."
     }
   ]
 }
