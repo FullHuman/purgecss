@@ -1,0 +1,25 @@
+.modUsed {
+  color: green;
+}
+
+.modUnused {
+  color: black;
+}
+
+.base {
+  padding: 0;
+}
+
+.modComposed {
+  composes: base;
+  margin: 0;
+}
+
+.modUsed:hover .inner {
+  color: pink;
+}
+
+.modCrossFile {
+  composes: sharedBase from "./shared.module.css";
+  color: teal;
+}

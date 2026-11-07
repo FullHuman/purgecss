@@ -51,3 +51,25 @@ export type UserDefinedOptions = Omit<
   blocklist?: PurgeCSSUserDefinedOptions["blocklist"] | BlocklistFunction;
   only?: string[];
 };
+
+/**
+ * Compilation of webpack or Rspack
+ *
+ * @public
+ */
+export type CompilationLike = object;
+
+/**
+ * Compiler of webpack or Rspack, the part of it the plugin is applied to.
+ * The types of the plugin do not depend on webpack, which Rspack projects
+ * don't install.
+ *
+ * @public
+ */
+export interface CompilerLike {
+  hooks: {
+    compilation: {
+      tap(name: string, callback: (compilation: CompilationLike) => void): void;
+    };
+  };
+}

@@ -177,6 +177,10 @@ const getEnglishSidebar = () => [
         link: "/plugins/webpack",
       },
       {
+        text: "Rollup",
+        link: "/plugins/rollup",
+      },
+      {
         text: "Gulp",
         link: "/plugins/gulp",
       },
@@ -290,6 +294,10 @@ const getFrenchSidebar = () => [
       {
         text: "Webpack",
         link: "/fr/plugins/webpack",
+      },
+      {
+        text: "Rollup",
+        link: "/fr/plugins/rollup",
       },
       {
         text: "Gulp",

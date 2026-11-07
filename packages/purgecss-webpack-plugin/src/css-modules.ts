@@ -1,0 +1,394 @@
+import type { Chunk, Compilation, Module } from "webpack";
+
+/**
+ * Class names exported by a CSS module under an export name, e.g.
+ * `modUsed` exporting `card-module__modUsed--VlNeS`
+ */
+export interface CssModuleExport {
+  /** name of the export, as the JavaScript code reads it: `styles.modUsed` */
+  name: string;
+  /** hashed class names of the export, several with `composes` */
+  classNames: string[];
+  /**
+   * exports of other CSS modules whose class names are part of this export:
+   * the classes composed from another file with the native CSS support of
+   * Rspack, `"btn": "btn-hash" + " " + __webpack_require__(id)["base"]`
+   */
+  references?: CssModuleReference[];
+}
+
+/**
+ * Export of another CSS module that an export refers to
+ */
+export interface CssModuleReference {
+  /** id of the other module, as passed to `__webpack_require__` */
+  moduleId: string;
+  /** name of the export in the code generated for the other module */
+  name: string;
+}
+
+/**
+ * Export maps of the CSS modules of a compilation
+ */
+export interface CssModulesExports {
+  /**
+   * exports whose class names are kept only if their export name is found in
+   * the content
+   */
+  exports: CssModuleExport[];
+  /**
+   * class names that the bundler itself found to be used: the export maps
+   * that it generated after removing the unused exports, whose names may be
+   * mangled
+   */
+  usedClassNames: string[];
+}
+
+const stringLiteral = String.raw`"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'`;
+const identifier = String.raw`[A-Za-z_$][\w$]*`;
+/**
+ * export of another module: `__webpack_require__("./a.css")["name"]`,
+ * `__webpack_require__(378).h`, `e(378).h` once minimized
+ */
+const moduleReference = String.raw`${identifier}\(\s*(?:${stringLiteral}|\d+)\s*\)\s*(?:\[\s*(?:${stringLiteral})\s*\]|\.\s*${identifier})`;
+const moduleReferenceRegExp = new RegExp(
+  String.raw`\(\s*(${stringLiteral}|\d+)\s*\)\s*(?:\[\s*(${stringLiteral})\s*\]|\.\s*(${identifier}))`,
+);
+const term = String.raw`${stringLiteral}|${moduleReference}|${identifier}`;
+const termRegExp = new RegExp(term, "g");
+// a string literal, or a concatenation of string literals, variables and
+// exports of other modules: Rspack generates `"a" + " " + "b"` for a class
+// that composes another one of the same file, and
+// `"a" + " " + __webpack_require__(id)["b"]` for a class of another file
+const stringLiterals = String.raw`(?:${term})(?:\s*\+\s*(?:${term}))*`;
+
+/** `var _1 = "class-name";`, `export const modUsed = "class-name";` */
+const variableRegExp = new RegExp(
+  String.raw`(\bexport\s+)?\b(?:var|let|const)\s+(${identifier})\s*=\s*(${stringLiterals})\s*(?=[;,\n]|$)`,
+  "g",
+);
+/** `"modUsed": "class-name"`, `modUsed: _1` in an object literal */
+const propertyRegExp = new RegExp(
+  String.raw`[{,]\s*(${stringLiteral}|${identifier})\s*:\s*(${stringLiterals})\s*(?=[,}])`,
+  "g",
+);
+/** `export { _1 as "modUsed", _2 as base }` */
+const exportListRegExp = /\bexport\s*\{([^}]*)\}/g;
+const exportSpecifierRegExp = new RegExp(
+  String.raw`^\s*(${identifier})(?:\s+as\s+(${stringLiteral}|${identifier}))?\s*$`,
+);
+
+/**
+ * Value of a JavaScript string literal
+ *
+ * @param literal - string literal, with its quotes
+ */
+function unquote(literal: string): string {
+  if (literal.startsWith('"')) {
+    try {
+      return JSON.parse(literal);
+    } catch {
+      // escapes that JSON does not have, e.g. `\'`
+    }
+  }
+  return literal.slice(1, -1).replace(/\\(.)/g, "$1");
+}
+
+/**
+ * Class names and references to other modules of a value: a string literal,
+ * a variable, the export of another module, or a concatenation of them
+ *
+ * @param value - JavaScript expression
+ * @param variables - class names of the variables declared before
+ * @returns the class names and references of the value, undefined when it
+ * reads an unknown variable
+ */
+function getClassNames(
+  value: string,
+  variables: Map<string, CssModuleExport>,
+): Omit<CssModuleExport, "name"> | undefined {
+  let classes = "";
+  const references: CssModuleReference[] = [];
+  for (const [part] of value.matchAll(termRegExp)) {
+    if (/^["']/.test(part)) {
+      classes += unquote(part);
+      continue;
+    }
+    const reference = moduleReferenceRegExp.exec(part);
+    if (reference) {
+      const [, moduleId, quotedName, name] = reference;
+      references.push({
+        moduleId: /^["']/.test(moduleId) ? unquote(moduleId) : moduleId,
+        name: quotedName ? unquote(quotedName) : name,
+      });
+      // a separate class list
+      classes += " ";
+      continue;
+    }
+    const variable = variables.get(part);
+    if (!variable) return undefined;
+    classes += ` ${variable.classNames.join(" ")} `;
+    if (variable.references) references.push(...variable.references);
+  }
+  const classNames = classes.split(/\s+/).filter(Boolean);
+  return references.length > 0 ? { classNames, references } : { classNames };
+}
+
+/**
+ * Read the export map of a CSS module from the JavaScript code that exports
+ * it: the code generated by mini-css-extract-plugin and
+ * `CssExtractRspackPlugin` (`export default {...}`, `module.exports = {...}`,
+ * `var _1 = "..."; export { _1 as "name" }`) or by the native CSS support of
+ * Rspack (`var exports = { "name": "a" + " " + "b" }`). With Rspack, a class
+ * composed from another file is read from the export of the other module,
+ * `"a" + " " + __webpack_require__("./b.module.css")["b"]`: the export lists
+ * it in its `references`.
+ *
+ * The code is not parsed: it is only matched against the shapes these
+ * plugins generate. Something else that looks like an export can only keep
+ * more classes, as its class names are kept only when its name is found in
+ * the content.
+ *
+ * @param source - JavaScript code of the module
+ * @returns the exports of the CSS module
+ */
+export function parseCssModuleExports(source: string): CssModuleExport[] {
+  const variables = new Map<string, CssModuleExport>();
+  const cssExports = new Map<string, CssModuleExport>();
+  const addExport = (key: string, value: Omit<CssModuleExport, "name">) => {
+    const name = /^["']/.test(key) ? unquote(key) : key;
+    cssExports.set(name, { ...value, name });
+  };
+
+  for (const [, isExported, name, value] of source.matchAll(variableRegExp)) {
+    const classNames = getClassNames(value, variables);
+    if (!classNames) continue;
+    variables.set(name, { name, ...classNames });
+    if (isExported) addExport(name, classNames);
+  }
+
+  for (const [, key, value] of source.matchAll(propertyRegExp)) {
+    const classNames = getClassNames(value, variables);
+    if (classNames) addExport(key, classNames);
+  }
+
+  for (const [, specifiers] of source.matchAll(exportListRegExp)) {
+    for (const specifier of specifiers.split(",")) {
+      const match = exportSpecifierRegExp.exec(specifier);
+      if (!match) continue;
+      const [, local, exported = local] = match;
+      const variable = variables.get(local);
+      if (variable) addExport(exported, variable);
+    }
+  }
+
+  return Array.from(cssExports.values());
+}
+
+/**
+ * Source code of a module as a string
+ *
+ * @param module - module with `originalSource`
+ */
+function getOriginalSource(module: Module | null | undefined): string {
+  const source = module?.originalSource?.()?.source();
+  return source ? source.toString() : "";
+}
+
+/**
+ * JavaScript code generated for a module by the bundler, e.g. the export
+ * map of a CSS module with the native CSS support of Rspack
+ *
+ * @param compilation - current compilation
+ * @param module - module
+ */
+function getGeneratedJavaScript(
+  compilation: Compilation,
+  module: Module,
+): string {
+  const codeGenerationResults = compilation.codeGenerationResults;
+  if (!codeGenerationResults) return "";
+  // Rspack takes no runtime when there is a single one, webpack takes the
+  // runtime of a chunk of the module when there are several
+  const runtimes: Chunk["runtime"][] = [undefined];
+  for (const chunk of compilation.chunkGraph.getModuleChunksIterable(module)) {
+    runtimes.push(chunk.runtime);
+  }
+  for (const runtime of runtimes) {
+    try {
+      const result = codeGenerationResults.get(module, runtime);
+      const source = result?.sources?.get("javascript")?.source();
+      if (source) return source.toString();
+    } catch {
+      // no code generation result for this runtime
+    }
+  }
+  return "";
+}
+
+/**
+ * Whether a module is a CSS module of the native CSS support of the bundler
+ *
+ * @param module - module
+ */
+function isNativeCss(module: Module): boolean {
+  const type: string = module.type ?? "";
+  return type === "css" || type.startsWith("css/");
+}
+
+/**
+ * Resolve the exports of other CSS modules that the exports of a module
+ * refer to (classes composed from another file with Rspack): their class
+ * names are added to the class names of the exports that refer to them.
+ */
+class ReferenceResolver {
+  /** native CSS modules by id, read on the first reference */
+  private modulesById?: Map<string, Module>;
+  /** exports of the modules, by module */
+  private exportsByModule = new Map<Module, CssModuleExport[]>();
+
+  constructor(private compilation: Compilation) {}
+
+  /**
+   * Exports of a native CSS module, read from its generated JavaScript code
+   *
+   * @param module - native CSS module
+   */
+  getExports(module: Module): CssModuleExport[] {
+    let cssExports = this.exportsByModule.get(module);
+    if (!cssExports) {
+      cssExports = parseCssModuleExports(
+        getGeneratedJavaScript(this.compilation, module),
+      );
+      this.exportsByModule.set(module, cssExports);
+    }
+    return cssExports;
+  }
+
+  /**
+   * Class names of an export and of the exports it refers to, recursively
+   *
+   * @param cssExport - export of a CSS module
+   * @param visited - exports already resolved, against cycles
+   */
+  resolve(
+    cssExport: CssModuleExport,
+    visited = new Set<CssModuleExport>(),
+  ): string[] {
+    visited.add(cssExport);
+    const classNames = [...cssExport.classNames];
+    for (const reference of cssExport.references ?? []) {
+      const module = this.getModule(reference.moduleId);
+      if (!module) continue;
+      const moduleExports = this.getExports(module);
+      const referenced = moduleExports.filter(
+        ({ name }) => name === reference.name,
+      );
+      // an export that is not found keeps every class of the module rather
+      // than removing a used class
+      for (const target of referenced.length > 0 ? referenced : moduleExports) {
+        if (!visited.has(target)) {
+          classNames.push(...this.resolve(target, visited));
+        }
+      }
+    }
+    return classNames;
+  }
+
+  /**
+   * Native CSS module of an id
+   *
+   * @param moduleId - id of the module
+   */
+  private getModule(moduleId: string): Module | undefined {
+    if (!this.modulesById) {
+      this.modulesById = new Map();
+      const { chunkGraph } = this.compilation;
+      for (const module of this.compilation.modules) {
+        if (!isNativeCss(module)) continue;
+        const id = chunkGraph.getModuleId(module);
+        if (id !== null && id !== undefined) {
+          this.modulesById.set(String(id), module);
+        }
+      }
+    }
+    return this.modulesById.get(moduleId);
+  }
+}
+
+/**
+ * Collect the export maps of the CSS modules of the chunks.
+ *
+ * - With mini-css-extract-plugin or `CssExtractRspackPlugin`, a CSS module is
+ *   a `css/mini-extract` module issued by a JavaScript module whose source is
+ *   the export map.
+ * - With the native CSS support of webpack (`experiments.css`), the export map
+ *   is stored in the build info of the CSS module.
+ * - With the native CSS support of Rspack (`css/auto`, `css/module`), the
+ *   export map is generated with the JavaScript code of the CSS module. When
+ *   `optimization.usedExports` is enabled, it only lists the exports used by
+ *   the JavaScript code, possibly under mangled names: they are all used.
+ *   The classes composed from another file are read from the export map of
+ *   the other module.
+ *
+ * @param compilation - current compilation
+ * @param chunks - chunks whose CSS is purged
+ * @returns the exports of the CSS modules of the chunks
+ */
+export function collectCssModulesExports(
+  compilation: Compilation,
+  chunks: Iterable<Chunk>,
+): CssModulesExports {
+  const result: CssModulesExports = { exports: [], usedClassNames: [] };
+  const seen = new Set<Module>();
+  const seenStubs = new Set<Module>();
+  const usedExportsOnly = !!compilation.options.optimization?.usedExports;
+  const references = new ReferenceResolver(compilation);
+  // Rspack 1.0 has no module graph in its JavaScript API: the module that
+  // issues an extracted CSS module, its export map, cannot be found
+  const moduleGraph = compilation.moduleGraph as
+    Compilation["moduleGraph"] | undefined;
+
+  for (const chunk of chunks) {
+    for (const module of compilation.chunkGraph.getChunkModulesIterable(
+      chunk,
+    )) {
+      if (seen.has(module)) continue;
+      seen.add(module);
+
+      if (module.type === "css/mini-extract") {
+        const stub = moduleGraph?.getIssuer(module);
+        if (!stub || seenStubs.has(stub)) continue;
+        seenStubs.add(stub);
+        result.exports.push(...parseCssModuleExports(getOriginalSource(stub)));
+        continue;
+      }
+
+      if (!isNativeCss(module)) continue;
+
+      const cssData = (
+        module.buildInfo as
+          { cssData?: { exports?: Map<string, string> } } | undefined
+      )?.cssData;
+      if (cssData?.exports instanceof Map) {
+        for (const [name, value] of cssData.exports) {
+          result.exports.push({
+            name,
+            classNames: value.split(/\s+/).filter(Boolean),
+          });
+        }
+        continue;
+      }
+
+      for (const cssExport of references.getExports(module)) {
+        const classNames = references.resolve(cssExport);
+        if (usedExportsOnly) {
+          result.usedClassNames.push(...classNames);
+        } else {
+          result.exports.push({ name: cssExport.name, classNames });
+        }
+      }
+    }
+  }
+  return result;
+}
