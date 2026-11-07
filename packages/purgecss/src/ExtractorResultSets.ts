@@ -89,6 +89,39 @@ class ExtractorResultSets {
   hasTag(tag: string): boolean {
     return this.tags.has(tag) || this.undetermined.has(tag);
   }
+
+  /**
+   * Replace the selectors with the equal strings of a pool, adding the
+   * missing ones to it, so that the selectors kept in memory for many files,
+   * e.g. by a content cache, share one string per distinct selector. The
+   * strings added are copies: the selectors extracted from a file can be
+   * slices of its whole content, which they would keep in memory.
+   *
+   * @param pool - strings shared by the selectors, by value
+   *
+   * @internal
+   */
+  internSelectors(pool: Map<string, string>): void {
+    const intern = (selectors: Set<string>): Set<string> => {
+      const interned = new Set<string>();
+      for (const selector of selectors) {
+        let shared = pool.get(selector);
+        if (shared === undefined) {
+          // a new string, not a slice of the content of the file
+          shared = (" " + selector).slice(1);
+          pool.set(shared, shared);
+        }
+        interned.add(shared);
+      }
+      return interned;
+    };
+    this.undetermined = intern(this.undetermined);
+    this.attrNames = intern(this.attrNames);
+    this.attrValues = intern(this.attrValues);
+    this.classes = intern(this.classes);
+    this.ids = intern(this.ids);
+    this.tags = intern(this.tags);
+  }
 }
 
 export default ExtractorResultSets;

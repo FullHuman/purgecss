@@ -97,6 +97,14 @@ export interface ContentCacheEntry extends ContentFileStats {
  */
 export class ContentCache {
   private entries = new Map<string, ContentCacheEntry>();
+  /**
+   * Strings of the selectors of the entries, one per distinct selector: the
+   * files of a project share most of their selectors, which would otherwise
+   * be kept once per file, each one keeping the whole content of its file
+   * in memory. It holds the selectors of the files removed from the cache
+   * too, until {@link ContentCache.clear}.
+   */
+  private selectorsPool = new Map<string, string>();
 
   /**
    * Number of files in the cache
@@ -148,9 +156,18 @@ export class ContentCache {
     const forget = (): void => {
       if (this.entries.get(filePath) === entry) this.entries.delete(filePath);
     };
-    entry.selectors.then(() => {
+    entry.selectors.then((selectors) => {
       const changedAt = Math.max(entry.mtimeMs, entry.ctimeMs);
-      if (entry.checkedAt - changedAt < RECENTLY_MODIFIED_MS) forget();
+      if (entry.checkedAt - changedAt < RECENTLY_MODIFIED_MS) {
+        forget();
+      } else if (
+        this.entries.get(filePath) === entry &&
+        typeof selectors?.internSelectors === "function"
+      ) {
+        // the selectors are equal strings: the runs that read them get the
+        // same selectors
+        selectors.internSelectors(this.selectorsPool);
+      }
     }, forget);
   }
 
@@ -205,5 +222,6 @@ export class ContentCache {
    */
   clear(): void {
     this.entries.clear();
+    this.selectorsPool.clear();
   }
 }

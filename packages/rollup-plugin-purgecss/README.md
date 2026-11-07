@@ -138,6 +138,9 @@ export default {
   HTML. When Vite builds several environments (e.g. `vite build --app` or an
   SSR framework), it only gets the CSS of the client environments, not of the
   server ones (`ssr`), which usually import the same CSS.
+  The URLs of the assets, e.g. `url(./bg.png)`, are the URLs of the files Vite
+  emits: with Vite's default `base`, `/assets/bg-[hash].png`, and with a
+  relative `base`, a path relative to the `output` file.
 - CSS files imported with `?inline` are purged. Those imported with another
   query, e.g. `?raw` or `?url`, are not.
 - Files processed by a preprocessor (e.g. `.scss`) are only purged when they

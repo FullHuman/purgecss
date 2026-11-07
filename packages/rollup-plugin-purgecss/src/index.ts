@@ -32,7 +32,13 @@ interface ViteConfig {
   root?: string;
   /** Vite 6 and later: whether the environment runs in a browser */
   consumer?: "client" | "server";
-  build?: { ssr?: boolean | string };
+  /** public base path of the assets, `/` by default */
+  base?: string;
+  build?: {
+    ssr?: boolean | string;
+    /** directory of the build, relative to the root */
+    outDir?: string;
+  };
 }
 
 /**
@@ -108,7 +114,54 @@ interface PurgeCSSModuleMeta {
  * @param id - module id
  */
 function cleanId(id: string): string {
-  return id.replace(/[?#].*$/, "");
+  // not a regex such as /[?#].*$/, which is quadratic on many `?` or `#`
+  const index = id.search(/[?#]/);
+  return index === -1 ? id : id.slice(0, index);
+}
+
+/**
+ * Placeholder of the URL of an asset in the CSS of Vite, e.g. for
+ * `url(./bg.png)`: Vite only replaces it in the CSS files it emits
+ */
+const VITE_ASSET_RE = /__VITE_ASSET__([\w$]+)__(?:\$_(.*?)__)?/g;
+
+/**
+ * Replace the placeholders of the assets in the CSS of Vite with their URLs,
+ * as Vite does in the CSS files it emits
+ *
+ * @param css - purged CSS of Vite
+ * @param getFileName - file name of an emitted asset, from its reference
+ * @param base - public base path of the assets
+ * @param relativeTo - with a relative base, the directory the URLs are
+ * relative to, and the directory of the build
+ */
+function resolveViteAssets(
+  css: string,
+  getFileName: (referenceId: string) => string,
+  base: string,
+  relativeTo?: { dir: string; outDir: string },
+): string {
+  return css.replace(
+    VITE_ASSET_RE,
+    (placeholder, referenceId: string, postfix = "") => {
+      let fileName: string;
+      try {
+        fileName = getFileName(referenceId);
+      } catch {
+        // an asset of another build, e.g. of another environment
+        return placeholder;
+      }
+      const isRelativeBase = base === "" || base.startsWith(".");
+      if (isRelativeBase && relativeTo) {
+        const url = path
+          .relative(relativeTo.dir, path.join(relativeTo.outDir, fileName))
+          .split(path.sep)
+          .join("/");
+        return url + postfix;
+      }
+      return `${base.endsWith("/") || base === "" ? base : `${base}/`}${fileName}${postfix}`;
+    },
+  );
 }
 
 /**
@@ -179,7 +232,32 @@ class ContentFilesRecorder extends ContentCache {
   }
 
   set(filePath: string, entry: ContentCacheEntry): void {
+    this.files.add(filePath);
     this.cache.set(filePath, entry);
+  }
+
+  get size(): number {
+    return this.cache.size;
+  }
+
+  has(filePath: string): boolean {
+    return this.cache.has(filePath);
+  }
+
+  keys(): IterableIterator<string> {
+    return this.cache.keys();
+  }
+
+  delete(filePath: string): boolean {
+    return this.cache.delete(filePath);
+  }
+
+  prune(filePaths: Iterable<string>): number {
+    return this.cache.prune(filePaths);
+  }
+
+  clear(): void {
+    this.cache.clear();
   }
 }
 
@@ -231,15 +309,37 @@ function getStylesInImportOrder(
   const visited = new Set<string>();
   const styles: string[] = [];
   const dynamicImports: string[] = [];
-  const visit = (id: string): void => {
-    if (visited.has(id)) return;
-    visited.add(id);
-    const info = context.getModuleInfo(id);
-    if (!info) return;
-    for (const importedId of info.importedIds) visit(importedId);
-    dynamicImports.push(...info.dynamicallyImportedIds);
-    const css = getCSS(id);
-    if (css !== undefined) styles.push(css);
+  // depth-first, the imports of a module before the module itself. With a
+  // stack rather than recursion, which a long chain of imports would
+  // overflow.
+  const visit = (start: string): void => {
+    if (visited.has(start)) return;
+    visited.add(start);
+    const stack = [{ id: start, info: context.getModuleInfo(start), next: 0 }];
+    while (stack.length > 0) {
+      const frame = stack[stack.length - 1];
+      const { info } = frame;
+      if (!info) {
+        stack.pop();
+        continue;
+      }
+      if (frame.next < info.importedIds.length) {
+        const importedId = info.importedIds[frame.next++];
+        if (!visited.has(importedId)) {
+          visited.add(importedId);
+          stack.push({
+            id: importedId,
+            info: context.getModuleInfo(importedId),
+            next: 0,
+          });
+        }
+        continue;
+      }
+      stack.pop();
+      dynamicImports.push(...info.dynamicallyImportedIds);
+      const css = getCSS(frame.id);
+      if (css !== undefined) styles.push(css);
+    }
   };
   for (const id of entries) visit(id);
   for (let i = 0; i < dynamicImports.length; i++) visit(dynamicImports[i]);
@@ -591,14 +691,39 @@ function pluginPurgeCSS(options: UserDefinedOptions = {}): Plugin {
       if (!purgedStyles.length && !outputHasCSS) return;
       outputHasCSS = purgedStyles.length > 0;
 
+      const output =
+        typeof options.output === "string"
+          ? path.resolve(vite?.root ?? "", options.output)
+          : undefined;
+      if (vite) {
+        // the URLs of the assets, e.g. `url(./bg.png)`, are placeholders
+        // that Vite only replaces in the CSS files it emits
+        const root = path.resolve(vite.root ?? "");
+        const relativeTo = output
+          ? {
+              dir: path.dirname(output),
+              outDir: path.resolve(root, vite.build?.outDir ?? "dist"),
+            }
+          : undefined;
+        for (let i = 0; i < purgedStyles.length; i++) {
+          purgedStyles[i] = resolveViteAssets(
+            purgedStyles[i],
+            (referenceId) => this.getFileName(referenceId),
+            vite.base ?? "/",
+            relativeTo,
+          );
+        }
+      }
       const css = purgedStyles.join("");
-      if (typeof options.output === "string") {
-        const output = path.resolve(vite?.root ?? "", options.output);
+      if (output !== undefined) {
         fs.mkdirSync(path.dirname(output), { recursive: true });
         fs.writeFileSync(output, css);
         return;
       }
-      options.output(css, purgedStyles);
+      (options.output as (css: string, styles: string[]) => void)(
+        css,
+        purgedStyles,
+      );
     },
   };
 

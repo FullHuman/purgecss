@@ -46,7 +46,13 @@ import { VariablesStructure } from "./VariablesStructure";
 
 export * from "./ContentCache";
 export * from "./types";
-export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
+export {
+  defaultOptions,
+  ExtractorResultSets,
+  matchesPattern,
+  PurgeCSS,
+  VariablesStructure,
+};
 export * from "./VariablesStructure";
 
 const asyncFs = {

@@ -1,4 +1,5 @@
 import type * as postcss from "postcss";
+import { matchesPattern } from "purgecss";
 import type { ExtractorResultSets, StringRegExpArray } from "purgecss";
 
 /**
@@ -42,6 +43,23 @@ function getRootNames(root: postcss.Root): {
 }
 
 /**
+ * Words of a CSS source that can be class names, IDs or values: the runs of
+ * characters that are not whitespace or CSS punctuation, unescaped, e.g.
+ * `red` and `brand` for `@value brand: red;` and `sm:p-4` for `.sm\:p-4`
+ *
+ * @param css - CSS source, before postcss-modules
+ */
+function getSourceWordsOf(css: string): Set<string> {
+  const words = new Set<string>();
+  for (const [word] of css.matchAll(
+    /(?:[^\s.#:[\]()>+~,*'"\\=|^$;{}!/@%&]|\\.)+/g,
+  )) {
+    words.add(word.replace(/\\(.)/g, "$1"));
+  }
+  return words;
+}
+
+/**
  * Names postcss-modules may export a value under, depending on its option
  * `localsConvention`: the name, its camelCase form (as lodash.camelcase
  * gives it for ASCII names) and its dashes form, e.g. `brand-color` gives
@@ -61,10 +79,36 @@ function getConventionNames(name: string): string[] {
         : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
     )
     .join("");
-  const dashes = name.replace(/-+(\w)/g, (_, letter: string) =>
-    letter.toUpperCase(),
-  );
-  return [name, camelCase, dashes];
+  return [name, camelCase, toDashesForm(name)];
+}
+
+/**
+ * The dashes form of a name, as postcss-modules gives it with
+ * `localsConvention: "dashes"`: each run of dashes followed by a word
+ * character is removed and the character upper-cased, e.g. `brand--color`
+ * gives `brandColor`. Like `name.replace(/-+(\w)/g, ...)`, in linear time.
+ *
+ * @param name - name of a value
+ */
+function toDashesForm(name: string): string {
+  let result = "";
+  let index = 0;
+  while (index < name.length) {
+    if (name[index] !== "-") {
+      result += name[index++];
+      continue;
+    }
+    let end = index;
+    while (end < name.length && name[end] === "-") end++;
+    if (end < name.length && /\w/.test(name[end])) {
+      result += name[end].toUpperCase();
+      index = end + 1;
+    } else {
+      result += name.slice(index, end);
+      index = end;
+    }
+  }
+  return result;
 }
 
 /**
@@ -92,14 +136,18 @@ function getValueDefinitions(css: string): Map<string, string | undefined> {
   // before it, e.g. `@value border: 1px solid brand`
   const values = new Map<string, string | undefined>();
   for (const [, params] of css.matchAll(/@value\s+([^;{}]+)/g)) {
-    // `@value a, b as c from "./colors.css"`
-    const importMatch = /^([\s\S]+?)\s+from\s+\S+\s*$/.exec(params.trim());
-    if (importMatch) {
-      for (const item of importMatch[1].replace(/[()]/g, "").split(",")) {
-        const alias = item
-          .trim()
-          .split(/\s+as\s+/)
-          .pop();
+    // `@value a, b as c from "./colors.css"`: the words before `from` and
+    // the path. Split on whitespace rather than matched with a regex that
+    // takes quadratic time on long runs of spaces.
+    const words = params.trim().split(/\s+/);
+    if (words.length >= 3 && words[words.length - 2] === "from") {
+      const imported = words.slice(0, -2).join(" ");
+      for (const item of imported.replace(/[()]/g, "").split(",")) {
+        const itemWords = item.trim().split(/\s+/);
+        const asIndex = itemWords.lastIndexOf("as");
+        const alias = (
+          asIndex > 0 ? itemWords.slice(asIndex + 1) : itemWords
+        ).join(" ");
         if (alias) {
           values.set(alias, undefined);
           add(alias, undefined);
@@ -146,25 +194,13 @@ function isValueToken(
 }
 
 /**
- * Check if a name matches a pattern of the options, as PurgeCSS does: a
- * regular expression, or a string written between slashes like "/^btn-/", is
- * tested against the name, any other string matches the name exactly
+ * Check if a name matches one of the patterns of an option, as PurgeCSS does
  *
  * @param patterns - strings and regular expressions of an option
  * @param name - local name of a class
  */
 function matchesAnyPattern(patterns: StringRegExpArray, name: string): boolean {
-  return patterns.some((pattern) => {
-    const match =
-      typeof pattern === "string"
-        ? /^\/(.+)\/([dgimsuvy]*)$/.exec(pattern)
-        : undefined;
-    const regExp = match ? new RegExp(match[1], match[2]) : pattern;
-    if (typeof regExp === "string") return regExp === name;
-    // a regex with the g or y flag keeps its lastIndex between calls
-    regExp.lastIndex = 0;
-    return regExp.test(name);
-  });
+  return patterns.some((pattern) => matchesPattern(pattern, name));
 }
 
 /**
@@ -240,6 +276,11 @@ export function getCSSModulesClassNames(
   const rootNames = getRootNames(root);
   const sourceCSS = root.source?.input.css ?? "";
   const valueDefinitions = getValueDefinitions(sourceCSS);
+  // the names written in the source, read once rather than searching the
+  // source for each token
+  let sourceWords: Set<string> | undefined;
+  const getSourceWords = (): Set<string> =>
+    (sourceWords ??= getSourceWordsOf(sourceCSS));
   for (const message of exportMessages) {
     for (const [localName, value] of Object.entries(message.exportTokens)) {
       if (typeof value !== "string") continue;
@@ -256,7 +297,7 @@ export function getCSSModulesClassNames(
       const isGeneratedName =
         (rootNames.classes.has(scopedNames[0]) ||
           rootNames.ids.has(scopedNames[0])) &&
-        !sourceCSS.includes(scopedNames[0]);
+        !getSourceWords().has(scopedNames[0]);
       if (
         !isGeneratedName &&
         isValueToken(valueDefinitions, localName, value)

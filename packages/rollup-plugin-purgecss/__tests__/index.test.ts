@@ -1024,8 +1024,11 @@ describe("rollup-plugin-purgecss in a real Vite build", () => {
       | "rolldownOptions"
       | "rolldownOptionsCopy"
       | "post" = "plugins",
+    viteBuild: object = {},
   ): {
     css?: string[];
+    cssMaps?: string[];
+    assets?: string[];
     chunks?: string[];
     warnings: string[];
     styles?: string[];
@@ -1036,7 +1039,7 @@ describe("rollup-plugin-purgecss in a real Vite build", () => {
       [
         path.resolve(__dirname, "vite/build.js"),
         root,
-        JSON.stringify({ options, placement }),
+        JSON.stringify({ options, placement, viteBuild }),
       ],
       { encoding: "utf-8" },
     );
@@ -1052,6 +1055,7 @@ describe("rollup-plugin-purgecss in a real Vite build", () => {
       "index.html": `<!doctype html><html><body><div class="used-html"></div><script type="module" src="/src/main.js"></script></body></html>`,
       "src/main.js": [
         `import "./styles.css";`,
+        `import "./asset.css";`,
         `import inline from "./inline.css?inline";`,
         `import card from "./card.module.css";`,
         `document.body.className = "used-js " + card.modUsed;`,
@@ -1064,14 +1068,33 @@ describe("rollup-plugin-purgecss in a real Vite build", () => {
       ].join("\n"),
       "src/inline.css": `.used-js { margin: 0; }\n.unused-inline { margin: 1px; }`,
       "src/card.module.css": `.modUsed { color: purple; }\n.modUnused { color: gray; }`,
+      "src/asset.css": `.used-html { background: url(./bg.png); }\n.unused-asset { color: red; }`,
     };
     for (const [name, code] of Object.entries(files)) {
       fs.mkdirSync(path.dirname(path.join(root, name)), { recursive: true });
       fs.writeFileSync(path.join(root, name), code);
     }
+    // larger than Vite's inline limit, so it is emitted as a file
+    fs.writeFileSync(path.join(root, "src/bg.png"), Buffer.alloc(8192, 1));
   });
   afterAll(() => {
     fs.rmSync(root, { recursive: true, force: true });
+  });
+
+  it("writes the URLs of the assets to output, not Vite's placeholders", () => {
+    const output = path.join(root, "out", "purged.css");
+    const { error, assets = [] } = buildWithVite(root, {
+      content: ["index.html", "src/**/*.js"],
+      output,
+    });
+
+    expect(error).toBeUndefined();
+    const image = assets.find((name) => /bg-.*\.png$/.test(name));
+    expect(image).toBeDefined();
+    const css = fs.readFileSync(output).toString();
+    expect(css).not.toContain("__VITE_ASSET__");
+    expect(css).toContain(`url(/${image})`);
+    expect(css).not.toContain("unused-asset");
   });
 
   it("purges the global and ?inline css and leaves css modules untouched", () => {

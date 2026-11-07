@@ -9,6 +9,7 @@
 //   placement: "plugins" (default), "rolldownOptions", "rolldownOptionsCopy"
 //   (a copy of the plugin in `build.rolldownOptions.plugins`) or "post" (in
 //   `plugins` with `enforce: "post"`)
+//   viteBuild: options merged into the `build` options of Vite
 require("ts-node").register({
   transpileOnly: true,
   compilerOptions: { module: "CommonJS" },
@@ -17,7 +18,7 @@ const purgecss = require("../../src").default;
 
 (async () => {
   const [root, json] = process.argv.slice(2);
-  const { options, placement = "plugins" } = JSON.parse(json);
+  const { options, placement = "plugins", viteBuild = {} } = JSON.parse(json);
   const { captureOutput, ...pluginOptions } = options;
   let styles;
   if (captureOutput) {
@@ -59,6 +60,7 @@ const purgecss = require("../../src").default;
         rolldownOptions: rolldownPlugins
           ? { plugins: rolldownPlugins }
           : undefined,
+        ...viteBuild,
       },
     });
   } catch (error) {
@@ -75,6 +77,10 @@ const purgecss = require("../../src").default;
       css: outputs
         .filter((o) => o.type === "asset" && o.fileName.endsWith(".css"))
         .map((o) => String(o.source)),
+      cssMaps: outputs
+        .filter((o) => o.type === "asset" && o.fileName.endsWith(".css.map"))
+        .map((o) => String(o.source)),
+      assets: outputs.filter((o) => o.type === "asset").map((o) => o.fileName),
       chunks: outputs.filter((o) => o.type === "chunk").map((o) => o.code),
       warnings,
       styles,

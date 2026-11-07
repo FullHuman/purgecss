@@ -492,3 +492,29 @@ describe("content files read in parallel", () => {
     ).rejects.toThrow(/^error 1$/);
   });
 });
+
+describe("ExtractorResultSets.internSelectors", () => {
+  it("keeps the selectors and shares the strings of the pool", () => {
+    const pool = new Map<string, string>();
+    const first = new ExtractorResultSets({
+      attributes: { names: ["data-x"], values: ["on"] },
+      classes: ["a-long-class-name-from-file-one"],
+      ids: ["main"],
+      tags: ["div"],
+      undetermined: ["token"],
+    });
+    const second = new ExtractorResultSets(["a-long-class-name-from-file-one"]);
+    first.internSelectors(pool);
+    second.internSelectors(pool);
+
+    expect(first.hasClass("a-long-class-name-from-file-one")).toBe(true);
+    expect(first.hasId("main")).toBe(true);
+    expect(first.hasTag("div")).toBe(true);
+    expect(first.hasAttrName("data-x")).toBe(true);
+    expect(first.hasAttrValue("on")).toBe(true);
+    expect(first.hasClass("token")).toBe(true);
+    expect(second.hasClass("a-long-class-name-from-file-one")).toBe(true);
+    // one string per distinct selector
+    expect(pool.size).toBe(6);
+  });
+});
