@@ -1,5 +1,12 @@
 # grunt-purgecss
 
+## 9.1.0
+
+### Patch Changes
+
+- Updated dependencies [e0f3dd4]
+  - purgecss@9.1.0
+
 ## 9.0.0
 
 ### Major Changes

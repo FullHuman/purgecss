@@ -1,5 +1,16 @@
 # @fullhuman/postcss-purgecss
 
+## 9.1.0
+
+### Minor Changes
+
+- e0f3dd4: Make the PostCSS plugin work with the dev servers and the CSS modules of bundlers. The selectors extracted from the content files are kept between CSS files (with the new `ContentCache` of purgecss, shared by all the instances of the plugin), so a bundler that runs PostCSS once per CSS file only reads and extracts a content file again when it changed: 20 CSS files with 1,081 content files went from 7.6 s to 1.6 s. With a `postcss.config.js` that exports a function, which postcss-loader calls for every CSS file, define the extractor functions outside of it to benefit from the cache. The plugin now adds PostCSS `dependency`, `dir-dependency` and `missing-dependency` messages for the content files and globs (from `content` or `contentFunction`), so Vite, webpack and Rspack (postcss-loader), Next.js and Parcel purge the CSS again when a content file changes, instead of serving stale CSS until a restart (Vite picks up a new file matching a content glob at the next run of PostCSS for the CSS file only). Under Turbopack, the content outside the root Next.js infers (the outermost workspace marker or lock file, e.g. the monorepo root) gets no message, and the new option `dependencies: { root }` sets that root (pass the value of `turbopack.root` or `outputFileTracingRoot` when `next.config` sets it); `dependencies: false` and `contentCache: false` turn the features off. When postcss-modules runs before the plugin, as in Vite, the scoped class names and IDs of a CSS module whose local name is used in the content (`styles.button`) are kept, along with the classes they compose, instead of being removed.
+
+### Patch Changes
+
+- Updated dependencies [e0f3dd4]
+  - purgecss@9.1.0
+
 ## 9.0.0
 
 ### Major Changes
