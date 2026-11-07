@@ -6,18 +6,6 @@
   },
   "issues": [
     {
-      "number": 978,
-      "state": "resolution_recommended",
-      "updated_at": "2026-11-07",
-      "note": "All thread repros (incl. :any-link, :where(body), Radix :where(:not())) verified kept on npm purgecss@9.0.0 2026-11-07. Listed Close issue in monthly; no new comment (maintainer closed #1282 at release)."
-    },
-    {
-      "number": 1153,
-      "state": "resolution_recommended",
-      "updated_at": "2026-11-07",
-      "note": "Exact repro gives expected output on npm purgecss@9.0.0 (verified 2026-11-07). Listed Close issue in monthly; no new comment."
-    },
-    {
       "number": 913,
       "state": "awaiting_approval",
       "updated_at": "2026-10-24",
@@ -46,12 +34,6 @@
       "state": "commented",
       "updated_at": "2026-11-07",
       "note": "2026-11-07 correction comment: on 9.0.0 reporter config keeps rule (greedy string exact match, #1574); /[data-loaded=true]$/ is a char class keeping unrelated rules. Suggested close in monthly."
-    },
-    {
-      "number": 1115,
-      "state": "commented",
-      "updated_at": "2026-10-27",
-      "note": "gulp content ../dist/*.js points to parent dir; unmatched globs skipped silently (warns only if no files at all). Verified; asked reporter to confirm."
     },
     {
       "number": 1123,
@@ -98,8 +80,8 @@
     {
       "area": "docs",
       "checked_at": "2026-11-07",
-      "result": "2026-11-07: draft PR branch repo-assist/docs-plugins-config-file: Configuration file section for postcss+webpack plugins (EN/FR/READMEs, configuration.md link). Verified on npm 9.0.0: postcss combines safelists, webpack replaces.",
-      "follow_up": "READMEs still say vue-cli 3. postcss README says content required (config file can provide it)."
+      "result": "2026-11-07: #1585 merged. Draft branch repo-assist/basics-docs-source-map-option: sourceMap option, UserDefinedOptions block, ResultPurge.sourceMap (EN/FR); verified on built lib.",
+      "follow_up": "READMEs still say vue-cli 3 (low value). gulp docs do not mention gulp-sourcemaps chaining."
     },
     {
       "area": "build",
@@ -109,26 +91,26 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-10-25",
-      "result": "VariablesStructure redefinition O(N^3) fix: PR #1520 (draft). Differential fuzz 5000 cases identical.",
-      "follow_up": "addVariable still copies the array per redefinition (O(N^2)); minor, skipped to avoid conflict with #1503."
+      "checked_at": "2026-11-07",
+      "result": "VariablesStructure: #1520 merged; addVariable now pushes in place (O(N^2) follow-up done on main). No new measurable opportunity found 2026-11-07.",
+      "follow_up": "addProperty still copies array per @property (tiny N, skip)."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-06",
-      "result": "2026-11-06 19:4x: pug extractor kept quotes of single-quoted/backtick/!= attribute values (class=card -> card; e2e purged all). PR #1580 (literal regex, fallback strip quotes; 5 tests fail on main; pug 100%). #1578 merged.",
-      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, webpack plugin lines 25/64/209. Pug/html split on \" \" only (tabs/newlines); low value. vue-cli plugin no tests."
+      "checked_at": "2026-11-07",
+      "result": "2026-11-07: coverage purgecss 98.3% stmts; bin.ts stdin now covered by new draft (98.6%). gulp 124, rollup 72-76 (insert), webpack 25/64/213 remain.",
+      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, vue-cli plugin no tests."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-06",
-      "result": "2026-11-06: CLI -o file.css skipped mkdir (ENOENT; dir output did mkdir) -> draft PR branch repo-assist/fix-cli-output-file-mkdir (mkdir dirname, docs EN/FR, patch changeset; cli-errors regex +EEXIST).",
-      "follow_up": "CLI getOptions mutates defaultOptions (no-config path); cli-options.test passes only because of it (expected omits skippedContentGlobs). Low value; bin bundle is isolated. variables :root{} cleanup after #1543. #998 maintainer."
+      "checked_at": "2026-11-07",
+      "result": "2026-11-07: CLI wrote stdin/unnamed raw CSS to <dir>/undefined. Draft branch repo-assist/fix-cli-unnamed-css-output-folder: throws before writing, cli-stdin tests, CLI.md documents -.",
+      "follow_up": "CLI -o with sourceMap {inline:false}: annotation written, .map never written (needs per-file to). getOptions mutates defaultOptions (stdin tests rely on test order). #998 maintainer."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-07",
-      "result": "2026-11-07 (post-9.0.0): prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 still (suggestion in monthly), deepmerge low no patch. pnpm outdated: only minor/patch; Dependabot monthly covers them. CI actions current.",
+      "result": "2026-11-07 17:5x: prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 + deepmerge (no patch) unchanged. No open Dependabot PRs.",
       "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
     },
     {
@@ -140,7 +122,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-07",
-      "result": "2026-11-07 main 834d7ff (post-release): #1543, #1577, #1579, #1580 merge cleanly; #1580 CodeQL green. #1495 still conflicts (index.ts, docs/configuration EN/FR, jest.config.ts). New docs draft this run.",
+      "result": "2026-11-07 17:5x main 6ae41d9: #1543/#1577/#1579/#1580 merge cleanly; #1495 conflicts (index.ts, docs/configuration EN/FR, jest.config.ts). Two new drafts this run (sourceMap docs, CLI unnamed output).",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -157,14 +139,6 @@
     }
   ],
   "completed_actions": [
-    {
-      "key": "review-pr-1560",
-      "completed_at": "2026-11-04"
-    },
-    {
-      "key": "review-pr-1557",
-      "completed_at": "2026-11-04"
-    },
     {
       "key": "merge-pr-1562",
       "completed_at": "2026-11-04"
@@ -204,6 +178,22 @@
     {
       "key": "close-issue-1570",
       "completed_at": "2026-11-06"
+    },
+    {
+      "key": "review-pr-1585",
+      "completed_at": "2026-11-07"
+    },
+    {
+      "key": "close-issue-978",
+      "completed_at": "2026-11-07"
+    },
+    {
+      "key": "close-issue-1153",
+      "completed_at": "2026-11-07"
+    },
+    {
+      "key": "check-comment-1115",
+      "completed_at": "2026-11-07"
     }
   ],
   "priorities": [
@@ -220,12 +210,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-07 06:30 UTC; #978/#1153/#1229 suggested for closing."
+      "note": "All open issues addressed or deferred; #978/#1153/#1115 closed by maintainer 2026-11-07. No new human activity as of 17:5x UTC. #1229 still suggested for closing."
     },
     {
       "task": 6,
-      "item": "docs-config-draft",
-      "note": "Find PR number for draft on repo-assist/docs-plugins-config-file (created 2026-11-07 06:2x) and list it in monthly issue."
+      "item": "new-drafts-2026-11-07",
+      "note": "Find PR numbers for drafts on repo-assist/basics-docs-source-map-option and repo-assist/fix-cli-unnamed-css-output-folder (created 2026-11-07 ~18:0x) and list them in monthly issue."
     }
   ]
 }
