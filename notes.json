@@ -72,8 +72,8 @@
       "pr": 1543,
       "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal-24e127f20522718e",
       "status": "open",
-      "updated_at": "2026-11-05",
-      "note": "Draft PR #1543. 11-05 07:25 push FAILED (tool could not resolve branch). 11-05 20:20 pushed 34f2403: removeEmptyParents below hasIgnoreAnnotation, called inside if(!node.selector) in evaluateRule. Merges cleanly with main 3fe20bd; merged tree 262/262, branch 215/215."
+      "updated_at": "2026-11-08",
+      "note": "Draft PR #1543. #1588 (DeferredRemovals) made it conflict; 11-08 pushed f3fb0f9: evaluateRule back to base, removeEmptyParents checks nodes.every(isRemovableComment). Merges cleanly with 38f7d07; merged tree purgecss 300/300, branch 215/215."
     }
   ],
   "checks": [
@@ -91,38 +91,38 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-07",
-      "result": "VariablesStructure: #1520 merged; addVariable now pushes in place (O(N^2) follow-up done on main). No new measurable opportunity found 2026-11-07.",
-      "follow_up": "addProperty still copies array per @property (tiny N, skip)."
+      "checked_at": "2026-11-08",
+      "result": "11-08 draft perf(purgecss) branch repo-assist/perf-skip-removed-selector-string: skip toString of removed selectors unless rejected/rejectedCss, ~8% on tailwind.css. :is/:where precheck = noise; hasIgnoreAnnotation prescan ~1.5% (skipped).",
+      "follow_up": "Rest is postcss-selector-parser (Attribute ctor calls util.deprecate per node: upstream). addProperty copies array per @property (tiny N, skip)."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-07",
-      "result": "2026-11-07: coverage purgecss 98.3% stmts; bin.ts stdin now covered by new draft (98.6%). gulp 124, rollup 72-76 (insert), webpack 25/64/213 remain.",
-      "follow_up": "grunt 0% (tests run built tasks/), rollup insert:true needs design, vue-cli plugin no tests."
+      "checked_at": "2026-11-08",
+      "result": "2026-11-08: coverage purgecss 98.1%; webpack css-modules.ts 278-315 and rollup 148-162 gaps are child-process builds (rspack/vite) not seen by coverage, actually tested. postcss/rollup content-cache gaps are 1-line delegations.",
+      "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-07",
-      "result": "2026-11-07: CLI wrote stdin/unnamed raw CSS to <dir>/undefined. Draft branch repo-assist/fix-cli-unnamed-css-output-folder: throws before writing, cli-stdin tests, CLI.md documents -.",
-      "follow_up": "CLI -o with sourceMap {inline:false}: annotation written, .map never written (needs per-file to). getOptions mutates defaultOptions (stdin tests rely on test order). #998 maintainer."
+      "checked_at": "2026-11-08",
+      "result": "2026-11-08: rollup insert:true now valid JS (#1588) - dropped from future work. RunContentCache (postcss) and ContentFilesRecorder (rollup) duplicate each other; sharing needs a core API (maintainer).",
+      "follow_up": "CLI -o with sourceMap {inline:false}: .map never written; touches bin.ts like #1579/#1587, wait for them. getOptions mutates defaultOptions. #998 maintainer."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-07",
-      "result": "2026-11-07 17:5x: prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 + deepmerge (no patch) unchanged. No open Dependabot PRs.",
+      "checked_at": "2026-11-08",
+      "result": "2026-11-08 (after #1588 added rspack/rolldown/vite dev deps): prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 + deepmerge (no patch) unchanged. outdated: minors only + TypeScript 7 major (skip, purgecss-from-tsx uses TS API).",
       "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-07",
-      "result": "9.0.0 released 2026-11-06 21:31 UTC (39 changesets). Maintainer closed #1282/#1545 with comments; #978/#1153 left open (listed Close issue).",
-      "follow_up": "Open PR changesets (#1543/#1577/#1579/#1580) will form 9.0.1; release PR touches package.json (protected) -> suggest only."
+      "checked_at": "2026-11-08",
+      "result": "9.1.0 released 2026-11-07 ~19:10 UTC (#1588 ContentCache, batched removal, Rspack/Rolldown/Vite). #1586 merged before it.",
+      "follow_up": "Open PR changesets (#1543/#1577/#1579/#1580/#1587 + perf) would form 9.1.1; release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-07",
-      "result": "2026-11-07 17:5x main 6ae41d9: #1543/#1577/#1579/#1580 merge cleanly; #1495 conflicts (index.ts, docs/configuration EN/FR, jest.config.ts). Two new drafts this run (sourceMap docs, CLI unnamed output).",
+      "checked_at": "2026-11-08",
+      "result": "2026-11-08 main 38f7d07 (9.1.0): #1543 conflicted after #1588, fixed by f3fb0f9 (no main merge). #1577/#1579/#1580/#1587 merge cleanly. #1495 still conflicts. New perf draft this run.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -194,6 +194,10 @@
     {
       "key": "check-comment-1115",
       "completed_at": "2026-11-07"
+    },
+    {
+      "key": "review-pr-1586",
+      "completed_at": "2026-11-07"
     }
   ],
   "priorities": [
@@ -210,12 +214,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; #978/#1153/#1115 closed by maintainer 2026-11-07. No new human activity as of 17:5x UTC. #1229 still suggested for closing."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-08 06:xx UTC. #1229 still suggested for closing."
     },
     {
       "task": 6,
-      "item": "new-drafts-2026-11-07",
-      "note": "Find PR numbers for drafts on repo-assist/basics-docs-source-map-option and repo-assist/fix-cli-unnamed-css-output-folder (created 2026-11-07 ~18:0x) and list them in monthly issue."
+      "item": "perf-draft-2026-11-08",
+      "note": "Find PR number of draft on repo-assist/perf-skip-removed-selector-string (created 2026-11-08) and list it in the monthly issue."
     }
   ]
 }
