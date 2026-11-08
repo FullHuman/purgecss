@@ -205,8 +205,8 @@ function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
 
 /**
  * Remove the rules and at-rules left empty after one of their children was
- * removed, going up through nested rules and at-rules (e.g. `@supports`
- * inside `@media`) but not past the root
+ * removed once the css was walked through, going up through nested rules and
+ * at-rules (e.g. `@supports` inside `@media`) but not past the root
  *
  * @param parent - parent of the removed node
  */
@@ -216,7 +216,8 @@ function removeEmptyParents(
   let emptyCandidate = parent;
   while (
     (isPostCSSRule(emptyCandidate) || isPostCSSAtRule(emptyCandidate)) &&
-    isRuleEmpty(emptyCandidate)
+    // nothing is left in it but comments that can be removed along with it
+    emptyCandidate.nodes?.every(isRemovableComment)
   ) {
     const grandParent: postcss.Container | postcss.Document | undefined =
       emptyCandidate.parent;
@@ -745,8 +746,17 @@ class PurgeCSS {
     const parent = node.parent;
     if (!node.selector) {
       node.remove();
-      // a parent can only be left empty once the rule is removed
-      removeEmptyParents(parent);
+    }
+    // remove the parents left empty, going up through nested rules and
+    // at-rules (e.g. @supports inside @media) but not past the root
+    let emptyCandidate = parent;
+    while (emptyCandidate && isRuleEmpty(emptyCandidate)) {
+      const grandParent = emptyCandidate.parent;
+      emptyCandidate.remove();
+      emptyCandidate =
+        isPostCSSRule(grandParent) || isPostCSSAtRule(grandParent)
+          ? grandParent
+          : undefined;
     }
 
     // rebuild the rule with the removed selectors and optionally its parent
