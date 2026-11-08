@@ -104,8 +104,8 @@
     {
       "area": "code",
       "checked_at": "2026-11-08",
-      "result": "2026-11-08: rollup insert:true now valid JS (#1588) - dropped from future work. RunContentCache (postcss) and ContentFilesRecorder (rollup) duplicate each other; sharing needs a core API (maintainer).",
-      "follow_up": "CLI -o with sourceMap {inline:false}: .map never written; touches bin.ts like #1579/#1587, wait for them. getOptions mutates defaultOptions. #998 maintainer."
+      "result": "2026-11-08 18:xx: draft PR repo-assist/improve-cli-default-options-copy: getOptions copies defaultOptions (was mutating it; cli-options test vacuous for skippedContentGlobs). No changeset (no user-visible change).",
+      "follow_up": "CLI -o with sourceMap {inline:false}: .map never written; touches run() like #1579/#1587, wait for them. RunContentCache/ContentFilesRecorder share needs core API (maintainer). #998 maintainer."
     },
     {
       "area": "dependencies",
@@ -122,7 +122,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-08",
-      "result": "2026-11-08 main 38f7d07 (9.1.0): #1543 conflicted after #1588, fixed by f3fb0f9 (no main merge). #1577/#1579/#1580/#1587 merge cleanly. #1495 still conflicts. New perf draft this run.",
+      "result": "2026-11-08 18:xx main 38f7d07: #1543/#1577/#1579/#1580/#1587/#1590 merge cleanly with main and pairwise; no human comments; only CodeQL runs on bot PRs. New getOptions draft merges cleanly with all; CLI tests 24/24 with #1579+#1587.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -214,12 +214,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-08 06:xx UTC. #1229 still suggested for closing."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-08 18:xx UTC. #1229 still suggested for closing."
     },
     {
       "task": 6,
-      "item": "perf-draft-2026-11-08",
-      "note": "Find PR number of draft on repo-assist/perf-skip-removed-selector-string (created 2026-11-08) and list it in the monthly issue."
+      "item": "getoptions-draft-2026-11-08",
+      "note": "Find PR number of draft on repo-assist/improve-cli-default-options-copy (created 2026-11-08 evening) and list it in the monthly issue."
     }
   ]
 }
