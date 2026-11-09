@@ -49,14 +49,16 @@ const getSelectorsInElement = (
   };
 
   for (const [name, value] of Object.entries(element.attribs)) {
+    // a class list can be separated by new lines and tabs, not only spaces
+    const words = value.split(/\s+/).filter(Boolean);
     if (name === "class") {
-      result.classes.push(...value.split(" "));
+      result.classes.push(...words);
     } else if (name === "id") {
-      result.ids.push(...value.split(" "));
+      result.ids.push(...words);
     }
     // always add to attributes, to handle things like [class*=foo]
     result.attributes.names.push(name);
-    result.attributes.values.push(...value.split(" "));
+    result.attributes.values.push(...words);
   }
 
   return mergedExtractorResults(getSelectorsInNodes(element), result);

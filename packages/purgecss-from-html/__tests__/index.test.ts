@@ -78,4 +78,26 @@ describe("purgehtml", () => {
       }
     });
   });
+
+  describe("whitespace in attribute values", () => {
+    it("splits on new lines and tabs", () => {
+      const received = purgehtml(
+        `<div class="card\n    active\tshadow" id="main"></div>`,
+      );
+      expect(received.classes).toEqual(["card", "active", "shadow"]);
+      expect(received.ids).toEqual(["main"]);
+      expect(received.attributes.values).toEqual([
+        "card",
+        "active",
+        "shadow",
+        "main",
+      ]);
+    });
+
+    it("ignores leading, trailing and repeated whitespace", () => {
+      const received = purgehtml(`<p class="  lead\n\n  muted  "></p>`);
+      expect(received.classes).toEqual(["lead", "muted"]);
+      expect(received.attributes.values).toEqual(["lead", "muted"]);
+    });
+  });
 });
