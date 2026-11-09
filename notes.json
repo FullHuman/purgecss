@@ -104,7 +104,7 @@
     {
       "area": "code",
       "checked_at": "2026-11-09",
-      "result": "2026-11-09: draft PR repo-assist/fix-html-extractor-whitespace: purgecss-from-html split class/id/attr values on \" \" only (multi-line/tab class lists purged). Same PR fixes docs/extractors.md (EN/FR) named import of purgecss-from-html (default export only; Node SyntaxError).",
+      "result": "2026-11-09: #1592 (html extractor split on any whitespace + extractors.md default import fix EN/FR) open draft.",
       "follow_up": "pug has same split(\" \") (line 47-48; touched by #1580, wait). CLI -o + sourceMap {inline:false}: .map never written; waits for #1579/#1587. #998 maintainer."
     },
     {
@@ -122,7 +122,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-09",
-      "result": "2026-11-09 main 38f7d07 unchanged: #1543/#1577/#1579/#1580/#1587/#1590/#1591 + new html draft merge cleanly with main and pairwise; no human comments; CodeQL passes. 8 open Repo Assist PRs -> maintenance-only.",
+      "result": "2026-11-09 22:4x: main 38f7d07 unchanged, PR heads unchanged; #1543/#1577/#1579/#1580/#1587/#1590/#1591/#1592 merge cleanly; Build/Test action_required (maintainer approval); no review comments. Labelled #1592 bug. 8 open -> maintenance-only.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -214,17 +214,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-09 07:xx UTC. #1229 still suggested for closing."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-09 22:4x UTC. #1229 still suggested for closing."
     },
     {
       "task": 8,
       "item": "html-extractor-quadratic-merge",
-      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark script idea: n sibling <li>. Wait for PR capacity + html whitespace draft (same file)."
-    },
-    {
-      "task": 6,
-      "item": "html-whitespace-draft-2026-11-09",
-      "note": "Find PR number of draft on repo-assist/fix-html-extractor-whitespace (created 2026-11-09 ~07:xx) and list it in the monthly issue."
+      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark: n sibling <li>. Wait for PR capacity + #1592 (same file)."
     }
   ]
 }
