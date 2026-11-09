@@ -28,7 +28,7 @@ Vous pouvez utiliser un extractor en configurant l'option extractors dans le fic
 
 ```js
 import { purgeCSSFromPug } from "purgecss-from-pug";
-import { purgeCSSFromHtml } from "purgecss-from-html";
+import purgeCSSFromHtml from "purgecss-from-html";
 
 const options = {
   content: [], // fichiers desquels extraire les sélecteurs
