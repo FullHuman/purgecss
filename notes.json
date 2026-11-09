@@ -79,8 +79,8 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-11-07",
-      "result": "2026-11-07: #1585 merged. Draft branch repo-assist/basics-docs-source-map-option: sourceMap option, UserDefinedOptions block, ResultPurge.sourceMap (EN/FR); verified on built lib.",
+      "checked_at": "2026-11-09",
+      "result": "2026-11-09: extractors.md named import of purgecss-from-html fixed in html whitespace draft. #1586 merged earlier.",
       "follow_up": "READMEs still say vue-cli 3 (low value). gulp docs do not mention gulp-sourcemaps chaining."
     },
     {
@@ -91,9 +91,9 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-08",
-      "result": "11-08 draft perf(purgecss) branch repo-assist/perf-skip-removed-selector-string: skip toString of removed selectors unless rejected/rejectedCss, ~8% on tailwind.css. :is/:where precheck = noise; hasIgnoreAnnotation prescan ~1.5% (skipped).",
-      "follow_up": "Rest is postcss-selector-parser (Attribute ctor calls util.deprecate per node: upstream). addProperty copies array per @property (tiny N, skip)."
+      "checked_at": "2026-11-09",
+      "result": "2026-11-09: purgecss-from-html getSelectorsInNodes/mergedExtractorResults copy accumulated arrays per child = O(n^2): 2k siblings 32ms, 8k 1.3s, 32k 35s (parse 65ms). Fix: push into one shared result. #1590 (skip removed selector toString) open.",
+      "follow_up": "Implement html extractor accumulator fix when PR capacity allows (after html whitespace PR merges, same file). Rest of core = postcss-selector-parser upstream."
     },
     {
       "area": "tests",
@@ -103,9 +103,9 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-08",
-      "result": "2026-11-08 18:xx: draft PR repo-assist/improve-cli-default-options-copy: getOptions copies defaultOptions (was mutating it; cli-options test vacuous for skippedContentGlobs). No changeset (no user-visible change).",
-      "follow_up": "CLI -o with sourceMap {inline:false}: .map never written; touches run() like #1579/#1587, wait for them. RunContentCache/ContentFilesRecorder share needs core API (maintainer). #998 maintainer."
+      "checked_at": "2026-11-09",
+      "result": "2026-11-09: draft PR repo-assist/fix-html-extractor-whitespace: purgecss-from-html split class/id/attr values on \" \" only (multi-line/tab class lists purged). Same PR fixes docs/extractors.md (EN/FR) named import of purgecss-from-html (default export only; Node SyntaxError).",
+      "follow_up": "pug has same split(\" \") (line 47-48; touched by #1580, wait). CLI -o + sourceMap {inline:false}: .map never written; waits for #1579/#1587. #998 maintainer."
     },
     {
       "area": "dependencies",
@@ -121,8 +121,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-08",
-      "result": "2026-11-08 18:xx main 38f7d07: #1543/#1577/#1579/#1580/#1587/#1590 merge cleanly with main and pairwise; no human comments; only CodeQL runs on bot PRs. New getOptions draft merges cleanly with all; CLI tests 24/24 with #1579+#1587.",
+      "checked_at": "2026-11-09",
+      "result": "2026-11-09 main 38f7d07 unchanged: #1543/#1577/#1579/#1580/#1587/#1590/#1591 + new html draft merge cleanly with main and pairwise; no human comments; CodeQL passes. 8 open Repo Assist PRs -> maintenance-only.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches."
     },
     {
@@ -214,12 +214,17 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-08 18:xx UTC. #1229 still suggested for closing."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-09 07:xx UTC. #1229 still suggested for closing."
+    },
+    {
+      "task": 8,
+      "item": "html-extractor-quadratic-merge",
+      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark script idea: n sibling <li>. Wait for PR capacity + html whitespace draft (same file)."
     },
     {
       "task": 6,
-      "item": "getoptions-draft-2026-11-08",
-      "note": "Find PR number of draft on repo-assist/improve-cli-default-options-copy (created 2026-11-08 evening) and list it in the monthly issue."
+      "item": "html-whitespace-draft-2026-11-09",
+      "note": "Find PR number of draft on repo-assist/fix-html-extractor-whitespace (created 2026-11-09 ~07:xx) and list it in the monthly issue."
     }
   ]
 }
