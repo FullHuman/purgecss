@@ -121,8 +121,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-10",
-      "result": "2026-11-10: main 38f7d07 and all 8 PR heads unchanged; Build/Test still action_required, no reviews. Octopus-merged all 8 onto main: no conflicts, build+lint pass, all packages pass (purgecss 312/312, postcss 85, webpack 80, rollup 44). 7 patch changesets (no name clash) = 9.1.1.",
+      "checked_at": "2026-11-11",
+      "result": "2026-11-11: main 38f7d07 and all 8 PR heads unchanged since 11-09; Build/Test still action_required, no reviews/comments. 11-10 octopus merge of all 8 onto main: no conflicts, build+lint pass, all packages pass (purgecss 312/312). 7 patch changesets = 9.1.1.",
       "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches. Redo combined merge only if main or a PR head moves."
     },
     {
@@ -214,7 +214,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-10. #1229 still suggested for closing."
+      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-11 (latest 11-07). #1229 still suggested for closing."
     },
     {
       "task": 8,
