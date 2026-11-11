@@ -122,8 +122,8 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-11",
-      "result": "2026-11-11: main 38f7d07 and all 8 PR heads unchanged since 11-09; Build/Test still action_required, no reviews/comments. 11-10 octopus merge of all 8 onto main: no conflicts, build+lint pass, all packages pass (purgecss 312/312). 7 patch changesets = 9.1.1.",
-      "follow_up": "push_to_pull_request_branch needs repo FullHuman/purgecss + exact head ref (safe-output branches get -<hash> suffix). Do NOT merge main into PR branches. Redo combined merge only if main or a PR head moves."
+      "result": "11-11 19:47: main 38f7d07 + all 8 PR heads unchanged since 11-09; Build/Test action_required, no reviews. 11-10 octopus merge of all 8: no conflicts, build/lint/tests pass (purgecss 312/312); 7 patch changesets = 9.1.1. 11-10 19:54 to 11-11 19:47 runs: noop.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Redo combined merge only if main/PR head moves. Monthly #1544: use * [ ] on next update."
     },
     {
       "area": "ci",
