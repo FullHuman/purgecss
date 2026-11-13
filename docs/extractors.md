@@ -28,7 +28,7 @@ You can use an extractor by settings the extractors option in the PurgeCSS confi
 
 ```js
 import { purgeCSSFromPug } from "purgecss-from-pug";
-import { purgeCSSFromHtml } from "purgecss-from-html";
+import purgeCSSFromHtml from "purgecss-from-html";
 
 const options = {
   content: [], // files to extract the selectors from
