@@ -90,6 +90,7 @@ describe("purgehtml", () => {
         "card",
         "active",
         "shadow",
+        "card\n    active\tshadow",
         "main",
       ]);
     });
@@ -97,7 +98,11 @@ describe("purgehtml", () => {
     it("ignores leading, trailing and repeated whitespace", () => {
       const received = purgehtml(`<p class="  lead\n\n  muted  "></p>`);
       expect(received.classes).toEqual(["lead", "muted"]);
-      expect(received.attributes.values).toEqual(["lead", "muted"]);
+      expect(received.attributes.values).toEqual([
+        "lead",
+        "muted",
+        "  lead\n\n  muted  ",
+      ]);
     });
 
     it("splits on form feeds and carriage returns", () => {
@@ -120,6 +125,27 @@ describe("purgehtml", () => {
       const received = purgehtml(`<p class="" id=""></p>`);
       expect(received.classes).toEqual([]);
       expect(received.ids).toEqual([]);
+    });
+
+    it("keeps the whole value of an attribute with several words", () => {
+      const received = purgehtml(
+        `<a title="hello world" class="card active" href="#">a</a>`,
+      );
+      expect(received.classes).toEqual(["card", "active"]);
+      expect(received.attributes.values).toEqual([
+        "hello",
+        "world",
+        "hello world",
+        "card",
+        "active",
+        "card active",
+        "#",
+      ]);
+    });
+
+    it("adds the value of an attribute with one word once", () => {
+      const received = purgehtml(`<a title="hello" href="#">a</a>`);
+      expect(received.attributes.values).toEqual(["hello", "#"]);
     });
   });
 });

@@ -66,9 +66,11 @@ const getSelectorsInElement = (
     // always add to attributes, to handle things like [class*=foo]
     result.attributes.names.push(name);
     result.attributes.values.push(...words);
-    // an empty value has no word: keep it, to handle things like [alt=""]
-    if (value === "") {
-      result.attributes.values.push("");
+    // also add the whole value when it isn't its only word, i.e. when it is
+    // empty or has whitespace, to handle things like [alt=""],
+    // [title="hello world"] or [title^="hello wo"]
+    if (words.length !== 1 || words[0] !== value) {
+      result.attributes.values.push(value);
     }
   }
 
