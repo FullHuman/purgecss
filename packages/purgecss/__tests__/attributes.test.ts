@@ -145,3 +145,27 @@ describe("dynamicAttributes with regular expressions", () => {
     expect(css.includes('html[data-theme="dark"] .menu-item')).toBe(true);
   });
 });
+
+describe("empty attribute values with the HTML extractor", () => {
+  it("keeps [attribute=''] when the attribute is empty in the content", async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: `<img alt="" src="logo.png">\n<input disabled>`,
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: `img[alt=""] { color: red } img[alt="logo"] { color: blue } input[disabled=""] { color: green }`,
+        },
+      ],
+      extractors: [{ extensions: ["html"], extractor: purgecssFromHtml }],
+    });
+    const purgedCSS = resultsPurge[0].css;
+
+    expect(purgedCSS.includes('img[alt=""]')).toBe(true);
+    expect(purgedCSS.includes('input[disabled=""]')).toBe(true);
+    expect(purgedCSS.includes('img[alt="logo"]')).toBe(false);
+  });
+});

@@ -15,6 +15,13 @@ export type ExtractorResultDetailed = {
   undetermined: string[];
 };
 
+/**
+ * The characters separating the classes of a class list in HTML: space, tab,
+ * new line, form feed and carriage return. `\s` matches more than these, e.g.
+ * the no-break space, which is part of a class name.
+ */
+const ASCII_WHITESPACE = /[ \t\n\f\r]+/;
+
 const mergedExtractorResults = (
   resultLeft: ExtractorResultDetailed,
   resultRight: ExtractorResultDetailed,
@@ -50,7 +57,7 @@ const getSelectorsInElement = (
 
   for (const [name, value] of Object.entries(element.attribs)) {
     // a class list can be separated by new lines and tabs, not only spaces
-    const words = value.split(/\s+/).filter(Boolean);
+    const words = value.split(ASCII_WHITESPACE).filter(Boolean);
     if (name === "class") {
       result.classes.push(...words);
     } else if (name === "id") {
@@ -59,6 +66,10 @@ const getSelectorsInElement = (
     // always add to attributes, to handle things like [class*=foo]
     result.attributes.names.push(name);
     result.attributes.values.push(...words);
+    // an empty value has no word: keep it, to handle things like [alt=""]
+    if (value === "") {
+      result.attributes.values.push("");
+    }
   }
 
   return mergedExtractorResults(getSelectorsInNodes(element), result);

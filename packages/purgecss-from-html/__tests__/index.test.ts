@@ -99,5 +99,27 @@ describe("purgehtml", () => {
       expect(received.classes).toEqual(["lead", "muted"]);
       expect(received.attributes.values).toEqual(["lead", "muted"]);
     });
+
+    it("splits on form feeds and carriage returns", () => {
+      const received = purgehtml(`<p class="lead\r\nmuted\fsmall"></p>`);
+      expect(received.classes).toEqual(["lead", "muted", "small"]);
+    });
+
+    it("does not split on a no-break space", () => {
+      const received = purgehtml(`<p class="lead\u00a0muted small"></p>`);
+      expect(received.classes).toEqual(["lead\u00a0muted", "small"]);
+    });
+
+    it("keeps an empty attribute value", () => {
+      const received = purgehtml(`<img alt="" src="a.png"><input disabled>`);
+      expect(received.attributes.names).toEqual(["alt", "src", "disabled"]);
+      expect(received.attributes.values).toEqual(["", "a.png", ""]);
+    });
+
+    it("does not add an empty class or id", () => {
+      const received = purgehtml(`<p class="" id=""></p>`);
+      expect(received.classes).toEqual([]);
+      expect(received.ids).toEqual([]);
+    });
   });
 });
