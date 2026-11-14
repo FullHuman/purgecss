@@ -69,7 +69,7 @@
       "number": 1593,
       "state": "commented",
       "updated_at": "2026-11-14",
-      "note": "New 11-14, labelled bug. Cases 2+3 (font shorthand/var/case fontFace, -webkit-animation) in draft PR from branch repo-assist/fix-issue-1593-font-face-keyframes-uses. Case 1 (case-insensitive tags/attr names/i flag) analysis+verified safelist workaround posted; not implemented."
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in draft PR from branch repo-assist/fix-issue-1593-case-insensitive-selectors (18:38 run). Linked both on issue. Close once both merged."
     }
   ],
   "fixes": [
@@ -83,11 +83,11 @@
     },
     {
       "issue": 1593,
-      "pr": null,
+      "pr": 1594,
       "branch": "repo-assist/fix-issue-1593-font-face-keyframes-uses",
       "status": "open",
       "updated_at": "2026-11-14",
-      "note": "Draft PR (number unknown at creation; look up by branch). Part of #1593 cases 2+3. purgecss 307/307; merges clean with all RA PRs; #1495 unchanged 2 conflict regions."
+      "note": "#1594 = cases 2+3 (fontFace font shorthand/var/case, -webkit-animation). Case 1 = separate draft PR (number unknown; branch repo-assist/fix-issue-1593-case-insensitive-selectors): lazy lowercase sets in ExtractorResultSets, i flag. Both clean with main 015f06e."
     }
   ],
   "checks": [
@@ -106,20 +106,20 @@
     {
       "area": "performance",
       "checked_at": "2026-11-14",
-      "result": "2026-11-09: purgecss-from-html getSelectorsInNodes/mergedExtractorResults copy accumulated arrays per child = O(n^2): 2k siblings 32ms, 8k 1.3s, 32k 35s (parse 65ms). Fix: push into one shared result. #1590 (skip removed selector toString) open.",
-      "follow_up": "html extractor accumulator fix unblocked by #1592 merge; needs a PR slot (8 open). fontFace fix: 40k custom-prop values x 50 font faces adds ~30ms."
+      "result": "2026-11-14 18:38: draft PR (branch repo-assist/perf-html-extractor-accumulate) makes purgecss-from-html linear: 16k siblings 11.8s -> 0.1s, identical output on 48 repo html/vue. Case-insensitive fix: no slowdown on performance fixture.",
+      "follow_up": "Sync test can't guard perf (jest timeout can't interrupt). Next perf idea needs measurement first."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-14",
-      "result": "2026-11-14: coverage purgecss 98.09%; added fontFace shorthand/var/case + -webkit-animation tests in #1593 PR. Child-process builds (rspack/vite) not seen by coverage.",
+      "result": "2026-11-14: purgecss 320/320 (98.93% stmts) with case-insensitive tests; html extractor 18 tests, 100%.",
       "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests."
     },
     {
       "area": "code",
       "checked_at": "2026-11-14",
-      "result": "2026-11-14: #1592 merged. #1593 fix PR normalizes font names (normalizeFontFamily), removes dead stripQuotes, adds fontValues matched in removeUnusedFontFaces.",
-      "follow_up": "#1593 case 1: lowercase tag/attr-name lookup (lazy lowercase undetermined set, reset on merge) + attributeNode.insensitive. pug split(\" \") waits #1580. CLI .map waits #1579/#1587."
+      "result": "2026-11-14: #1593 case 1 PR opened. purgecss-from-html skips <script>/<style> (htmlparser2 types script/style, not tag) - verified, low impact.",
+      "follow_up": "CLI sourceMap inline:false .map not written with --output (#1579/#1587 merged, now unblocked). html script/style skip (low)."
     },
     {
       "area": "dependencies",
@@ -129,15 +129,15 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-08",
-      "result": "9.1.0 released 2026-11-07 ~19:10 UTC (#1588 ContentCache, batched removal, Rspack/Rolldown/Vite). #1586 merged before it.",
-      "follow_up": "8 open PRs carry 7 patch changesets (5 purgecss, html, pug; #1591 none) = 9.1.1 once merged; release PR touches package.json (protected) -> suggest only."
+      "checked_at": "2026-11-14",
+      "result": "main has 10 patch changesets since 9.1.0 (cli x2, html x2, pug x5, perf). Suggested 9.1.1 release in monthly (Define goal).",
+      "follow_up": "Release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-14",
-      "result": "11-14: #1592 merged (5b8a29b). 7 RA PRs unchanged since 11-09 + new #1593 draft = 8 open -> next runs maintenance-only. All merge clean with main and the new branch.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Redo combined merge only if main/PR head moves."
+      "result": "11-14 18:38: merged since: #1590 #1587 #1580 #1579 (+ maintainer pug #1595-#1598). Open RA: #1543 #1577 #1591 #1594 + 2 new drafts (case-insensitive, html perf) = 6. All clean with main 015f06e.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
@@ -228,17 +228,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred as of 2026-11-14 (#1593 new, handled). #1229 still suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred as of 2026-11-14 18:38. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
-      "task": 8,
-      "item": "html-extractor-quadratic-merge",
-      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark n sibling <li>. #1592 merged; waits only for PR capacity (<8 open)."
-    },
-    {
-      "task": 3,
-      "item": "issue-1593-case1",
-      "note": "Case-insensitive selectors: hasTag/hasAttrName lowercase (html extractor already lowercases; default extractor needs lowercase lookup of undetermined), i flag via attributeNode.insensitive in someAttrValue. Own PR when capacity allows."
+      "task": 5,
+      "item": "cli-sourcemap-map-file",
+      "note": "CLI --output with sourceMap {inline:false}: annotation added but .map never written; set `to` per output file. Unblocked (#1579/#1587 merged)."
     }
   ]
 }
