@@ -51,12 +51,24 @@ The options available through the CLI are similar to the ones available with a c
 purgecss --css css/app.css css/palette.css --content src/index.html
 ```
 
+Use `-` to read the CSS from the standard input. This CSS has no file name, so it is written to the console, or to the file given to `--output` if the path ends with `.css`.
+
+```sh
+cat css/app.css | purgecss --css - --content src/index.html --output build/app.css
+```
+
 ### --content
 
 You can specify content that should be analyzed by PurgeCSS with an array of filenames or [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). These files can be HTML, Pug, Blade, etc.
 
 ```sh
 purgecss --css css/app.css --content src/index.html src/**/*.js
+```
+
+Use `-` to read the content from the standard input.
+
+```sh
+cat src/index.html | purgecss --css css/app.css --content -
 ```
 
 ### --config
