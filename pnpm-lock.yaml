@@ -371,6 +371,12 @@ importers:
 
   packages/purgecss-from-pug:
     dependencies:
+      acorn:
+        specifier: ^8.19.0
+        version: 8.19.0
+      acorn-walk:
+        specifier: ^8.3.5
+        version: 8.3.5
       pug-lexer:
         specifier: ^5.0.1
         version: 5.0.1
