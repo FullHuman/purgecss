@@ -668,4 +668,292 @@ describe("purgeCSSFromPug", () => {
       });
     });
   });
+
+  describe("each", () => {
+    it("finds the strings of the list", () => {
+      expect(
+        purgeCSSFromPug(`each size in ['sm', 'lg']\n  div(class=size)`),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div"],
+        undetermined: ["sm", "lg"],
+      });
+    });
+
+    it("finds the strings of an object, of for and of each of", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "each val, key in {a: 'one', b: 'two three'}",
+            "  div(class=val)",
+            "else",
+            "  p",
+            "for size in [`md`, `size-${n}`]",
+            "  div(class=size)",
+            "each [key, val] of new Map([['k', 'v']])",
+            "  div(class=val)",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div", "p", "div", "div"],
+        undetermined: [
+          "one",
+          "two",
+          "three",
+          "two three",
+          "md",
+          "size-",
+          "k",
+          "v",
+        ],
+      });
+    });
+  });
+
+  describe("mixins", () => {
+    it("finds the strings of the arguments of a call", () => {
+      expect(
+        purgeCSSFromPug(
+          `mixin button(cls)\n  button(class=cls)\n+button('btn-primary')`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["button"],
+        undetermined: ["btn-primary"],
+      });
+    });
+
+    it("finds the strings of every argument, before the attributes", () => {
+      expect(
+        purgeCSSFromPug(
+          "+button('btn btn-primary', `btn-${size}`, {icon: 'plus'})(class='x' title='y')&attributes({id: 'z'})",
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "title"],
+          values: ["true", "false", "x", "y", "z"],
+        },
+        classes: ["x"],
+        ids: ["z"],
+        tags: [],
+        undetermined: ["btn", "btn-primary", "btn btn-primary", "btn-", "plus"],
+      });
+    });
+
+    it("finds the strings of the default arguments", () => {
+      expect(
+        purgeCSSFromPug(
+          "mixin button(cls = 'btn-default', size = `md`, ...rest)\n  button(class=[cls, size])",
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["button"],
+        undetermined: ["btn-default", "md"],
+      });
+    });
+  });
+
+  describe("interpolations", () => {
+    it("finds the strings of escaped and unescaped interpolations", () => {
+      expect(
+        purgeCSSFromPug(
+          `p #{isOn ? 'on' : 'off'} and !{'<b class="bold">' + text + '</b>'}`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p"],
+        undetermined: [
+          "on",
+          "off",
+          "<b",
+          'class="bold">',
+          '<b class="bold">',
+          "</b>",
+        ],
+      });
+    });
+
+    it("finds the strings of the interpolations of every text", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "| #{'piped'} text",
+            "p.",
+            "  text of a #{'block'}",
+            "p text with a #[span(class='inner') #{'nested'} tag]",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "inner"],
+        },
+        classes: ["inner"],
+        ids: [],
+        tags: ["p", "p", "span"],
+        undetermined: ["piped", "block", "nested"],
+      });
+    });
+
+    it("finds the strings of an interpolation in a line of HTML", () => {
+      expect(
+        purgeCSSFromPug(`<div class="#{isOn ? 'on' : 'off'}">text</div>`),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: [],
+        undetermined: ["on", "off"],
+      });
+    });
+
+    it("finds the strings of an interpolated tag", () => {
+      expect(purgeCSSFromPug(`#{isMain ? 'main' : 'section'}.foo`)).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "foo"],
+        },
+        classes: ["foo"],
+        ids: [],
+        tags: [],
+        undetermined: ["main", "section"],
+      });
+    });
+  });
+
+  describe("conditions", () => {
+    it("finds the strings of if, else if and unless", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "if theme === 'dark'",
+            "  p(class=theme)",
+            "else if theme === 'light'",
+            "  p(class=theme)",
+            "else",
+            "  p",
+            "unless size === 'sm'",
+            "  p(class=size)",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p", "p", "p"],
+        undetermined: ["dark", "light", "sm"],
+      });
+    });
+
+    it("finds the strings of while", () => {
+      expect(
+        purgeCSSFromPug(`while (cls = ['a', 'b'][n++])\n  p(class=cls)`),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p"],
+        undetermined: ["a", "b"],
+      });
+    });
+
+    it("finds the strings of case and when", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "case kind || 'info'",
+            "  when 'warning'",
+            "  when 'error': p(class=kind)",
+            "  when `note`",
+            "    p(class=kind)",
+            "  default",
+            "    p",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p", "p"],
+        undetermined: ["info", "warning", "error", "note"],
+      });
+    });
+  });
+
+  describe("JavaScript without strings", () => {
+    it("finds nothing in names, numbers and the name of a mixin", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "mixin button(cls, ...rest)",
+            "  button(class=cls)",
+            "+button(type, 2)",
+            "+button",
+            // the name of a mixin isn't in the HTML
+            "+#{'but' + 'ton'}(type)",
+            "each size, index in sizes",
+            "  p #{size} !{index}",
+            "each size of sizes",
+            "  #{tagName}",
+            "if isOn",
+            "  p",
+            "else if count > 1",
+            "  p",
+            "while n < 3",
+            "  p= n++",
+            "case n",
+            "  when 0",
+            "    p",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["button", "p", "p", "p", "p", "p"],
+        undetermined: [],
+      });
+    });
+  });
 });

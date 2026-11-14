@@ -167,6 +167,44 @@ const getCodeStrings = (code: string): string[] => {
 };
 
 /**
+ * Get the JavaScript of a token, other than the value of an attribute
+ *
+ * @param token - token of a Pug template
+ * @returns the JavaScript written in the token, if any
+ */
+const getTokenCode = (token: lex.Token): string | null => {
+  switch (token.type) {
+    // - code: unbuffered and buffered, e.g. `- var a = 'foo'` and `p= a`
+    // - interpolation in text: `p #{isOn ? 'on' : 'off'}` and `p !{html}`
+    // - interpolated tag: `#{isMain ? 'main' : 'section'}`
+    // - conditions, as the ones of unbuffered code, e.g.
+    //   `- if (size === 'lg') {`. `unless` is an `if` token
+    case "code":
+    case "interpolated-code":
+    case "interpolation":
+    case "if":
+    case "else-if":
+    case "while":
+    case "case":
+    case "when":
+      return token.val;
+    // the list of `each size in ['sm', 'lg']` and `each size of sizes`
+    case "each":
+    case "eachOf":
+      return token.code;
+    // the arguments of `+button('btn-primary')` and the default arguments of
+    // `mixin button(cls = 'btn-default')`. Without arguments, `args` is null,
+    // also for a call although its type says otherwise. The name of a mixin
+    // isn't read: it is never in the HTML
+    case "call":
+    case "mixin":
+      return token.args;
+    default:
+      return null;
+  }
+};
+
+/**
  * Add the words of a string to a list of selectors
  *
  * @param value - string found in a template, e.g. the value of an attribute
@@ -227,7 +265,8 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
     }
   };
   // the strings of code can be anything, e.g. the classes of
-  // `- var classes = ['foo', 'bar']` used by `div(class=classes)`
+  // `- var classes = ['foo', 'bar']` or `each size in ['sm', 'lg']` used by
+  // `div(class=classes)` and `div(class=size)`
   const addCode = (code: string): void => {
     for (const string of getCodeStrings(code)) {
       addWords(string, extractorResult.undetermined);
@@ -255,8 +294,6 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
       for (const [name, value] of getAndAttributes(token.val)) {
         addAttribute(name, value);
       }
-    } else if (token.type === "code") {
-      addCode(token.val);
     } else if (
       token.type === "blockcode" &&
       tokens[index + 1]?.type === "start-pipeless-text"
@@ -271,6 +308,11 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
           .map((line) => (line.type === "text" ? line.val : "\n"))
           .join(""),
       );
+    } else {
+      const code = getTokenCode(token);
+      if (code) {
+        addCode(code);
+      }
     }
   }
   return extractorResult;
