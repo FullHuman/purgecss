@@ -592,12 +592,19 @@ export function mergeExtractorSelectors(
 }
 
 /**
- * Strips quotes of a string
+ * Normalize a font family name, or a value ending with one, to compare it
+ * with the names of the font faces. The quotes are removed, the whitespace
+ * collapsed and the letters lowercased, as font family names are matched
+ * case-insensitively, e.g. `"Body Text"` and `body text` are the same font
  *
- * @param str - string to be stripped
+ * @param fontFamily - font family name or value ending with one
  */
-function stripQuotes(str: string): string {
-  return str.replace(/(^["'])|(["']$)/g, "");
+function normalizeFontFamily(fontFamily: string): string {
+  return fontFamily
+    .replace(/["']/g, " ")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }
 
 /**
@@ -791,6 +798,8 @@ class PurgeCSS {
   };
 
   private usedAnimations: Set<string> = new Set();
+  /** values of the font shorthands and custom properties, normalized */
+  private fontValues: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
   public removedNodes: postcss.Node[] = [];
@@ -835,7 +844,9 @@ class PurgeCSS {
 
     // collect keyframes data
     if (this.options.keyframes) {
-      if (prop === "animation" || prop === "animation-name") {
+      // the animation properties can have a vendor prefix, e.g.
+      // -webkit-animation for the @-webkit-keyframes rules
+      if (/^(-[a-z]+-)?animation(-name)?$/.test(prop)) {
         for (const word of value.split(/[\s,]+/)) {
           this.usedAnimations.add(word);
         }
@@ -854,8 +865,15 @@ class PurgeCSS {
     if (this.options.fontFace) {
       if (prop === "font-family") {
         for (const fontName of value.split(",")) {
-          const cleanedFontFace = stripQuotes(fontName.trim());
-          this.usedFontFaces.add(cleanedFontFace);
+          this.usedFontFaces.add(normalizeFontFamily(fontName));
+        }
+      } else if (prop === "font" || prop.startsWith("--")) {
+        // the font shorthand ends with the font families, after the font
+        // size, e.g. `700 2rem/1.2 Brand, sans-serif`, and custom properties
+        // can hold a font shorthand or font families. The values are matched
+        // with the font faces once all of them are known
+        for (const fontValue of value.split(",")) {
+          this.fontValues.add(normalizeFontFamily(fontValue));
         }
       }
       return;
@@ -1059,7 +1077,7 @@ class PurgeCSS {
       for (const childNode of node.nodes) {
         if (childNode.type === "decl" && childNode.prop === "font-family") {
           this.atRules.fontFace.push({
-            name: stripQuotes(childNode.value),
+            name: normalizeFontFamily(childNode.value),
             node,
           });
         }
@@ -1468,6 +1486,17 @@ class PurgeCSS {
    * Remove unused font-faces
    */
   public removeUnusedFontFaces(): void {
+    // a font face is used by the font shorthands and custom properties
+    // ending with its name
+    for (const { name } of this.atRules.fontFace) {
+      for (const fontValue of this.fontValues) {
+        if (fontValue === name || fontValue.endsWith(` ${name}`)) {
+          this.usedFontFaces.add(name);
+          break;
+        }
+      }
+    }
+
     for (const { name, node } of this.atRules.fontFace) {
       if (!this.usedFontFaces.has(name)) {
         node.remove();

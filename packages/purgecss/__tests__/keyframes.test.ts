@@ -165,3 +165,42 @@ describe("keep keyframes referenced via CSS variables", () => {
     expect(purgedCSS.includes("@keyframes unused")).toBe(false);
   });
 });
+
+describe("keep keyframes used by prefixed animation properties", () => {
+  let purgedCSS: string;
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: '<div class="spinner pulse"></div>',
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: `
+            @-webkit-keyframes spin { to { -webkit-transform: rotate(360deg); } }
+            @-webkit-keyframes pulse { to { opacity: 0.5; } }
+            @-webkit-keyframes unused { to { opacity: 0; } }
+            .spinner { -webkit-animation: spin 1s linear infinite; }
+            .pulse { -webkit-animation-name: pulse; }
+          `,
+        },
+      ],
+      keyframes: true,
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("keeps `@-webkit-keyframes spin` used by -webkit-animation", () => {
+    expect(purgedCSS.includes("@-webkit-keyframes spin")).toBe(true);
+  });
+
+  it("keeps `@-webkit-keyframes pulse` used by -webkit-animation-name", () => {
+    expect(purgedCSS.includes("@-webkit-keyframes pulse")).toBe(true);
+  });
+
+  it("removes `@-webkit-keyframes unused`", () => {
+    expect(purgedCSS.includes("@-webkit-keyframes unused")).toBe(false);
+  });
+});
