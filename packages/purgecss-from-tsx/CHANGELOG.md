@@ -1,5 +1,11 @@
 # @fullhuman/purgecss-from-tsx
 
+## 9.1.0
+
+### Patch Changes
+
+- @fullhuman/purgecss-from-jsx@9.1.0
+
 ## 9.0.0
 
 ### Major Changes

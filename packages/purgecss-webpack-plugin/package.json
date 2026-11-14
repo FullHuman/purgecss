@@ -1,11 +1,12 @@
 {
   "name": "purgecss-webpack-plugin",
-  "version": "9.0.0",
-  "description": "PurgeCSS plugin for webpack - Remove unused css",
+  "version": "9.1.0",
+  "description": "PurgeCSS plugin for webpack and Rspack - Remove unused css",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
   "keywords": [
     "webpack-plugin",
+    "rspack-plugin",
     "optimize",
     "optimization",
     "remove",
@@ -46,13 +47,23 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "devDependencies": {
+    "@rspack/core": "2.3.1",
     "css-loader": "^7.1.5",
     "fast-glob": "^3.3.3",
     "mini-css-extract-plugin": "^2.10.2",
     "webpack": "^5.112.2"
   },
   "peerDependencies": {
+    "@rspack/core": "^1.0.0 || ^2.0.0",
     "webpack": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

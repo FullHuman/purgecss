@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import * as fs from "fs";
+import * as path from "path";
 import packageJson from "./../package.json";
 import {
   defaultOptions,
@@ -140,6 +141,10 @@ export async function run(program: Command) {
   // output results in specified directory
   if (options.output) {
     if (purged.length === 1 && options.output.endsWith(".css")) {
+      // Ensure the directory exists
+      await fs.promises.mkdir(path.dirname(options.output), {
+        recursive: true,
+      });
       await fs.promises.writeFile(options.output, purged[0].css);
       return;
     }

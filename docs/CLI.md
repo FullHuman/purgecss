@@ -87,6 +87,12 @@ By default, the CLI outputs the result in the console. If you wish to return the
 purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build/css/
 ```
 
+If there is a single CSS file and the path ends with `.css`, the purified CSS is written to that file instead. Missing folders in the path are created.
+
+```sh
+purgecss --css css/app.css --content src/index.html --output build/css/app.purged.css
+```
+
 ### --preserve-paths
 
 By default, the CLI flattens the folder hierarchy and outputs all CSS files to the same directory. If you want to preserve the original folder structure in the output, use the `--preserve-paths` flag.

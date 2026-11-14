@@ -27,6 +27,8 @@ function toRegExp(pattern: string): RegExp | undefined {
  *
  * @param pattern - string or regular expression
  * @param value - value to match, e.g. a selector or a variable name
+ *
+ * @public
  */
 export function matchesPattern(
   pattern: string | RegExp,

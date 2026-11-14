@@ -29,7 +29,14 @@ export interface RawContent<T = string> {
  * @public
  */
 export interface RawCSS {
+  /** css to purge */
   raw: string;
+  /**
+   * name of the css, returned as the `file` of its result. It is used as the
+   * path of the css in source maps, like the path of a css file: the map
+   * `sources` are relative to the directory of `sourceMap.to`, which
+   * defaults to the name.
+   */
   name?: string;
 }
 

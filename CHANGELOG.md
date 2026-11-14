@@ -1,3 +1,16 @@
+# [9.1.0](https://github.com/FullHuman/purgecss/compare/v9.0.0...v9.1.0)
+
+PurgeCSS and its plugins now work with the bundlers in use today: Vite 8 and Rolldown, Next.js 16 with Turbopack, Rspack 1 and 2, webpack 5 and Parcel. See the package changelogs for the details, e.g. [purgecss](packages/purgecss/CHANGELOG.md), [@fullhuman/postcss-purgecss](packages/postcss-purgecss/CHANGELOG.md), [purgecss-webpack-plugin](packages/purgecss-webpack-plugin/CHANGELOG.md) and [rollup-plugin-purgecss](packages/rollup-plugin-purgecss/CHANGELOG.md).
+
+### Highlights
+
+- **Faster content scanning.** Content files are read in parallel. With the new `ContentCache`, which the plugins use, a content file is only read and extracted again when it changed: with the PostCSS plugin, 20 CSS files over 1,081 content files went from 7.6 s to 1.6 s.
+- **Faster purging.** Unused rules are removed in one pass after the walk, which gives the same output, about a third faster on large stylesheets; `rejectedCss` on Tailwind CSS 2 went from about 115 s to 0.5 s.
+- **Dev servers stay in sync.** The PostCSS plugin adds dependency messages for the content files and globs, so Vite, Next.js, webpack and Rspack (postcss-loader) and Parcel purge the CSS again when the content changes, instead of serving stale CSS until a restart. New options `dependencies` and `contentCache`.
+- **CSS modules.** The used classes of CSS modules are kept by the PostCSS plugin when postcss-modules runs first (Vite), and by the webpack plugin with mini-css-extract-plugin, `CssExtractRspackPlugin`, the native CSS of Rspack (including `composes` from another file) and webpack's `experiments.css`.
+- **purgecss-webpack-plugin** works with Rspack without webpack installed, purges in `processAssets`, extracts the content once per compilation, watches the content files and fixes its source maps.
+- **rollup-plugin-purgecss** works with Rolldown and Vite 8, where builds failed, creates the `output` directory, implements `insert` and honours `contentFunction`.
+
 # [9.0.0](https://github.com/FullHuman/purgecss/compare/v8.0.0...v9.0.0)
 
 From this release, each package has its own changelog, generated from the changesets: see `packages/<name>/CHANGELOG.md`, for example [purgecss](packages/purgecss/CHANGELOG.md), [@fullhuman/postcss-purgecss](packages/postcss-purgecss/CHANGELOG.md) and [purgecss-webpack-plugin](packages/purgecss-webpack-plugin/CHANGELOG.md). All packages are released together with the same version.
