@@ -9,6 +9,7 @@ describe("PurgeCSS CLI stdin", () => {
   const tempFolder = path.resolve(CLI_TEST_FOLDER, ".temp/stdin");
   const unnamedRawCSSConfig = path.resolve(tempFolder, "unnamed.config.cjs");
   const namedRawCSSConfig = path.resolve(tempFolder, "named.config.cjs");
+  const severalRawCSSConfig = path.resolve(tempFolder, "several.config.cjs");
 
   beforeAll(async () => {
     await asyncFs.mkdir(tempFolder, { recursive: true });
@@ -25,6 +26,16 @@ describe("PurgeCSS CLI stdin", () => {
       `module.exports = {
         content: [${content}],
         css: [{ raw: ".hello { color: red; } .unused { color: blue; }", name: "named.css" }],
+      };`,
+    );
+    await asyncFs.writeFile(
+      severalRawCSSConfig,
+      `module.exports = {
+        content: [${content}],
+        css: [
+          { raw: ".hello { color: red; }", name: "named.css" },
+          { raw: ".hello { color: blue; }" },
+        ],
       };`,
     );
   });
@@ -124,6 +135,21 @@ describe("PurgeCSS CLI stdin", () => {
         "--preserve-paths",
       ]),
     ).rejects.toThrow("give the raw CSS a name");
+    await expect(asyncFs.readdir(outputFolder)).rejects.toThrow("ENOENT");
+  });
+
+  it("should not suggest a .css output path for several css", async () => {
+    // a path ending with .css is a folder when there are several results
+    const outputFolder = path.resolve(tempFolder, "several-output.css");
+    const result = runWithStdin([
+      "--config",
+      severalRawCSSConfig,
+      "--output",
+      outputFolder,
+    ]);
+    await expect(result).rejects.toThrow("Give every raw CSS a name");
+    await expect(result).rejects.not.toThrow("ending with .css");
+    // the named css is not written either
     await expect(asyncFs.readdir(outputFolder)).rejects.toThrow("ENOENT");
   });
 
