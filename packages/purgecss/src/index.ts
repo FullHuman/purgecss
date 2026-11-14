@@ -1124,13 +1124,17 @@ class PurgeCSS {
         const keepSelector = this.shouldKeepSelector(selector, selectors);
 
         if (!keepSelector) {
-          // the whitespace after the previous comma belongs to the selector
-          const removedSelector = selector.toString().trim();
-          if (this.options.rejected) {
-            this.selectorsRemoved.add(removedSelector);
-          }
-          if (this.options.rejectedCss) {
-            selectorsRemovedFromRule.push(removedSelector);
+          // the removed selector is only stringified when it is reported, as
+          // most selectors of a big stylesheet are usually removed
+          if (this.options.rejected || this.options.rejectedCss) {
+            // the whitespace after the previous comma belongs to the selector
+            const removedSelector = selector.toString().trim();
+            if (this.options.rejected) {
+              this.selectorsRemoved.add(removedSelector);
+            }
+            if (this.options.rejectedCss) {
+              selectorsRemovedFromRule.push(removedSelector);
+            }
           }
           selector.remove();
         }
