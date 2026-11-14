@@ -167,6 +167,89 @@ const getCodeStrings = (code: string): string[] => {
 };
 
 /**
+ * What stands for a value computed at runtime in the HTML of a template: an
+ * interpolation in text, what is between two strings in code. A character
+ * that is never written in a template.
+ */
+const RUNTIME_VALUE = "\0";
+
+/**
+ * The start of a tag of HTML, or a comment: the tags written in a comment
+ * aren't elements. The name of a tag can start with a runtime value, e.g.
+ * `<#{tag} class="foo">`.
+ */
+const HTML_TAG = /<!--[^]*?(?:-->|$)|<([a-zA-Z\0][^\t\n\f\r />]*)/g;
+
+/**
+ * An attribute of a tag of HTML, as the HTML tokenizer reads it: a name, then
+ * a value in double quotes, in single quotes or without quotes. A value in
+ * quotes that isn't closed goes up to the end of the HTML.
+ */
+const HTML_ATTRIBUTE =
+  /[\t\n\f\r /]*([^\t\n\f\r />][^\t\n\f\r />=]*)(?:[\t\n\f\r ]*=[\t\n\f\r ]*(?:"([^"]*)"?|'([^']*)'?|([^\t\n\f\r >]*)))?/y;
+
+/**
+ * Get the tags of HTML and their attributes
+ *
+ * The HTML of a template is rarely a document: it is a line, a string or a
+ * part of them, cut anywhere by an interpolation or a concatenation, e.g.
+ * `<td class="` then `">`. So the start tags are read where they are, without
+ * building a tree: an HTML parser drops a `<td>` that isn't in a table and a
+ * tag that isn't closed at the end of its input.
+ *
+ * The runtime values are removed from the names and the values: only what is
+ * written in the template is returned, e.g. `btn-` for `btn-#{size}`, and no
+ * name for a tag or an attribute that is only a runtime value.
+ *
+ * @param html - HTML code, possibly a fragment, with its runtime values
+ * @returns the name and the attributes of each start tag
+ */
+const getHtmlTags = (
+  html: string,
+): { name: string; attributes: [string, string][] }[] => {
+  const tags: { name: string; attributes: [string, string][] }[] = [];
+  const getStatic = (text: string) => text.replaceAll(RUNTIME_VALUE, "");
+  HTML_TAG.lastIndex = 0;
+  let tag: RegExpExecArray | null;
+  while ((tag = HTML_TAG.exec(html))) {
+    // not a comment
+    if (tag[1] !== undefined) {
+      const attributes: [string, string][] = [];
+      HTML_ATTRIBUTE.lastIndex = HTML_TAG.lastIndex;
+      let attribute: RegExpExecArray | null;
+      while ((attribute = HTML_ATTRIBUTE.exec(html))) {
+        attributes.push([
+          getStatic(attribute[1]),
+          // an attribute without a value has an empty one, e.g. `disabled`
+          getStatic(attribute[2] ?? attribute[3] ?? attribute[4] ?? ""),
+        ]);
+        // the next tag is after the attributes: a `<` in a value isn't a tag
+        HTML_TAG.lastIndex = HTML_ATTRIBUTE.lastIndex;
+      }
+      tags.push({
+        name: getStatic(tag[1]),
+        attributes: attributes.filter(([name]) => name),
+      });
+    }
+  }
+  return tags;
+};
+
+/**
+ * Get a name of HTML as it is written and in lower case
+ *
+ * The names of the tags and of the attributes of HTML are case-insensitive,
+ * e.g. `<DIV>` is a `div`, but the ones of SVG are not, e.g. `linearGradient`
+ * and `viewBox`, and a fragment doesn't tell which one it is.
+ *
+ * @param name - name of a tag or of an attribute
+ * @returns the name, and the name in lower case when it is different
+ */
+const getHtmlNames = (name: string): string[] => [
+  ...new Set([name, name.toLowerCase()]),
+];
+
+/**
  * Get the JavaScript of a token, other than the value of an attribute
  *
  * @param token - token of a Pug template
@@ -245,6 +328,17 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
     tags: [],
     undetermined: [],
   };
+  const addAttributeValue = (name: string, value: string): void => {
+    addWords(
+      value,
+      extractorResult.attributes.values,
+      name === "class"
+        ? extractorResult.classes
+        : name === "id"
+          ? extractorResult.ids
+          : undefined,
+    );
+  };
   const addAttribute = (name: string, value?: acorn.Node): void => {
     if (name !== "class" && name !== "id") {
       extractorResult.attributes.names.push(name);
@@ -253,26 +347,67 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
       return;
     }
     for (const string of getExpressionStrings(value, name === "class")) {
-      addWords(
-        string,
-        extractorResult.attributes.values,
-        name === "class"
-          ? extractorResult.classes
-          : name === "id"
-            ? extractorResult.ids
-            : undefined,
-      );
+      addAttributeValue(name, string);
+    }
+  };
+  // the HTML written as HTML: Pug doesn't escape text, so the tags of a line
+  // of HTML, of the text of a tag and of a block of text are elements
+  const addHtml = (html: string): void => {
+    for (const { name, attributes } of getHtmlTags(html)) {
+      if (name) {
+        extractorResult.tags.push(...getHtmlNames(name));
+      }
+      for (const [attribute, value] of attributes) {
+        const lowerCaseName = attribute.toLowerCase();
+        if (lowerCaseName !== "class" && lowerCaseName !== "id") {
+          extractorResult.attributes.names.push(...getHtmlNames(attribute));
+        }
+        addAttributeValue(lowerCaseName, value);
+      }
     }
   };
   // the strings of code can be anything, e.g. the classes of
   // `- var classes = ['foo', 'bar']` or `each size in ['sm', 'lg']` used by
   // `div(class=classes)` and `div(class=size)`
   const addCode = (code: string): void => {
-    for (const string of getCodeStrings(code)) {
+    const strings = getCodeStrings(code);
+    for (const string of strings) {
       addWords(string, extractorResult.undetermined);
     }
+    // or HTML, e.g. `p!= '<b class="bold">' + text + '</b>'`. A concatenation
+    // cuts it anywhere, e.g. `'<b class="' + cls + '">'`: the strings are
+    // read together, in the order the code writes them
+    addHtml(strings.join(RUNTIME_VALUE));
   };
+  // the text read since the last token that isn't text. An interpolation cuts
+  // it anywhere, e.g. `<div class="a #{b} c">` is the text `<div class="a `,
+  // the code `b` and the text ` c">`: they are read together
+  let html = "";
+  // the lines of a block are text: JavaScript under `-`, nothing that is
+  // rendered as an element under a comment, HTML elsewhere, e.g. under `p.`
+  let block: "code" | "comment" | "html" = "html";
+  let code = "";
   for (const [index, token] of tokens.entries()) {
+    if (
+      token.type === "text" ||
+      token.type === "text-html" ||
+      token.type === "newline"
+    ) {
+      const text = token.type === "newline" ? "\n" : token.val;
+      if (block === "code") {
+        code += text;
+      } else if (block === "html") {
+        html += text;
+      }
+      continue;
+    }
+    if (token.type === "interpolated-code") {
+      html += RUNTIME_VALUE;
+    } else {
+      // the last token is always `eos`: no text is left after the loop
+      addHtml(html);
+      html = "";
+    }
     if (token.type === "tag") {
       extractorResult.tags.push(token.val);
     } else if (token.type === "class") {
@@ -294,24 +429,24 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
       for (const [name, value] of getAndAttributes(token.val)) {
         addAttribute(name, value);
       }
-    } else if (
-      token.type === "blockcode" &&
-      tokens[index + 1]?.type === "start-pipeless-text"
-    ) {
-      // the lines of block code are text tokens, up to the end of the block
-      const end = tokens.findIndex(
-        ({ type }, i) => i > index && type === "end-pipeless-text",
-      );
-      addCode(
-        tokens
-          .slice(index + 2, end)
-          .map((line) => (line.type === "text" ? line.val : "\n"))
-          .join(""),
-      );
-    } else {
-      const code = getTokenCode(token);
-      if (code) {
+    } else if (token.type === "start-pipeless-text") {
+      const previous = tokens[index - 1]?.type;
+      block =
+        previous === "blockcode"
+          ? "code"
+          : previous === "comment"
+            ? "comment"
+            : "html";
+    } else if (token.type === "end-pipeless-text") {
+      if (block === "code") {
         addCode(code);
+        code = "";
+      }
+      block = "html";
+    } else {
+      const tokenCode = getTokenCode(token);
+      if (tokenCode) {
+        addCode(tokenCode);
       }
     }
   }
