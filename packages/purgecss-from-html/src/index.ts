@@ -22,39 +22,20 @@ export type ExtractorResultDetailed = {
  */
 const ASCII_WHITESPACE = /[ \t\n\f\r]+/;
 
-const mergedExtractorResults = (
-  resultLeft: ExtractorResultDetailed,
-  resultRight: ExtractorResultDetailed,
-): ExtractorResultDetailed => {
-  return {
-    attributes: {
-      names: [...resultLeft.attributes.names, ...resultRight.attributes.names],
-      values: [
-        ...resultLeft.attributes.values,
-        ...resultRight.attributes.values,
-      ],
-    },
-    classes: [...resultLeft.classes, ...resultRight.classes],
-    ids: [...resultLeft.ids, ...resultRight.ids],
-    tags: [...resultLeft.tags, ...resultRight.tags],
-    undetermined: [],
-  };
-};
-
-const getSelectorsInElement = (
+/**
+ * Add the selectors of an element and of its descendants to the result
+ *
+ * @param element - element to get the selectors from
+ * @param result - result the selectors are added to
+ */
+const addSelectorsInElement = (
   element: htmlparser2.Htmlparser2TreeAdapterMap["element"],
-): ExtractorResultDetailed => {
-  const result: ExtractorResultDetailed = {
-    attributes: {
-      names: [],
-      values: [],
-    },
-    classes: [],
-    ids: [],
-    tags: [element.name],
-    undetermined: [],
-  };
+  result: ExtractorResultDetailed,
+): void => {
+  // the descendants are added before the element itself
+  addSelectorsInNodes(element, result);
 
+  result.tags.push(element.name);
   for (const [name, value] of Object.entries(element.attribs)) {
     // a class list can be separated by new lines and tabs, not only spaces
     const words = value.split(ASCII_WHITESPACE).filter(Boolean);
@@ -73,41 +54,36 @@ const getSelectorsInElement = (
       result.attributes.values.push(value);
     }
   }
-
-  return mergedExtractorResults(getSelectorsInNodes(element), result);
 };
 
-const getSelectorsInNodes = (
+/**
+ * Add the selectors of the descendants of a node to the result. Adding them
+ * to a single result, instead of merging the results of each child, keeps
+ * the extraction linear in the number of elements.
+ *
+ * @param node - node to get the selectors from
+ * @param result - result the selectors are added to
+ */
+const addSelectorsInNodes = (
   node:
     | htmlparser2.Htmlparser2TreeAdapterMap["document"]
     | htmlparser2.Htmlparser2TreeAdapterMap["element"],
-): ExtractorResultDetailed => {
-  let result: ExtractorResultDetailed = {
-    attributes: {
-      names: [],
-      values: [],
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: [],
-  };
-
+  result: ExtractorResultDetailed,
+): void => {
   for (const childNode of node.childNodes) {
     const element = childNode;
 
     switch (element.type) {
       case "tag":
-        result = mergedExtractorResults(result, getSelectorsInElement(element));
+        addSelectorsInElement(element, result);
         break;
       case "root":
-        result = mergedExtractorResults(result, getSelectorsInNodes(element));
+        addSelectorsInNodes(element, result);
         break;
       default:
         break;
     }
   }
-  return result;
 };
 
 /**
@@ -123,7 +99,18 @@ const purgecssFromHtml = (content: string): ExtractorResultDetailed => {
     treeAdapter: htmlparser2.adapter,
   });
 
-  return getSelectorsInNodes(tree);
+  const result: ExtractorResultDetailed = {
+    attributes: {
+      names: [],
+      values: [],
+    },
+    classes: [],
+    ids: [],
+    tags: [],
+    undetermined: [],
+  };
+  addSelectorsInNodes(tree, result);
+  return result;
 };
 
 export default purgecssFromHtml;

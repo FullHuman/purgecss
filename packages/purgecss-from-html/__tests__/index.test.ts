@@ -148,4 +148,29 @@ describe("purgehtml", () => {
       expect(received.attributes.values).toEqual(["hello", "#"]);
     });
   });
+
+  describe("nested elements", () => {
+    it("adds the selectors of the descendants before the element", () => {
+      const received = purgehtml(
+        `<ul id="list"><li class="a"><b class="c"></b></li><li class="b"></li></ul>`,
+      );
+      expect(received.tags).toEqual([
+        "head",
+        "b",
+        "li",
+        "li",
+        "ul",
+        "body",
+        "html",
+      ]);
+      expect(received.classes).toEqual(["c", "a", "b"]);
+      expect(received.ids).toEqual(["list"]);
+      expect(received.attributes.names).toEqual([
+        "class",
+        "class",
+        "class",
+        "id",
+      ]);
+    });
+  });
 });
