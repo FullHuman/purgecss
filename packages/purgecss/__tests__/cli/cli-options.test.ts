@@ -42,7 +42,27 @@ describe("PurgeCSS CLI options", () => {
       variables: true,
       safelist: standardizeSafelist(["expected-safelist"]),
       blocklist: ["expected-blocklist"],
+      skippedContentGlobs: ["expected-skipped-content-globs"],
     };
     expect(options).toEqual(expectedOptions);
+  });
+
+  it("should not change the default options", async () => {
+    const defaultOptionsBefore = { ...defaultOptions };
+    const program = parseCommandOptions(new Command());
+    program.parse([
+      "purgecss",
+      "",
+      "--content",
+      "content",
+      "--css",
+      "css",
+      "--keyframes",
+      "--rejected",
+    ]);
+
+    await getOptions(program);
+
+    expect(defaultOptions).toEqual(defaultOptionsBefore);
   });
 });
