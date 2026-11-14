@@ -538,11 +538,11 @@ describe("purgeCSSFromPug", () => {
       ).toEqual({
         attributes: {
           names: ["class", "id"],
-          values: ["true", "false"],
+          values: ["true", "false", "bold"],
         },
-        classes: [],
+        classes: ["bold"],
         ids: [],
-        tags: ["p", "p"],
+        tags: ["p", "p", "b"],
         undetermined: [
           "on",
           "off",
@@ -783,11 +783,11 @@ describe("purgeCSSFromPug", () => {
       ).toEqual({
         attributes: {
           names: ["class", "id"],
-          values: ["true", "false"],
+          values: ["true", "false", "bold"],
         },
-        classes: [],
+        classes: ["bold"],
         ids: [],
-        tags: ["p"],
+        tags: ["p", "b"],
         undetermined: [
           "on",
           "off",
@@ -827,11 +827,12 @@ describe("purgeCSSFromPug", () => {
       ).toEqual({
         attributes: {
           names: ["class", "id"],
-          values: ["true", "false"],
+          // the class attribute of the line, without its interpolation
+          values: ["true", "false", ""],
         },
         classes: [],
         ids: [],
-        tags: [],
+        tags: ["div"],
         undetermined: ["on", "off"],
       });
     });
@@ -953,6 +954,255 @@ describe("purgeCSSFromPug", () => {
         ids: [],
         tags: ["button", "p", "p", "p", "p", "p"],
         undetermined: [],
+      });
+    });
+  });
+
+  describe("HTML", () => {
+    it("finds the tags and the attributes of a line of HTML", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            `<div class="raw card" id="main" data-state='is open' hidden>`,
+            "  p text",
+            "</div>",
+            `<img src=/a.png alt="" class=logo/>`,
+            "<br/>",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "data-state", "hidden", "src", "alt"],
+          values: [
+            "true",
+            "false",
+            "raw",
+            "card",
+            "raw card",
+            "main",
+            "is",
+            "open",
+            "is open",
+            "",
+            "/a.png",
+            "",
+            "logo/",
+          ],
+        },
+        classes: ["raw", "card", "logo/"],
+        ids: ["main"],
+        tags: ["div", "p", "img", "br"],
+        undetermined: [],
+      });
+    });
+
+    it("finds the attributes of a line of HTML cut by interpolations", () => {
+      expect(
+        purgeCSSFromPug(
+          `<div class="a !{b} c" id=#{id} title="#{'x'}" #{rest}><#{tag} class="d-#{e}">`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "title"],
+          values: ["true", "false", "a", "c", "a  c", "", "", "d-"],
+        },
+        classes: ["a", "c", "d-"],
+        ids: [],
+        tags: ["div"],
+        undetermined: ["x"],
+      });
+    });
+
+    it("finds the HTML of the text of a tag, piped text and a block of text", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            `p This is <em class="inline">text</em> with a #[i.pug tag]`,
+            `| <b class="piped">text</b>`,
+            "p.",
+            "  <a",
+            `    class="block" href="#{url}">text</a>`,
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "href"],
+          values: ["true", "false", "inline", "pug", "piped", "block", ""],
+        },
+        classes: ["inline", "pug", "piped", "block"],
+        ids: [],
+        tags: ["p", "em", "i", "b", "p", "a"],
+        undetermined: [],
+      });
+    });
+
+    it("finds the tags an HTML parser drops out of their context", () => {
+      expect(
+        purgeCSSFromPug(
+          [`<tr class="row">`, `  <td class="cell">`, "</tr>"].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "row", "cell"],
+        },
+        classes: ["row", "cell"],
+        ids: [],
+        tags: ["tr", "td"],
+        undetermined: [],
+      });
+    });
+
+    it("finds the names as they are written and in lower case", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            `<DIV CLASS="Upper" ID="Main" Title="Hello">`,
+            `<linearGradient gradientUnits="userSpaceOnUse">`,
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: [
+            "class",
+            "id",
+            "Title",
+            "title",
+            "gradientUnits",
+            "gradientunits",
+          ],
+          values: ["true", "false", "Upper", "Main", "Hello", "userSpaceOnUse"],
+        },
+        classes: ["Upper"],
+        ids: ["Main"],
+        tags: ["DIV", "div", "linearGradient", "lineargradient"],
+        undetermined: [],
+      });
+    });
+
+    it("finds the HTML of the strings of code", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            `- var link = '<a href=' + url + ' class="link">' + text + '</a>'`,
+            "p!= link",
+            "-",
+            '  var icon = `<i class="icon icon-${name}"></i>`',
+            `  var open = isOn ? "<b id='on'>" : "<s>"`,
+            `+box('<em class="arg">')`,
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "href"],
+          values: [
+            "true",
+            "false",
+            "",
+            "link",
+            "icon",
+            "icon-",
+            "icon icon-",
+            "on",
+            "arg",
+          ],
+        },
+        classes: ["link", "icon", "icon-", "arg"],
+        ids: ["on"],
+        tags: ["a", "p", "i", "b", "s", "em"],
+        undetermined: [
+          "<a",
+          "href=",
+          "<a href=",
+          'class="link">',
+          ' class="link">',
+          "</a>",
+          "<i",
+          'class="icon',
+          "icon-",
+          '<i class="icon icon-',
+          '"></i>',
+          "<b",
+          "id='on'>",
+          "<b id='on'>",
+          "<s>",
+          "<em",
+          'class="arg">',
+          '<em class="arg">',
+        ],
+      });
+    });
+
+    it("finds the attributes of a tag that isn't closed at the end of its HTML", () => {
+      expect(
+        purgeCSSFromPug(
+          [`p!= '<b title="bold" class="' + cls`, `<i class="last`].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "title"],
+          values: ["true", "false", "bold", "", "last"],
+        },
+        classes: ["last"],
+        ids: [],
+        tags: ["p", "b", "i"],
+        undetermined: [
+          "<b",
+          'title="bold"',
+          'class="',
+          '<b title="bold" class="',
+        ],
+      });
+    });
+
+    it("finds the HTML written in a script", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "script.",
+            "  if (count < 1) {",
+            `    el.innerHTML = '<span class="empty">none</span>'`,
+            "  }",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "empty"],
+        },
+        classes: ["empty"],
+        ids: [],
+        tags: ["script", "span"],
+        undetermined: [],
+      });
+    });
+
+    it("finds nothing in comments, end tags and text without a tag", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            `<!-- <b class="html-comment"> -->`,
+            `// <b class="comment">`,
+            "//-",
+            `  <b class="comment-block">`,
+            "//",
+            `  <b class="rendered-comment-block"> #{'kept'}`,
+            "</div>",
+            "p a < b, 1 <2 and c > d </p>",
+            "p= 'a < b'",
+            "- var heart = '<3', end = '</b>'",
+            "p #{'<'} b",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p", "p"],
+        undetermined: ["kept", "a", "<", "b", "a < b", "<3", "</b>", "<"],
       });
     });
   });
