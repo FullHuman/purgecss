@@ -28,6 +28,8 @@
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "dependencies": {
+    "acorn": "^8.19.0",
+    "acorn-walk": "^8.3.5",
     "pug-lexer": "^5.0.1"
   },
   "devDependencies": {
