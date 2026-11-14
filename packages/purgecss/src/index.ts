@@ -618,17 +618,19 @@ function isAttributeFound(
     return true;
   }
 
+  // the `i` flag matches the value case-insensitively: [type="button" i]
+  const insensitive = attributeNode.insensitive === true;
   switch (attributeNode.operator) {
     case "$=":
-      return selectors.hasAttrSuffix(attributeNode.value);
+      return selectors.hasAttrSuffix(attributeNode.value, insensitive);
     case "~=":
     case "*=":
-      return selectors.hasAttrSubstr(attributeNode.value);
+      return selectors.hasAttrSubstr(attributeNode.value, insensitive);
     case "=":
-      return selectors.hasAttrValue(attributeNode.value);
+      return selectors.hasAttrValue(attributeNode.value, insensitive);
     case "|=":
     case "^=":
-      return selectors.hasAttrPrefix(attributeNode.value);
+      return selectors.hasAttrPrefix(attributeNode.value, insensitive);
     default:
       return true;
   }
