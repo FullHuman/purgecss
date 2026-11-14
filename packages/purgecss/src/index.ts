@@ -575,6 +575,29 @@ function hasIgnoreAnnotation(
 }
 
 /**
+ * Remove the rules and at-rules left empty after one of their children was
+ * removed once the css was walked through, going up through nested rules and
+ * at-rules (e.g. `@supports` inside `@media`) but not past the root
+ *
+ * @param parent - parent of the removed node
+ */
+function removeEmptyParents(
+  parent?: postcss.Container | postcss.Document,
+): void {
+  let emptyCandidate = parent;
+  while (
+    (isPostCSSRule(emptyCandidate) || isPostCSSAtRule(emptyCandidate)) &&
+    // nothing is left in it but comments that can be removed along with it
+    emptyCandidate.nodes?.every(isRemovableComment)
+  ) {
+    const grandParent: postcss.Container | postcss.Document | undefined =
+      emptyCandidate.parent;
+    emptyCandidate.remove();
+    emptyCandidate = grandParent;
+  }
+}
+
+/**
  * Merge two extractor selectors
  *
  * @param extractorSelectorsA - extractor selectors A
@@ -1461,7 +1484,12 @@ class PurgeCSS {
    * Remove unused CSS variables
    */
   public removeUnusedCSSVariables(): void {
+    // the at-rules left empty by the removed `@property` rules are removed too
+    const propertyParents = [...this.variablesStructure.properties.values()]
+      .flat()
+      .map((atRule) => atRule.parent);
     this.variablesStructure.removeUnused();
+    for (const parent of propertyParents) removeEmptyParents(parent);
   }
 
   /**
@@ -1470,7 +1498,9 @@ class PurgeCSS {
   public removeUnusedFontFaces(): void {
     for (const { name, node } of this.atRules.fontFace) {
       if (!this.usedFontFaces.has(name)) {
+        const parent = node.parent;
         node.remove();
+        removeEmptyParents(parent);
       }
     }
   }
@@ -1484,7 +1514,9 @@ class PurgeCSS {
         !this.usedAnimations.has(node.params) &&
         !this.isKeyframesSafelisted(node.params)
       ) {
+        const parent = node.parent;
         node.remove();
+        removeEmptyParents(parent);
       }
     }
   }
