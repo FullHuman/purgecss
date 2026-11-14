@@ -6,6 +6,8 @@ function mergeSets(into: Set<string>, from?: string[] | Set<string>): void {
   }
 }
 
+type LowercaseSetName = "attrNames" | "attrValues" | "tags" | "undetermined";
+
 /**
  * @public
  */
@@ -16,12 +18,18 @@ class ExtractorResultSets {
   private classes = new Set<string>();
   private ids = new Set<string>();
   private tags = new Set<string>();
+  /**
+   * Lowercase copies of the sets, for the case-insensitive lookups. Each is
+   * built on its first lookup and dropped when selectors are merged.
+   */
+  private lowercase: Partial<Record<LowercaseSetName, Set<string>>> = {};
 
   constructor(er: ExtractorResult) {
     this.merge(er);
   }
 
   merge(that: ExtractorResult | ExtractorResultSets): this {
+    this.lowercase = {};
     if (Array.isArray(that)) {
       mergeSets(this.undetermined, that);
     } else if (that instanceof ExtractorResultSets) {
@@ -45,37 +53,110 @@ class ExtractorResultSets {
     return this;
   }
 
-  hasAttrName(name: string): boolean {
-    return this.attrNames.has(name) || this.undetermined.has(name);
+  private getLowercase(name: LowercaseSetName): Set<string> {
+    let lowercase = this.lowercase[name];
+    if (!lowercase) {
+      lowercase = new Set<string>();
+      for (const value of this[name]) {
+        lowercase.add(value.toLowerCase());
+      }
+      this.lowercase[name] = lowercase;
+    }
+    return lowercase;
   }
 
-  private someAttrValue(predicate: (value: string) => boolean): boolean {
-    for (const val of this.attrValues) {
-      if (predicate(val)) return true;
-    }
-    for (const val of this.undetermined) {
-      if (predicate(val)) return true;
+  /**
+   * Returns true if the set, or the undetermined selectors, has the value
+   * written in any case
+   *
+   * @param name - name of the set
+   * @param value - value to find
+   */
+  private hasLowercase(
+    name: Exclude<LowercaseSetName, "undetermined">,
+    value: string,
+  ): boolean {
+    const lowercaseValue = value.toLowerCase();
+    return (
+      this.getLowercase(name).has(lowercaseValue) ||
+      this.getLowercase("undetermined").has(lowercaseValue)
+    );
+  }
+
+  /**
+   * Returns true if an attribute name is found. Attribute names are
+   * case-insensitive in HTML, `[DATA-STATE]` matches `data-state`.
+   *
+   * @param name - attribute name
+   */
+  hasAttrName(name: string): boolean {
+    return (
+      this.attrNames.has(name) ||
+      this.undetermined.has(name) ||
+      this.hasLowercase("attrNames", name)
+    );
+  }
+
+  private someAttrValue(
+    predicate: (value: string) => boolean,
+    insensitive: boolean,
+  ): boolean {
+    const values = insensitive
+      ? [this.getLowercase("attrValues"), this.getLowercase("undetermined")]
+      : [this.attrValues, this.undetermined];
+    for (const set of values) {
+      for (const val of set) {
+        if (predicate(val)) return true;
+      }
     }
     return false;
   }
 
-  hasAttrPrefix(prefix: string): boolean {
-    return this.someAttrValue((value) => value.startsWith(prefix));
+  /**
+   * @param prefix - start of the attribute value
+   * @param insensitive - whether the value is matched case-insensitively,
+   * as with the `i` flag of `[lang|="en" i]`
+   */
+  hasAttrPrefix(prefix: string, insensitive = false): boolean {
+    const start = insensitive ? prefix.toLowerCase() : prefix;
+    return this.someAttrValue((value) => value.startsWith(start), insensitive);
   }
 
-  hasAttrSuffix(suffix: string): boolean {
-    return this.someAttrValue((value) => value.endsWith(suffix));
+  /**
+   * @param suffix - end of the attribute value
+   * @param insensitive - whether the value is matched case-insensitively,
+   * as with the `i` flag of `[href$=".pdf" i]`
+   */
+  hasAttrSuffix(suffix: string, insensitive = false): boolean {
+    const end = insensitive ? suffix.toLowerCase() : suffix;
+    return this.someAttrValue((value) => value.endsWith(end), insensitive);
   }
 
-  hasAttrSubstr(substr: string): boolean {
-    const wordSubstr = substr.trim().split(" ");
+  /**
+   * @param substr - words of the attribute value
+   * @param insensitive - whether the value is matched case-insensitively,
+   * as with the `i` flag of `[title*="new" i]`
+   */
+  hasAttrSubstr(substr: string, insensitive = false): boolean {
+    const wordSubstr = (insensitive ? substr.toLowerCase() : substr)
+      .trim()
+      .split(" ");
     return wordSubstr.every((word) =>
-      this.someAttrValue((value) => value.includes(word)),
+      this.someAttrValue((value) => value.includes(word), insensitive),
     );
   }
 
-  hasAttrValue(value: string): boolean {
-    return this.attrValues.has(value) || this.undetermined.has(value);
+  /**
+   * @param value - attribute value
+   * @param insensitive - whether the value is matched case-insensitively,
+   * as with the `i` flag of `[type="button" i]`
+   */
+  hasAttrValue(value: string, insensitive = false): boolean {
+    return (
+      this.attrValues.has(value) ||
+      this.undetermined.has(value) ||
+      (insensitive && this.hasLowercase("attrValues", value))
+    );
   }
 
   hasClass(name: string): boolean {
@@ -86,8 +167,18 @@ class ExtractorResultSets {
     return this.ids.has(id) || this.undetermined.has(id);
   }
 
+  /**
+   * Returns true if a tag is found. Type selectors are case-insensitive in
+   * HTML, `TD` matches `td`.
+   *
+   * @param tag - tag name
+   */
   hasTag(tag: string): boolean {
-    return this.tags.has(tag) || this.undetermined.has(tag);
+    return (
+      this.tags.has(tag) ||
+      this.undetermined.has(tag) ||
+      this.hasLowercase("tags", tag)
+    );
   }
 
   /**
@@ -115,6 +206,7 @@ class ExtractorResultSets {
       }
       return interned;
     };
+    this.lowercase = {};
     this.undetermined = intern(this.undetermined);
     this.attrNames = intern(this.attrNames);
     this.attrValues = intern(this.attrValues);
