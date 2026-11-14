@@ -340,4 +340,332 @@ describe("purgeCSSFromPug", () => {
       });
     });
   });
+
+  describe("&attributes", () => {
+    it("finds the attributes of an object", () => {
+      expect(
+        purgeCSSFromPug(
+          `div&attributes({class: 'foo bar', id: 'main', title: 'hello world'})`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "title"],
+          values: [
+            "true",
+            "false",
+            "foo",
+            "bar",
+            "foo bar",
+            "main",
+            "hello",
+            "world",
+            "hello world",
+          ],
+        },
+        classes: ["foo", "bar"],
+        ids: ["main"],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("finds the classes of a class array and a class object", () => {
+      expect(
+        purgeCSSFromPug(
+          `div&attributes({class: ['card', {active: isActive}, open ? 'is-open' : 'is-closed']})`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "card", "active", "is-open", "is-closed"],
+        },
+        classes: ["card", "active", "is-open", "is-closed"],
+        ids: [],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("finds quoted names, numbers, booleans and empty values", () => {
+      expect(
+        purgeCSSFromPug(
+          `input&attributes({'data-state': "open", "aria-label": \`\`, tabindex: -1, 2: 'two', disabled: true})`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: [
+            "class",
+            "id",
+            "data-state",
+            "aria-label",
+            "tabindex",
+            "2",
+            "disabled",
+          ],
+          values: ["true", "false", "open", "", "-1", "two"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["input"],
+        undetermined: [],
+      });
+    });
+
+    it("splits on whitespace and doesn't use the keys of an object as values of other attributes", () => {
+      expect(
+        purgeCSSFromPug(
+          "div&attributes({class: `card\n  active`, style: {color: 'red'}})",
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "style"],
+          values: ["true", "false", "card", "active", "card\n  active", "red"],
+        },
+        classes: ["card", "active"],
+        ids: [],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("adds to the attributes in parentheses", () => {
+      expect(
+        purgeCSSFromPug(`a.btn(href='/')&attributes({class: 'active'})`),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "href"],
+          values: ["true", "false", "btn", "/", "active"],
+        },
+        classes: ["btn", "active"],
+        ids: [],
+        tags: ["a"],
+        undetermined: [],
+      });
+    });
+
+    it("has the name but no value for a variable", () => {
+      expect(
+        purgeCSSFromPug(
+          `div&attributes({class: classes, title, hidden: isHidden})`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id", "title", "hidden"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("ignores spread objects and computed names", () => {
+      expect(
+        purgeCSSFromPug(
+          `div&attributes({...rest, [name]: 'foo', ['data-' + key]: 'bar', id: 'main'})`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false", "main"],
+        },
+        classes: [],
+        ids: ["main"],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+
+    it("finds nothing when the argument isn't an object literal", () => {
+      const expected = {
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div"],
+        undetermined: [],
+      };
+      expect(purgeCSSFromPug(`div&attributes(attributes)`)).toEqual(expected);
+      expect(
+        purgeCSSFromPug(`div&attributes(merge({class: 'foo'}, attrs))`),
+      ).toEqual(expected);
+      expect(
+        purgeCSSFromPug(
+          `div&attributes(isOn ? {class: 'on'} : {class: 'off'})`,
+        ),
+      ).toEqual(expected);
+    });
+
+    it("finds nothing when the argument isn't an expression", () => {
+      // pug-lexer doesn't check it, Pug fails when it compiles the template
+      expect(purgeCSSFromPug(`div&attributes({class: 'foo' 'bar'})`)).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div"],
+        undetermined: [],
+      });
+    });
+  });
+
+  describe("code", () => {
+    it("finds the strings of unbuffered code", () => {
+      expect(
+        purgeCSSFromPug(`- var classes = ['foo', 'bar']\ndiv(class=classes)`),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["div"],
+        undetermined: ["foo", "bar"],
+      });
+    });
+
+    it("finds the strings of buffered code", () => {
+      expect(
+        purgeCSSFromPug(
+          `p= isOn ? 'on' : "off"\np!= '<b class="bold">' + text + '</b>'`,
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p"],
+        undetermined: [
+          "on",
+          "off",
+          "<b",
+          'class="bold">',
+          '<b class="bold">',
+          "</b>",
+        ],
+      });
+    });
+
+    it("splits on whitespace and keeps the whole string", () => {
+      expect(
+        purgeCSSFromPug(
+          `- var title = 'hello  world', label = "", cell = "a\\tb"\ndiv(title=title)`,
+        ).undetermined,
+      ).toEqual(["hello", "world", "hello  world", "", "a", "b", "a\tb"]);
+    });
+
+    it("finds the static parts of a template literal", () => {
+      expect(
+        purgeCSSFromPug(
+          "- var button = `btn btn-${size} ${isOn ? 'on' : `off-${level}`}`, empty = ``",
+        ).undetermined,
+      ).toEqual(["btn", "btn-", "btn btn-", " ", "on", "off-", ""]);
+    });
+
+    it("finds the strings of statements that aren't complete", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "- if (theme === 'dark') {",
+            "  p(class=theme)",
+            "- } else if (theme === 'light') {",
+            "  p",
+            "- }",
+            "- for (const size of ['sm', 'lg'])",
+            "  div(class=size)",
+            "- else",
+            "  div",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p", "div", "div"],
+        undetermined: ["dark", "light", "sm", "lg"],
+      });
+    });
+
+    it("finds the strings of block code", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "-",
+            `  var list = ["uno", "dos",`,
+            `      "tres"]`,
+            "",
+            "  var text = `multi",
+            "    line`",
+            "ul(class=list)",
+            "  li 'text'",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["ul", "li"],
+        undetermined: ["uno", "dos", "tres", "multi", "line", "multi\n  line"],
+      });
+    });
+
+    it("ignores names, numbers, regular expressions and comments", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "- var count = 3, isOn = /it's/.test(text), options = {active: isOn}",
+            "- // it's a 'comment'",
+            "- count += 1 /* 'comment' */",
+            "p= count",
+          ].join("\n"),
+        ).undetermined,
+      ).toEqual([]);
+    });
+
+    it("keeps the strings before a string that isn't closed", () => {
+      // pug-lexer doesn't check unbuffered code
+      expect(
+        purgeCSSFromPug(`- var a = 'foo', b = 'bar\ndiv`).undetermined,
+      ).toEqual(["foo"]);
+    });
+
+    it("doesn't read text as code", () => {
+      expect(
+        purgeCSSFromPug(
+          [
+            "p 'text'",
+            "p.",
+            "  var a = 'text'",
+            "script.",
+            "  var b = 'script'",
+            "-",
+            "p 'text'",
+          ].join("\n"),
+        ),
+      ).toEqual({
+        attributes: {
+          names: ["class", "id"],
+          values: ["true", "false"],
+        },
+        classes: [],
+        ids: [],
+        tags: ["p", "p", "script", "p"],
+        undetermined: [],
+      });
+    });
+  });
 });
