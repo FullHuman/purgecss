@@ -64,6 +64,12 @@
       "state": "commented",
       "updated_at": "2026-11-07",
       "note": "Still present in published 9.0.0 (module.exports=fn, d.ts export default). Posted portable cast PluginCreator<UserDefinedOptions> earlier. Fix = maintainer."
+    },
+    {
+      "number": 1593,
+      "state": "commented",
+      "updated_at": "2026-11-14",
+      "note": "New 11-14, labelled bug. Cases 2+3 (font shorthand/var/case fontFace, -webkit-animation) in draft PR from branch repo-assist/fix-issue-1593-font-face-keyframes-uses. Case 1 (case-insensitive tags/attr names/i flag) analysis+verified safelist workaround posted; not implemented."
     }
   ],
   "fixes": [
@@ -74,6 +80,14 @@
       "status": "open",
       "updated_at": "2026-11-08",
       "note": "Draft PR #1543. #1588 (DeferredRemovals) made it conflict; 11-08 pushed f3fb0f9: evaluateRule back to base, removeEmptyParents checks nodes.every(isRemovableComment). Merges cleanly with 38f7d07; merged tree purgecss 300/300, branch 215/215."
+    },
+    {
+      "issue": 1593,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-1593-font-face-keyframes-uses",
+      "status": "open",
+      "updated_at": "2026-11-14",
+      "note": "Draft PR (number unknown at creation; look up by branch). Part of #1593 cases 2+3. purgecss 307/307; merges clean with all RA PRs; #1495 unchanged 2 conflict regions."
     }
   ],
   "checks": [
@@ -91,21 +105,21 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-09",
+      "checked_at": "2026-11-14",
       "result": "2026-11-09: purgecss-from-html getSelectorsInNodes/mergedExtractorResults copy accumulated arrays per child = O(n^2): 2k siblings 32ms, 8k 1.3s, 32k 35s (parse 65ms). Fix: push into one shared result. #1590 (skip removed selector toString) open.",
-      "follow_up": "Implement html extractor accumulator fix when PR capacity allows (after html whitespace PR merges, same file). Rest of core = postcss-selector-parser upstream."
+      "follow_up": "html extractor accumulator fix unblocked by #1592 merge; needs a PR slot (8 open). fontFace fix: 40k custom-prop values x 50 font faces adds ~30ms."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-08",
-      "result": "2026-11-08: coverage purgecss 98.1%; webpack css-modules.ts 278-315 and rollup 148-162 gaps are child-process builds (rspack/vite) not seen by coverage, actually tested. postcss/rollup content-cache gaps are 1-line delegations.",
+      "checked_at": "2026-11-14",
+      "result": "2026-11-14: coverage purgecss 98.09%; added fontFace shorthand/var/case + -webkit-animation tests in #1593 PR. Child-process builds (rspack/vite) not seen by coverage.",
       "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-09",
-      "result": "2026-11-09: #1592 (html extractor split on any whitespace + extractors.md default import fix EN/FR) open draft.",
-      "follow_up": "pug has same split(\" \") (line 47-48; touched by #1580, wait). CLI -o + sourceMap {inline:false}: .map never written; waits for #1579/#1587. #998 maintainer."
+      "checked_at": "2026-11-14",
+      "result": "2026-11-14: #1592 merged. #1593 fix PR normalizes font names (normalizeFontFamily), removes dead stripQuotes, adds fontValues matched in removeUnusedFontFaces.",
+      "follow_up": "#1593 case 1: lowercase tag/attr-name lookup (lazy lowercase undetermined set, reset on merge) + attributeNode.insensitive. pug split(\" \") waits #1580. CLI .map waits #1579/#1587."
     },
     {
       "area": "dependencies",
@@ -121,9 +135,9 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-13",
-      "result": "11-13 19:57: main 38f7d07 + 8 PR heads unchanged since 11-09; no new CI runs/comments/reviews since 11-11. #1592 ready (maintainer 11-11), Build/Test green Node 22/24/26. Others action_required. 11-10 merge of all 8 clean (purgecss 312/312) = 9.1.1. Runs since 11-10 19:54: noop.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Redo combined merge only if main/PR head moves. Monthly #1544: use * [ ] on next update."
+      "checked_at": "2026-11-14",
+      "result": "11-14: #1592 merged (5b8a29b). 7 RA PRs unchanged since 11-09 + new #1593 draft = 8 open -> next runs maintenance-only. All merge clean with main and the new branch.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Redo combined merge only if main/PR head moves."
     },
     {
       "area": "ci",
@@ -214,12 +228,17 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred. No new human issue activity as of 2026-11-13 19:57 (latest 11-07). #1229 still suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred as of 2026-11-14 (#1593 new, handled). #1229 still suggested for closing. #170 unlabelled by design."
     },
     {
       "task": 8,
       "item": "html-extractor-quadratic-merge",
-      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark: n sibling <li>. Wait for PR capacity + #1592 (same file)."
+      "note": "purgecss-from-html merges results by copying arrays per child (O(n^2), 32k siblings 35s). Replace with single accumulator; benchmark n sibling <li>. #1592 merged; waits only for PR capacity (<8 open)."
+    },
+    {
+      "task": 3,
+      "item": "issue-1593-case1",
+      "note": "Case-insensitive selectors: hasTag/hasAttrName lowercase (html extractor already lowercases; default extractor needs lowercase lookup of undetermined), i flag via attributeNode.insensitive in someAttrValue. Own PR when capacity allows."
     }
   ]
 }
