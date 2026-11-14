@@ -184,6 +184,8 @@ Vous pouvez en apprendre plus sur les extracteurs [ici](extractors.md).
 
 S'il y a des règles @font-face inutilisées dans votre CSS, vous pouvez les supprimer en définissant l'option `fontFace` à `true`.
 
+PurgeCSS détecte les font faces utilisées en analysant les valeurs des propriétés `font-family` et `font`, ainsi que les valeurs des propriétés personnalisées CSS (variables). Les noms de familles de polices sont comparés sans tenir compte de la casse, comme dans les navigateurs.
+
 ```js
 await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
@@ -196,7 +198,7 @@ await new PurgeCSS().purge({
 
 Si vous utilisez une bibliothèque d'animations CSS telle que animate.css, vous pouvez supprimer les keyframes inutilisés en définissant l'option `keyframes` à `true`.
 
-PurgeCSS détecte les keyframes utilisés en analysant les valeurs des propriétés `animation` et `animation-name`, ainsi que les valeurs des propriétés personnalisées CSS (variables). Cela signifie que les keyframes référencés via des variables CSS seront correctement préservés :
+PurgeCSS détecte les keyframes utilisés en analysant les valeurs des propriétés `animation` et `animation-name`, avec ou sans préfixe vendeur (par exemple `-webkit-animation`), ainsi que les valeurs des propriétés personnalisées CSS (variables). Cela signifie que les keyframes référencés via des variables CSS seront correctement préservés :
 
 ```css
 .component {
