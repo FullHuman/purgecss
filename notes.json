@@ -106,7 +106,7 @@
     {
       "area": "performance",
       "checked_at": "2026-11-14",
-      "result": "2026-11-14 18:38: draft PR (branch repo-assist/perf-html-extractor-accumulate) makes purgecss-from-html linear: 16k siblings 11.8s -> 0.1s, identical output on 48 repo html/vue. Case-insensitive fix: no slowdown on performance fixture.",
+      "result": "2026-11-15: #1599 (html extractor linear) superseded by maintainer #1603, which is also linear (16k siblings 102ms).",
       "follow_up": "Sync test can't guard perf (jest timeout can't interrupt). Next perf idea needs measurement first."
     },
     {
@@ -119,7 +119,7 @@
       "area": "code",
       "checked_at": "2026-11-15",
       "result": "2026-11-15: purgecss-from-jsx default acorn options threw on any file with import/export (sourceType script). Draft PR (branch repo-assist/fix-jsx-default-module-syntax): script + allowImportExportEverywhere + allowAwaitOutsideFunction; tsx ESNext test.",
-      "follow_up": "CLI sourceMap+--output: .map not written AND map sources relative to input dir (even inline) -> needs per-file `to` design, no user reports; deprioritized. html script/style skip (low, would conflict #1599)."
+      "follow_up": "CLI sourceMap+--output: .map not written AND map sources relative to input dir -> needs per-file `to` design, no user reports; deprioritized. html script/style skip is covered by maintainer #1603 (verified)."
     },
     {
       "area": "dependencies",
@@ -136,8 +136,8 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-15",
-      "result": "11-15 07:12: main unchanged (015f06e). Open RA: #1543 #1577 #1591 #1594 #1599 #1600 + 2 new drafts (jsx module syntax, webpack rspack tests) = 8 -> maintenance-only next. All pairwise clean; no human comments.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Learn numbers of 2 new drafts next run."
+      "result": "11-15 19:10: main still 015f06e. Open RA: #1543 #1577 #1591 #1594 #1599 #1600 #1601 (jsx) #1602 (rspack tests) = 8 -> maintenance-only. Only CodeQL runs on RA PRs (pass). #1599 superseded by #1603.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. When #1603 merges, #1599 conflicts: do not fix, suggest close."
     },
     {
       "area": "ci",
@@ -233,7 +233,7 @@
     {
       "task": 6,
       "item": "maintenance-mode",
-      "note": "8 open RA PRs after 2026-11-15 07:12; next runs maintain PRs + triage only. Record new draft PR numbers (jsx module syntax, webpack rspack tests)."
+      "note": "8 open RA PRs (2026-11-15). Maintain + triage only. #1599 counts until closed; #1603 (maintainer html rework) labelled enhancement 11-15."
     }
   ]
 }
