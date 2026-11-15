@@ -254,6 +254,15 @@ describe("static HTML extraction", () => {
     expect(result.attributes.values).toEqual([" \t\n "]);
   });
 
+  it("keeps lone surrogates instead of throwing", () => {
+    // parse5 8.0.1 threw on two consecutive lone low surrogates.
+    const result = purgeFromHtml(
+      `<p class="before \uDC00\uDC00 after">\uDC00\uDC00</p>`,
+    );
+
+    expect(result.classes).toEqual(["before", "\uDC00\uDC00", "after"]);
+  });
+
   it("deduplicates in first-discovery order and returns independent results", () => {
     const content = `<article class="shared parent" id="same" data-note="first second"><p class="child shared" id="same"></p></article><article class="shared"></article>`;
     const result = purgeFromHtml(content);

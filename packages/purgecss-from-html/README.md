@@ -63,7 +63,7 @@ console.log(result);
 
 ### `purgeFromHtml(content: string): ExtractorResultDetailed`
 
-Parses HTML content synchronously and returns detailed selector information. The default export and result shape are unchanged.
+Parses HTML content synchronously and returns detailed selector information.
 
 #### Parameters
 
@@ -90,7 +90,7 @@ For HTML-namespace elements, it recursively extracts HTML embedded in `iframe` `
 
 Ordinary JavaScript, JSON, CSS, comments, and text are not scanned for selector-like words. External documents and scripts are not fetched, and JavaScript or template expressions are not evaluated. Include the other content files used by your application and configure PurgeCSS safelists or `dynamicAttributes` for selectors created at runtime.
 
-The parser integration is pinned to parse5 `8.0.1` because collecting discarded source tags uses an isolated internal parser hook. Parser upgrades require checking that hook against the package's regression tests.
+The parser integration is pinned to parse5 `8.1.1` because collecting discarded source tags uses an isolated internal parser hook. Parser upgrades require checking that hook against the package's regression tests.
 
 ## Accuracy and compatibility
 
