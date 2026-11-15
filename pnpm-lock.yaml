@@ -348,10 +348,7 @@ importers:
   packages/purgecss-from-html:
     dependencies:
       parse5:
-        specifier: ^8.0.1
-        version: 8.0.1
-      parse5-htmlparser2-tree-adapter:
-        specifier: ^8.0.1
+        specifier: 8.0.1
         version: 8.0.1
 
   packages/purgecss-from-jsx:
@@ -2860,17 +2857,9 @@ packages:
   domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
 
-  domelementtype@3.0.0:
-    resolution: {integrity: sha512-umCQid3jKbDmVjx8jGaW7uUykm4DEUeyV21hPxNMo2nV955DhUThwqyOIDtreepP31hl84X7G5U9ZfsWvIB3Pg==}
-    engines: {node: '>=20.19.0'}
-
   domhandler@5.0.3:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
-
-  domhandler@6.0.1:
-    resolution: {integrity: sha512-gYzvtM72ZtxQO0T048kd6HWSbbGCNOUwcnfQ01cqIJ4X2IYKFFHZ5mKvrQETcFXxsRObZulDaKmy//R7TPtsBg==}
-    engines: {node: '>=20.19.0'}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -4149,9 +4138,6 @@ packages:
 
   parse5-htmlparser2-tree-adapter@7.1.0:
     resolution: {integrity: sha512-ruw5xyKs6lrpo9x9rCZqZZnIUntICjQAd0Wsmp396Ul9lN/h+ifgVV1x1gZHi8euej6wTfpqX8j+BFQxF0NS/g==}
-
-  parse5-htmlparser2-tree-adapter@8.0.1:
-    resolution: {integrity: sha512-aqkH+xQxX+QGZtP5GIMmqqp16Y0v9muEf2VVeypv35kFsD5bqP1UeBanSshdfjMY+RTh2vN4mmK6nEOVRMEvHg==}
 
   parse5-parser-stream@7.1.2:
     resolution: {integrity: sha512-JyeQc9iwFLn5TbvvqACIF/VXG6abODeB3Fwmv/TGdLk2LfbWkaySGY72at4+Ty7EkPZj854u4CrICqNk2qIbow==}
@@ -7933,15 +7919,9 @@ snapshots:
 
   domelementtype@2.3.0: {}
 
-  domelementtype@3.0.0: {}
-
   domhandler@5.0.3:
     dependencies:
       domelementtype: 2.3.0
-
-  domhandler@6.0.1:
-    dependencies:
-      domelementtype: 3.0.0
 
   domutils@3.2.2:
     dependencies:
@@ -9394,11 +9374,6 @@ snapshots:
     dependencies:
       domhandler: 5.0.3
       parse5: 7.3.0
-
-  parse5-htmlparser2-tree-adapter@8.0.1:
-    dependencies:
-      domhandler: 6.0.1
-      parse5: 8.0.1
 
   parse5-parser-stream@7.1.2:
     dependencies:

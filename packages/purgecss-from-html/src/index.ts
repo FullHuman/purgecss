@@ -1,5 +1,10 @@
-import * as parse5 from "parse5";
-import * as htmlparser2 from "parse5-htmlparser2-tree-adapter";
+import {
+  Parser,
+  defaultTreeAdapter,
+  type DefaultTreeAdapterMap,
+  type DefaultTreeAdapterTypes,
+  type Token,
+} from "parse5";
 
 /**
  * @public
@@ -21,93 +26,71 @@ export type ExtractorResultDetailed = {
  * the no-break space, which is part of a class name.
  */
 const ASCII_WHITESPACE = /[ \t\n\f\r]+/;
+const ASCII_TRIM = /^[ \t\n\f\r]+|[ \t\n\f\r]+$/g;
+const HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
+const HTML_SCRIPT_TYPES = new Set(["text/html", "text/x-template"]);
 
-const mergedExtractorResults = (
-  resultLeft: ExtractorResultDetailed,
-  resultRight: ExtractorResultDetailed,
-): ExtractorResultDetailed => {
-  return {
-    attributes: {
-      names: [...resultLeft.attributes.names, ...resultRight.attributes.names],
-      values: [
-        ...resultLeft.attributes.values,
-        ...resultRight.attributes.values,
-      ],
-    },
-    classes: [...resultLeft.classes, ...resultRight.classes],
-    ids: [...resultLeft.ids, ...resultRight.ids],
-    tags: [...resultLeft.tags, ...resultRight.tags],
-    undetermined: [],
-  };
-};
+/**
+ * Keep parse5's internal parser integration here, covered by behavior tests and
+ * an exact dependency version. A tree alone loses start tags discarded during
+ * HTML recovery, including table fragments and repeated document elements.
+ */
+class SelectorParser extends Parser<DefaultTreeAdapterMap> {
+  public hasNoscript = false;
 
-const getSelectorsInElement = (
-  element: htmlparser2.Htmlparser2TreeAdapterMap["element"],
-): ExtractorResultDetailed => {
-  const result: ExtractorResultDetailed = {
-    attributes: {
-      names: [],
-      values: [],
-    },
-    classes: [],
-    ids: [],
-    tags: [element.name],
-    undetermined: [],
-  };
+  constructor(
+    private readonly collectElement: (
+      tagName: string,
+      attributes: Token.Attribute[],
+    ) => void,
+    scriptingEnabled: boolean,
+  ) {
+    super({ scriptingEnabled });
+  }
 
-  for (const [name, value] of Object.entries(element.attribs)) {
-    // a class list can be separated by new lines and tabs, not only spaces
-    const words = value.split(ASCII_WHITESPACE).filter(Boolean);
-    if (name === "class") {
-      result.classes.push(...words);
-    } else if (name === "id") {
-      result.ids.push(...words);
-    }
-    // always add to attributes, to handle things like [class*=foo]
-    result.attributes.names.push(name);
-    result.attributes.values.push(...words);
-    // also add the whole value when it isn't its only word, i.e. when it is
-    // empty or has whitespace, to handle things like [alt=""],
-    // [title="hello world"] or [title^="hello wo"]
-    if (words.length !== 1 || words[0] !== value) {
-      result.attributes.values.push(value);
+  override onStartTag(token: Token.TagToken): void {
+    // Tree construction normalizes SVG/MathML names and namespace attributes.
+    super.onStartTag(token);
+    this.collectElement(token.tagName, token.attrs);
+    if (token.tagName === "noscript") {
+      this.hasNoscript = true;
     }
   }
 
-  return mergedExtractorResults(getSelectorsInNodes(element), result);
-};
+  public parseContent(content: string): DefaultTreeAdapterTypes.Document {
+    this.tokenizer.write(content, true);
+    return this.document;
+  }
+}
 
-const getSelectorsInNodes = (
-  node:
-    | htmlparser2.Htmlparser2TreeAdapterMap["document"]
-    | htmlparser2.Htmlparser2TreeAdapterMap["element"],
-): ExtractorResultDetailed => {
-  let result: ExtractorResultDetailed = {
-    attributes: {
-      names: [],
-      values: [],
-    },
-    classes: [],
-    ids: [],
-    tags: [],
-    undetermined: [],
-  };
+const getAttribute = (
+  element: DefaultTreeAdapterTypes.Element,
+  name: string,
+): string | undefined =>
+  element.attrs.find((attr) => attr.name === name && !attr.namespace)?.value;
 
-  for (const childNode of node.childNodes) {
-    const element = childNode;
+const getEmbeddedHtml = (
+  element: DefaultTreeAdapterTypes.Element,
+): string | undefined => {
+  if (element.namespaceURI !== HTML_NAMESPACE) return;
 
-    switch (element.type) {
-      case "tag":
-        result = mergedExtractorResults(result, getSelectorsInElement(element));
-        break;
-      case "root":
-        result = mergedExtractorResults(result, getSelectorsInNodes(element));
-        break;
-      default:
-        break;
+  if (element.tagName === "iframe") {
+    // parse5 already decoded the attribute for this HTML document.
+    return getAttribute(element, "srcdoc");
+  }
+
+  if (element.tagName === "script") {
+    const type = (getAttribute(element, "type") ?? "")
+      .split(";", 1)[0]
+      .replace(ASCII_TRIM, "")
+      .replace(/[A-Z]/g, (character) => character.toLowerCase());
+    if (HTML_SCRIPT_TYPES.has(type)) {
+      return element.childNodes
+        .filter(defaultTreeAdapter.isTextNode)
+        .map((node) => node.value)
+        .join("");
     }
   }
-  return result;
 };
 
 /**
@@ -119,11 +102,95 @@ const getSelectorsInNodes = (
  * @public
  */
 const purgecssFromHtml = (content: string): ExtractorResultDetailed => {
-  const tree = parse5.parse(content, {
-    treeAdapter: htmlparser2.adapter,
-  });
+  const attributeNames = new Set<string>();
+  const attributeValues = new Set<string>();
+  const classes = new Set<string>();
+  const ids = new Set<string>();
+  const tags = new Set<string>();
+  const pending: string[] = [];
+  const seenContent = new Set<string>();
 
-  return getSelectorsInNodes(tree);
+  const enqueue = (html: string): void => {
+    if (!seenContent.has(html)) {
+      seenContent.add(html);
+      pending.push(html);
+    }
+  };
+
+  const collectElement = (
+    tagName: string,
+    attributes: Token.Attribute[],
+  ): void => {
+    tags.add(tagName);
+    for (const { name, value, prefix, namespace } of attributes) {
+      attributeNames.add(name);
+      if (prefix) attributeNames.add(`${prefix}:${name}`);
+      attributeValues.add(value);
+
+      if (!prefix && !namespace) {
+        if (name === "class") {
+          for (const className of value.split(ASCII_WHITESPACE)) {
+            if (className) classes.add(className);
+          }
+        } else if (name === "id" && value !== "") {
+          ids.add(value);
+        }
+      }
+    }
+  };
+
+  const collectDocument = (
+    html: string,
+    scriptingEnabled: boolean,
+  ): boolean => {
+    const parser = new SelectorParser(collectElement, scriptingEnabled);
+    const stack: DefaultTreeAdapterTypes.Node[] = [parser.parseContent(html)];
+
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      if (defaultTreeAdapter.isElementNode(node)) {
+        collectElement(node.tagName, node.attrs);
+        const embedded = getEmbeddedHtml(node);
+        if (embedded !== undefined) enqueue(embedded);
+
+        if (
+          node.tagName === "template" &&
+          node.namespaceURI === HTML_NAMESPACE
+        ) {
+          stack.push(
+            defaultTreeAdapter.getTemplateContent(
+              node as DefaultTreeAdapterTypes.Template,
+            ),
+          );
+        }
+      }
+      if ("childNodes" in node) {
+        for (let i = node.childNodes.length - 1; i >= 0; i--) {
+          stack.push(node.childNodes[i]);
+        }
+      }
+    }
+    return parser.hasNoscript;
+  };
+
+  enqueue(content);
+  for (let i = 0; i < pending.length; i++) {
+    if (collectDocument(pending[i], false)) {
+      // A malformed fallback can hide later markup in only one interpretation.
+      collectDocument(pending[i], true);
+    }
+  }
+
+  return {
+    attributes: {
+      names: [...attributeNames],
+      values: [...attributeValues],
+    },
+    classes: [...classes],
+    ids: [...ids],
+    tags: [...tags],
+    undetermined: [],
+  };
 };
 
 export default purgecssFromHtml;

@@ -87,9 +87,6 @@ describe("purgehtml", () => {
       expect(received.classes).toEqual(["card", "active", "shadow"]);
       expect(received.ids).toEqual(["main"]);
       expect(received.attributes.values).toEqual([
-        "card",
-        "active",
-        "shadow",
         "card\n    active\tshadow",
         "main",
       ]);
@@ -98,11 +95,7 @@ describe("purgehtml", () => {
     it("ignores leading, trailing and repeated whitespace", () => {
       const received = purgehtml(`<p class="  lead\n\n  muted  "></p>`);
       expect(received.classes).toEqual(["lead", "muted"]);
-      expect(received.attributes.values).toEqual([
-        "lead",
-        "muted",
-        "  lead\n\n  muted  ",
-      ]);
+      expect(received.attributes.values).toEqual(["  lead\n\n  muted  "]);
     });
 
     it("splits on form feeds and carriage returns", () => {
@@ -118,7 +111,7 @@ describe("purgehtml", () => {
     it("keeps an empty attribute value", () => {
       const received = purgehtml(`<img alt="" src="a.png"><input disabled>`);
       expect(received.attributes.names).toEqual(["alt", "src", "disabled"]);
-      expect(received.attributes.values).toEqual(["", "a.png", ""]);
+      expect(received.attributes.values).toEqual(["", "a.png"]);
     });
 
     it("does not add an empty class or id", () => {
@@ -133,11 +126,7 @@ describe("purgehtml", () => {
       );
       expect(received.classes).toEqual(["card", "active"]);
       expect(received.attributes.values).toEqual([
-        "hello",
-        "world",
         "hello world",
-        "card",
-        "active",
         "card active",
         "#",
       ]);
