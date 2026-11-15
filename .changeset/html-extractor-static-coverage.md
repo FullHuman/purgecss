@@ -1,5 +1,5 @@
 ---
-"purgecss-from-html": major
+"purgecss-from-html": minor
 ---
 
 Rework static HTML extraction to retain selectors from documents, fragments, parser-discarded source tags, script/style elements, nested templates, SVG, MathML, and both noscript interpretations. Extract embedded HTML from HTML-namespace iframe srcdoc attributes and scripts with a text/html or text/x-template MIME essence.
