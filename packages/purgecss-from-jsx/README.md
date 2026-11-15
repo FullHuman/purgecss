@@ -75,7 +75,7 @@ Creates an extractor function for JSX content.
 
 #### Parameters
 
-- `options` (optional) - [Acorn parser options](https://github.com/acornjs/acorn#interface). Defaults to `{ ecmaVersion: "latest" }`
+- `options` (optional) - [Acorn parser options](https://github.com/acornjs/acorn#interface). Defaults to `{ ecmaVersion: "latest", sourceType: "script", allowImportExportEverywhere: true, allowAwaitOutsideFunction: true }`, which parses both ES modules (`import`, `export`, top-level `await`) and scripts. Options passed replace the defaults.
 
 #### Returns
 

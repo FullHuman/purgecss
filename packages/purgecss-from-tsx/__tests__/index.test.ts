@@ -1,3 +1,4 @@
+import * as ts from "typescript";
 import purgeTsx from "../src/index";
 
 import { TEST_1_CONTENT, TEST_1_TAG, TEST_1_CLASS, TEST_1_ID } from "./data";
@@ -85,5 +86,12 @@ describe("purgeFromTsx", () => {
     expect(
       plugin(`const a = <List<string> className="generic" items={[]} />;`),
     ).toEqual(["List", "generic"]);
+  });
+
+  it("parses the ES modules emitted with the module option", () => {
+    const received = purgeTsx({ tsOptions: { module: ts.ModuleKind.ESNext } })(
+      TEST_1_CONTENT,
+    );
+    expect(received).toEqual(plugin(TEST_1_CONTENT));
   });
 });

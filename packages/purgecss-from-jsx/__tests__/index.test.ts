@@ -105,3 +105,27 @@ describe("purgeFromJsx", () => {
     expect(received).toEqual(["div", "x"]);
   });
 });
+
+describe("purgeFromJsx with the default options", () => {
+  const defaultPlugin = purgeJsx();
+
+  it("parses ES modules", () => {
+    expect(defaultPlugin(TEST_1_CONTENT)).toEqual(
+      purgeJsx({ ecmaVersion: "latest", sourceType: "module" })(TEST_1_CONTENT),
+    );
+    const received = defaultPlugin(`import { lazy } from "react";
+export * from "./components";
+const url = import.meta.url;
+const data = await fetch(url);
+export const Page = () => <main className="page" />;`);
+    expect(received).toEqual(["main", "page"]);
+  });
+
+  it("parses scripts", () => {
+    const received = defaultPlugin(`const React = require("react");
+with (React) {
+  module.exports = () => <div className="legacy" />;
+}`);
+    expect(received).toEqual(["div", "legacy"]);
+  });
+});

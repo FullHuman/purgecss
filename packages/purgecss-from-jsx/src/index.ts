@@ -19,9 +19,22 @@ type NodeState = {
 extend<NodeState>(walk.base);
 
 /**
+ * JSX files are usually ES modules, with `import`, `export` and top-level
+ * `await`, but can be scripts, e.g. with `require` or sloppy mode code. They
+ * are parsed as scripts that can have the syntax of modules, so that both are
+ * parsed.
+ */
+const DEFAULT_ACORN_OPTIONS: acorn.Options = {
+  ecmaVersion: "latest",
+  sourceType: "script",
+  allowImportExportEverywhere: true,
+  allowAwaitOutsideFunction: true,
+};
+
+/**
  * Create function to extract selectors from jsx code
  *
- * @param options - acorn options
+ * @param options - acorn options, parsing ES modules and scripts by default
  * @returns function to extract selectors from jsx code
  *
  * @public
@@ -35,7 +48,7 @@ function purgeFromJsx(options?: acorn.Options) {
     walk.recursive<NodeState>(
       acorn.Parser.extend(
         jsx() as (BaseParser: typeof acorn.Parser) => typeof acorn.Parser,
-      ).parse(content, options || { ecmaVersion: "latest" }),
+      ).parse(content, options || DEFAULT_ACORN_OPTIONS),
       state,
       {
         JSXOpeningElement(

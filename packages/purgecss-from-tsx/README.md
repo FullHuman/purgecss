@@ -87,7 +87,7 @@ Creates an extractor function for TSX content.
 #### Parameters
 
 - `options` (optional) - Configuration object with:
-  - `acornOptions` - [Acorn parser options](https://github.com/acornjs/acorn#interface). Defaults to `{ ecmaVersion: "latest" }`
+  - `acornOptions` - [Acorn parser options](https://github.com/acornjs/acorn#interface). Defaults to the options of [purgecss-from-jsx](../purgecss-from-jsx#api), which parse both ES modules and scripts
   - `tsOptions` - [TypeScript compiler options](https://www.typescriptlang.org/tsconfig). JSX is always preserved for parsing.
 
 #### Returns
