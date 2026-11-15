@@ -68,8 +68,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-14",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in draft PR from branch repo-assist/fix-issue-1593-case-insensitive-selectors (18:38 run). Linked both on issue. Close once both merged."
+      "updated_at": "2026-11-15",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged."
     }
   ],
   "fixes": [
@@ -86,8 +86,8 @@
       "pr": 1594,
       "branch": "repo-assist/fix-issue-1593-font-face-keyframes-uses",
       "status": "open",
-      "updated_at": "2026-11-14",
-      "note": "#1594 = cases 2+3 (fontFace font shorthand/var/case, -webkit-animation). Case 1 = separate draft PR (number unknown; branch repo-assist/fix-issue-1593-case-insensitive-selectors): lazy lowercase sets in ExtractorResultSets, i flag. Both clean with main 015f06e."
+      "updated_at": "2026-11-15",
+      "note": "#1594 = cases 2+3 (fontFace font shorthand/var/case, -webkit-animation). #1600 = case 1 (branch repo-assist/fix-issue-1593-case-insensitive-selectors-7ed955bafd9e75b4). Both clean with main 015f06e."
     }
   ],
   "checks": [
@@ -111,15 +111,15 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-14",
-      "result": "2026-11-14: purgecss 320/320 (98.93% stmts) with case-insensitive tests; html extractor 18 tests, 100%.",
-      "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests."
+      "checked_at": "2026-11-15",
+      "result": "2026-11-15: draft PR (branch repo-assist/test-webpack-rspack-composes-resolution) unit-tests Rspack ReferenceResolver (fallback, cycle guard; mutation-checked); webpack plugin 84.5->94.7% stmts. purgecss 98.9%, other pkgs >=89%.",
+      "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests (needs package.json test script = protected). gulp stream-mode rejected/error untested (low). rollup/webpack gaps = child-process Vite/Rspack builds."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-14",
-      "result": "2026-11-14: #1593 case 1 PR opened. purgecss-from-html skips <script>/<style> (htmlparser2 types script/style, not tag) - verified, low impact.",
-      "follow_up": "CLI sourceMap inline:false .map not written with --output (#1579/#1587 merged, now unblocked). html script/style skip (low)."
+      "checked_at": "2026-11-15",
+      "result": "2026-11-15: purgecss-from-jsx default acorn options threw on any file with import/export (sourceType script). Draft PR (branch repo-assist/fix-jsx-default-module-syntax): script + allowImportExportEverywhere + allowAwaitOutsideFunction; tsx ESNext test.",
+      "follow_up": "CLI sourceMap+--output: .map not written AND map sources relative to input dir (even inline) -> needs per-file `to` design, no user reports; deprioritized. html script/style skip (low, would conflict #1599)."
     },
     {
       "area": "dependencies",
@@ -135,9 +135,9 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-14",
-      "result": "11-14 18:38: merged since: #1590 #1587 #1580 #1579 (+ maintainer pug #1595-#1598). Open RA: #1543 #1577 #1591 #1594 + 2 new drafts (case-insensitive, html perf) = 6. All clean with main 015f06e.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
+      "checked_at": "2026-11-15",
+      "result": "11-15 07:12: main unchanged (015f06e). Open RA: #1543 #1577 #1591 #1594 #1599 #1600 + 2 new drafts (jsx module syntax, webpack rspack tests) = 8 -> maintenance-only next. All pairwise clean; no human comments.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Learn numbers of 2 new drafts next run."
     },
     {
       "area": "ci",
@@ -231,9 +231,9 @@
       "note": "All open issues addressed or deferred as of 2026-11-14 18:38. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
-      "task": 5,
-      "item": "cli-sourcemap-map-file",
-      "note": "CLI --output with sourceMap {inline:false}: annotation added but .map never written; set `to` per output file. Unblocked (#1579/#1587 merged)."
+      "task": 6,
+      "item": "maintenance-mode",
+      "note": "8 open RA PRs after 2026-11-15 07:12; next runs maintain PRs + triage only. Record new draft PR numbers (jsx module syntax, webpack rspack tests)."
     }
   ]
 }
