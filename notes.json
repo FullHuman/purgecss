@@ -68,8 +68,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-15",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged."
+      "updated_at": "2026-11-16",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-16."
     }
   ],
   "fixes": [
@@ -117,9 +117,9 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-15",
-      "result": "2026-11-15: purgecss-from-jsx default acorn options threw on any file with import/export (sourceType script). Draft PR (branch repo-assist/fix-jsx-default-module-syntax): script + allowImportExportEverywhere + allowAwaitOutsideFunction; tsx ESNext test.",
-      "follow_up": "CLI sourceMap+--output: .map not written AND map sources relative to input dir -> needs per-file `to` design, no user reports; deprioritized. html script/style skip is covered by maintainer #1603 (verified)."
+      "checked_at": "2026-11-16",
+      "result": "2026-11-16: jsx extractor dropped all attribute selectors + ignored class attr (verified e2e: 7/7 used rules removed). Draft PR branch repo-assist/fix-jsx-attribute-selectors.",
+      "follow_up": "If maintainer wants: jsx/tsx return ExtractorResultDetailed (return type change). CLI sourceMap+--output needs per-file `to` design, deprioritized."
     },
     {
       "area": "dependencies",
@@ -129,15 +129,15 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-14",
-      "result": "main has 10 patch changesets since 9.1.0 (cli x2, html x2, pug x5, perf). Suggested 9.1.1 release in monthly (Define goal).",
+      "checked_at": "2026-11-16",
+      "result": "main has 13 changesets since 9.1.0 incl. #1603 minor -> suggest 9.2.0 in monthly.",
       "follow_up": "Release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-16",
-      "result": "11-16: main still 015f06e, PR heads unchanged, no reviews. Scratch merge main+#1603+7 RA PRs (all but #1599): build ok, lint 0 errors, tests 729/729 (purgecss 340, html 66). #1599 conflicts with #1603 only.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. When #1603 merges, #1599 conflicts: do not fix, suggest close."
+      "result": "11-16 22:38: main d5869e5 (#1601,#1602,#1603 merged, #1599 closed). 5 open RA PRs (#1543,#1577,#1591,#1594,#1600) clean; scratch merge of all 5: build ok, 729/729 tests.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
@@ -212,6 +212,14 @@
     {
       "key": "review-pr-1586",
       "completed_at": "2026-11-07"
+    },
+    {
+      "key": "close-pr-1599",
+      "completed_at": "2026-11-16"
+    },
+    {
+      "key": "review-pr-1601",
+      "completed_at": "2026-11-16"
     }
   ],
   "priorities": [
@@ -232,8 +240,8 @@
     },
     {
       "task": 6,
-      "item": "maintenance-mode",
-      "note": "8 open RA PRs (2026-11-16). Maintain + triage only. #1599 counts until closed; #1603 compatible with all other RA PRs (verified 11-16)."
+      "item": "jsx-attr-pr",
+      "note": "New jsx attribute draft PR 2026-11-16 (branch repo-assist/fix-jsx-attribute-selectors, title \"keep the attribute selectors\", no issue): record its number next run; maintain. 6 open RA PRs."
     }
   ]
 }
