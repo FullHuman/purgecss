@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/purgecss-from-html.svg)](https://www.npmjs.com/package/purgecss-from-html)
 
-HTML extractor for [PurgeCSS](https://purgecss.com). This extractor parses HTML files and extracts used selectors with detailed information about tags, classes, IDs, and attributes.
+HTML extractor for [PurgeCSS](https://purgecss.com). Extract potential tag, class, ID, and attribute selectors from static HTML documents and fragments.
 
 ## Installation
 
@@ -49,12 +49,12 @@ const result = purgeFromHtml(html);
 console.log(result);
 // {
 //   attributes: {
-//     names: ["class", "id", "data-section", "class"],
-//     values: ["container", "title", "hero", "btn", "btn-primary"]
+//     names: ["class", "id", "data-section"],
+//     values: ["container", "title", "hero", "btn btn-primary"]
 //   },
 //   classes: ["container", "btn", "btn-primary"],
 //   ids: ["title"],
-//   tags: ["html", "head", "body", "div", "h1", "button"],
+//   tags: ["div", "h1", "button", "html", "head", "body"],
 //   undetermined: []
 // }
 ```
@@ -63,7 +63,7 @@ console.log(result);
 
 ### `purgeFromHtml(content: string): ExtractorResultDetailed`
 
-Parses HTML content and returns detailed selector information.
+Parses HTML content synchronously and returns detailed selector information.
 
 #### Parameters
 
@@ -73,21 +73,32 @@ Parses HTML content and returns detailed selector information.
 
 An `ExtractorResultDetailed` object containing:
 
-- `attributes.names` - Array of attribute names found in the HTML
-- `attributes.values` - Array of attribute values (split by spaces)
-- `classes` - Array of class names extracted from `class` attributes
-- `ids` - Array of IDs extracted from `id` attributes
-- `tags` - Array of HTML tag names used
-- `undetermined` - Array of selectors that couldn't be categorized
+- `attributes.names` - Attribute names, including local and qualified names for namespaced attributes, such as `href` and `xlink:href`.
+- `attributes.values` - Complete decoded attribute values, including empty values. Values are not split into words.
+- `classes` - Nonempty class names, split only on HTML ASCII whitespace: space, tab, line feed, form feed, and carriage return. A nonbreaking space remains part of a class name.
+- `ids` - Complete nonempty decoded ID values. IDs are not split on whitespace.
+- `tags` - Tag names from source elements and the parsed document, including inferred elements such as `html`, `head`, `body`, and `tbody`.
+- `undetermined` - Always an empty array; text and unrelated attribute values are not treated as possible classes or IDs.
+
+Every array contains unique values in deterministic first-discovery order. Each parsing pass collects source start tags and their attributes first, followed by additional values from the parsed tree. A scripting-disabled pass runs first; when `noscript` is encountered, a scripting-enabled pass follows. Embedded HTML is then processed in discovery order using a first-in, first-out queue. Names and values follow HTML parsing rules, including character-reference decoding, newline normalization, and SVG/MathML name adjustment.
 
 ## How It Works
 
-This extractor uses [parse5](https://github.com/inikulin/parse5) to parse the HTML into an AST and then walks through the tree to extract:
+This extractor uses [parse5](https://github.com/inikulin/parse5) to collect parsed start tags and walk the native document tree. It covers ordinary elements, `script` and `style` element attributes, nested `template` contents, SVG, and MathML. It also retains selectors from source start tags that HTML error recovery discards. This conservative behavior can preserve extra CSS for malformed or context-dependent fragments.
 
-1. **Tag names** - All HTML elements (e.g., `div`, `span`, `button`)
-2. **Classes** - Values from `class` attributes, split by spaces
-3. **IDs** - Values from `id` attributes
-4. **Attributes** - Both attribute names and values, useful for attribute selectors like `[data-theme]` or `[class*=foo]`
+For HTML-namespace elements, it recursively extracts HTML embedded in `iframe` `srcdoc` attributes and in scripts with type `text/html` or `text/x-template`. Script types are matched by their trimmed, ASCII-case-insensitive MIME essence before any `;` parameters. For example, `type="TEXT/HTML; charset=utf-8"` is recognized. `noscript` content is considered with scripting both enabled and disabled so selectors from either interpretation are retained.
+
+Ordinary JavaScript, JSON, CSS, comments, and text are not scanned for selector-like words. External documents and scripts are not fetched, and JavaScript or template expressions are not evaluated. Include the other content files used by your application and configure PurgeCSS safelists or `dynamicAttributes` for selectors created at runtime.
+
+The parser integration is pinned to parse5 `8.1.1` because collecting discarded source tags uses an isolated internal parser hook. Parser upgrades require checking that hook against the package's regression tests.
+
+## Accuracy and compatibility
+
+The extractor provides potential selector names and values to PurgeCSS; PurgeCSS decides which CSS rules to retain. Its current matching uses global collections rather than a DOM query. Attribute names and values are not correlated, element relationships are not preserved, and namespace matching is approximate. Attribute `~=` and `|=` matching is also approximate. Some unused rules can therefore remain.
+
+Core matching also has limitations with case-insensitive HTML tag and attribute names, attribute value case rules, and explicit attribute selector `i` flags. This package does not add case aliases to work around those limitations. Use consistent selector spelling and safelist affected selectors when needed.
+
+Compared with earlier versions, the arrays no longer contain duplicates, IDs retain their complete values, and `attributes.values` contains complete values instead of individual words. For example, `title="hello world"` contributes `"hello world"`, not `"hello"` and `"world"`. This improves exact, prefix, and suffix attribute matching while retaining class selectors and attribute word selectors. Standalone consumers that relied on word tokens or the previous array order need to update their handling.
 
 ## License
 

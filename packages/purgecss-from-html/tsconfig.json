@@ -1,10 +1,17 @@
 {
   "extends": "./../../tsconfig.json",
   "compilerOptions": {
-      "declaration": true,
-      "outDir": "./lib",
-      "declarationDir": "./.temp/",
-      "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "declaration": true,
+    "outDir": "./lib",
+    "declarationDir": "./.temp/",
+    "baseUrl": "."
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "moduleResolution": "node"
+    }
   },
   "include": ["src"],
   "exclude": ["./lib"]
