@@ -1,9 +1,12 @@
 import * as fs from "fs";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import * as path from "path";
-import webpack, { Configuration } from "webpack";
+import webpack, { Chunk, Compilation, Configuration } from "webpack";
 import { PurgeCSSPlugin } from "../src";
-import { parseCssModuleExports } from "../src/css-modules";
+import {
+  collectCssModulesExports,
+  parseCssModuleExports,
+} from "../src/css-modules";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const fixture = require("./css-modules/webpack.config.js");
@@ -107,6 +110,136 @@ module.exports = exports;`;
         "// extracted by mini-css-extract-plugin\nexport {};",
       ),
     ).toEqual([]);
+  });
+});
+
+/**
+ * Compilation of native CSS modules of Rspack in a single chunk: their export
+ * maps are generated with their JavaScript code
+ *
+ * @param generatedCode - generated JavaScript code of the modules, by id
+ * @param usedExports - whether only the used exports are generated
+ */
+function createRspackCompilation(
+  generatedCode: Record<string, string>,
+  usedExports = false,
+): { compilation: Compilation; chunks: Chunk[] } {
+  const modules = Object.keys(generatedCode).map((id) => ({
+    // the ids are numbers once minimized
+    id: /^\d+$/.test(id) ? Number(id) : id,
+    type: "css/module",
+    buildInfo: {},
+  }));
+  type FakeModule = (typeof modules)[number];
+  const compilation = {
+    options: { optimization: { usedExports } },
+    modules,
+    chunkGraph: {
+      getChunkModulesIterable: () => modules,
+      getModuleChunksIterable: () => [],
+      getModuleId: (module: FakeModule) => module.id,
+    },
+    codeGenerationResults: {
+      get: (module: FakeModule) => ({
+        sources: new Map([
+          ["javascript", { source: () => generatedCode[String(module.id)] }],
+        ]),
+      }),
+    },
+  };
+  return {
+    compilation: compilation as unknown as Compilation,
+    chunks: [{}] as unknown as Chunk[],
+  };
+}
+
+describe("collectCssModulesExports with the native CSS modules of Rspack", () => {
+  const sharedModule = `var exports = {
+  "base": "base__b2",
+  "other": "other__c3",
+};`;
+
+  it("adds the classes composed from another module to the export", () => {
+    const { compilation, chunks } = createRspackCompilation({
+      "./src/btn.module.css": `var exports = {
+  "btn": "btn__a1" + " " + __webpack_require__("./src/shared.module.css")["base"],
+};`,
+      "./src/shared.module.css": sharedModule,
+    });
+    expect(collectCssModulesExports(compilation, chunks)).toEqual({
+      exports: [
+        { name: "btn", classNames: ["btn__a1", "base__b2"] },
+        { name: "base", classNames: ["base__b2"] },
+        { name: "other", classNames: ["other__c3"] },
+      ],
+      usedClassNames: [],
+    });
+  });
+
+  it("finds the other module by its numeric id", () => {
+    const { compilation, chunks } = createRspackCompilation({
+      "12": `var exports = {"H":"BY0Sh6 " + e(378).h};`,
+      "378": `var exports = {"h":"h__d4"};`,
+    });
+    expect(collectCssModulesExports(compilation, chunks).exports).toEqual([
+      { name: "H", classNames: ["BY0Sh6", "h__d4"] },
+      { name: "h", classNames: ["h__d4"] },
+    ]);
+  });
+
+  it("keeps every class of the other module when the composed export is not found", () => {
+    const { compilation, chunks } = createRspackCompilation({
+      "./src/btn.module.css": `var exports = {
+  "btn": "btn__a1" + " " + __webpack_require__("./src/shared.module.css")["renamed"],
+};`,
+      "./src/shared.module.css": sharedModule,
+    });
+    expect(collectCssModulesExports(compilation, chunks).exports[0]).toEqual({
+      name: "btn",
+      classNames: ["btn__a1", "base__b2", "other__c3"],
+    });
+  });
+
+  it("ignores a reference to a module that is not a native CSS module", () => {
+    const { compilation, chunks } = createRspackCompilation({
+      "./src/btn.module.css": `var exports = {
+  "btn": "btn__a1" + " " + __webpack_require__("./src/other.js")["base"],
+};`,
+    });
+    expect(collectCssModulesExports(compilation, chunks).exports).toEqual([
+      { name: "btn", classNames: ["btn__a1"] },
+    ]);
+  });
+
+  it("resolves the exports of modules that compose each other", () => {
+    const { compilation, chunks } = createRspackCompilation({
+      "./src/a.module.css": `var exports = {
+  "x": "x__a1" + " " + __webpack_require__("./src/b.module.css")["y"],
+};`,
+      "./src/b.module.css": `var exports = {
+  "y": "y__b2" + " " + __webpack_require__("./src/a.module.css")["x"],
+};`,
+    });
+    expect(collectCssModulesExports(compilation, chunks).exports).toEqual([
+      { name: "x", classNames: ["x__a1", "y__b2"] },
+      { name: "y", classNames: ["y__b2", "x__a1"] },
+    ]);
+  });
+
+  it("lists every class as used when only the used exports are generated", () => {
+    const { compilation, chunks } = createRspackCompilation(
+      {
+        "./src/btn.module.css": `var exports = {
+  "a": "btn__a1" + " " + __webpack_require__("./src/shared.module.css")["b"],
+};`,
+        "./src/shared.module.css": `var exports = {"b":"base__b2"};`,
+      },
+      true,
+    );
+    expect(collectCssModulesExports(compilation, chunks)).toEqual({
+      exports: [],
+      usedClassNames: ["btn__a1", "base__b2", "base__b2"],
+    });
   });
 });
 
