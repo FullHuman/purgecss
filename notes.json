@@ -135,8 +135,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-15",
-      "result": "11-15 19:10: main still 015f06e. Open RA: #1543 #1577 #1591 #1594 #1599 #1600 #1601 (jsx) #1602 (rspack tests) = 8 -> maintenance-only. Only CodeQL runs on RA PRs (pass). #1599 superseded by #1603.",
+      "checked_at": "2026-11-16",
+      "result": "11-16: main still 015f06e, PR heads unchanged, no reviews. Scratch merge main+#1603+7 RA PRs (all but #1599): build ok, lint 0 errors, tests 729/729 (purgecss 340, html 66). #1599 conflicts with #1603 only.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. When #1603 merges, #1599 conflicts: do not fix, suggest close."
     },
     {
@@ -233,7 +233,7 @@
     {
       "task": 6,
       "item": "maintenance-mode",
-      "note": "8 open RA PRs (2026-11-15). Maintain + triage only. #1599 counts until closed; #1603 (maintainer html rework) labelled enhancement 11-15."
+      "note": "8 open RA PRs (2026-11-16). Maintain + triage only. #1599 counts until closed; #1603 compatible with all other RA PRs (verified 11-16)."
     }
   ]
 }
