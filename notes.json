@@ -68,8 +68,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-16",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-16."
+      "updated_at": "2026-11-17",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-17."
     }
   ],
   "fixes": [
@@ -94,8 +94,8 @@
     {
       "area": "docs",
       "checked_at": "2026-11-17",
-      "result": "2026-11-09: extractors.md named import of purgecss-from-html fixed in html whitespace draft. #1586 merged earlier.",
-      "follow_up": "Next Task 7: docs/plugins/gulp.md (+fr, README) has no Options section (description promises it) and no source maps section (gulp-sourcemaps/built-in verified working 11-17)."
+      "result": "2026-11-17: gulp docs draft (EN/FR + README: Options, Source maps, per-file purge tip), branch repo-assist/basics-gulp-docs-options-sourcemaps, all claims verified on gulp 5.",
+      "follow_up": "Next Task 7: check grunt docs/README options vs grunt-purgecss src (only content/extractors/safelist listed)."
     },
     {
       "area": "build",
@@ -136,20 +136,20 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-17",
-      "result": "11-17: main d5869e5 unchanged; 6 open RA PRs (#1543,#1577,#1591,#1594,#1600,#1604) no review activity; new gulp stream draft = 7th.",
+      "result": "11-17 21:19: main d5869e5; 8 open RA PRs (#1543,#1577,#1591,#1594,#1600,#1604,#1605 + gulp docs draft). Cap reached -> maintenance-only next.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-07",
-      "result": "Corepack in sandbox needs NODE_USE_ENV_PROXY=1 and --install-directory /tmp/gh-aw/agent/bin; pre-commit hook runs prettier via pnpm (needs pnpm on PATH or commit fails silently).",
+      "checked_at": "2026-11-17",
+      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; PATH must include it for pre-commit prettier hook. main tests: 695.",
       "follow_up": "Reuse this setup next run."
     },
     {
       "area": "qa",
       "checked_at": "2026-11-17",
-      "result": "2026-11-17 gulp 5/4 QA: buffer, gulp-sourcemaps, built-in sourcemaps, rejected OK; buffer:false never finished on gulp 5 (streamx pipe after end) -> draft PR branch repo-assist/fix-gulp-stream-mode-end.",
-      "follow_up": "gulp 5 swallows mid-stream plugin errors (streamx pipe) = gulp behaviour, not fixed. Vue CLI plugin has no test suite."
+      "result": "2026-11-17 gulp 5 QA: raw content errors, sourceMap/rejectedCss no effect, fontFace/keyframes/variables per file (gulp-concat keeps). Buffer mode: no \"No files found\" warning when content matches nothing (getFiles -> []); stream mode warns.",
+      "follow_up": "Possible small fix: warn in gulp buffer mode when content globs match nothing (in monthly Future Work). Vue CLI plugin has no test suite."
     }
   ],
   "completed_actions": [
@@ -236,12 +236,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-17. #1229 suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-17 21:19. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
       "task": 6,
-      "item": "gulp-stream-pr",
-      "note": "New gulp stream-mode draft 2026-11-17 (branch repo-assist/fix-gulp-stream-mode-end, title \"end the purged css stream\"): record number next run. JSX attr PR is #1604. 7 open RA PRs; cap 8."
+      "item": "gulp-docs-pr",
+      "note": "Gulp stream draft = #1605. New gulp docs draft 2026-11-17 (title \"document the options and the source maps\"): record number next run. 8 open RA PRs = cap."
     }
   ]
 }
