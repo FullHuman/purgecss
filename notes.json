@@ -93,9 +93,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-11-09",
+      "checked_at": "2026-11-17",
       "result": "2026-11-09: extractors.md named import of purgecss-from-html fixed in html whitespace draft. #1586 merged earlier.",
-      "follow_up": "READMEs still say vue-cli 3 (low value). gulp docs do not mention gulp-sourcemaps chaining."
+      "follow_up": "Next Task 7: docs/plugins/gulp.md (+fr, README) has no Options section (description promises it) and no source maps section (gulp-sourcemaps/built-in verified working 11-17)."
     },
     {
       "area": "build",
@@ -105,14 +105,14 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-14",
-      "result": "2026-11-15: #1599 (html extractor linear) superseded by maintainer #1603, which is also linear (16k siblings 102ms).",
-      "follow_up": "Sync test can't guard perf (jest timeout can't interrupt). Next perf idea needs measurement first."
+      "checked_at": "2026-11-17",
+      "result": "2026-11-17: profiled 2.8MB tailwind purge (~550ms): PurgeCSS code ~5%, rest postcss/selector-parser parse + GC; util.deprecate in selector-parser Attribute ctor ~4% (dependency). No action.",
+      "follow_up": "Next perf idea needs measurement first. performance.test.ts comment says 908KB tailwind (file is 2.8MB, assets/) - trivial."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-15",
-      "result": "2026-11-15: draft PR (branch repo-assist/test-webpack-rspack-composes-resolution) unit-tests Rspack ReferenceResolver (fallback, cycle guard; mutation-checked); webpack plugin 84.5->94.7% stmts. purgecss 98.9%, other pkgs >=89%.",
+      "checked_at": "2026-11-17",
+      "result": "2026-11-17: coverage purgecss 98.9%, postcss 94.6% (gaps = RunContentCache delegations), rollup 89%, webpack 94.7%. 696 tests pass. No worthwhile gap.",
       "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests (needs package.json test script = protected). gulp stream-mode rejected/error untested (low). rollup/webpack gaps = child-process Vite/Rspack builds."
     },
     {
@@ -135,8 +135,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-16",
-      "result": "11-16 22:38: main d5869e5 (#1601,#1602,#1603 merged, #1599 closed). 5 open RA PRs (#1543,#1577,#1591,#1594,#1600) clean; scratch merge of all 5: build ok, 729/729 tests.",
+      "checked_at": "2026-11-17",
+      "result": "11-17: main d5869e5 unchanged; 6 open RA PRs (#1543,#1577,#1591,#1594,#1600,#1604) no review activity; new gulp stream draft = 7th.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
@@ -147,9 +147,9 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-11-04",
-      "result": "Webpack config-file loading fixed in draft PR (2026-11-04). webpack lib .esm.js fails under Node ESM (import { sources } from webpack CJS) - only bundlers use it (no exports field); noted, no action.",
-      "follow_up": "Vue CLI plugin has no test suite. webpack plugin merges config into this.options each compilation (watch-mode config edits ignored; import() cached anyway) - low value."
+      "checked_at": "2026-11-17",
+      "result": "2026-11-17 gulp 5/4 QA: buffer, gulp-sourcemaps, built-in sourcemaps, rejected OK; buffer:false never finished on gulp 5 (streamx pipe after end) -> draft PR branch repo-assist/fix-gulp-stream-mode-end.",
+      "follow_up": "gulp 5 swallows mid-stream plugin errors (streamx pipe) = gulp behaviour, not fixed. Vue CLI plugin has no test suite."
     }
   ],
   "completed_actions": [
@@ -236,12 +236,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred as of 2026-11-14 18:38. #1229 suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-17. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
       "task": 6,
-      "item": "jsx-attr-pr",
-      "note": "New jsx attribute draft PR 2026-11-16 (branch repo-assist/fix-jsx-attribute-selectors, title \"keep the attribute selectors\", no issue): record its number next run; maintain. 6 open RA PRs."
+      "item": "gulp-stream-pr",
+      "note": "New gulp stream-mode draft 2026-11-17 (branch repo-assist/fix-gulp-stream-mode-end, title \"end the purged css stream\"): record number next run. JSX attr PR is #1604. 7 open RA PRs; cap 8."
     }
   ]
 }
