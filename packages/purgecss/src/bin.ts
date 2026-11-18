@@ -94,7 +94,8 @@ export async function getOptions(
 
   // if the config file is present, use it
   // other options specified will override
-  let options = defaultOptions;
+  // copy the default options, PurgeCSS uses them for every purge
+  let options: Options = { ...defaultOptions };
   if (config) {
     options = await setOptions(config);
   }
