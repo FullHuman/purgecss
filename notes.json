@@ -136,13 +136,13 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-18",
-      "result": "11-18 07:58: main 63979c9 (#1591 merged 11-17). 8 open RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606 + gulp buffer warning draft). Cap reached -> maintenance-only next.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
+      "result": "11-18 20:53: main 63979c9 unchanged. 8 open RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606,#1607), all merge clean; all 8 merged together: build+lint ok, 738 tests pass. Only CodeQL runs on RA PRs (green). Labelled #1607 bug.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Maintenance-only until a PR closes."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-18",
-      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin first, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; PATH must include it for pre-commit prettier hook. main tests: 696.",
+      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep NODE_USE_ENV_PROXY=1 exported for every pnpm call (first call downloads). PATH must include it for pre-commit prettier hook. main tests: 696.",
       "follow_up": "Reuse this setup next run."
     },
     {
@@ -236,12 +236,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-18 07:58. #1229 suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-18 20:53. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
       "task": 6,
       "item": "gulp-prs",
-      "note": "Gulp: #1605 stream end, #1606 docs, new buffer-warning draft 2026-11-18 (title \"warn when no content file matches with buffered files\"): record number next run. All 3 merge cleanly together."
+      "note": "Gulp: #1605 stream end, #1606 docs, #1607 buffer-mode warning (labelled bug 11-18). All 3 merge cleanly together and with the other 5 RA PRs."
     }
   ]
 }
