@@ -68,8 +68,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-17",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-17."
+      "updated_at": "2026-11-18",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-18."
     }
   ],
   "fixes": [
@@ -111,15 +111,15 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-17",
-      "result": "2026-11-17: coverage purgecss 98.9%, postcss 94.6% (gaps = RunContentCache delegations), rollup 89%, webpack 94.7%. 696 tests pass. No worthwhile gap.",
+      "checked_at": "2026-11-18",
+      "result": "2026-11-18: 699 tests pass on branch (main 696). No worthwhile gap: purgecss-with-wordpress/vue-cli-plugin are JS-only w/o test script (package.json protected); grunt e2e via npx grunt (0% src cov).",
       "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests (needs package.json test script = protected). gulp stream-mode rejected/error untested (low). rollup/webpack gaps = child-process Vite/Rspack builds."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-16",
-      "result": "2026-11-16: jsx extractor dropped all attribute selectors + ignored class attr (verified e2e: 7/7 used rules removed). Draft PR branch repo-assist/fix-jsx-attribute-selectors.",
-      "follow_up": "If maintainer wants: jsx/tsx return ExtractorResultDetailed (return type change). CLI sourceMap+--output needs per-file `to` design, deprioritized."
+      "checked_at": "2026-11-18",
+      "result": "2026-11-18: gulp buffer mode globbed content itself (fast-glob) -> no No-files-found warning. Draft PR branch repo-assist/improve-gulp-buffer-content-warning passes content to PurgeCSS like stream mode. Edge: dir in content now EISDIR; literal path in skippedContentGlobs now used.",
+      "follow_up": "fast-glob now unused in gulp package.json (protected) -> maintainer may drop. jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design."
     },
     {
       "area": "dependencies",
@@ -129,27 +129,27 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-16",
-      "result": "main has 13 changesets since 9.1.0 incl. #1603 minor -> suggest 9.2.0 in monthly.",
+      "checked_at": "2026-11-18",
+      "result": "2026-11-18: main has 12 changeset files since 9.1.0 (earlier count of 13 was wrong) incl. #1603 minor -> suggest 9.2.0 in monthly.",
       "follow_up": "Release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-17",
-      "result": "11-17 21:19: main d5869e5; 8 open RA PRs (#1543,#1577,#1591,#1594,#1600,#1604,#1605 + gulp docs draft). Cap reached -> maintenance-only next.",
+      "checked_at": "2026-11-18",
+      "result": "11-18 07:58: main 63979c9 (#1591 merged 11-17). 8 open RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606 + gulp buffer warning draft). Cap reached -> maintenance-only next.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-17",
-      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; PATH must include it for pre-commit prettier hook. main tests: 695.",
+      "checked_at": "2026-11-18",
+      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin first, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; PATH must include it for pre-commit prettier hook. main tests: 696.",
       "follow_up": "Reuse this setup next run."
     },
     {
       "area": "qa",
-      "checked_at": "2026-11-17",
-      "result": "2026-11-17 gulp 5 QA: raw content errors, sourceMap/rejectedCss no effect, fontFace/keyframes/variables per file (gulp-concat keeps). Buffer mode: no \"No files found\" warning when content matches nothing (getFiles -> []); stream mode warns.",
-      "follow_up": "Possible small fix: warn in gulp buffer mode when content globs match nothing (in monthly Future Work). Vue CLI plugin has no test suite."
+      "checked_at": "2026-11-18",
+      "result": "2026-11-18: re-QA gulp buffer vs stream (no match, [id] literal, skippedContentGlobs with/without ./): identical output; only buffer lacked the warning -> fixed in draft PR.",
+      "follow_up": "Vue CLI plugin has no test suite. Next Task 7: grunt docs/README options vs grunt-purgecss src."
     }
   ],
   "completed_actions": [
@@ -236,12 +236,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-17 21:19. #1229 suggested for closing. #170 unlabelled by design."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-18 07:58. #1229 suggested for closing. #170 unlabelled by design."
     },
     {
       "task": 6,
-      "item": "gulp-docs-pr",
-      "note": "Gulp stream draft = #1605. New gulp docs draft 2026-11-17 (title \"document the options and the source maps\"): record number next run. 8 open RA PRs = cap."
+      "item": "gulp-prs",
+      "note": "Gulp: #1605 stream end, #1606 docs, new buffer-warning draft 2026-11-18 (title \"warn when no content file matches with buffered files\"): record number next run. All 3 merge cleanly together."
     }
   ]
 }
