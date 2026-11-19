@@ -14,8 +14,8 @@
     {
       "number": 1339,
       "state": "deferred",
-      "updated_at": "2026-10-24",
-      "note": "Covered by maintainer PR #1495 (blocklist attribute selectors with value). Do not duplicate."
+      "updated_at": "2026-11-19",
+      "note": "Covered by maintainer PR #1495 (linked as closing PR). 11-19 re-checked: only workaround on main is blocklist [\"type\"] (removes every [type=...]); #1495 body already says so -> no comment. Do not duplicate."
     },
     {
       "number": 170,
@@ -136,7 +136,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-19",
-      "result": "11-19: main 63979c9 unchanged since 11-18; 8 RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606,#1607) heads unchanged, all merge clean (merge-tree), no reviews/comments, CodeQL green. 11-18: all 8 merged together build+lint ok, 738 tests.",
+      "result": "11-19 07:48 + 20:54: main 63979c9 unchanged since 11-18; 8 RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606,#1607) heads unchanged, all merge clean (merge-tree), no reviews/comments, CodeQL green. 11-18: all 8 merged together build+lint ok, 738 tests.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Maintenance-only until a PR closes."
     },
     {
@@ -236,7 +236,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-19. #1229 suggested for closing. #170 unlabelled by design. #803 clarification pending since 10-27."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-19 20:54. #1229 suggested for closing. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
     },
     {
       "task": 6,
