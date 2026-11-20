@@ -46,9 +46,11 @@
   },
   "devDependencies": {
     "@types/event-stream": "^4.0.6",
+    "@types/gulp": "^4.0.18",
     "@types/readable-stream": "^4.0.25",
     "@types/vinyl": "^2.0.12",
     "event-stream": "^4.0.1",
+    "gulp": "^5.0.1",
     "vinyl": "^3.0.1"
   },
   "bugs": {
