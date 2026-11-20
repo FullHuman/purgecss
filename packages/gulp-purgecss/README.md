@@ -34,6 +34,8 @@ gulp.task('purgecss', () => {
 })
 ```
 
+With gulp 5, write the task with `pipeline` to get the errors of the plugin reported, see [Errors](#errors).
+
 By setting the `rejected` option, you can 'invert' the output to list _only the removed selectors_: 
 
 ```js

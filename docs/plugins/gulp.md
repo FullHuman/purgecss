@@ -30,6 +30,8 @@ gulp.task('purgecss', () => {
 })
 ```
 
+With gulp 5, write the task with `pipeline` to get the errors of the plugin reported, see [Errors](#errors).
+
 By setting the `rejected` option, you can 'invert' the output to list _only the removed selectors_: 
 
 ```js
@@ -94,7 +96,7 @@ The following tasks did not complete: purgecss
 Did you forget to signal async completion?
 ```
 
-Every plugin that fails asynchronously is affected, see [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Write the task with `pipeline` of Node.js, which reports the error of any of its streams:
+Every plugin that fails is affected, see [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Write the task with `pipeline` of Node.js, which reports the error of any of its streams:
 
 ```js
 const { pipeline } = require('node:stream/promises')

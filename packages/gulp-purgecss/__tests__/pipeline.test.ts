@@ -16,7 +16,8 @@ function runTask(
 ): Promise<void> {
   const task = () => {
     return pipeline(
-      gulp.src(css, srcOptions),
+      // a glob is written with forward slashes, also on Windows
+      gulp.src(css.split(path.sep).join("/"), srcOptions),
       gulpPurgecss({
         content: ["./__tests__/test.html"],
       }),

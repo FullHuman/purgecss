@@ -30,6 +30,8 @@ gulp.task('purgecss', () => {
 })
 ```
 
+Avec gulp 5, écrivez la tâche avec `pipeline` pour que les erreurs du plugin soient signalées, voir [Erreurs](#erreurs).
+
 En définissant l'option `rejected`, vous pouvez « inverser » la sortie pour lister _uniquement les sélecteurs supprimés_ :
 
 ```js
@@ -94,7 +96,7 @@ The following tasks did not complete: purgecss
 Did you forget to signal async completion?
 ```
 
-Tous les plugins qui échouent de manière asynchrone sont concernés, voir [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Écrivez la tâche avec `pipeline` de Node.js, qui signale l'erreur de n'importe lequel de ses flux :
+Tous les plugins qui échouent sont concernés, voir [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Écrivez la tâche avec `pipeline` de Node.js, qui signale l'erreur de n'importe lequel de ses flux :
 
 ```js
 const { pipeline } = require('node:stream/promises')
