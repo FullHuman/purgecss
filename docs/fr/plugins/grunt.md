@@ -40,81 +40,53 @@ grunt.initConfig({
   });
 ```
 
+Chaque destination de `files` est purgée avec ses fichiers sources, et le CSS purgé de ses fichiers sources est écrit dans la destination. Un fichier source qui n'existe pas est ignoré avec un avertissement lorsque `nonull` est défini (sinon Grunt l'écarte), et la tâche échoue lorsqu'il ne reste aucun fichier source pour une destination.
+
 ### Options
 
-Toutes les options de purgecss sont disponibles avec les plugins.
-Vous trouverez ci-dessous les principales options disponibles. Pour la liste complète, consultez le [site de documentation de Purgecss](https://www.purgecss.com/fr/configuration.html#options).
+La tâche accepte les [options de PurgeCSS](../configuration.md), sauf `css`, remplacée par les fichiers sources de chaque destination. Certaines fonctionnent différemment :
 
-#### options.content
+- #### content
 
-Type : `string | Object`
+Un tableau de chemins et de globs des fichiers de contenu, par exemple `['src/**/*.html', 'src/**/*.js']`. Ils sont relatifs au répertoire de travail courant, que Grunt définit sur le répertoire du Gruntfile. Les fichiers correspondant à `skippedContentGlobs` ne sont pas utilisés. Lorsqu'aucun fichier ne correspond, PurgeCSS affiche un avertissement et tous les sélecteurs sont supprimés.
 
-Vous pouvez spécifier le contenu qui doit être analysé par Purgecss avec un tableau de noms de fichiers ou de globs. Les fichiers peuvent être HTML, Pug, Blade, etc.
+- #### sourceMap
 
-#### options.extractors
+La source map est ajoutée en ligne à la fin du fichier de destination. Définissez `to` sur le fichier de destination, afin que les sources de la map soient relatives à celui-ci :
 
-Type : `Array<Object>`
-
-Purgecss peut être adapté à vos besoins. Si vous remarquez que beaucoup de CSS inutilisé n'est pas supprimé, vous voudrez peut-être utiliser un extracteur personnalisé.
-Plus d'informations sur les extracteurs [ici](https://www.purgecss.com/fr/extractors.html).
-
-#### options.safelist
-
-Vous pouvez indiquer quels sélecteurs sont sûrs à conserver dans le CSS final. Cela peut être accompli avec l'option `safelist`.
-
-Deux formes sont disponibles pour cette option.
-
-```ts
-safelist: ['random', 'yep', 'button', /^nav-/]
-```
-
-Sous cette forme, safelist est un tableau qui peut contenir une chaîne de caractères ou une expression régulière.
-
-La forme _complexe_ est :
-
-```ts
-safelist: {
-    standard: ['random', 'yep', 'button', /^nav-/],
-    deep: [],
-    greedy: [],
-    keyframes: [],
-    variables: []
+```js
+options: {
+  content: ['src/**/*.html'],
+  sourceMap: { to: 'dist/app.css' }
 }
 ```
 
-#### options.keyframes
+La tâche n'écrit pas de fichiers de source map : avec `inline: false`, la source map est perdue et le fichier de destination fait référence à un fichier qui n'existe pas. Chaque fichier source ajoute sa propre source map, donc seule une destination avec un seul fichier source a une source map utilisable.
 
-Type : `boolean`
-Valeur par défaut : `false`
+- #### stdin
 
-Si vous utilisez une bibliothèque d'animations CSS comme animate.css, vous pouvez supprimer les keyframes inutilisées en définissant l'option `keyframes` sur true.
+Ne la définissez pas : les chemins des fichiers sources seraient lus comme du CSS et la tâche échoue.
 
-#### options.fontFace
+Les options `rejected`, `rejectedCss`, `output` et `stdout` n'ont pas d'effet : la tâche écrit uniquement le CSS purgé.
 
-Type : `boolean`
-Valeur par défaut : `false`
-
-S'il y a des règles `@font-face` inutilisées dans votre CSS, vous pouvez les supprimer en définissant l'option `fontFace` sur true.
+::: tip
+Les fichiers sources d'une destination sont purgés ensemble, et chaque destination séparément. Avec `fontFace`, `keyframes` ou `variables`, une règle `@font-face`, des `@keyframes` ou une variable CSS utilisés uniquement par les fichiers sources d'une autre destination sont supprimés. Pour les conserver, listez ces fichiers sources dans la même destination.
+:::
 
 ### Exemple
 
-L'exemple ci-dessous utilise toutes les principales options disponibles.
-
 ```js
 grunt.initConfig({
-    // Configuration à exécuter (puis à tester).
     purgecss: {
       my_target: {
         options: {
-          content: ['./src/**/*.html', `src/**/*.js`, 'src/**/*.blade', 'src/**/*.vue'],
-          extractors: {
-            extractor: class {
-                static extract(content) {
-                    content.match(/a-Z/) || []
-                }
-            },
-            extension: ['html', 'blade']
-          },
+          content: ['./src/**/*.html', 'src/**/*.js', 'src/**/*.blade', 'src/**/*.vue'],
+          extractors: [
+            {
+              extractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+              extensions: ['html', 'blade']
+            }
+          ],
           safelist: ['random', 'yep', 'button', /red$/],
           keyframes: true,
           fontFace: true
