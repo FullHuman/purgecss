@@ -87,9 +87,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-11-17",
-      "result": "2026-11-17: gulp docs draft (EN/FR + README: Options, Source maps, per-file purge tip), branch repo-assist/basics-gulp-docs-options-sourcemaps, all claims verified on gulp 5.",
-      "follow_up": "Next Task 7: check grunt docs/README options vs grunt-purgecss src (only content/extractors/safelist listed)."
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: grunt docs draft (EN/FR + README), branch repo-assist/basics-grunt-docs-options: fixed v1 extractors example (task failed), options like gulp #1606 (merged). All claims run with grunt 1.6.",
+      "follow_up": "Next Task 7: compare docs/plugins/postcss.md and rollup.md with their src options/behaviour."
     },
     {
       "area": "build",
@@ -106,8 +106,8 @@
     {
       "area": "tests",
       "checked_at": "2026-11-20",
-      "result": "2026-11-20: draft PR branch repo-assist/test-webpack-plugin-rejected-blocklist-query (webpack rejected->purgedStats, blocklist fn, asset name ?query; index.ts lines 100%). main 706 tests, branch 710.",
-      "follow_up": "Low value: postcss RunContentCache delegates (unused by core); rollup Vite paths run in child process; gulp stream error line covered by maintainer #1610 test."
+      "result": "2026-11-20 (pm): coverage 95-100% lines per package; gaps = defensive fallbacks (postcss dependencies/toDashesForm), rollup Vite child process, jsx (in #1604), webpack (in #1611). No PR.",
+      "follow_up": "Revisit only after #1604/#1611 merge or new code lands."
     },
     {
       "area": "code",
@@ -118,8 +118,8 @@
     {
       "area": "dependencies",
       "checked_at": "2026-11-20",
-      "result": "2026-11-20: pnpm audit: only dev glob GHSA-3g3m-2fjr-6pw4 (moderate, via jest). gulp-purgecss fast-glob dep dropped by maintainer. Earlier: TypeScript 7 major skipped.",
-      "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
+      "result": "2026-11-20: pnpm outdated = minor/patch only (TS 7 major skipped); Dependabot npm+actions monthly, none open. pnpm audit: dev glob GHSA-3g3m-2fjr-6pw4 via jest.",
+      "follow_up": "No bundling needed while Dependabot runs monthly. glob override suggest-only (pnpm-workspace.yaml)."
     },
     {
       "area": "release",
@@ -130,7 +130,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-20",
-      "result": "11-20: main 76cce5c (#1605-#1609 merged). 5 RA PRs (#1543,#1577,#1594,#1600,#1604) merge clean (merge-tree); + new webpack tests PR. No reviews.",
+      "result": "11-20 pm: main still 76cce5c. RA PRs #1543,#1577,#1594,#1600,#1604,#1611 + new grunt docs draft. Removed mistaken refactor label from #1611. No reviews.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
@@ -141,9 +141,9 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-11-18",
-      "result": "2026-11-18: re-QA gulp buffer vs stream (no match, [id] literal, skippedContentGlobs with/without ./): identical output; only buffer lacked the warning -> fixed in draft PR.",
-      "follow_up": "Vue CLI plugin has no test suite. Next Task 7: grunt docs/README options vs grunt-purgecss src."
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: grunt QA: rejected/rejectedCss/output ignored, stdin:true fails, sourceMap inline only (one map per src; use to), srcs of a dest purged together, content from Gruntfile dir.",
+      "follow_up": "Vue CLI plugin has no test suite (package.json protected). grunt README still says Grunt ~0.4.5 (unverified, left)."
     }
   ],
   "completed_actions": [
@@ -235,11 +235,6 @@
       "task": 2,
       "item": "untouched-older-issues",
       "note": "All open issues addressed or deferred; no new human activity as of 2026-11-20. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495. #1229 closed by maintainer."
-    },
-    {
-      "task": 6,
-      "item": "webpack-tests-pr-label",
-      "note": "New draft PR (webpack rejected/blocklist/query tests) got label refactor by mistake on 11-20; remove refactor via remove_labels once its number is known."
     }
   ]
 }
