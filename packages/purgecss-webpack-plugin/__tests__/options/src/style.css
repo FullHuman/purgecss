@@ -1,0 +1,11 @@
+.used {
+  color: red;
+}
+
+.unused {
+  color: blue;
+}
+
+.blocklisted {
+  color: green;
+}
