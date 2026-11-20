@@ -24,6 +24,12 @@ export * from "./types";
 
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";
+/**
+ * Key of the info of an asset holding the name it had when it was purged,
+ * its key in `purgedStats`. The info of an asset is kept by webpack and
+ * Rspack when they rename it, which no hook reports.
+ */
+const purgedNameInfoKey = "purgecssName";
 
 /**
  * Get the filename without its query (`?hash`), which starts at the first
@@ -287,6 +293,44 @@ export class PurgeCSSPlugin {
         return this.runPluginHook(compilation, entryPaths);
       },
     );
+    compilation.hooks.processAssets.tap(
+      {
+        name: pluginName,
+        // once the assets have their final name, before the stage of the
+        // plugins reporting on the assets (REPORT)
+        stage: Compilation.PROCESS_ASSETS_STAGE_ANALYSE,
+      },
+      () => this.renamePurgedStats(compilation),
+    );
+  }
+
+  /**
+   * Rename the keys of `purgedStats` after the assets renamed since they
+   * were purged: with `optimization.realContentHash`, the content hash in
+   * the name of an asset is replaced with the hash of its final content
+   * (OPTIMIZE_HASH)
+   *
+   * @param compilation - compilation of webpack or Rspack
+   */
+  private renamePurgedStats(compilation: Compilation): void {
+    // the assets of the compilation, not the assets of the same name another
+    // compiler added
+    const purgedAssets = this.purgedAssets.get(compilation.compiler.root);
+    if (!purgedAssets) return;
+    for (const { name, info } of compilation.getAssets()) {
+      const purgedName: unknown = info[purgedNameInfoKey];
+      if (typeof purgedName !== "string" || purgedName === name) continue;
+      const rejected = purgedAssets.get(purgedName);
+      // not renamed: an asset created with the info of the purged asset
+      if (!rejected || compilation.getAsset(purgedName)) continue;
+      // removed under its new name when the next compilation starts
+      purgedAssets.delete(purgedName);
+      purgedAssets.set(name, rejected);
+      if (this.purgedStats[purgedName] === rejected) {
+        delete this.purgedStats[purgedName];
+      }
+      this.purgedStats[name] = rejected;
+    }
   }
 
   /**
@@ -408,7 +452,11 @@ export class PurgeCSSPlugin {
           purged,
           sourceMapEnabled,
         ),
-        (info) => ({ ...info, version }),
+        (info) => ({
+          ...info,
+          version,
+          ...(purged.rejected && { [purgedNameInfoKey]: name }),
+        }),
       );
     }
   }

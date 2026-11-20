@@ -12,6 +12,8 @@ interface Build {
   devtool: string | false;
   /** the TypeScript source of the plugin, its built bundle or no plugin */
   plugin: boolean | "lib";
+  /** a content hash in the name of the CSS asset and the `rejected` option */
+  rejected?: boolean;
 }
 
 const libFile = path.resolve(
@@ -71,6 +73,14 @@ const builds: Build[] = [
     mode: "development",
     devtool: false,
     plugin: "lib",
+  },
+  {
+    name: "rejected",
+    css: "native",
+    mode: "production",
+    devtool: false,
+    plugin: true,
+    rejected: true,
   },
 ];
 
@@ -230,6 +240,18 @@ describe("Rspack", () => {
     expect(second).toMatch(/\.kept \{/);
     expect(second).toMatch(/\.removed-a \{/);
   }, 60_000);
+
+  it("has the names of the assets with their real content hash as keys of purgedStats", async () => {
+    // `optimization.realContentHash`, enabled in production mode: the asset
+    // is renamed after it is purged
+    const { assets, purgedStats } = JSON.parse(
+      await readOutput("rejected", "purged-stats.json"),
+    ) as { assets: string[]; purgedStats: Record<string, string[]> };
+    const cssAssets = assets.filter((name) => name.endsWith(".css"));
+    expect(cssAssets).toEqual([expect.stringMatching(/^main\.\w+\.css$/)]);
+    expect(Object.keys(purgedStats)).toEqual(cssAssets);
+    expect(purgedStats[cssAssets[0]]).toContain(".unused-global");
+  });
 
   it("keeps the original sources in the source maps", async () => {
     const map = JSON.parse(await readOutput("source-map", "main.css.map"));
