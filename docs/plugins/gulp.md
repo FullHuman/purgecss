@@ -91,7 +91,7 @@ The plugin accepts the [PurgeCSS options](../configuration.md), except `css`, wh
 
 - #### content
 
-An array of paths and globs of the content files, e.g. `['src/**/*.html', 'src/**/*.js']`. They are relative to the current working directory, which the gulp CLI sets to the directory of the gulpfile. The files matching `skippedContentGlobs` are not used. Raw content (`{ raw, extension }`) is not supported. When no file matches, all the selectors are removed.
+An array of paths and globs of the content files, e.g. `['src/**/*.html', 'src/**/*.js']`. They are relative to the current working directory, which the gulp CLI sets to the directory of the gulpfile. The files matching `skippedContentGlobs` are not used. When no file matches, PurgeCSS prints a warning and all the selectors are removed.
 
 - #### rejected
 

@@ -91,7 +91,7 @@ Le plugin accepte les [options de PurgeCSS](../configuration.md), sauf `css`, re
 
 - #### content
 
-Un tableau de chemins et de globs des fichiers de contenu, par exemple `['src/**/*.html', 'src/**/*.js']`. Ils sont relatifs au répertoire de travail courant, que la CLI de gulp définit sur le répertoire du gulpfile. Les fichiers correspondant à `skippedContentGlobs` ne sont pas utilisés. Le contenu brut (`{ raw, extension }`) n'est pas pris en charge. Lorsqu'aucun fichier ne correspond, tous les sélecteurs sont supprimés.
+Un tableau de chemins et de globs des fichiers de contenu, par exemple `['src/**/*.html', 'src/**/*.js']`. Ils sont relatifs au répertoire de travail courant, que la CLI de gulp définit sur le répertoire du gulpfile. Les fichiers correspondant à `skippedContentGlobs` ne sont pas utilisés. Lorsqu'aucun fichier ne correspond, PurgeCSS affiche un avertissement et tous les sélecteurs sont supprimés.
 
 - #### rejected
 

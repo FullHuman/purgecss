@@ -60,7 +60,7 @@ The plugin updates the source map of the files that have one, so that it still p
 
 ## Options
 
-The plugin accepts the [PurgeCSS options](https://www.purgecss.com/configuration.html#options), except `css`, which is replaced by the files of the stream. `content` is an array of paths and globs, relative to the current working directory (the directory of the gulpfile with the gulp CLI): raw content is not supported. The `rejectedCss`, `output`, `stdin` and `stdout` options have no effect.
+The plugin accepts the [PurgeCSS options](https://www.purgecss.com/configuration.html#options), except `css`, which is replaced by the files of the stream. `content` is an array of paths and globs, relative to the current working directory (the directory of the gulpfile with the gulp CLI). The `rejectedCss`, `output`, `stdin` and `stdout` options have no effect.
 
 Each file of the stream is purged on its own: with `fontFace`, `keyframes` or `variables`, a `@font-face`, `@keyframes` or CSS variable only used by another file is removed. To keep it, concatenate the files before purging them. See the [documentation](https://www.purgecss.com/plugins/gulp.html#options).
 
