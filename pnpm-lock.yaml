@@ -278,9 +278,6 @@ importers:
 
   packages/gulp-purgecss:
     dependencies:
-      fast-glob:
-        specifier: ^3.3.3
-        version: 3.3.3
       plugin-error:
         specifier: ^2.0.1
         version: 2.0.1

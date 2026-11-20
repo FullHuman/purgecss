@@ -1,4 +1,3 @@
-import glob from "fast-glob";
 import PluginError from "plugin-error";
 import { PurgeCSS } from "purgecss";
 import * as internal from "stream";
@@ -10,12 +9,6 @@ import { UserDefinedOptions } from "./types";
 export { UserDefinedOptions };
 
 const PLUGIN_NAME = "gulp-purgecss";
-
-function getFiles(contentArray: string[], ignore?: string[]): string[] {
-  return contentArray.reduce((acc: string[], content) => {
-    return [...acc, ...glob.sync(content, { ignore })];
-  }, []);
-}
 
 // generate a separate source map describing only this step, without any
 // annotation in the css, so that it can be chained with gulp-sourcemaps
@@ -67,9 +60,10 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
     // buffer
     if (file.isBuffer()) {
       try {
+        // the content globs are resolved by PurgeCSS, which skips the
+        // `skippedContentGlobs` and warns when no file matches
         const optionsGulp = {
           ...options,
-          content: getFiles(options.content, options.skippedContentGlobs),
           css: [
             {
               raw: file.contents.toString(),
