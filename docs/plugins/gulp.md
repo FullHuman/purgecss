@@ -85,6 +85,33 @@ gulp.task('purgecss', () => {
 })
 ```
 
+## Errors
+
+With gulp 5, an error of the plugin, e.g. for invalid CSS or a content path that cannot be read, is not always reported when the task is a chain of `.pipe()`. gulp may only print:
+
+```
+The following tasks did not complete: purgecss
+Did you forget to signal async completion?
+```
+
+Every plugin that fails asynchronously is affected, see [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Write the task with `pipeline` of Node.js, which reports the error of any of its streams:
+
+```js
+const { pipeline } = require('node:stream/promises')
+const gulp = require('gulp')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return pipeline(
+        gulp.src('src/**/*.css'),
+        purgecss({
+            content: ['src/**/*.html']
+        }),
+        gulp.dest('build/css')
+    )
+})
+```
+
 ## Options
 
 The plugin accepts the [PurgeCSS options](../configuration.md), except `css`, which is replaced by the files of the stream. Some of them work differently:
