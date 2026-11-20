@@ -39,7 +39,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "fast-glob": "^3.3.3",
     "plugin-error": "^2.0.1",
     "purgecss": "workspace:^",
     "through2": "^5.0.12",
