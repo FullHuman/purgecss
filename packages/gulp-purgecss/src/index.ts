@@ -114,9 +114,12 @@ function gulpPurgeCSS(options: UserDefinedOptions): internal.Transform {
             ? purge.rejected.join(" {}\n") + " {}"
             : purge.css;
 
+        // the contents were read to the end: piping them into the new stream
+        // would not end it with every kind of stream, e.g. not with the
+        // streamx streams of gulp 5 (`buffer: false`)
         const streamResult = transform();
-        streamResult.write(Buffer.from(result, "utf-8"));
-        file.contents = file.contents.pipe(streamResult);
+        streamResult.end(Buffer.from(result, "utf-8"));
+        file.contents = streamResult;
         // apply source map to the chain
         applyPurgedSourceMap(file, purge.sourceMap);
         return file;
