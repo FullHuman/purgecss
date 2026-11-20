@@ -46,3 +46,38 @@ describe("gulp-purgecss with stream", () => {
     });
   });
 });
+
+/**
+ * Contents of a file read by gulp 5 with `buffer: false`: vinyl-fs 4 reads it
+ * with a streamx stream, which does not end the destination when it is piped
+ * after it has ended
+ */
+class StreamxLikePassThrough extends PassThrough {
+  pipe<T extends NodeJS.WritableStream>(destination: T): T {
+    if (this.readableEnded) return destination;
+    return super.pipe(destination);
+  }
+}
+
+describe("gulp-purgecss with a stream that has ended", () => {
+  it("ends the purged css stream", (done) => {
+    const contents = new StreamxLikePassThrough();
+    contents.end(
+      Buffer.from(".unused { color: red; }\n.used { color: blue; }\n"),
+    );
+    const myGulpPurgecss = gulpPurgecss({
+      content: ["./__tests__/test.html"],
+    });
+
+    myGulpPurgecss.once("error", done);
+    myGulpPurgecss.once("data", (file: File.StreamFile) => {
+      file.contents.pipe(
+        es.wait((_err: unknown, data: Buffer) => {
+          expect(data.toString()).toBe(".used { color: blue; }\n");
+          done();
+        }),
+      );
+    });
+    myGulpPurgecss.write(new File({ contents }));
+  });
+});
