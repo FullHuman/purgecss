@@ -102,4 +102,13 @@ describe("PurgeCSSPlugin options in a compilation", () => {
     expect(names[0]).toMatch(/^main\.css\?[0-9a-f]+$/);
     expect(plugin.purgedStats[names[0]]).toEqual([".unused"]);
   }, 30_000);
+
+  it("purges the css assets whose name has several question marks", async () => {
+    // the query starts at the first `?`: webpack writes the asset to main.css
+    const plugin = new PurgeCSSPlugin({ paths, rejected: true });
+    const css = await compile(plugin, "[name].css?v=1?x");
+    expect(css).toMatch(/\.used \{/);
+    expect(css).not.toMatch(/\.unused/);
+    expect(plugin.purgedStats).toEqual({ "main.css?v=1?x": [".unused"] });
+  }, 30_000);
 });
