@@ -30,12 +30,6 @@
       "note": "Reproduced. Posted verified workaround safelist.variables (needs config file; CLI -s is standard only). Fix idea: keep vars whose name is in content (extractor already returns --x); maintainer decision."
     },
     {
-      "number": 1229,
-      "state": "commented",
-      "updated_at": "2026-11-07",
-      "note": "2026-11-07 correction comment: on 9.0.0 reporter config keeps rule (greedy string exact match, #1574); /[data-loaded=true]$/ is a char class keeping unrelated rules. Suggested close in monthly."
-    },
-    {
       "number": 1123,
       "state": "resolution_recommended",
       "updated_at": "2026-10-27",
@@ -68,8 +62,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-18",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-18."
+      "updated_at": "2026-11-20",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-20."
     }
   ],
   "fixes": [
@@ -105,15 +99,15 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-17",
-      "result": "2026-11-17: profiled 2.8MB tailwind purge (~550ms): PurgeCSS code ~5%, rest postcss/selector-parser parse + GC; util.deprecate in selector-parser Attribute ctor ~4% (dependency). No action.",
-      "follow_up": "Next perf idea needs measurement first. performance.test.ts comment says 908KB tailwind (file is 2.8MB, assets/) - trivial."
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: large-content profile (2000 HTML/118MB; ~11k node_modules JS): mergeSets 43-57% self = Set.add of ~37M fresh tokens (~80ns each, inherent). Direct merge w/o per-file set + index loop = only 2-3% e2e -> no PR. CSS side (11-17): PurgeCSS ~5%.",
+      "follow_up": "No perf PR unless a new measurable hotspot; per-file Set removal not worth it."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-18",
-      "result": "2026-11-18: 699 tests pass on branch (main 696). No worthwhile gap: purgecss-with-wordpress/vue-cli-plugin are JS-only w/o test script (package.json protected); grunt e2e via npx grunt (0% src cov).",
-      "follow_up": "grunt 0% (tests run built tasks/), vue-cli plugin no tests (needs package.json test script = protected). gulp stream-mode rejected/error untested (low). rollup/webpack gaps = child-process Vite/Rspack builds."
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: draft PR branch repo-assist/test-webpack-plugin-rejected-blocklist-query (webpack rejected->purgedStats, blocklist fn, asset name ?query; index.ts lines 100%). main 706 tests, branch 710.",
+      "follow_up": "Low value: postcss RunContentCache delegates (unused by core); rollup Vite paths run in child process; gulp stream error line covered by maintainer #1610 test."
     },
     {
       "area": "code",
@@ -123,26 +117,26 @@
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-08",
-      "result": "2026-11-08 (after #1588 added rspack/rolldown/vite dev deps): prod audit clean; dev glob GHSA-3g3m-2fjr-6pw4 + deepmerge (no patch) unchanged. outdated: minors only + TypeScript 7 major (skip, purgecss-from-tsx uses TS API).",
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: pnpm audit: only dev glob GHSA-3g3m-2fjr-6pw4 (moderate, via jest). gulp-purgecss fast-glob dep dropped by maintainer. Earlier: TypeScript 7 major skipped.",
       "follow_up": "pnpm-workspace.yaml/package.json/lockfile/.github protected -> suggest only. Drop suggestion if maintainer adds the override or jest updates glob."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-18",
-      "result": "2026-11-18: main has 12 changeset files since 9.1.0 (earlier count of 13 was wrong) incl. #1603 minor -> suggest 9.2.0 in monthly.",
+      "checked_at": "2026-11-20",
+      "result": "2026-11-20: main has 14 changeset files since 9.1.0 (12 + gulp stream end/buffer warning) incl. #1603 minor -> suggest 9.2.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-19",
-      "result": "11-19 07:48 + 20:54: main 63979c9 unchanged since 11-18; 8 RA PRs (#1543,#1577,#1594,#1600,#1604,#1605,#1606,#1607) heads unchanged, all merge clean (merge-tree), no reviews/comments, CodeQL green. 11-18: all 8 merged together build+lint ok, 738 tests.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. Maintenance-only until a PR closes."
+      "checked_at": "2026-11-20",
+      "result": "11-20: main 76cce5c (#1605-#1609 merged). 5 RA PRs (#1543,#1577,#1594,#1600,#1604) merge clean (merge-tree); + new webpack tests PR. No reviews.",
+      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-18",
-      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep NODE_USE_ENV_PROXY=1 exported for every pnpm call (first call downloads). PATH must include it for pre-commit prettier hook. main tests: 696.",
+      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep NODE_USE_ENV_PROXY=1 exported + PATH for every pnpm call (pre-commit prettier hook). git config user github-actions[bot]. main tests: 706.",
       "follow_up": "Reuse this setup next run."
     },
     {
@@ -220,6 +214,10 @@
     {
       "key": "review-pr-1601",
       "completed_at": "2026-11-16"
+    },
+    {
+      "key": "check-comment-1229",
+      "completed_at": "2026-11-20"
     }
   ],
   "priorities": [
@@ -236,12 +234,12 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-19 20:54. #1229 suggested for closing. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-20. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495. #1229 closed by maintainer."
     },
     {
       "task": 6,
-      "item": "gulp-prs",
-      "note": "Gulp: #1605 stream end, #1606 docs, #1607 buffer-mode warning (labelled bug 11-18). All 3 merge cleanly together and with the other 5 RA PRs."
+      "item": "webpack-tests-pr-label",
+      "note": "New draft PR (webpack rejected/blocklist/query tests) got label refactor by mistake on 11-20; remove refactor via remove_labels once its number is known."
     }
   ]
 }
