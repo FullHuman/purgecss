@@ -1,23 +1,7 @@
 ---
 title: Safelisting
+description: "To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors."
 lang: en-US
-meta:
-  - name: description
-    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
-  - itemprop: description
-    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
-  - property: og:url
-    content:  https://purgecss.com/safelisting
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: To avoid PurgeCSS to remove unused CSS that you want to keep, you can safelist selectors.
 ---
 
 ::: tip
@@ -90,6 +74,20 @@ const purgeCSSResult = await new PurgeCSS().purge({
 In the example, selectors ending with `red` such as `.bg-red`, selectors ending with `blue` as well as their children such as `blue p` or `.bg-blue .child-of-bg`, and selectors that have any part ending with `yellow` such as `button.bg-yellow.other-class`, will be left in the final CSS.
 
 Patterns are regular expressions. You can use [regexr](https://regexr.com) to verify the regular expressions correspond to what you are looking for.
+
+If your configuration cannot contain regular expressions, for example a JSON file such as `postcss.config.json`, write the regular expression as a string between slashes. Flags go after the last slash. Any other string still matches a selector exactly.
+
+```json
+{
+  "safelist": {
+    "standard": ["/red$/", "/^btn-/i", "active"],
+    "deep": ["/blue$/"],
+    "greedy": ["/yellow$/"]
+  }
+}
+```
+
+Strings between slashes work in every option that accepts regular expressions: `safelist`, `blocklist` and `dynamicAttributes`.
 
 ## In the CSS directly
 

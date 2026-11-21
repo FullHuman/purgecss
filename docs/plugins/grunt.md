@@ -1,25 +1,7 @@
 ---
 title: Grunt
+description: "Remove unused CSS in Grunt builds with grunt-purgecss: installation, configuration of the purgecss task and its options."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with grunt with a plugin.
-  - itemprop: description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with grunt with a plugin.
-  - property: og:url
-    content:  https://purgecss.com/plugins/grunt
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS is a tool for removing CSS that you're not actually using in your project. You can use it with grunt with a plugin.
 ---
 
 # Grunt
@@ -58,81 +40,53 @@ grunt.initConfig({
   });
 ```
 
+Each destination of `files` is purged with its source files, and the purged CSS of its source files is written to the destination. A source file that does not exist is skipped with a warning when `nonull` is set (Grunt drops it otherwise), and the task fails when a destination has no source file left.
+
 ### Options
 
-All of the options of purgecss are available to use with the plugins.
-You will find below the main options available. For the complete list, go to the [Purgecss documentation website](https://www.purgecss.com/configuration.html#options).
+The task accepts the [PurgeCSS options](../configuration.md), except `css`, which is replaced by the source files of each destination. Some of them work differently:
 
-#### options.content
+- #### content
 
-Type: `string | Object`
+An array of paths and globs of the content files, e.g. `['src/**/*.html', 'src/**/*.js']`. They are relative to the current working directory, which Grunt sets to the directory of the Gruntfile. The files matching `skippedContentGlobs` are not used. When no file matches, PurgeCSS prints a warning and all the selectors are removed.
 
-You can specify content that should be analyzed by Purgecss with an array of filenames or globs. The files can be HTML, Pug, Blade, etc.
+- #### sourceMap
 
-#### options.extractors
+The source map is added inline at the end of the destination file. Set `to` to the destination file, so that the sources of the map are relative to it:
 
-Type: `Array<Object>`
-
-Purgecss can be adapted to suit your needs. If you notice a lot of unused CSS is not being removed, you might want to use a custom extractor.
-More information about extractors [here](https://www.purgecss.com/extractors.html).
-
-#### options.safelist
-
-You can indicate which selectors are safe to leave in the final CSS. This can be accomplished with the option `safelist`.
-
-Two forms are available for this option.
-
-```ts
-safelist: ['random', 'yep', 'button', /^nav-/]
-```
-
-In this form, safelist is an array that can take a string or a regex.
-
-The _complex_ form is:
-
-```ts
-safelist: {
-    standard: ['random', 'yep', 'button', /^nav-/],
-    deep: [],
-    greedy: [],
-    keyframes: [],
-    variables: []
+```js
+options: {
+  content: ['src/**/*.html'],
+  sourceMap: { to: 'dist/app.css' }
 }
 ```
 
-#### options.keyframes
+The task doesn't write source map files: with `inline: false`, the source map is lost and the destination file refers to a file that doesn't exist. Each source file adds its own source map, so only a destination with one source file has a usable source map.
 
-Type: `boolean`
-Default value: `false`
+- #### stdin
 
-If you are using a CSS animation library such as animate.css, you can remove unused keyframes by setting the `keyframes` option to true.
+Do not set it: the paths of the source files would be read as CSS and the task fails.
 
-#### options.fontFace
+The `rejected`, `rejectedCss`, `output` and `stdout` options have no effect: the task only writes the purged CSS.
 
-Type: `boolean`
-Default value: `false`
-
-If there are any unused `@font-face` rules in your CSS, you can remove them by setting the `fontFace` option to true.
+::: tip
+The source files of a destination are purged together, and each destination on its own. With `fontFace`, `keyframes` or `variables`, a `@font-face`, `@keyframes` or CSS variable only used by the source files of another destination is removed. To keep it, list these source files in the same destination.
+:::
 
 ### Example
 
-The example below is using all of the main options available.
-
 ```js
 grunt.initConfig({
-    // Configuration to be run (and then tested).
     purgecss: {
       my_target: {
         options: {
-          content: ['./src/**/*.html', `src/**/*.js`, 'src/**/*.blade', 'src/**/*.vue'],
-          extractors: {
-            extractor: class {
-                static extract(content) {
-                    content.match(/a-Z/) || []
-                }
-            },
-            extension: ['html', 'blade']
-          },
+          content: ['./src/**/*.html', 'src/**/*.js', 'src/**/*.blade', 'src/**/*.vue'],
+          extractors: [
+            {
+              extractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+              extensions: ['html', 'blade']
+            }
+          ],
           safelist: ['random', 'yep', 'button', /red$/],
           keyframes: true,
           fontFace: true

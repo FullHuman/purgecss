@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-purgecss",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "Rollup plugin for purgecss",
   "main": "lib/rollup-plugin-purgecss.js",
   "module": "./lib/rollup-plugin-purgecss.esm.js",
@@ -9,6 +9,9 @@
     "lib": "lib",
     "test": "__tests__"
   },
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "ts-node build.ts",
     "test": "jest"
@@ -19,6 +22,8 @@
   },
   "keywords": [
     "rollup-plugin",
+    "rolldown-plugin",
+    "vite-plugin",
     "purgecss",
     "remove",
     "unused",
@@ -26,13 +31,29 @@
   ],
   "author": "Ffloriel",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "bugs": {
     "url": "https://github.com/FullHuman/purgecss/issues"
   },
   "homepage": "https://purgecss.com",
   "dependencies": {
-    "purgecss": "workspace:^",
-    "rollup-pluginutils": "^2.8.2"
+    "@rollup/pluginutils": "^5.4.0",
+    "purgecss": "workspace:^"
+  },
+  "devDependencies": {
+    "rolldown": "1.3.0",
+    "rollup": "^4.66.0",
+    "vite": "8.3.6"
+  },
+  "peerDependencies": {
+    "rollup": "^3.0.0 || ^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "rollup": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

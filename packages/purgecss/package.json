@@ -1,6 +1,6 @@
 {
   "name": "purgecss",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "Remove unused css selectors",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -17,6 +17,9 @@
     "purify"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/purgecss.js",
   "module": "./lib/purgecss.esm.js",
   "types": "./lib/purgecss.d.ts",
@@ -43,7 +46,7 @@
     "commander": "^15.0.0",
     "fast-glob": "^3.3.3",
     "postcss": "^8.5.29",
-    "postcss-selector-parser": "^7.1.6"
+    "postcss-selector-parser": "^7.1.7"
   },
   "devDependencies": {
     "purgecss-from-html": "workspace:^"

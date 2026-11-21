@@ -13,7 +13,8 @@ import * as path from "path";
   });
   const rollupConfig = createRollupConfig("rollup-plugin-purgecss", [
     "fs",
-    "rollup-pluginutils",
+    "path",
+    "@rollup/pluginutils",
     "purgecss",
   ]);
   await buildRollup(rollupConfig);

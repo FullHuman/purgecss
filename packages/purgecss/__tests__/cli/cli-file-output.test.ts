@@ -34,4 +34,25 @@ describe("PurgeCSS CLI file output", () => {
     ).toString();
     expect(actual).toBe(".hello {\n  color: red;\n}\n");
   });
+
+  it("should create the folder of the output file if it doesn't exist", async () => {
+    const outputFolder = path.resolve(CLI_TEST_FOLDER, ".temp/new-folder");
+    await asyncFs.rm(outputFolder, { recursive: true, force: true });
+    program.parse([
+      "purgecss",
+      "",
+      "--content",
+      `${CLI_TEST_FOLDER}/src/content.html`,
+      `${CLI_TEST_FOLDER}/src/*.js`,
+      "--css",
+      `${CLI_TEST_FOLDER}/src/style.css`,
+      "--output",
+      `${outputFolder}/nested/output-style.css`,
+    ]);
+    await run(program);
+    const actual = (
+      await asyncFs.readFile(`${outputFolder}/nested/output-style.css`)
+    ).toString();
+    expect(actual).toBe(".hello {\n  color: red;\n}\n");
+  });
 });

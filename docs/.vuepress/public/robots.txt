@@ -1,8 +1,0 @@
-# PurgeCSS Documentation
-# https://purgecss.com
-
-User-agent: *
-Allow: /
-
-# Sitemap location
-Sitemap: https://purgecss.com/sitemap.xml

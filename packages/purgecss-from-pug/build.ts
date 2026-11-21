@@ -11,7 +11,11 @@ import * as path from "path";
     recursive: true,
     force: true,
   });
-  const rollupConfig = createRollupConfig("purgecss-from-pug", ["pug-lexer"]);
+  const rollupConfig = createRollupConfig("purgecss-from-pug", [
+    "acorn",
+    "acorn-walk",
+    "pug-lexer",
+  ]);
   await buildRollup(rollupConfig);
   await extractAPI(__dirname);
   await asyncFs.rm(path.resolve(__dirname, "lib", ".temp"), {

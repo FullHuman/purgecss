@@ -1,6 +1,6 @@
 {
   "name": "gulp-purgecss",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "Gulp plugin for purgecss",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -17,6 +17,9 @@
     "uncss"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "lib/gulp-purgecss.js",
   "module": "./lib/gulp-purgecss.esm.js",
   "types": "./lib/gulp-purgecss.d.ts",
@@ -36,17 +39,18 @@
     "test": "jest"
   },
   "dependencies": {
-    "fast-glob": "^3.3.3",
     "plugin-error": "^2.0.1",
     "purgecss": "workspace:^",
-    "through2": "^4.0.2",
+    "through2": "^5.0.12",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
   "devDependencies": {
     "@types/event-stream": "^4.0.6",
-    "@types/through2": "^2.0.41",
+    "@types/gulp": "^4.0.18",
+    "@types/readable-stream": "^4.0.25",
     "@types/vinyl": "^2.0.12",
     "event-stream": "^4.0.1",
+    "gulp": "^5.0.1",
     "vinyl": "^3.0.1"
   },
   "bugs": {

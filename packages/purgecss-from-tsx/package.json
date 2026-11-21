@@ -1,10 +1,13 @@
 {
   "name": "@fullhuman/purgecss-from-tsx",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "TSX extractor for PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://github.com/FullHuman/purgecss#readme",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "./lib/purgecss-from-tsx.js",
   "module": "./lib/purgecss-from-tsx.esm.js",
   "types": "./lib/purgecss-from-tsx.d.ts",

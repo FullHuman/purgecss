@@ -1,0 +1,8 @@
+.hello {
+  color: red;
+}
+
+.hello[aria-selected="true"] {
+  color: green;
+}
+

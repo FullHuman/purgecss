@@ -1,23 +1,7 @@
 ---
-title: CLI
+title: Interface en ligne de commande
+description: "Utilisez PurgeCSS en ligne de commande : installation du CLI purgecss et options pour le contenu, le CSS, la sortie, les listes blanches, les polices, les keyframes et les variables."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
-  - property: og:url
-    content:  https://purgecss.com/fr/CLI
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son interface en ligne de commande dans votre flux de travail de développement.
 ---
 
 # CLI
@@ -67,12 +51,24 @@ Les options disponibles via le CLI sont similaires à celles disponibles avec un
 purgecss --css css/app.css css/palette.css --content src/index.html
 ```
 
+Utilisez `-` pour lire le CSS depuis l'entrée standard. Ce CSS n'a pas de nom de fichier : il est donc affiché dans la console, ou écrit dans le fichier donné à `--output` si le chemin se termine par `.css`.
+
+```sh
+cat css/app.css | purgecss --css - --content src/index.html --output build/app.css
+```
+
 ### --content
 
-Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). Ces fichiers peuvent être HTML, Pug, Blade, etc.
+Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). Ces fichiers peuvent être HTML, Pug, Blade, etc.
 
 ```sh
 purgecss --css css/app.css --content src/index.html src/**/*.js
+```
+
+Utilisez `-` pour lire le contenu depuis l'entrée standard.
+
+```sh
+cat src/index.html | purgecss --css css/app.css --content -
 ```
 
 ### --config
@@ -89,6 +85,12 @@ Par défaut, le CLI affiche le résultat dans la console. Si vous souhaitez reto
 
 ```sh
 purgecss --css css/app.css --content src/index.html "src/**/*.js" --output build/css/
+```
+
+S'il n'y a qu'un seul fichier CSS et que le chemin se termine par `.css`, le CSS purifié est écrit dans ce fichier. Les dossiers manquants du chemin sont créés.
+
+```sh
+purgecss --css css/app.css --content src/index.html --output build/css/app.purged.css
 ```
 
 ### --preserve-paths
@@ -115,4 +117,10 @@ Si vous souhaitez empêcher PurgeCSS de supprimer un sélecteur CSS spécifique,
 
 ```sh
 purgecss --css css/app.css --content src/index.html --safelist classnameToSafelist
+```
+
+Une chaîne de caractères écrite entre barres obliques est interprétée comme une expression régulière :
+
+```sh
+purgecss --css css/app.css --content src/index.html --safelist "/^btn-/" classnameToSafelist
 ```

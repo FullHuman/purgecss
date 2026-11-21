@@ -1,25 +1,7 @@
 ---
 title: Gulp
+description: "Supprimez le CSS inutilisé dans vos tâches gulp avec gulp-purgecss : installation, utilisation dans un pipe et options du plugin."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
-  - property: og:url
-    content:  https://purgecss.com/fr/plugins/gulp
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS inutilisé de votre projet. Vous pouvez l'utiliser avec le plugin gulp.
 ---
 
 # Gulp
@@ -48,6 +30,8 @@ gulp.task('purgecss', () => {
 })
 ```
 
+Avec gulp 5, écrivez la tâche avec `pipeline` pour que les erreurs du plugin soient signalées, voir [Erreurs](#erreurs).
+
 En définissant l'option `rejected`, vous pouvez « inverser » la sortie pour lister _uniquement les sélecteurs supprimés_ :
 
 ```js
@@ -67,3 +51,87 @@ gulp.task('purgecss-rejected', () => {
         .pipe(gulp.dest('build/css'))
 })
 ```
+
+## Source maps
+
+Le plugin met à jour la source map des fichiers qui en ont une, afin qu'elle pointe toujours vers le CSS d'origine. Créez les source maps avec l'option `sourcemaps` de gulp :
+
+```js
+const gulp = require('gulp')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return gulp.src('src/**/*.css', { sourcemaps: true })
+        .pipe(purgecss({
+            content: ['src/**/*.html']
+        }))
+        .pipe(gulp.dest('build/css', { sourcemaps: '.' }))
+})
+```
+
+ou avec [gulp-sourcemaps](https://www.npmjs.com/package/gulp-sourcemaps) :
+
+```js
+const gulp = require('gulp')
+const sourcemaps = require('gulp-sourcemaps')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return gulp.src('src/**/*.css')
+        .pipe(sourcemaps.init())
+        .pipe(purgecss({
+            content: ['src/**/*.html']
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('build/css'))
+})
+```
+
+## Erreurs
+
+Avec gulp 5, une erreur du plugin, par exemple pour un CSS invalide ou un chemin de contenu illisible, n'est pas toujours signalée lorsque la tâche est une chaîne de `.pipe()`. gulp peut n'afficher que :
+
+```
+The following tasks did not complete: purgecss
+Did you forget to signal async completion?
+```
+
+Tous les plugins qui échouent sont concernés, voir [gulpjs/gulp#2812](https://github.com/gulpjs/gulp/issues/2812). Écrivez la tâche avec `pipeline` de Node.js, qui signale l'erreur de n'importe lequel de ses flux :
+
+```js
+const { pipeline } = require('node:stream/promises')
+const gulp = require('gulp')
+const purgecss = require('gulp-purgecss')
+
+gulp.task('purgecss', () => {
+    return pipeline(
+        gulp.src('src/**/*.css'),
+        purgecss({
+            content: ['src/**/*.html']
+        }),
+        gulp.dest('build/css')
+    )
+})
+```
+
+## Options
+
+Le plugin accepte les [options de PurgeCSS](../configuration.md), sauf `css`, remplacée par les fichiers du flux. Certaines fonctionnent différemment :
+
+- #### content
+
+Un tableau de chemins et de globs des fichiers de contenu, par exemple `['src/**/*.html', 'src/**/*.js']`. Ils sont relatifs au répertoire de travail courant, que la CLI de gulp définit sur le répertoire du gulpfile. Les fichiers correspondant à `skippedContentGlobs` ne sont pas utilisés. Lorsqu'aucun fichier ne correspond, PurgeCSS affiche un avertissement et tous les sélecteurs sont supprimés.
+
+- #### rejected
+
+Si `true`, le contenu de chaque fichier est remplacé par la liste de ses sélecteurs supprimés, un `sélecteur {}` par ligne.
+
+- #### sourceMap
+
+L'option n'a aucun effet : les source maps sont créées avec gulp, voir [Source maps](#source-maps).
+
+Les options `rejectedCss`, `output`, `stdin` et `stdout` n'ont pas d'effet non plus.
+
+::: tip
+Chaque fichier du flux est purgé séparément. Avec `fontFace`, `keyframes` ou `variables`, une règle `@font-face`, des `@keyframes` ou une variable CSS utilisés uniquement par un autre fichier sont supprimés. Pour les conserver, concaténez les fichiers avant de les purger, par exemple avec [gulp-concat](https://www.npmjs.com/package/gulp-concat).
+:::

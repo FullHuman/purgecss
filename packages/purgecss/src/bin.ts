@@ -1,5 +1,6 @@
 import { Command } from "commander";
 import * as fs from "fs";
+import * as path from "path";
 import packageJson from "./../package.json";
 import {
   defaultOptions,
@@ -8,16 +9,6 @@ import {
   standardizeSafelist,
 } from "./index";
 import { Options } from "./types";
-
-async function writeCSSToFile(filePath: string, css: string) {
-  try {
-    await fs.promises.writeFile(filePath, css);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error(err.message);
-    }
-  }
-}
 
 async function read(stream: NodeJS.ReadStream) {
   const chunks = [];
@@ -103,7 +94,8 @@ export async function getOptions(
 
   // if the config file is present, use it
   // other options specified will override
-  let options = defaultOptions;
+  // copy the default options, PurgeCSS uses them for every purge
+  let options: Options = { ...defaultOptions };
   if (config) {
     options = await setOptions(config);
   }
@@ -150,8 +142,26 @@ export async function run(program: Command) {
   // output results in specified directory
   if (options.output) {
     if (purged.length === 1 && options.output.endsWith(".css")) {
-      await writeCSSToFile(options.output, purged[0].css);
+      // Ensure the directory exists
+      await fs.promises.mkdir(path.dirname(options.output), {
+        recursive: true,
+      });
+      await fs.promises.writeFile(options.output, purged[0].css);
       return;
+    }
+
+    // the css read from stdin, or a raw css without a name, has no file name
+    // to use in the output folder. Check every result before writing any file
+    if (purged.some((purgedResult) => !purgedResult.file)) {
+      // an output path ending with .css only receives a single result, and
+      // the css read from stdin is always the only one
+      const reason =
+        purged.length === 1
+          ? "the CSS read from stdin, or a raw CSS without a name, has no file name. Use an --output path ending with .css, or give the raw CSS a name."
+          : "a raw CSS without a name has no file name. Give every raw CSS a name.";
+      throw new Error(
+        `Cannot write the purged CSS to the folder "${options.output}": ${reason}`,
+      );
     }
 
     for (const purgedResult of purged) {
@@ -167,7 +177,7 @@ export async function run(program: Command) {
       // Ensure the directory exists
       const dir = outputPath.substring(0, outputPath.lastIndexOf("/"));
       await fs.promises.mkdir(dir, { recursive: true });
-      await writeCSSToFile(outputPath, purgedResult.css);
+      await fs.promises.writeFile(outputPath, purgedResult.css);
     }
   } else {
     console.log(JSON.stringify(purged));
@@ -178,11 +188,10 @@ export async function main() {
   try {
     const program = parseCommandOptions(new Command());
     program.parse(process.argv);
-    run(program);
+    await run(program);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
+    // a config file or an extractor can throw any value, e.g. `throw "error"`
+    console.error(error instanceof Error ? error.message : String(error));
     process.exit(1);
   }
 }

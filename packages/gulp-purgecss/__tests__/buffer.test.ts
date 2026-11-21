@@ -58,6 +58,62 @@ describe("gulp-purgecss with buffer and the rejected option", () => {
   });
 });
 
+describe("gulp-purgecss with buffer and the content files", () => {
+  let warn: jest.SpyInstance;
+  beforeEach(() => {
+    warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+  });
+  afterEach(() => {
+    warn.mockRestore();
+  });
+
+  function purge(
+    options: Parameters<typeof gulpPurgecss>[0],
+    done: jest.DoneCallback,
+    onData: (css: string) => void,
+  ) {
+    const fileTest = new File({
+      contents: Buffer.from(".unused { color: blue; } .used { color: red; }"),
+    });
+    const myGulpPurgecss = gulpPurgecss(options);
+    myGulpPurgecss.once("error", done);
+    myGulpPurgecss.once("data", (file: File.BufferFile) => {
+      onData(file.contents.toString("utf8"));
+      done();
+    });
+    myGulpPurgecss.write(fileTest);
+  }
+
+  it("warns when no content file matches", (done) => {
+    purge({ content: ["./__tests__/missing/**/*.html"] }, done, (css) => {
+      expect(css).toBe("");
+      expect(warn).toHaveBeenCalledWith(
+        "No files found from the passed PurgeCSS option 'content'.",
+      );
+    });
+  });
+
+  it("does not warn when a content file matches", (done) => {
+    purge({ content: ["./__tests__/*.html"] }, done, (css) => {
+      expect(css).toBe(".used { color: red; }");
+      expect(warn).not.toHaveBeenCalled();
+    });
+  });
+
+  it("skips the content files matching skippedContentGlobs", (done) => {
+    purge(
+      {
+        content: ["./__tests__/*.html"],
+        skippedContentGlobs: ["./__tests__/test.html"],
+      },
+      done,
+      (css) => {
+        expect(css).toBe("");
+      },
+    );
+  });
+});
+
 describe("gulp-purgecss with buffer and invalid css", () => {
   it("emits a gulp-purgecss plugin error", (done) => {
     const fileTest = new File({

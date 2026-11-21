@@ -1,6 +1,6 @@
 {
   "name": "purgecss-with-wordpress",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "PurgeCSS with wordpress",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -18,6 +18,9 @@
     "purify"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "index.js",
   "repository": {
     "type": "git",

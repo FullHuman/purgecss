@@ -1,30 +1,14 @@
 ---
 title: Getting Started
+description: "Install PurgeCSS and remove unused CSS with the command line, the JavaScript API, or a plugin for PostCSS, webpack, Gulp or Grunt."
 lang: en-US
-meta:
-  - name: description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
-  - itemprop: description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
-  - property: og:url
-    content: https://purgecss.com
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:type
-    content: website
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: en_US
-  - property: og:title
-    content: Remove unused CSS - PurgeCSS
-  - property: og:description
-    content: PurgeCSS is a tool to remove unused CSS from your project. It can be used as part of your development workflow. PurgeCSS comes with a JavaScript API, a CLI, and plugins for popular build tools.
 ---
 
 # Getting Started
 
 Most bundlers and frameworks to build websites are using PostCSS. The easiest way to configure PurgeCSS is with its PostCSS plugin.
+
+PurgeCSS requires Node.js 22.12 or later.
 
 Install the PostCSS plugin:
 
@@ -42,11 +26,11 @@ yarn add @fullhuman/postcss-purgecss --dev
 and add the PurgeCSS plugin to the PostCSS configuration:
 
 ```js{1,5-7}
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
-module.exports = {
+export default {
   plugins: [
-    purgecss({
+    purgeCSSPlugin({
       content: ['./**/*.html']
     })
   ]

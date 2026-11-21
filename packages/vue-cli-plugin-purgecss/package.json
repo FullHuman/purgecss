@@ -1,6 +1,6 @@
 {
   "name": "@fullhuman/vue-cli-plugin-purgecss",
-  "version": "8.0.0",
+  "version": "9.1.0",
   "description": "vue-cli plugin to add PurgeCSS",
   "author": "Ffloriel",
   "homepage": "https://purgecss.com",
@@ -16,6 +16,9 @@
     "optimization"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FullHuman/purgecss.git"

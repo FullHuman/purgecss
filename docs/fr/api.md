@@ -1,23 +1,7 @@
 ---
 title: API Programmatique
+description: "Utilisez l'API JavaScript de PurgeCSS dans Node.js : créez une instance PurgeCSS, purgez vos fichiers de contenu et CSS, et récupérez le CSS obtenu."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
-  - itemprop: description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
-  - property: og:url
-    content:  https://purgecss.com/fr/api
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS est un outil pour supprimer le CSS que vous n'utilisez pas réellement dans votre projet. Vous pouvez utiliser son API programmatique dans votre flux de travail de développement.
 ---
 
 # API Programmatique
@@ -84,5 +68,30 @@ interface ResultPurge {
   file?: string;
   rejected?: string[];
   rejectedCss?: string;
+  sourceMap?: string;
 }
 ```
+
+`rejected` et `rejectedCss` sont définis quand les options du même nom sont activées. `sourceMap` est défini quand l'option [`sourceMap`](configuration.md#options) génère une source map qui n'est pas intégrée au CSS, par exemple avec `inline: false`.
+
+## Réutiliser le contenu extrait entre les exécutions
+
+Les intégrations qui exécutent PurgeCSS de nombreuses fois avec le même contenu, comme un plugin PostCSS appelé une fois par fichier CSS ou un plugin de bundler en mode watch, peuvent partager un `ContentCache` entre leurs instances de PurgeCSS. Un fichier de contenu n'est alors relu et extrait à nouveau que lorsque sa date de modification, sa date de changement, sa taille, son inode ou son extracteur ont changé. Les exécutions simultanées partagent les fichiers en cours de lecture et d'extraction, si bien que chaque fichier n'est extrait qu'une fois.
+
+```js
+import { ContentCache, PurgeCSS } from 'purgecss'
+
+const contentCache = new ContentCache()
+
+async function purge(css) {
+  const purgeCSS = new PurgeCSS()
+  purgeCSS.contentCache = contentCache
+  return purgeCSS.purge({ content: ['src/**/*.html'], css: [css] })
+}
+```
+
+Les globs sont toujours résolus à chaque exécution, si bien que les nouveaux fichiers sont pris en compte et que les fichiers supprimés n'apportent plus de sélecteurs. Un fichier modifié ou changé moins de 2 secondes avant d'être lu (par exemple écrit, ou doté d'une date de modification plus ancienne par `touch -r`, `cp -p` ou la restauration d'une sauvegarde) est extrait à nouveau à l'exécution suivante, car un changement dans la limite de précision des horodatages du système de fichiers pourrait passer inaperçu.
+
+Le cache garde une entrée pour chaque fichier qu'il a vu. Appelez `contentCache.prune(paths)` pour ne garder que les fichiers donnés, par exemple les fichiers que les globs du contenu trouvent après un rebuild, ou `contentCache.delete(path)` et `contentCache.clear()`. Les chemins passés à `prune`, `delete` et `has` sont résolus depuis le répertoire de travail courant, et `contentCache.keys()` liste les chemins absolus des fichiers du cache.
+
+Les fichiers de contenu sont lus et extraits en parallèle, avec ou sans cache, au plus 32 à la fois pour l'ensemble des exécutions du processus, si bien que les extracteurs peuvent être appelés en même temps et dans n'importe quel ordre. Un extracteur ne doit dépendre que du contenu qu'il reçoit, et non des fichiers qu'il a vus auparavant.

@@ -145,3 +145,75 @@ describe("dynamicAttributes with regular expressions", () => {
     expect(css.includes('html[data-theme="dark"] .menu-item')).toBe(true);
   });
 });
+
+describe("empty attribute values with the HTML extractor", () => {
+  it("keeps [attribute=''] when the attribute is empty in the content", async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: `<img alt="" src="logo.png">\n<input disabled>`,
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: `img[alt=""] { color: red } img[alt="logo"] { color: blue } input[disabled=""] { color: green }`,
+        },
+      ],
+      extractors: [{ extensions: ["html"], extractor: purgecssFromHtml }],
+    });
+    const purgedCSS = resultsPurge[0].css;
+
+    expect(purgedCSS.includes('img[alt=""]')).toBe(true);
+    expect(purgedCSS.includes('input[disabled=""]')).toBe(true);
+    expect(purgedCSS.includes('img[alt="logo"]')).toBe(false);
+  });
+});
+
+describe("attribute values of several words with the HTML extractor", () => {
+  let purgedCSS: string;
+
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [
+        {
+          raw: `<a title="hello big world" class="card active" href="#">a</a>`,
+          extension: "html",
+        },
+      ],
+      css: [
+        {
+          raw: [
+            `[title="hello big world"] { color: red }`,
+            `[title="hello world"] { color: red }`,
+            `[title^="hello bi"] { color: red }`,
+            `[title^="big wo"] { color: red }`,
+            `[title$="ig world"] { color: red }`,
+            `[title$="hello big"] { color: red }`,
+            `[class="card active"] { color: red }`,
+            `[class="active card"] { color: red }`,
+          ].join("\n"),
+        },
+      ],
+      extractors: [{ extensions: ["html"], extractor: purgecssFromHtml }],
+    });
+    purgedCSS = resultsPurge[0].css;
+  });
+
+  it("handles [attribute=value]", () => {
+    expect(purgedCSS.includes('[title="hello big world"]')).toBe(true);
+    expect(purgedCSS.includes('[class="card active"]')).toBe(true);
+    expect(purgedCSS.includes('[title="hello world"]')).toBe(false);
+    expect(purgedCSS.includes('[class="active card"]')).toBe(false);
+  });
+
+  it("handles [attribute^=value]", () => {
+    expect(purgedCSS.includes('[title^="hello bi"]')).toBe(true);
+    expect(purgedCSS.includes('[title^="big wo"]')).toBe(false);
+  });
+
+  it("handles [attribute$=value]", () => {
+    expect(purgedCSS.includes('[title$="ig world"]')).toBe(true);
+    expect(purgedCSS.includes('[title$="hello big"]')).toBe(false);
+  });
+});

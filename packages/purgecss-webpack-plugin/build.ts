@@ -15,6 +15,7 @@ import * as path from "path";
     "fs",
     "path",
     "purgecss",
+    "url",
     "webpack",
     "webpack-sources",
   ]);

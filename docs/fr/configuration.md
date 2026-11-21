@@ -1,23 +1,7 @@
 ---
 title: Configuration
+description: "PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles."
 lang: fr-FR
-meta:
-  - name: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - itemprop: description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
-  - property: og:url
-    content:  https://purgecss.com/fr/configuration
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son comportement. La personnalisation peut améliorer les performances et l'efficacité de PurgeCSS. Détails sur la configuration de PurgeCSS et les options disponibles.
 ---
 
 # Configuration
@@ -26,7 +10,7 @@ PurgeCSS dispose d'une liste d'options qui vous permettent de personnaliser son 
 
 ## Fichier de configuration
 
-Le fichier de configuration est un simple fichier JavaScript. Par défaut, l'API JavaScript recherchera `purgecss.config.js`.
+Le fichier de configuration est un simple fichier JavaScript. Par défaut, l'API JavaScript recherchera `purgecss.config.js`. Le [plugin PostCSS](plugins/postcss.md#fichier-de-configuration) et le [plugin webpack](plugins/webpack.md#fichier-de-configuration) le lisent aussi depuis le répertoire de travail.
 
 ```js
 module.exports = {
@@ -58,11 +42,14 @@ interface UserDefinedOptions {
   output?: string;
   rejected?: boolean;
   rejectedCss?: boolean;
+  sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
   stdin?: boolean;
   stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
+  skippedContentGlobs?: Array<string>;
+  dynamicAttributes?: StringRegExpArray;
 }
 
 interface RawContent {
@@ -72,14 +59,15 @@ interface RawContent {
 
 interface RawCSS {
   raw: string
+  name?: string
 }
 
 type StringRegExpArray = Array<RegExp | string>;
 
 type ComplexSafelist = {
   standard?: StringRegExpArray;
-  deep?: RegExp[];
-  greedy?: RegExp[];
+  deep?: StringRegExpArray;
+  greedy?: StringRegExpArray;
   variables?: StringRegExpArray;
   keyframes?: StringRegExpArray;
 };
@@ -89,7 +77,7 @@ type UserDefinedSafelist = StringRegExpArray | ComplexSafelist;
 
 - **content**
 
-Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer). Les fichiers peuvent être HTML, Pug, Blade, etc.
+Vous pouvez spécifier le contenu qui doit être analysé par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer). Les fichiers peuvent être HTML, Pug, Blade, etc.
 
 ```js
 await new PurgeCSS().purge({
@@ -122,7 +110,7 @@ await new PurgeCSS().purge({
 
 - **css**
 
-Similaire à `content`, vous pouvez spécifier le CSS qui doit être traité par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer).
+Similaire à `content`, vous pouvez spécifier le CSS qui doit être traité par PurgeCSS avec un tableau de noms de fichiers ou de [globs](https://github.com/isaacs/node-glob/blob/main/README.md#glob-primer).
 
 ```js
 await new PurgeCSS().purge({
@@ -151,6 +139,8 @@ await new PurgeCSS().purge({
   ]
 })
 ```
+
+Le css brut peut avoir un `name`. Il est renvoyé comme `file` de son résultat, et il est utilisé comme chemin du css dans les source maps, comme le chemin d'un fichier css : les `sources` de la map sont relatives au répertoire de `sourceMap.to`, qui vaut par défaut le nom. Par exemple, `{ raw, name: 'static/css/main.css' }` donne une map avec `sources: ['main.css']`.
 
 - **defaultExtractor**
 
@@ -232,6 +222,8 @@ await new PurgeCSS().purge({
 
 Si vous utilisez des propriétés personnalisées (variables CSS), ou une bibliothèque qui les utilise comme Bootstrap, vous pouvez supprimer les variables CSS inutilisées en définissant l'option `variables` à `true`.
 
+Les règles [`@property`](https://developer.mozilla.org/fr/docs/Web/CSS/@property) qui déclarent des variables inutilisées sont également supprimées.
+
 ```js
 await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
@@ -263,6 +255,24 @@ await new PurgeCSS().purge({
 })
 ```
 
+- **sourceMap \(par défaut : false\)**
+
+Définissez `sourceMap` à `true` pour générer une source map du CSS purgé. Par défaut, la source map est intégrée à la fin du CSS, dans un commentaire `sourceMappingURL`. Si le fichier CSS a déjà une source map, par exemple générée par Sass, la nouvelle source map pointe vers les sources d'origine.
+
+`sourceMap` accepte aussi les [options de source map de PostCSS](https://github.com/postcss/postcss/blob/main/docs/source-maps.md), comme `inline` ou `annotation`, ainsi qu'une option `to`. Quand la source map n'est pas intégrée, par exemple avec `inline: false`, elle est renvoyée dans la propriété `sourceMap` du résultat. `to` est le chemin du fichier CSS de sortie : il définit le champ `file` de la source map, et les `sources` sont relatives à ce chemin.
+
+```js
+const [result] = await new PurgeCSS().purge({
+  content: ['index.html'],
+  css: ['css/app.css'],
+  sourceMap: { inline: false, to: 'dist/app.css' }
+})
+// result.css se termine par /*# sourceMappingURL=app.css.map */
+// result.sourceMap est la source map à écrire dans dist/app.css.map
+```
+
+Le [plugin gulp](plugins/gulp.md) et le [plugin webpack](plugins/webpack.md) définissent cette option eux-mêmes.
+
 - **safelist**
 
 Vous pouvez indiquer quels sélecteurs peuvent être laissés en toute sécurité dans le CSS final. Cela peut être accompli avec l'option `safelist`.
@@ -274,6 +284,8 @@ safelist: ['random', 'yep', 'button', /^nav-/]
 ```
 
 Sous cette forme, safelist est un tableau qui peut contenir une chaîne de caractères ou une expression régulière.
+
+Une chaîne de caractères écrite entre barres obliques, comme `"/^nav-/"`, est interprétée comme une expression régulière. Les fichiers de configuration qui ne peuvent pas contenir d'expressions régulières, comme `postcss.config.json`, peuvent ainsi utiliser des motifs. Voir [Motifs](./safelisting.md#motifs).
 
 La forme _complexe_ est :
 
@@ -350,6 +362,8 @@ blocklist: ['usedClass', /^nav-/]
 ```
 Même si nav-links et usedClass sont trouvés par un extracteur, ils seront supprimés.
 
+Une chaîne de caractères écrite entre barres obliques, comme `"/^nav-/"`, est interprétée comme une expression régulière, comme dans `safelist`.
+
 - **skippedContentGlobs**
 
 Si vous fournissez des globs pour le paramètre `content`, vous pouvez utiliser cette option pour exclure certains fichiers ou dossiers qui seraient autrement analysés. Passez un tableau de globs correspondant aux éléments qui doivent être exclus. (Note : cette option n'a aucun effet si `content` n'utilise pas de globs.)
@@ -363,7 +377,7 @@ Ici, PurgeCSS n'analysera rien dans les dossiers "node_modules" et "components".
 
 Option pour ajouter des sélecteurs d'attributs CSS personnalisés comme "aria-selected", "data-selected", etc. Utilisez-la pour les attributs définis à l'exécution, par votre propre JavaScript ou par une bibliothèque de composants, et qui n'apparaissent pas dans vos fichiers de contenu. Les sélecteurs utilisant ces attributs sont conservés quelle que soit la valeur de l'attribut, tant que le reste du sélecteur est utilisé.
 
-Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut.
+Une chaîne de caractères correspond exactement au nom de l'attribut. Une expression régulière est testée sur le nom de l'attribut. Une chaîne de caractères écrite entre barres obliques, comme `"/^data-/"`, est interprétée comme une expression régulière.
 
 ```js
 dynamicAttributes: ["aria-selected", /^data-/]

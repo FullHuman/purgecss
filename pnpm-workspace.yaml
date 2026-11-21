@@ -8,3 +8,8 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/parser@8.71.1'
   - '@typescript-eslint/type-utils@8.71.1'
   - '@typescript-eslint/utils@8.71.1'
+# GHSA-g3hv-75wg-m249: minimatch >=7 <11.0.1 is open to denial of service. Every dependent
+# in the dev toolchain (eslint, typescript-eslint, api-extractor, jest) still asks for
+# minimatch 9 or 10, so force the patched release. Remove once they ship minimatch 11.
+overrides:
+  'minimatch@>=7 <11.0.1': ^11.0.1

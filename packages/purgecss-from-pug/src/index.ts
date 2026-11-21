@@ -8,17 +8,305 @@
  * @packageDocumentation
  */
 
+import * as acorn from "acorn";
+import * as walk from "acorn-walk";
 import lex from "pug-lexer";
 import type { ExtractorResultDetailed } from "purgecss";
 
-const getAttributeTokenValues = (token: lex.AttributeToken): string[] => {
-  if (typeof token.val === "string") {
-    return (token.mustEscape ? token.val.replace(/"/g, "") : token.val).split(
-      " ",
-    );
+/**
+ * The characters separating the classes of a class list in HTML: space, tab,
+ * new line, form feed and carriage return. `\s` matches more than these, e.g.
+ * the no-break space, which is part of a class name.
+ */
+const ASCII_WHITESPACE = /[ \t\n\f\r]+/;
+
+const ACORN_OPTIONS: acorn.Options = { ecmaVersion: "latest" };
+
+/**
+ * Get the name of a property of an object
+ *
+ * @param property - property of an object expression
+ * @returns the name written in the object, undefined when it is computed
+ */
+const getPropertyName = ({
+  computed,
+  key,
+}: Pick<acorn.Property, "computed" | "key">): string | undefined => {
+  if (!computed && key.type === "Identifier") {
+    return key.name;
   }
-  return [];
+  if (!computed && key.type === "Literal") {
+    return String(key.value);
+  }
 };
+
+/**
+ * Get the static strings of an attribute value
+ *
+ * The value of an attribute is a JavaScript expression: usually a string, but
+ * also a class array, a class object, a condition, a concatenation, etc. Only
+ * the strings and numbers written in the expression are returned, not the
+ * values computed at runtime, e.g. the content of a variable.
+ *
+ * @param expression - value of the attribute, parsed by acorn
+ * @param isClass - true for a class attribute, to find the keys of class objects
+ * @returns the strings found in the value of the attribute
+ */
+const getExpressionStrings = (
+  expression: acorn.Node,
+  isClass: boolean,
+): string[] => {
+  const strings: string[] = [];
+  walk.ancestor(expression, {
+    Literal(node, _state, ancestors) {
+      if (typeof node.value === "string") {
+        strings.push(node.value);
+      } else if (typeof node.value === "number") {
+        // e.g. colspan=2 or tabindex=-1
+        const parent = ancestors[ancestors.length - 2];
+        const isNegative =
+          parent?.type === "UnaryExpression" && parent.operator === "-";
+        strings.push(`${isNegative ? "-" : ""}${node.value}`);
+      }
+    },
+    TemplateLiteral(node) {
+      for (const { value } of node.quasis) {
+        // the static parts of a template literal, e.g. `btn btn-${size}`,
+        // without the empty ones around its expressions
+        if (value.cooked || (value.cooked === "" && node.quasis.length === 1)) {
+          strings.push(value.cooked);
+        }
+      }
+    },
+    // the keys of a class object, e.g. class={active: isActive, "is-open": isOpen}
+    Property(node) {
+      // a computed key is an expression, walked like the rest of the value
+      const name = isClass ? getPropertyName(node) : undefined;
+      if (name !== undefined) {
+        strings.push(name);
+      }
+    },
+  });
+  return strings;
+};
+
+/**
+ * Get the attributes of the object of `&attributes`
+ *
+ * Only the attributes written in an object are returned, e.g. `class` and
+ * `title` of `&attributes({class: 'foo', title: 'bar'})`. The attributes of
+ * an object known at runtime are not, e.g. `&attributes(attributes)`, a spread
+ * object or a computed name.
+ *
+ * @param source - JavaScript expression given to `&attributes`
+ * @returns the name and the value of each attribute
+ */
+const getAndAttributes = (source: string): [string, acorn.Node][] => {
+  let expression: acorn.Expression;
+  try {
+    expression = acorn.parseExpressionAt(source, 0, ACORN_OPTIONS);
+  } catch {
+    // pug-lexer only checks its brackets, not that it is an expression
+    return [];
+  }
+  const attributes: [string, acorn.Node][] = [];
+  if (expression.type === "ObjectExpression") {
+    for (const property of expression.properties) {
+      // not a spread object
+      if (property.type === "Property") {
+        const name = getPropertyName(property);
+        if (name !== undefined) {
+          attributes.push([name, property.value]);
+        }
+      }
+    }
+  }
+  return attributes;
+};
+
+/**
+ * Get the static strings of code
+ *
+ * The code is read token by token and not parsed: a line of unbuffered code
+ * doesn't have to be a whole statement, e.g. `- if (isOpen) {` and `- }`
+ * around a block.
+ *
+ * @param code - JavaScript code
+ * @returns the strings and the static parts of the template literals
+ */
+const getCodeStrings = (code: string): string[] => {
+  // acorn gives the value of a token, but doesn't declare it in its types
+  const tokens: (acorn.Token & { value?: unknown })[] = [];
+  try {
+    for (const token of acorn.tokenizer(code, ACORN_OPTIONS)) {
+      tokens.push(token);
+    }
+  } catch {
+    // pug-lexer doesn't check unbuffered code: keep the strings found before
+    // the code that can't be read, e.g. a string that isn't closed
+  }
+  const strings: string[] = [];
+  tokens.forEach(({ type, value }, index) => {
+    if (typeof value !== "string") {
+      return;
+    }
+    if (type === acorn.tokTypes.string) {
+      strings.push(value);
+    } else if (type === acorn.tokTypes.template) {
+      // the static parts of a template literal, without the empty ones around
+      // its expressions, as in the value of an attribute
+      const isWhole =
+        tokens[index - 1]?.type === acorn.tokTypes.backQuote &&
+        tokens[index + 1]?.type === acorn.tokTypes.backQuote;
+      if (value || isWhole) {
+        strings.push(value);
+      }
+    }
+  });
+  return strings;
+};
+
+/**
+ * What stands for a value computed at runtime in the HTML of a template: an
+ * interpolation in text, what is between two strings in code. A character
+ * that is never written in a template.
+ */
+const RUNTIME_VALUE = "\0";
+
+/**
+ * The start of a tag of HTML, or a comment: the tags written in a comment
+ * aren't elements. The name of a tag can start with a runtime value, e.g.
+ * `<#{tag} class="foo">`.
+ */
+const HTML_TAG = /<!--[^]*?(?:-->|$)|<([a-zA-Z\0][^\t\n\f\r />]*)/g;
+
+/**
+ * An attribute of a tag of HTML, as the HTML tokenizer reads it: a name, then
+ * a value in double quotes, in single quotes or without quotes. A value in
+ * quotes that isn't closed goes up to the end of the HTML.
+ */
+const HTML_ATTRIBUTE =
+  /[\t\n\f\r /]*([^\t\n\f\r />][^\t\n\f\r />=]*)(?:[\t\n\f\r ]*=[\t\n\f\r ]*(?:"([^"]*)"?|'([^']*)'?|([^\t\n\f\r >]*)))?/y;
+
+/**
+ * Get the tags of HTML and their attributes
+ *
+ * The HTML of a template is rarely a document: it is a line, a string or a
+ * part of them, cut anywhere by an interpolation or a concatenation, e.g.
+ * `<td class="` then `">`. So the start tags are read where they are, without
+ * building a tree: an HTML parser drops a `<td>` that isn't in a table and a
+ * tag that isn't closed at the end of its input.
+ *
+ * The runtime values are removed from the names and the values: only what is
+ * written in the template is returned, e.g. `btn-` for `btn-#{size}`, and no
+ * name for a tag or an attribute that is only a runtime value.
+ *
+ * @param html - HTML code, possibly a fragment, with its runtime values
+ * @returns the name and the attributes of each start tag
+ */
+const getHtmlTags = (
+  html: string,
+): { name: string; attributes: [string, string][] }[] => {
+  const tags: { name: string; attributes: [string, string][] }[] = [];
+  const getStatic = (text: string) => text.replaceAll(RUNTIME_VALUE, "");
+  HTML_TAG.lastIndex = 0;
+  let tag: RegExpExecArray | null;
+  while ((tag = HTML_TAG.exec(html))) {
+    // not a comment
+    if (tag[1] !== undefined) {
+      const attributes: [string, string][] = [];
+      HTML_ATTRIBUTE.lastIndex = HTML_TAG.lastIndex;
+      let attribute: RegExpExecArray | null;
+      while ((attribute = HTML_ATTRIBUTE.exec(html))) {
+        attributes.push([
+          getStatic(attribute[1]),
+          // an attribute without a value has an empty one, e.g. `disabled`
+          getStatic(attribute[2] ?? attribute[3] ?? attribute[4] ?? ""),
+        ]);
+        // the next tag is after the attributes: a `<` in a value isn't a tag
+        HTML_TAG.lastIndex = HTML_ATTRIBUTE.lastIndex;
+      }
+      tags.push({
+        name: getStatic(tag[1]),
+        attributes: attributes.filter(([name]) => name),
+      });
+    }
+  }
+  return tags;
+};
+
+/**
+ * Get a name of HTML as it is written and in lower case
+ *
+ * The names of the tags and of the attributes of HTML are case-insensitive,
+ * e.g. `<DIV>` is a `div`, but the ones of SVG are not, e.g. `linearGradient`
+ * and `viewBox`, and a fragment doesn't tell which one it is.
+ *
+ * @param name - name of a tag or of an attribute
+ * @returns the name, and the name in lower case when it is different
+ */
+const getHtmlNames = (name: string): string[] => [
+  ...new Set([name, name.toLowerCase()]),
+];
+
+/**
+ * Get the JavaScript of a token, other than the value of an attribute
+ *
+ * @param token - token of a Pug template
+ * @returns the JavaScript written in the token, if any
+ */
+const getTokenCode = (token: lex.Token): string | null => {
+  switch (token.type) {
+    // - code: unbuffered and buffered, e.g. `- var a = 'foo'` and `p= a`
+    // - interpolation in text: `p #{isOn ? 'on' : 'off'}` and `p !{html}`
+    // - interpolated tag: `#{isMain ? 'main' : 'section'}`
+    // - conditions, as the ones of unbuffered code, e.g.
+    //   `- if (size === 'lg') {`. `unless` is an `if` token
+    case "code":
+    case "interpolated-code":
+    case "interpolation":
+    case "if":
+    case "else-if":
+    case "while":
+    case "case":
+    case "when":
+      return token.val;
+    // the list of `each size in ['sm', 'lg']` and `each size of sizes`
+    case "each":
+    case "eachOf":
+      return token.code;
+    // the arguments of `+button('btn-primary')` and the default arguments of
+    // `mixin button(cls = 'btn-default')`. Without arguments, `args` is null,
+    // also for a call although its type says otherwise. The name of a mixin
+    // isn't read: it is never in the HTML
+    case "call":
+    case "mixin":
+      return token.args;
+    default:
+      return null;
+  }
+};
+
+/**
+ * Add the words of a string to a list of selectors
+ *
+ * @param value - string found in a template, e.g. the value of an attribute
+ * @param values - list getting the words of the string, and the string itself
+ * @param names - list getting only the words, e.g. the classes
+ */
+const addWords = (value: string, values: string[], names?: string[]): void => {
+  // a class list can be separated by new lines and tabs, not only spaces
+  const words = value.split(ASCII_WHITESPACE).filter(Boolean);
+  names?.push(...words);
+  values.push(...words);
+  // also add the whole value when it isn't its only word, i.e. when it is
+  // empty or has whitespace, to handle things like [alt=""],
+  // [title="hello world"] or [title^="hello wo"]
+  if (words.length !== 1 || words[0] !== value) {
+    values.push(value);
+  }
+};
+
 /**
  * Get the potential selectors from Pug code
  *
@@ -40,7 +328,86 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
     tags: [],
     undetermined: [],
   };
-  for (const token of tokens) {
+  const addAttributeValue = (name: string, value: string): void => {
+    addWords(
+      value,
+      extractorResult.attributes.values,
+      name === "class"
+        ? extractorResult.classes
+        : name === "id"
+          ? extractorResult.ids
+          : undefined,
+    );
+  };
+  const addAttribute = (name: string, value?: acorn.Node): void => {
+    if (name !== "class" && name !== "id") {
+      extractorResult.attributes.names.push(name);
+    }
+    if (!value) {
+      return;
+    }
+    for (const string of getExpressionStrings(value, name === "class")) {
+      addAttributeValue(name, string);
+    }
+  };
+  // the HTML written as HTML: Pug doesn't escape text, so the tags of a line
+  // of HTML, of the text of a tag and of a block of text are elements
+  const addHtml = (html: string): void => {
+    for (const { name, attributes } of getHtmlTags(html)) {
+      if (name) {
+        extractorResult.tags.push(...getHtmlNames(name));
+      }
+      for (const [attribute, value] of attributes) {
+        const lowerCaseName = attribute.toLowerCase();
+        if (lowerCaseName !== "class" && lowerCaseName !== "id") {
+          extractorResult.attributes.names.push(...getHtmlNames(attribute));
+        }
+        addAttributeValue(lowerCaseName, value);
+      }
+    }
+  };
+  // the strings of code can be anything, e.g. the classes of
+  // `- var classes = ['foo', 'bar']` or `each size in ['sm', 'lg']` used by
+  // `div(class=classes)` and `div(class=size)`
+  const addCode = (code: string): void => {
+    const strings = getCodeStrings(code);
+    for (const string of strings) {
+      addWords(string, extractorResult.undetermined);
+    }
+    // or HTML, e.g. `p!= '<b class="bold">' + text + '</b>'`. A concatenation
+    // cuts it anywhere, e.g. `'<b class="' + cls + '">'`: the strings are
+    // read together, in the order the code writes them
+    addHtml(strings.join(RUNTIME_VALUE));
+  };
+  // the text read since the last token that isn't text. An interpolation cuts
+  // it anywhere, e.g. `<div class="a #{b} c">` is the text `<div class="a `,
+  // the code `b` and the text ` c">`: they are read together
+  let html = "";
+  // the lines of a block are text: JavaScript under `-`, nothing that is
+  // rendered as an element under a comment, HTML elsewhere, e.g. under `p.`
+  let block: "code" | "comment" | "html" = "html";
+  let code = "";
+  for (const [index, token] of tokens.entries()) {
+    if (
+      token.type === "text" ||
+      token.type === "text-html" ||
+      token.type === "newline"
+    ) {
+      const text = token.type === "newline" ? "\n" : token.val;
+      if (block === "code") {
+        code += text;
+      } else if (block === "html") {
+        html += text;
+      }
+      continue;
+    }
+    if (token.type === "interpolated-code") {
+      html += RUNTIME_VALUE;
+    } else {
+      // the last token is always `eos`: no text is left after the loop
+      addHtml(html);
+      html = "";
+    }
     if (token.type === "tag") {
       extractorResult.tags.push(token.val);
     } else if (token.type === "class") {
@@ -50,15 +417,37 @@ export const purgeCSSFromPug = (content: string): ExtractorResultDetailed => {
       extractorResult.ids.push(token.val);
       extractorResult.attributes.values.push(token.val);
     } else if (token.type === "attribute") {
-      const tokenValues = getAttributeTokenValues(token);
-      if (token.name === "class") {
-        extractorResult.classes.push(...tokenValues);
-      } else if (token.name === "id") {
-        extractorResult.ids.push(...tokenValues);
-      } else {
-        extractorResult.attributes.names.push(token.name);
+      addAttribute(
+        token.name,
+        // a boolean attribute, e.g. `input(disabled)`, has the value `true`.
+        // pug-lexer only accepts a value that is a valid expression
+        typeof token.val === "string"
+          ? acorn.parseExpressionAt(token.val, 0, ACORN_OPTIONS)
+          : undefined,
+      );
+    } else if (token.type === "&attributes") {
+      for (const [name, value] of getAndAttributes(token.val)) {
+        addAttribute(name, value);
       }
-      extractorResult.attributes.values.push(...tokenValues);
+    } else if (token.type === "start-pipeless-text") {
+      const previous = tokens[index - 1]?.type;
+      block =
+        previous === "blockcode"
+          ? "code"
+          : previous === "comment"
+            ? "comment"
+            : "html";
+    } else if (token.type === "end-pipeless-text") {
+      if (block === "code") {
+        addCode(code);
+        code = "";
+      }
+      block = "html";
+    } else {
+      const tokenCode = getTokenCode(token);
+      if (tokenCode) {
+        addCode(tokenCode);
+      }
     }
   }
   return extractorResult;

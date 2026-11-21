@@ -1,23 +1,7 @@
 ---
 title: Safelisting
+description: "Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist."
 lang: fr-FR
-meta:
-  - name: description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
-  - itemprop: description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
-  - property: og:url
-    content:  https://purgecss.com/fr/safelisting
-  - property: og:site_name
-    content: purgecss.com
-  - property: og:image
-    content: https://i.imgur.com/UEiUiJ0.png
-  - property: og:locale
-    content: fr_FR
-  - property: og:title
-    content: Supprimer le CSS inutilisé - PurgeCSS
-  - property: og:description
-    content: Pour éviter que PurgeCSS supprime du CSS inutilisé que vous souhaitez conserver, vous pouvez ajouter des sélecteurs à la safelist.
 ---
 
 ::: tip
@@ -90,6 +74,20 @@ const purgeCSSResult = await new PurgeCSS().purge({
 Dans cet exemple, les sélecteurs se terminant par `red` comme `.bg-red`, les sélecteurs se terminant par `blue` ainsi que leurs enfants comme `blue p` ou `.bg-blue .child-of-bg`, et les sélecteurs dont une partie se termine par `yellow` comme `button.bg-yellow.other-class`, seront conservés dans le CSS final.
 
 Les motifs sont des expressions régulières. Vous pouvez utiliser [regexr](https://regexr.com) pour vérifier que les expressions régulières correspondent à ce que vous recherchez.
+
+Si votre configuration ne peut pas contenir d'expressions régulières, par exemple un fichier JSON comme `postcss.config.json`, écrivez l'expression régulière sous forme de chaîne de caractères entre barres obliques. Les drapeaux se placent après la dernière barre oblique. Toute autre chaîne de caractères correspond toujours exactement à un sélecteur.
+
+```json
+{
+  "safelist": {
+    "standard": ["/red$/", "/^btn-/i", "active"],
+    "deep": ["/blue$/"],
+    "greedy": ["/yellow$/"]
+  }
+}
+```
+
+Les chaînes entre barres obliques fonctionnent dans toutes les options qui acceptent des expressions régulières : `safelist`, `blocklist` et `dynamicAttributes`.
 
 ## Directement dans le CSS
 

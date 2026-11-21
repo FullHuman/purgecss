@@ -36,9 +36,11 @@ describe("Webpack integration", () => {
   });
 
   const cases: string[] = [
+    "dynamic-attributes",
     "path-and-safelist-functions",
     "simple",
     "simple-with-exclusion",
+    "only-chunk-name",
   ];
 
   for (const testCase of cases) {
