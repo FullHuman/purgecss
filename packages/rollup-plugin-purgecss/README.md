@@ -88,6 +88,15 @@ The plugin accepts the [PurgeCSS options](https://purgecss.com/configuration.htm
   The CSS given to `output` has no source map. With Vite, it is handed to Vite
   along with the CSS.
 
+The `rejected`, `rejectedCss`, `stdin` and `stdout` options have no effect.
+
+Each imported CSS file is purged on its own: with `fontFace`, `keyframes` or
+`variables`, a `@font-face`, `@keyframes` or CSS variable only used by another
+CSS file is removed. To keep it, safelist it with `safelist.variables`,
+`safelist.keyframes` or a `/* purgecss start ignore */` comment, or, with Vite,
+import a single CSS file that imports the others with `@import`. See the
+[documentation](https://purgecss.com/plugins/rollup.html#options).
+
 The types of the plugin import the types of `rollup` and `postcss`: if
 TypeScript cannot find them, e.g. with Vite or Rolldown, or with pnpm, which
 does not hoist the dependencies of `purgecss`, install them as dev
