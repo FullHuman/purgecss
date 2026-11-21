@@ -222,7 +222,7 @@ await new PurgeCSS().purge({
 
 Si vous utilisez des propriétés personnalisées (variables CSS), ou une bibliothèque qui les utilise comme Bootstrap, vous pouvez supprimer les variables CSS inutilisées en définissant l'option `variables` à `true`.
 
-Les règles [`@property`](https://developer.mozilla.org/fr/docs/Web/CSS/@property) qui déclarent des variables inutilisées sont également supprimées.
+Les règles [`@property`](https://developer.mozilla.org/fr/docs/Web/CSS/@property) qui déclarent des variables inutilisées sont également supprimées, ainsi que les règles laissées vides par les variables supprimées, par exemple une règle `:root` dont toutes les variables sont inutilisées. Une keyframe laissée vide, par exemple `from { }`, est conservée.
 
 ```js
 await new PurgeCSS().purge({

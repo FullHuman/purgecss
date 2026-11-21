@@ -812,6 +812,19 @@ function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
 }
 
 /**
+ * Check if the node is a keyframe of a `@keyframes` rule, e.g. `from { }`
+ *
+ * @param node - node of postcss AST
+ */
+function isKeyframe(node?: postcss.Node): boolean {
+  return (
+    isPostCSSRule(node) &&
+    isPostCSSAtRule(node.parent) &&
+    node.parent.name.endsWith("keyframes")
+  );
+}
+
+/**
  * A css file walked through, before it is turned back into css
  */
 interface PurgedRoot {
@@ -1524,12 +1537,23 @@ class PurgeCSS {
    * Remove unused CSS variables
    */
   public removeUnusedCSSVariables(): void {
-    // the at-rules left empty by the removed `@property` rules are removed too
-    const propertyParents = [...this.variablesStructure.properties.values()]
-      .flat()
-      .map((atRule) => atRule.parent);
+    const { nodes, properties } = this.variablesStructure;
+    const variableNodes = [
+      ...[...nodes.values()].flat().map((variable) => variable.value),
+      ...[...properties.values()].flat(),
+    ].map((node) => ({ node, parent: node.parent }));
     this.variablesStructure.removeUnused();
-    for (const parent of propertyParents) removeEmptyParents(parent);
+    // the rules and at-rules left empty by the removed declarations and
+    // `@property` rules are removed too, e.g. `:root { }`. A keyframe left
+    // empty, e.g. `from { }`, is kept: its `@keyframes` would be removed once
+    // empty, while its animation may be used. The `keyframes` option removes
+    // the unused animations.
+    const parents = new Set<postcss.Container | postcss.Document>();
+    for (const { node, parent } of variableNodes) {
+      // a removed node no longer has a parent
+      if (!node.parent && parent && !isKeyframe(parent)) parents.add(parent);
+    }
+    for (const parent of parents) removeEmptyParents(parent);
   }
 
   /**
