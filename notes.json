@@ -62,34 +62,26 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-20",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-20."
+      "updated_at": "2026-11-21",
+      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-21."
     }
   ],
   "fixes": [
-    {
-      "issue": 964,
-      "pr": 1543,
-      "branch": "repo-assist/fix-empty-at-rules-after-at-rule-removal-24e127f20522718e",
-      "status": "open",
-      "updated_at": "2026-11-08",
-      "note": "Draft PR #1543. #1588 (DeferredRemovals) made it conflict; 11-08 pushed f3fb0f9: evaluateRule back to base, removeEmptyParents checks nodes.every(isRemovableComment). Merges cleanly with 38f7d07; merged tree purgecss 300/300, branch 215/215."
-    },
     {
       "issue": 1593,
       "pr": 1594,
       "branch": "repo-assist/fix-issue-1593-font-face-keyframes-uses",
       "status": "open",
-      "updated_at": "2026-11-15",
-      "note": "#1594 = cases 2+3 (fontFace font shorthand/var/case, -webkit-animation). #1600 = case 1 (branch repo-assist/fix-issue-1593-case-insensitive-selectors-7ed955bafd9e75b4). Both clean with main 015f06e."
+      "updated_at": "2026-11-21",
+      "note": "#1594 = cases 2+3 (fontFace font shorthand/var/case, -webkit-animation). #1600 = case 1 (branch repo-assist/fix-issue-1593-case-insensitive-selectors-7ed955bafd9e75b4). Both clean with main ee99627 (11-21)."
     }
   ],
   "checks": [
     {
       "area": "docs",
       "checked_at": "2026-11-21",
-      "result": "2026-11-21: postcss docs done in rejected PR (output/stdin/stdout/rejectedCss/sourceMap no effect, verified). grunt docs = #1612. gulp docs merged (#1606, #1610).",
-      "follow_up": "Next Task 7: compare docs/plugins/rollup.md (EN/FR) with rollup src options/behaviour."
+      "result": "2026-11-21: rollup docs PR (branch repo-assist/basics-rollup-docs-per-file-purge): CSS files purged one by one, so cross-file @font-face/@keyframes/vars are removed (Rollup/Rolldown/Vite); workarounds documented; rejected/rejectedCss/stdin/stdout no effect.",
+      "follow_up": "All plugin docs checked (gulp, grunt, postcss, rollup, webpack). Next Task 7: CLI docs vs bin.ts options, or wordpress/vue-cli plugin docs."
     },
     {
       "area": "build",
@@ -112,31 +104,31 @@
     {
       "area": "code",
       "checked_at": "2026-11-21",
-      "result": "2026-11-21: postcss rejected message indented 1st selector 10 spaces, rest 2; postcss-reporter 7 default filter = warning|error so documented setup printed nothing. Draft PR branch repo-assist/improve-postcss-rejected-message (fix + filter docs EN/FR/README + no-effect options).",
-      "follow_up": "jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design. Keep message type purgecss (warning would spam bundlers)."
+      "result": "2026-11-21: draft PR branch repo-assist/improve-remove-rules-emptied-by-variables: removeUnusedCSSVariables calls removeEmptyParents for parents of removed decls/@property (keyframes kept, named layers kept). 7/11 new tests fail on main. Adds no new conflict to #1495.",
+      "follow_up": "Rollup plugin cross-file fontFace/keyframes/variables fix needs design (transform per module). jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-20",
-      "result": "2026-11-20: pnpm outdated = minor/patch only (TS 7 major skipped); Dependabot npm+actions monthly, none open. pnpm audit: dev glob GHSA-3g3m-2fjr-6pw4 via jest.",
+      "checked_at": "2026-11-21",
+      "result": "2026-11-21: pnpm audit still only dev glob GHSA-3g3m-2fjr-6pw4 via jest. 11-20: pnpm outdated minor/patch only (TS 7 major skipped); Dependabot monthly, none open.",
       "follow_up": "No bundling needed while Dependabot runs monthly. glob override suggest-only (pnpm-workspace.yaml)."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-20",
-      "result": "2026-11-20: main has 14 changeset files since 9.1.0 (12 + gulp stream end/buffer warning) incl. #1603 minor -> suggest 9.2.0.",
+      "checked_at": "2026-11-21",
+      "result": "2026-11-21: main has 20 changeset files since 9.1.0 incl. #1603 minor -> suggest 9.2.0.",
       "follow_up": "Release PR touches package.json (protected) -> suggest only."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-21",
-      "result": "11-21: main 06832f9 (#1610,#1611 merged). RA PRs #1543,#1577,#1594,#1600,#1604,#1612 + new postcss rejected draft = 7. Maintainer #1613 (webpack purgedStats). All merge clean; rejected PR adds no conflict to #1495.",
+      "result": "11-21 2nd run: main ee99627 (#1543,#1577,#1612,#1613,#1614 merged). Open RA PRs #1594,#1600,#1604 merge clean + 2 new drafts (variables empty rules, rollup docs) = 5.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. 8 open RA PRs = maintenance-only."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-21",
-      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep NODE_USE_ENV_PROXY=1 + PATH for every pnpm call (pre-commit hook). git user github-actions[bot]. main tests: 714. npm install in /tmp/gh-aw/agent works.",
+      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin; NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep env + PATH for every pnpm call. git user github-actions[bot]. main tests: 747. Run rollup __tests__/{rolldown,vite}/build.js from package dir.",
       "follow_up": "Reuse this setup next run."
     },
     {
@@ -234,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-21. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-21 (2nd run). #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
     }
   ]
 }
