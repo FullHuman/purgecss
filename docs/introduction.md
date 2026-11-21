@@ -16,4 +16,4 @@ You can try PurgeCSS online at [purgecss.full-human.com](https://purgecss.full-h
 ## Sponsors 🥰
 
 [<img src="https://avatars.githubusercontent.com/u/133211198?v=4" height="85" style="margin-right: 10px" alt="BairesDev - Sponsor">](https://www.bairesdev.com/sponsoring-open-source-projects/)
-[<img src="/full-human.png" height="85" style="margin-right: 10px" alt="Full Human - Sponsor">](https://full-human.health/)
+[<img src="/full-human.png" height="85" style="margin-right: 10px" alt="Full Human - Sponsor">](https://www.full-human.health/)
