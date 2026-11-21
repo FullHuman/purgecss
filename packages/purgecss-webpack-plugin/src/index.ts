@@ -11,7 +11,7 @@ import {
 } from "purgecss";
 // only types are imported from webpack: at runtime, the plugin uses the
 // classes of the bundler running it (`compiler.webpack`), webpack or Rspack
-import type { Chunk, Compilation, sources } from "webpack";
+import type { Chunk, Compilation, Compiler, sources } from "webpack";
 import { collectCssModulesExports } from "./css-modules";
 import {
   CompilationLike,
@@ -24,17 +24,22 @@ export * from "./types";
 
 const styleExtensions = [".css", ".scss", ".styl", ".sass", ".less"];
 const pluginName = "PurgeCSS";
+/**
+ * Key of the info of an asset holding the name it had when it was purged,
+ * its key in `purgedStats`. The info of an asset is kept by webpack and
+ * Rspack when they rename it, which no hook reports.
+ */
+const purgedNameInfoKey = "purgecssName";
 
 /**
- * Get the filename without ?hash
+ * Get the filename without its query (`?hash`), which starts at the first
+ * `?`: webpack writes the asset `main.css?v=1?x` to `main.css`
  *
  * @param fileName - file name
  */
 function getFormattedFilename(fileName: string): string {
-  if (fileName.includes("?")) {
-    return fileName.split("?").slice(0, -1).join("");
-  }
-  return fileName;
+  const queryIndex = fileName.indexOf("?");
+  return queryIndex === -1 ? fileName : fileName.slice(0, queryIndex);
 }
 
 /**
@@ -179,7 +184,18 @@ function addContentDependencies(
  */
 export class PurgeCSSPlugin {
   options: UserDefinedOptions;
+  /**
+   * Selectors removed from the CSS assets of the last compilation, with the
+   * `rejected` option. With a plugin instance shared by several compilers,
+   * the assets of the last compilation of each compiler.
+   */
   purgedStats: PurgedStats = {};
+  /**
+   * Assets each compiler added to `purgedStats` in its last compilation,
+   * removed when its next compilation starts: in watch mode, the assets of a
+   * previous compilation may no longer exist, e.g. with a hash in their name
+   */
+  private purgedAssets = new WeakMap<Compiler, Map<string, string[]>>();
   /**
    * Selectors extracted from the content files, kept from one compilation to
    * the next one in watch mode: only the files that changed are read again
@@ -209,6 +225,11 @@ export class PurgeCSSPlugin {
   initializePlugin(compilationLike: CompilationLike): void {
     const compilation = compilationLike as Compilation;
     const { Compilation } = compilation.compiler.webpack;
+    // the compilation of a child compiler is part of the compilation of its
+    // root compiler, and does not start a new one
+    if (compilation.compiler.root === compilation.compiler) {
+      this.resetPurgedStats(compilation.compiler);
+    }
     compilation.hooks.processAssets.tapPromise(
       {
         name: pluginName,
@@ -272,6 +293,83 @@ export class PurgeCSSPlugin {
         return this.runPluginHook(compilation, entryPaths);
       },
     );
+    compilation.hooks.processAssets.tap(
+      {
+        name: pluginName,
+        // once the assets have their final name, before the stage of the
+        // plugins reporting on the assets (REPORT)
+        stage: Compilation.PROCESS_ASSETS_STAGE_ANALYSE,
+      },
+      () => this.renamePurgedStats(compilation),
+    );
+  }
+
+  /**
+   * Rename the keys of `purgedStats` after the assets renamed since they
+   * were purged: with `optimization.realContentHash`, the content hash in
+   * the name of an asset is replaced with the hash of its final content
+   * (OPTIMIZE_HASH)
+   *
+   * @param compilation - compilation of webpack or Rspack
+   */
+  private renamePurgedStats(compilation: Compilation): void {
+    // the assets of the compilation, not the assets of the same name another
+    // compiler added
+    const purgedAssets = this.purgedAssets.get(compilation.compiler.root);
+    if (!purgedAssets) return;
+    // a purged asset is a file of a chunk, and still is once renamed
+    const chunkFiles = new Set<string>();
+    for (const chunk of compilation.chunks) {
+      for (const file of chunk.files) chunkFiles.add(file);
+    }
+    // new name of the renamed assets, by the name they were purged under
+    const renamedAssets = new Map<string, string>();
+    for (const { name, info } of compilation.getAssets()) {
+      const purgedName: unknown = info[purgedNameInfoKey];
+      if (typeof purgedName !== "string" || purgedName === name) continue;
+      // not renamed: an asset created with the info of the purged asset
+      if (!purgedAssets.has(purgedName) || compilation.getAsset(purgedName)) {
+        continue;
+      }
+      // renamed, and an asset created with its info before it was: the
+      // renamed asset is the one that is a file of a chunk
+      const renamedName = renamedAssets.get(purgedName);
+      if (
+        renamedName === undefined ||
+        (!chunkFiles.has(renamedName) && chunkFiles.has(name))
+      ) {
+        renamedAssets.set(purgedName, name);
+      }
+    }
+    for (const [purgedName, name] of renamedAssets) {
+      const rejected = purgedAssets.get(purgedName);
+      if (!rejected) continue;
+      // removed under its new name when the next compilation starts
+      purgedAssets.delete(purgedName);
+      purgedAssets.set(name, rejected);
+      if (this.purgedStats[purgedName] === rejected) {
+        delete this.purgedStats[purgedName];
+      }
+      this.purgedStats[name] = rejected;
+    }
+  }
+
+  /**
+   * Remove from `purgedStats` the assets of the previous compilation of a
+   * compiler. The assets of the other compilers the plugin instance is
+   * applied to are kept: they are not compiled again with this compiler,
+   * e.g. in watch mode or when the compilers run one after the other.
+   *
+   * @param compiler - root compiler starting a compilation
+   */
+  private resetPurgedStats(compiler: Compiler): void {
+    const assets = this.purgedAssets.get(compiler);
+    if (!assets) return;
+    for (const [name, rejected] of assets) {
+      // unless another compiler stored an asset of the same name since
+      if (this.purgedStats[name] === rejected) delete this.purgedStats[name];
+    }
+    assets.clear();
   }
 
   /**
@@ -348,6 +446,13 @@ export class PurgeCSSPlugin {
 
       if (purged.rejected) {
         this.purgedStats[name] = purged.rejected;
+        const { root } = compilation.compiler;
+        let purgedAssets = this.purgedAssets.get(root);
+        if (!purgedAssets) {
+          purgedAssets = new Map();
+          this.purgedAssets.set(root, purgedAssets);
+        }
+        purgedAssets.set(name, purged.rejected);
       }
 
       // Rspack only writes the assets whose version changed since the
@@ -368,7 +473,11 @@ export class PurgeCSSPlugin {
           purged,
           sourceMapEnabled,
         ),
-        (info) => ({ ...info, version }),
+        (info) => ({
+          ...info,
+          version,
+          ...(purged.rejected && { [purgedNameInfoKey]: name }),
+        }),
       );
     }
   }
