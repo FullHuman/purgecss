@@ -56,6 +56,23 @@ describe("Purgecss postcss plugin", () => {
     },
   );
 
+  it(`lists the rejected selectors one per line, indented the same`, async () => {
+    const result = await postcss([
+      purgeCSSPlugin({
+        content: [{ raw: '<div class="used"></div>', extension: "html" }],
+        rejected: true,
+      }),
+    ]).process(".used {} .unused {} .another-unused {}", { from: undefined });
+
+    expect(result.messages).toEqual([
+      {
+        type: "purgecss",
+        plugin: "postcss-purgecss",
+        text: "purging 2 selectors:\n  .unused\n  .another-unused",
+      },
+    ]);
+  });
+
   it(`queues messages when using reject flag: simple`, async () => {
     const result = await postcss([
       purgeCSSPlugin({

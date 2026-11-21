@@ -125,6 +125,7 @@ Vite exécute [postcss-modules](https://github.com/madyankin/postcss-modules) av
 
 Toutes les options de PurgeCSS sont disponibles avec les plugins.
 Vous trouverez ci-dessous la définition de type des principales options disponibles. Pour la liste complète, consultez le [site de documentation de PurgeCSS](https://www.purgecss.com/fr/configuration.html#options).
+Les options `output`, `stdin`, `stdout`, `rejectedCss` et `sourceMap` n'ont aucun effet : PostCSS donne le CSS au plugin, puis écrit le résultat et sa source map.
 
 ```ts
 export interface UserDefinedOptions {
@@ -134,10 +135,7 @@ export interface UserDefinedOptions {
   extractors?: Array<Extractors>;
   fontFace?: boolean;
   keyframes?: boolean;
-  output?: string;
   rejected?: boolean;
-  stdin?: boolean;
-  stdout?: boolean;
   variables?: boolean;
   safelist?: UserDefinedSafelist;
   blocklist?: StringRegExpArray;
@@ -155,6 +153,39 @@ interface RawCSS {
 }
 
 type StringRegExpArray = Array<RegExp | string>;
+```
+
+### `rejected`
+
+Type : `boolean`
+Valeur par défaut : `false`
+
+Ajoute les sélecteurs supprimés de chaque fichier CSS au résultat de PostCSS, sous la forme d'un message de type `purgecss`. Pour les afficher, ajoutez [postcss-reporter](https://github.com/postcss/postcss-reporter) après le plugin, avec un `filter` qui garde ces messages : par défaut, postcss-reporter n'affiche que les avertissements et les erreurs.
+
+```js
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
+import postcssReporter from 'postcss-reporter';
+
+export default {
+  plugins: [
+    purgeCSSPlugin({
+      content: ['./src/**/*.html'],
+      rejected: true
+    }),
+    postcssReporter({
+      filter: (message) => message.type === 'purgecss'
+    })
+  ]
+}
+```
+
+```
+src/style.css
+purging 2 selectors:
+  .unused
+  .another-unused [postcss-purgecss]
+
+⚠ 1 problem (0 errors, 0 warnings)
 ```
 
 ### `dependencies`
