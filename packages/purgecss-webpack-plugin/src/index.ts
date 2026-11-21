@@ -317,12 +317,33 @@ export class PurgeCSSPlugin {
     // compiler added
     const purgedAssets = this.purgedAssets.get(compilation.compiler.root);
     if (!purgedAssets) return;
+    // a purged asset is a file of a chunk, and still is once renamed
+    const chunkFiles = new Set<string>();
+    for (const chunk of compilation.chunks) {
+      for (const file of chunk.files) chunkFiles.add(file);
+    }
+    // new name of the renamed assets, by the name they were purged under
+    const renamedAssets = new Map<string, string>();
     for (const { name, info } of compilation.getAssets()) {
       const purgedName: unknown = info[purgedNameInfoKey];
       if (typeof purgedName !== "string" || purgedName === name) continue;
-      const rejected = purgedAssets.get(purgedName);
       // not renamed: an asset created with the info of the purged asset
-      if (!rejected || compilation.getAsset(purgedName)) continue;
+      if (!purgedAssets.has(purgedName) || compilation.getAsset(purgedName)) {
+        continue;
+      }
+      // renamed, and an asset created with its info before it was: the
+      // renamed asset is the one that is a file of a chunk
+      const renamedName = renamedAssets.get(purgedName);
+      if (
+        renamedName === undefined ||
+        (!chunkFiles.has(renamedName) && chunkFiles.has(name))
+      ) {
+        renamedAssets.set(purgedName, name);
+      }
+    }
+    for (const [purgedName, name] of renamedAssets) {
+      const rejected = purgedAssets.get(purgedName);
+      if (!rejected) continue;
       // removed under its new name when the next compilation starts
       purgedAssets.delete(purgedName);
       purgedAssets.set(name, rejected);

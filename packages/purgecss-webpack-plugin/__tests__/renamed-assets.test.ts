@@ -142,6 +142,47 @@ describe("purgedStats of the assets renamed after they are purged", () => {
     });
   }, 30_000);
 
+  it("has the name of the renamed asset as key, not of an asset created with its info", async () => {
+    // a plugin deriving an asset from the css with the info of the css,
+    // before the css is renamed: the derived asset comes first in the assets
+    const derivedAssetPlugin = {
+      apply(compiler: Compiler): void {
+        compiler.hooks.compilation.tap("DerivedAsset", (compilation) => {
+          compilation.hooks.processAssets.tap(
+            {
+              name: "DerivedAsset",
+              stage: webpack.Compilation.PROCESS_ASSETS_STAGE_DERIVED,
+            },
+            () => {
+              for (const asset of compilation.getAssets()) {
+                if (/^a\.\w+\.css$/.test(asset.name)) {
+                  compilation.emitAsset("a.rtl.css", asset.source, asset.info);
+                }
+              }
+            },
+          );
+        });
+      },
+    };
+    const plugin = new PurgeCSSPlugin({ paths: [contentFile], rejected: true });
+    const stats = await build(
+      "renamed-assets-derived-renamed",
+      "[name].[contenthash].css",
+      { mode: "production", plugins: [plugin, derivedAssetPlugin] },
+    );
+
+    const cssAssets = getCssAssets(stats);
+    expect(cssAssets).toEqual([
+      expect.stringMatching(/^a\.\w+\.css$/),
+      "a.rtl.css",
+      expect.stringMatching(/^b\.\w+\.css$/),
+    ]);
+    expect(plugin.purgedStats).toEqual({
+      [cssAssets[0]]: [".removed-a"],
+      [cssAssets[2]]: [".removed-b"],
+    });
+  }, 30_000);
+
   it("keeps the assets of the same name another compiler added", async () => {
     const plugin = new PurgeCSSPlugin({ paths: [contentFile], rejected: true });
     // a compiler that does not rename its assets, compiled while the assets
