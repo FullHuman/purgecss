@@ -587,6 +587,9 @@ function removeEmptyParents(
   let emptyCandidate = parent;
   while (
     (isPostCSSRule(emptyCandidate) || isPostCSSAtRule(emptyCandidate)) &&
+    // an empty named layer still sets the order of the layers, see
+    // `isNamedLayer`: it is kept, and so are its parents
+    !isNamedLayer(emptyCandidate) &&
     // nothing is left in it but comments that can be removed along with it
     emptyCandidate.nodes?.every(isRemovableComment)
   ) {
@@ -775,6 +778,33 @@ function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
 
 function isPostCSSRule(node?: postcss.Node): node is postcss.Rule {
   return node?.type === "rule";
+}
+
+/**
+ * Check if the node is a named cascade layer block, e.g. `@layer reset { }`.
+ *
+ * A named layer block left empty is kept, as an empty block, instead of
+ * being removed like the other at-rules left empty. The order of the cascade
+ * layers is the order in which their names first appear, and an empty block
+ * still declares its layer. In
+ *
+ *   `@layer reset { .unused {} } @layer base { .a {} } @layer reset { .a {} }`
+ *
+ * the order is `reset` then `base`, so the rules of `base` win. Without the
+ * first block, `reset` would first appear after `base`, and its rules would
+ * win instead: removing the block changes how the css that is kept applies.
+ *
+ * An anonymous layer (`@layer { }`) has no name another block can add rules
+ * to, so it is removed when it is left empty.
+ *
+ * @param node - node of postcss AST
+ */
+function isNamedLayer(node?: postcss.Node): boolean {
+  return (
+    isPostCSSAtRule(node) &&
+    node.name.toLowerCase() === "layer" &&
+    node.params.trim() !== ""
+  );
 }
 
 function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
@@ -1201,9 +1231,15 @@ class PurgeCSS {
       this.removals.remove(node);
     }
     // remove the parents left empty, going up through nested rules and
-    // at-rules (e.g. @supports inside @media) but not past the root
+    // at-rules (e.g. @supports inside @media) but not past the root. An
+    // empty named layer still sets the order of the layers, see
+    // `isNamedLayer`: it is kept, and so are its parents
     let emptyCandidate = parent;
-    while (emptyCandidate && this.removals.isEmpty(emptyCandidate)) {
+    while (
+      emptyCandidate &&
+      !isNamedLayer(emptyCandidate) &&
+      this.removals.isEmpty(emptyCandidate)
+    ) {
       const grandParent = this.removals.parentOf(emptyCandidate);
       this.removals.remove(emptyCandidate);
       emptyCandidate =
