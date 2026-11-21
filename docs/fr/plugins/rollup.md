@@ -106,6 +106,12 @@ Si `true`, les fichiers CSS importés insèrent leur CSS purgé dans le `<head>`
 
 Avec Rollup et Rolldown, la source map est intégrée au CSS purgé exporté par chaque fichier CSS. Le CSS transmis à `output` n'a pas de source map. Avec Vite, elle est transmise à Vite avec le CSS.
 
+Les options `rejected`, `rejectedCss`, `stdin` et `stdout` n'ont aucun effet.
+
+::: tip
+Chaque fichier CSS importé est purgé séparément. Avec `fontFace`, `keyframes` ou `variables`, une règle `@font-face`, des `@keyframes` ou une variable CSS utilisés uniquement par un autre fichier CSS sont supprimés, par exemple une variable définie dans `variables.css` et utilisée dans `button.css`. Pour les conserver, ajoutez-les à la safelist avec `safelist.variables` ou `safelist.keyframes`, ou avec un [commentaire dans le CSS](../safelisting.md#directement-dans-le-css) comme `/* purgecss start ignore */`. Avec Vite, vous pouvez aussi importer un seul fichier CSS qui importe les autres avec `@import` : Vite intègre les règles `@import` avant que le plugin ne s'exécute, et les fichiers sont donc purgés ensemble.
+:::
+
 ::: warning
 Avant la version 9.1.0, `insert` faisait échouer le build, `contentFunction` était ignorée, `output` échouait avec `ENOENT` lorsque son répertoire n'existait pas, et l'`exclude` par défaut (`"node_modules/**"`) ne correspondait qu'au répertoire `node_modules` du répertoire de travail courant. L'option `dest` n'a aucun effet et est dépréciée : utilisez `output`.
 :::
