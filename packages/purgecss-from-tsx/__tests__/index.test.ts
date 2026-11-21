@@ -40,52 +40,68 @@ describe("purgeFromTsx", () => {
   it("splits class names on any whitespace", () => {
     const received = plugin(`const a = <div className="flex
       items-center	gap-2" />;`);
-    expect(received).toEqual(["div", "flex", "items-center", "gap-2"]);
+    expect(received).toEqual([
+      "div",
+      "class",
+      "flex",
+      "items-center",
+      "gap-2",
+      "flex\n      items-center\tgap-2",
+    ]);
   });
 
   it("finds every string of a className expression", () => {
     expect(
       plugin(`const a = <div className={on ? "is-on" : "is-off"} />;`),
-    ).toEqual(["div", "is-on", "is-off"]);
+    ).toEqual(["div", "class", "is-on", "is-off"]);
     expect(
       plugin(`const a = <div className={clsx("btn", "btn-primary")} />;`),
-    ).toEqual(["div", "btn", "btn-primary"]);
+    ).toEqual(["div", "class", "btn", "btn-primary"]);
   });
 
   it("finds the static parts of a template literal", () => {
     const received = plugin(
       'const a = <div className={`card ${active ? "active" : ""}`} />;',
     );
-    expect(received).toEqual(["div", "card", "active"]);
+    expect(received).toEqual(["div", "class", "card", "card ", "active", ""]);
   });
 
   it("finds the JSX elements in the value of other attributes", () => {
     expect(
       plugin(`const a = <Button icon={<Icon className="icon-star" />} />;`),
-    ).toEqual(["Button", "Icon", "icon-star"]);
+    ).toEqual(["Button", "icon", "Icon", "class", "icon-star"]);
     expect(
       plugin(`const a = <Route render={() => <Page id="page" />} />;`),
-    ).toEqual(["Route", "Page", "page"]);
+    ).toEqual(["Route", "render", "Page", "id", "page"]);
   });
 
-  it("ignores the strings of other attributes", () => {
+  it("finds the names and the values of other attributes", () => {
     const received = plugin(
-      `const a = <a href="#top" title="Top" className="link" />;`,
+      `const a = <a href="#top" title="Back to top" className="link" />;`,
     );
-    expect(received).toEqual(["a", "link"]);
+    expect(received).toEqual([
+      "a",
+      "href",
+      "#top",
+      "title",
+      "Back to top",
+      "class",
+      "link",
+    ]);
   });
 
   it("strips the TypeScript syntax of a className expression", () => {
     expect(plugin(`const a = <div className={"cast" as string} />;`)).toEqual([
       "div",
+      "class",
       "cast",
     ]);
     expect(
       plugin(`const a = <div className={"checked" satisfies string} />;`),
-    ).toEqual(["div", "checked"]);
+    ).toEqual(["div", "class", "checked"]);
     expect(
       plugin(`const a = <List<string> className="generic" items={[]} />;`),
-    ).toEqual(["List", "generic"]);
+    ).toEqual(["List", "class", "generic", "items"]);
   });
 
   it("parses the ES modules emitted with the module option", () => {

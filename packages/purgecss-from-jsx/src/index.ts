@@ -14,9 +14,40 @@ type NodeState = {
   selectors?: string[];
   text?: string;
   strings?: string[];
+  // the keys of the objects are class names, e.g. clsx({ active: isActive })
+  objectKeys?: boolean;
 };
 
 extend<NodeState>(walk.base);
+
+/**
+ * Attributes whose words are selectors: the class names of `className` and
+ * `class` (Preact, Solid) and the id of `id`
+ */
+const SELECTOR_ATTRIBUTES = new Set(["className", "class", "id"]);
+
+/**
+ * Attributes that React names differently from HTML
+ */
+const HTML_ATTRIBUTE_NAMES = new Map([
+  ["className", "class"],
+  ["htmlFor", "for"],
+]);
+
+/**
+ * Get the names of an attribute in the HTML, for the attribute selectors
+ *
+ * The names of the attributes of HTML are case-insensitive, e.g. `tabIndex`
+ * is `tabindex`, but the ones of SVG are not, e.g. `viewBox`, so the name is
+ * returned as written and in lower case.
+ *
+ * @param name - name of the attribute in JSX
+ * @returns the names of the attribute in the HTML
+ */
+const getAttributeNames = (name: string): string[] => {
+  const htmlName = HTML_ATTRIBUTE_NAMES.get(name) ?? name;
+  return [...new Set([htmlName, htmlName.toLowerCase()])];
+};
 
 /**
  * JSX files are usually ES modules, with `import`, `export` and top-level
@@ -75,32 +106,38 @@ function purgeFromJsx(options?: acorn.Options) {
         ) {
           const node = acornNode as JSXAttribute;
 
+          const nameState: NodeState = {};
+          callback(node.name, nameState);
+          // a JSXIdentifier or a JSXNamespacedName, both set the text
+          const name = nameState.text as string;
+          // for the attribute selectors, e.g. [data-state] or [class^="icon-"]
+          state.selectors?.push(...getAttributeNames(name));
+
           if (!node.value) {
             return;
           }
 
-          const nameState: NodeState = {};
-          callback(node.name, nameState);
+          const isSelectorAttribute = SELECTOR_ATTRIBUTES.has(name);
+          // Get all the strings in node.value, e.g. both strings of
+          // className={active ? "on" : "off"}. The value can also contain JSX
+          // elements, e.g. icon={<Icon />}, whose selectors are added
+          const valueState: NodeState = {
+            selectors: state.selectors,
+            strings: [],
+            objectKeys: isSelectorAttribute,
+          };
+          callback(node.value, valueState);
 
-          // node.name is id or className
-          switch (nameState.text) {
-            case "id":
-            case "className":
-              {
-                // Get all the strings in node.value, e.g. both strings of
-                // className={active ? "on" : "off"}
-                const valueState: NodeState = { strings: [] };
-                callback(node.value, valueState);
-
-                for (const text of valueState.strings ?? []) {
-                  state.selectors?.push(...text.split(/\s+/).filter(Boolean));
-                }
-              }
-              break;
-            default:
-              // the value can contain JSX elements, e.g. icon={<Icon />}
-              callback(node.value, { selectors: state.selectors });
-              break;
+          for (const text of valueState.strings ?? []) {
+            const words = isSelectorAttribute
+              ? text.split(/\s+/).filter(Boolean)
+              : [];
+            state.selectors?.push(...words);
+            // the whole value when it isn't its only word, to handle things
+            // like [type="checkbox"], [title="hello world"] or [alt=""]
+            if (words.length !== 1 || words[0] !== text) {
+              state.selectors?.push(text);
+            }
           }
         },
         JSXIdentifier(acornNode: acorn.Node, state: NodeState) {
@@ -134,11 +171,11 @@ function purgeFromJsx(options?: acorn.Options) {
         ) {
           const node = acornNode as acorn.Property;
           if (
-            state.strings &&
+            state.objectKeys &&
             !node.computed &&
             node.key.type === "Identifier"
           ) {
-            state.strings.push(node.key.name);
+            state.strings?.push(node.key.name);
           } else {
             // a string key is a Literal, a computed key any expression
             callback(node.key, state);
@@ -149,7 +186,8 @@ function purgeFromJsx(options?: acorn.Options) {
       { ...walk.base },
     );
 
-    return state.selectors || [];
+    // without duplicates, e.g. the `class` of every className
+    return [...new Set(state.selectors)];
   };
 }
 
