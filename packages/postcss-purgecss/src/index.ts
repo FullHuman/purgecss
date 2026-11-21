@@ -208,13 +208,14 @@ async function purgeContent(
   if (purgeCSS.options.variables) purgeCSS.removeUnusedCSSVariables();
 
   if (purgeCSS.options.rejected && purgeCSS.selectorsRemoved.size > 0) {
+    // one selector per line, every line indented the same
+    const selectors = Array.from(purgeCSS.selectorsRemoved)
+      .map((selector) => `\n  ${selector.trim()}`)
+      .join("");
     result.messages.push({
       type: "purgecss",
-      plugin: "postcss-purgecss",
-      text: `purging ${purgeCSS.selectorsRemoved.size} selectors:
-          ${Array.from(purgeCSS.selectorsRemoved)
-            .map((selector) => selector.trim())
-            .join("\n  ")}`,
+      plugin: PLUGIN_NAME,
+      text: `purging ${purgeCSS.selectorsRemoved.size} selectors:${selectors}`,
     });
     purgeCSS.selectorsRemoved.clear();
   }

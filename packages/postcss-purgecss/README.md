@@ -55,6 +55,7 @@ Vite runs [postcss-modules](https://github.com/madyankin/postcss-modules) before
 
 All of the options of purgecss are available to use with the plugins.
 You will find below the main options available. For the complete list, go to the [purgecss documentation website](https://www.purgecss.com/configuration.html#options).
+The options `output`, `stdin`, `stdout`, `rejectedCss` and `sourceMap` have no effect: PostCSS gives the CSS to the plugin, then writes the result and its source map.
 
 ### `content` (**required** or use `contentFunction` instead)
 Type: `Array<string>`
@@ -150,9 +151,21 @@ Keep the selectors extracted from the content files between the CSS files and th
 Type: `boolean`
 Default value: `false`
 
-If true, purged selectors will be captured and rendered as PostCSS messages.
+If true, purged selectors will be captured and rendered as PostCSS messages of type `purgecss`, one message per CSS file.
 Use with a PostCSS reporter plugin like [`postcss-reporter`](https://github.com/postcss/postcss-reporter)
-to print the purged selectors to the console as they are processed.
+to print the purged selectors to the console as they are processed. postcss-reporter only prints the warnings and errors by default: pass a `filter` that keeps the messages of type `purgecss`.
+
+```js
+postcss([
+  purgecss({
+    content: ['./src/**/*.html'],
+    rejected: true
+  }),
+  require('postcss-reporter')({
+    filter: (message) => message.type === 'purgecss'
+  })
+])
+```
 
 ### `keyframes`
 Type: `boolean`
