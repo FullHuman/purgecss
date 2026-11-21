@@ -184,6 +184,8 @@ You can learn more about extractors [here](extractors.md).
 
 If there are any unused @font-face rules in your css, you can remove them by setting the `fontFace` option to `true`.
 
+PurgeCSS detects used font faces by scanning the `font-family` and `font` property values, as well as CSS custom property (variable) values. Font family names are matched case-insensitively, as in browsers.
+
 ```js
 await new PurgeCSS().purge({
   content: ['index.html', '**/*.js', '**/*.html', '**/*.vue'],
@@ -196,7 +198,7 @@ await new PurgeCSS().purge({
 
 If you are using a CSS animation library such as animate.css, you can remove unused keyframes by setting the `keyframes` option to `true`.
 
-PurgeCSS detects used keyframes by scanning `animation` and `animation-name` property values, as well as CSS custom property (variable) values. This means keyframes referenced via CSS variables will be correctly preserved:
+PurgeCSS detects used keyframes by scanning `animation` and `animation-name` property values, with or without a vendor prefix (e.g. `-webkit-animation`), as well as CSS custom property (variable) values. This means keyframes referenced via CSS variables will be correctly preserved:
 
 ```css
 .component {
