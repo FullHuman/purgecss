@@ -191,3 +191,111 @@ describe("purgedStats of a plugin instance shared by several compilers", () => {
     });
   }, 30_000);
 });
+
+describe("purgedStats of compilers adding an asset of the same name", () => {
+  let contentDirectory: string;
+  let contentFile: string;
+
+  beforeAll(async () => {
+    contentDirectory = await fs.promises.mkdtemp(
+      path.join(os.tmpdir(), "purgecss-webpack-plugin-stats-name-"),
+    );
+    contentFile = path.join(contentDirectory, "index.html");
+    await fs.promises.writeFile(contentFile, '<div class="kept"></div>\n');
+  });
+
+  afterAll(async () => {
+    await fs.promises.rm(contentDirectory, { recursive: true, force: true });
+  });
+
+  it("does not remove the asset another compiler added since", async () => {
+    const plugin = new PurgeCSSPlugin({ paths: [contentFile], rejected: true });
+    // the stats when a compilation of the first compiler starts
+    const started: PurgedStats[] = [];
+    const configuration = (name: string, entry: string): Configuration => ({
+      mode: "development",
+      devtool: false,
+      context: fixtureDirectory,
+      // both compilers have an asset named `a.css`
+      entry: { a: entry },
+      output: {
+        path: path.resolve(__dirname, "js", "purged-stats-name", name),
+        clean: true,
+      },
+      module: {
+        rules: [
+          { test: /\.css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
+        ],
+      },
+      plugins: [new MiniCssExtractPlugin(), plugin],
+    });
+    const first = webpack(configuration("first", "./src/a.js"));
+    first.hooks.compilation.tap("Started", () => {
+      started.push({ ...plugin.purgedStats });
+    });
+    const second = webpack(configuration("second", "./src/b.js"));
+
+    await run(first);
+    expect(plugin.purgedStats).toEqual({ "a.css": [".removed-a"] });
+    await run(second);
+    expect(plugin.purgedStats).toEqual({ "a.css": [".removed-b"] });
+    await run(first);
+    // the asset of the second compiler is kept until the first compiler
+    // adds its own
+    expect(started).toEqual([{}, { "a.css": [".removed-b"] }]);
+    expect(plugin.purgedStats).toEqual({ "a.css": [".removed-a"] });
+
+    for (const compiler of [first, second]) {
+      await new Promise<void>((resolve) => compiler.close(() => resolve()));
+    }
+  }, 30_000);
+
+  it("is not reset by the compilation of a child compiler", async () => {
+    const plugin = new PurgeCSSPlugin({ paths: [contentFile], rejected: true });
+    // a child compiler run once the css is purged
+    const childCompilerPlugin = {
+      apply(compiler: Compiler): void {
+        compiler.hooks.compilation.tap("ChildCompiler", (compilation) => {
+          // the hook is called for the compilation of the child compiler too
+          if (compilation.compiler !== compiler) return;
+          compilation.hooks.processAssets.tapAsync(
+            {
+              name: "ChildCompiler",
+              stage: webpack.Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
+            },
+            (_, callback) => {
+              const child = compilation.createChildCompiler("child", {}, [
+                new webpack.EntryPlugin(
+                  fixtureDirectory,
+                  "data:text/javascript,export default 1;",
+                  "child",
+                ),
+              ]);
+              child.runAsChild((err) => callback(err ?? undefined));
+            },
+          );
+        });
+      },
+    };
+    const compiler = webpack({
+      mode: "development",
+      devtool: false,
+      context: fixtureDirectory,
+      entry: { a: "./src/a.js" },
+      output: {
+        path: path.resolve(__dirname, "js", "purged-stats-child"),
+        clean: true,
+      },
+      module: {
+        rules: [
+          { test: /\.css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
+        ],
+      },
+      plugins: [new MiniCssExtractPlugin(), plugin, childCompilerPlugin],
+    });
+
+    await run(compiler);
+    await new Promise<void>((resolve) => compiler.close(() => resolve()));
+    expect(plugin.purgedStats).toEqual({ "a.css": [".removed-a"] });
+  }, 30_000);
+});

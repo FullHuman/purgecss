@@ -141,6 +141,58 @@ describe("purgedStats of the assets renamed after they are purged", () => {
       "b.css": [".removed-b"],
     });
   }, 30_000);
+
+  it("keeps the assets of the same name another compiler added", async () => {
+    const plugin = new PurgeCSSPlugin({ paths: [contentFile], rejected: true });
+    // a compiler that does not rename its assets, compiled while the assets
+    // of the other compiler are processed, once they are purged: its assets
+    // have the names the assets of the other compiler were purged under
+    let unrenamed: Stats | undefined;
+    const nestedBuildPlugin = {
+      apply(compiler: Compiler): void {
+        compiler.hooks.compilation.tap("NestedBuild", (compilation) => {
+          compilation.hooks.processAssets.tapPromise(
+            {
+              name: "NestedBuild",
+              stage: webpack.Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
+            },
+            async () => {
+              unrenamed = await build(
+                "renamed-assets-shared-unrenamed",
+                "[name].[contenthash].css",
+                {
+                  mode: "development",
+                  optimization: { realContentHash: false },
+                  plugins: [plugin],
+                },
+              );
+            },
+          );
+        });
+      },
+    };
+    const renamed = await build(
+      "renamed-assets-shared",
+      "[name].[contenthash].css",
+      {
+        mode: "development",
+        optimization: { realContentHash: true },
+        plugins: [plugin, nestedBuildPlugin],
+      },
+    );
+
+    const [a, b] = unrenamed ? getCssAssets(unrenamed) : [];
+    const [renamedA, renamedB] = getCssAssets(renamed);
+    expect(a).toMatch(/^a\.\w+\.css$/);
+    expect(renamedA).toMatch(/^a\.\w+\.css$/);
+    expect(renamedA).not.toBe(a);
+    expect(plugin.purgedStats).toEqual({
+      [a]: [".removed-a"],
+      [b]: [".removed-b"],
+      [renamedA]: [".removed-a"],
+      [renamedB]: [".removed-b"],
+    });
+  }, 30_000);
 });
 
 describe("purgedStats of the renamed assets in watch mode", () => {
