@@ -52,25 +52,32 @@ describe("rejectedCss", () => {
     [
       "an at-rule nested in an at-rule",
       "@supports (display: grid) { @media (min-width: 1px) { .unused { color: red; } } }",
+      "",
     ],
     [
+      // the named layer is kept empty: it still sets the order of the layers
       "an at-rule nested in a cascade layer",
       "@layer base { @media print { .unused { color: red; } } }",
+      "@layer base { }",
     ],
     [
       "an at-rule nested in a rule",
       ".used { @media (min-width: 1px) { .unused { color: red; } } }",
+      "",
     ],
-  ])("keeps all the ancestors of a rejected rule in %s", async (_, css) => {
-    expect.assertions(2);
-    const resultsPurge = await new PurgeCSS().purge({
-      content: [{ raw: '<div class="used"></div>', extension: "html" }],
-      css: [{ raw: css }],
-      rejectedCss: true,
-    });
-    expect(resultsPurge[0].css).toBe("");
-    expect(resultsPurge[0].rejectedCss).toBe(css);
-  });
+  ])(
+    "keeps all the ancestors of a rejected rule in %s",
+    async (_, css, purgedCss) => {
+      expect.assertions(2);
+      const resultsPurge = await new PurgeCSS().purge({
+        content: [{ raw: '<div class="used"></div>', extension: "html" }],
+        css: [{ raw: css }],
+        rejectedCss: true,
+      });
+      expect(resultsPurge[0].css).toBe(purgedCss);
+      expect(resultsPurge[0].rejectedCss).toBe(css);
+    },
+  );
   it("only keeps the rejected rules in the ancestors of a rejected rule", async () => {
     expect.assertions(2);
     const resultsPurge = await new PurgeCSS().purge({
