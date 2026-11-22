@@ -79,9 +79,9 @@
   "checks": [
     {
       "area": "docs",
-      "checked_at": "2026-11-21",
-      "result": "2026-11-21: rollup docs PR (branch repo-assist/basics-rollup-docs-per-file-purge): CSS files purged one by one, so cross-file @font-face/@keyframes/vars are removed (Rollup/Rolldown/Vite); workarounds documented; rejected/rejectedCss/stdin/stdout no effect.",
-      "follow_up": "All plugin docs checked (gulp, grunt, postcss, rollup, webpack). Next Task 7: CLI docs vs bin.ts options, or wordpress/vue-cli plugin docs."
+      "checked_at": "2026-11-22",
+      "result": "2026-11-22 PM: CLI docs PR (branch repo-assist/basics-cli-docs-options, EN/FR): 7 options without section documented; -s replaces config safelist entirely; -r/-R dropped with --output. Examples run verbatim.",
+      "follow_up": "All plugin docs + CLI checked. Next Task 7: wordpress/vue-cli plugin docs, or docs/api.md vs exported API."
     },
     {
       "area": "build",
@@ -97,20 +97,20 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-21",
-      "result": "2026-11-21: after #1611 merge coverage 95-100% lines; gaps = postcss RunContentCache pass-through methods (unused by PurgeCSS), gulp sourcemap/stream branches, rollup Vite child process, defensive fallbacks. No PR.",
-      "follow_up": "Revisit only after #1604 merges or new code lands."
+      "checked_at": "2026-11-22",
+      "result": "2026-11-22 PM: main 747 tests; purgecss lines 99.4% after #1543/#1577 (uncovered = defensive branches index.ts 443/659/1155, bin.ts 92); rollup gaps = Vite child process. No PR.",
+      "follow_up": "Revisit only after new code lands."
     },
     {
       "area": "code",
       "checked_at": "2026-11-22",
-      "result": "2026-11-22: Task 5 sweep of bin.ts, ExtractorResultSets, attribute/pseudo helpers, vue-cli/wordpress: only a duplicate CSS_SAFELIST.includes in shouldKeepSelector (not worth a PR). 11-21: #1615 variables empty rules.",
-      "follow_up": "Rollup cross-file fontFace/keyframes/variables needs design. jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design."
+      "result": "2026-11-22 PM: draft PR repo-assist/fix-nested-at-rule-declarations: evaluateAtRule read decls only in nested @media/@supports and only with variables, so keyframes/fontFace/vars used in nested at-rules or @page were removed. Excludes @font-face.",
+      "follow_up": "Open design items: rollup cross-file, JSX ExtractorResultDetailed, CLI sourceMap+--output, CLI -s merge with config. Minor: var() regex case-sensitive (VAR())."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-21",
-      "result": "2026-11-21: pnpm audit still only dev glob GHSA-3g3m-2fjr-6pw4 via jest. 11-20: pnpm outdated minor/patch only (TS 7 major skipped); Dependabot monthly, none open.",
+      "checked_at": "2026-11-22",
+      "result": "2026-11-22: pnpm audit still only dev glob GHSA-3g3m-2fjr-6pw4 via jest; pnpm outdated minor/patch only; CI actions current; Dependabot monthly, none open.",
       "follow_up": "No bundling needed while Dependabot runs monthly. glob override suggest-only (pnpm-workspace.yaml)."
     },
     {
@@ -122,14 +122,14 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-22",
-      "result": "11-22: main 4e3cc03 (#1617 docs). Open RA PRs #1594,#1600,#1604,#1615,#1616 merge clean, no reviews; + new perf draft (branch repo-assist/perf-skip-where-is-pass) = 6. #1495 still conflicts.",
-      "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. 8 open RA PRs = maintenance-only."
+      "result": "11-22 PM: main 4e3cc03. Open RA PRs #1594,#1600,#1604,#1615,#1616,#1618 + 2 new drafts (nested at-rules fix, CLI docs) = 8, all merge clean together. #1495 still conflicts.",
+      "follow_up": "8 open RA PRs -> next scheduled run maintenance-only (Tasks 6,1,2). push_to_pull_request_branch: repo + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-22",
-      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep env+PATH for pnpm and git commit (husky runs pnpm). git user github-actions[bot]. main tests: 747. Run jest from package dir.",
-      "follow_up": "Reuse this setup next run."
+      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm (first download may fail EAI_AGAIN; retry). Keep env+PATH for pnpm and git commit (husky). git user github-actions[bot]. Run jest from package dir.",
+      "follow_up": "Scratch worktrees need every packages/*/node_modules symlinked."
     },
     {
       "area": "qa",
@@ -226,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-22. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-22 20:00 UTC. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
     }
   ]
 }
