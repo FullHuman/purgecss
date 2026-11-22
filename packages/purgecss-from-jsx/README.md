@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@fullhuman/purgecss-from-jsx.svg)](https://www.npmjs.com/package/@fullhuman/purgecss-from-jsx)
 
-JSX extractor for [PurgeCSS](https://purgecss.com). This extractor parses JSX files (React, Preact, etc.) and extracts used selectors from component names, `className`, and `id` attributes.
+JSX extractor for [PurgeCSS](https://purgecss.com). This extractor parses JSX files (React, Preact, etc.) and extracts used selectors from component names, `className`, `class` and `id` attributes, and the names and values of the other attributes.
 
 ## Installation
 
@@ -64,7 +64,7 @@ const jsx = `
 const selectors = purgeFromJsx()(jsx);
 
 console.log(selectors);
-// ["div", "container", "Header", "main-header", "button", "btn", "btn-primary"]
+// ["div", "class", "container", "Header", "id", "main-header", "button", "btn", "btn-primary", "btn btn-primary"]
 ```
 
 ## API
@@ -79,17 +79,18 @@ Creates an extractor function for JSX content.
 
 #### Returns
 
-A function that takes JSX content as a string and returns an array of selectors.
+A function that takes JSX content as a string and returns an array of selectors, without duplicates.
 
 ## What It Extracts
 
 The extractor parses JSX and extracts:
 
 1. **Component names** - JSX element names (e.g., `div`, `Header`, `MyComponent`), including elements inside the value of another attribute (e.g., `icon={<Icon />}`)
-2. **className values** - String values from `className` attributes, split by whitespace
+2. **className values** - String values from `className` and `class` (Preact, Solid) attributes, split by whitespace
 3. **id values** - String values from `id` attributes
+4. **Attributes** - The name of every attribute and the string values of the attributes, for attribute selectors such as `[data-state="open"]`, `input[type="checkbox"]` or `[class^="icon-"]`. The name is also given as it is in the HTML: in lower case (`tabIndex` gives `tabIndex` and `tabindex`), `class` for `className` and `for` for `htmlFor`
 
-When `className` or `id` is an expression, every string in it is extracted, as well as the static parts of template literals and the keys of object literals. For example, `className={active ? "on" : "off"}` gives `on` and `off`, ``className={`card ${size}`}`` gives `card`, and `className={clsx({ active: isActive })}` gives `active`.
+When an attribute is an expression, every string in it is extracted, as well as the static parts of template literals. For `className`, `class` and `id`, the keys of object literals are extracted too. For example, `className={active ? "on" : "off"}` gives `on` and `off`, ``className={`card ${size}`}`` gives `card`, `className={clsx({ active: isActive })}` gives `active` and `data-state={open ? "open" : "closed"}` gives `open` and `closed`.
 
 ### Example
 
@@ -100,11 +101,11 @@ When `className` or `id` is an expression, every string in it is extracted, as w
 </Card>
 ```
 
-Extracted selectors: `["Card", "card", "card-primary", "featured-card", "CardHeader", "CardBody", "p-4"]`
+Extracted selectors: `["Card", "class", "card", "card-primary", "card card-primary", "id", "featured-card", "CardHeader", "CardBody", "p-4"]`
 
 ## Limitations
 
-- Only extracts static string values from `className` and `id`
+- Only extracts static string values from the attributes
 - Values computed at runtime, like `className={styles.container}` or the `size` of ``className={`btn-${size}`}``, are not extracted
 - For dynamic class names, consider using PurgeCSS's [safelist](https://purgecss.com/safelisting.html) option
 
