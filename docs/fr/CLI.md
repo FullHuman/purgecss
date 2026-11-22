@@ -79,6 +79,13 @@ Vous pouvez utiliser le CLI avec un [fichier de configuration](configuration.md)
 purgecss --config ./purgecss.config.js
 ```
 
+Les autres options données dans la ligne de commande remplacent celles du fichier de configuration. `--safelist` remplace toute la `safelist` du fichier de configuration, y compris ses motifs `deep` et `greedy` :
+
+```sh
+# seul classnameToSafelist est dans la safelist, pas les sélecteurs du fichier de configuration
+purgecss --config ./purgecss.config.js --safelist classnameToSafelist
+```
+
 ### --output
 
 Par défaut, le CLI affiche le résultat dans la console. Si vous souhaitez retourner le CSS sous forme de fichiers, spécifiez le répertoire dans lequel écrire les fichiers CSS purifiés.
@@ -124,3 +131,43 @@ Une chaîne de caractères écrite entre barres obliques est interprétée comme
 ```sh
 purgecss --css css/app.css --content src/index.html --safelist "/^btn-/" classnameToSafelist
 ```
+
+Le CLI ne définit que `safelist.standard`. Utilisez un fichier de configuration pour `safelist.deep`, `safelist.greedy`, `safelist.keyframes` et `safelist.variables` (voir [Safelisting](safelisting.md)).
+
+### --blocklist
+
+Les sélecteurs donnés à `--blocklist` sont supprimés même s'ils sont trouvés dans le contenu. Comme dans l'[option `blocklist`](configuration.md), écrivez les noms sans `.` ni `#`, et les expressions régulières entre barres obliques :
+
+```sh
+purgecss --css css/app.css --content src/index.html --blocklist usedClass "/^nav-/"
+```
+
+### --skippedContentGlobs
+
+Les fichiers de contenu correspondant aux globs donnés à `--skippedContentGlobs` ne sont pas analysés :
+
+```sh
+purgecss --css css/app.css --content "src/**/*.html" --skippedContentGlobs "src/vendor/**"
+```
+
+### --font-face, --keyframes et --variables
+
+`--font-face`, `--keyframes` et `--variables` suppriment les règles `@font-face`, les keyframes et les variables CSS inutilisées, comme les options `fontFace`, `keyframes` et `variables` du [fichier de configuration](configuration.md) :
+
+```sh
+purgecss --css css/app.css --content src/index.html --font-face --keyframes --variables
+```
+
+### --rejected et --rejected-css
+
+`--rejected` ajoute au résultat la liste des sélecteurs supprimés, et `--rejected-css` le CSS supprimé :
+
+```sh
+purgecss --css css/app.css --content src/index.html --rejected
+```
+
+```json
+[{"css":".used { color: red; }\n","file":"css/app.css","rejected":[".unused"]}]
+```
+
+Ils ne font partie que du résultat affiché dans la console : avec `--output`, seul le CSS purifié est écrit.
