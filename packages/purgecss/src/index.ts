@@ -1078,11 +1078,15 @@ class PurgeCSS {
   private evaluateAtRule(node: postcss.AtRule, index: number): void {
     const isIgnored = this.isIgnored(node, index);
 
-    // when tracking variables, collect var() usages from declarations
-    // nested inside at-rules (e.g. @media, @supports, ...)
+    // collect the variables, animations and font faces used by the
+    // declarations directly inside an at-rule, e.g. an at-rule nested in a
+    // rule (@media, @container, @starting-style, ...) or @page. The
+    // declarations of @font-face define a font face, they do not use one
     if (
-      this.options.variables &&
-      (node.name === "media" || node.name === "supports")
+      (this.options.variables ||
+        this.options.keyframes ||
+        this.options.fontFace) &&
+      node.name !== "font-face"
     ) {
       this.collectDeclarationsDataOfNode(node, isIgnored);
     }
