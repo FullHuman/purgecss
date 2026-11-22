@@ -550,6 +550,28 @@ function getRejectedNode(
 }
 
 /**
+ * Check if a comment inside the node, at any depth, contains the text. It goes
+ * through the children directly, without the overhead of `walkComments`
+ *
+ * @param node - node of postcss AST
+ * @param text - text to look for in the comments
+ */
+function hasCommentWith(node: postcss.Node, text: string): boolean {
+  const children = getRawChildren(node);
+  if (!children) return false;
+  for (const child of children) {
+    if (
+      child.type === "comment"
+        ? child.text.includes(text)
+        : hasCommentWith(child, text)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Check if the node has a css comment indicating to ignore the current selector rule
  *
  * @param rule - rule of postcss AST
@@ -838,6 +860,11 @@ interface PurgedRoot {
  */
 class PurgeCSS {
   private ignore = false;
+  /**
+   * Whether the css walked through has a comment with an ignore next or
+   * ignore current annotation: the rules are only checked for them if so
+   */
+  private hasIgnoreAnnotations = true;
   private atRules: AtRules = {
     fontFace: [],
     keyframes: [],
@@ -941,6 +968,10 @@ class PurgeCSS {
   private isIgnored(node: postcss.ChildNode, index: number): boolean {
     if (this.ignore) {
       return true;
+    }
+
+    if (!this.hasIgnoreAnnotations) {
+      return false;
     }
 
     const annotation = this.removals.previousSibling(node, index);
@@ -1157,7 +1188,7 @@ class PurgeCSS {
 
     // exit if it has an ignore rule comment inside, still collecting what its
     // declarations use
-    if (hasIgnoreAnnotation(node, this.removals)) {
+    if (this.hasIgnoreAnnotations && hasIgnoreAnnotation(node, this.removals)) {
       this.collectDeclarationsDataOfNode(node, true);
       return;
     }
@@ -1170,7 +1201,16 @@ class PurgeCSS {
     // themselves. Second pass will remove selectors containing empty
     // :where and :is.
     node.selector = selectorParser((selectorsParsed) => {
+      // the second pass stringifies every selector left: it only runs when
+      // the rule has a :where or :is, which most rules do not have
+      let hasWhereOrIs = false;
       selectorsParsed.walk((selector) => {
+        if (
+          selector.type === "pseudo" &&
+          (selector.value === ":where" || selector.value === ":is")
+        ) {
+          hasWhereOrIs = true;
+        }
         if (selector.type !== "selector") {
           return;
         }
@@ -1192,6 +1232,8 @@ class PurgeCSS {
           selector.remove();
         }
       });
+
+      if (!hasWhereOrIs) return;
 
       // removes selectors containing empty :where and :is
       selectorsParsed.walk((selector) => {
@@ -1681,6 +1723,9 @@ class PurgeCSS {
     root: PostCSSRoot,
     selectors: ExtractorResultSets,
   ): void {
+    // the ignore current annotation contains the ignore next one. The
+    // annotations are only removed during the walk, never added
+    this.hasIgnoreAnnotations = hasCommentWith(root, IGNORE_ANNOTATION_NEXT);
     // the nodes are removed once the whole tree has been walked through
     try {
       root.walk((node, index) => {

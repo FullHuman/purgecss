@@ -128,3 +128,39 @@ describe("ignore comment range starting in a purged media query", () => {
     expect(purgedCSS.includes(".unused")).toBe(false);
   });
 });
+
+describe("ignore comments in one of several css files", () => {
+  let purgedCSS: string[];
+  beforeAll(async () => {
+    const resultsPurge = await new PurgeCSS().purge({
+      content: [{ raw: "<div></div>", extension: "html" }],
+      css: [
+        { raw: ".unused-first { color: black; }" },
+        {
+          raw: `@media print {
+  /* purgecss ignore */
+  .ignored-next { color: black; }
+  .unused-second { color: black; }
+}
+@supports (display: grid) {
+  .ignored-current { /* purgecss ignore current */ color: black; }
+}`,
+        },
+        { raw: ".unused-third { color: black; }" },
+      ],
+    });
+    purgedCSS = resultsPurge.map((result) => result.css);
+  });
+
+  it("applies the comments of the css file that has them", () => {
+    expect(purgedCSS[1]).toContain(".ignored-next");
+    expect(purgedCSS[1]).toContain(".ignored-current");
+    expect(purgedCSS[1]).not.toContain(".unused-second");
+    expect(purgedCSS[1]).not.toContain("purgecss");
+  });
+
+  it("removes the unused selectors of the other css files", () => {
+    expect(purgedCSS[0]).toBe("");
+    expect(purgedCSS[2]).toBe("");
+  });
+});
