@@ -62,8 +62,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-21",
-      "note": "Cases 2+3 in #1594; case 1 (case-insensitive tags/attr names/i flag) in #1600. Linked both on issue. Close once both merged. No new activity 11-21."
+      "updated_at": "2026-11-22",
+      "note": "Cases 2+3 in #1594; case 1 in #1600. Linked both on issue. Close once both merged. No new activity 11-22."
     }
   ],
   "fixes": [
@@ -91,9 +91,9 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-20",
-      "result": "2026-11-20: large-content profile (2000 HTML/118MB; ~11k node_modules JS): mergeSets 43-57% self = Set.add of ~37M fresh tokens (~80ns each, inherent). Direct merge w/o per-file set + index loop = only 2-3% e2e -> no PR. CSS side (11-17): PurgeCSS ~5%.",
-      "follow_up": "No perf PR unless a new measurable hotspot; per-file Set removal not worth it."
+      "checked_at": "2026-11-22",
+      "result": "2026-11-22: draft PR repo-assist/perf-skip-where-is-pass: walkThroughCSS on tailwind -7..13% (skip ignore-annotation lookups w/o \"purgecss ignore\" comment; skip 2nd :where/:is pass). Rest = postcss-selector-parser (upstream).",
+      "follow_up": "No further CSS-side perf PR: remaining walk cost is upstream selector parsing. Bench scripts: bench-walk (walkThroughCSS only, fresh root per run)."
     },
     {
       "area": "tests",
@@ -103,9 +103,9 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-21",
-      "result": "2026-11-21: draft PR branch repo-assist/improve-remove-rules-emptied-by-variables: removeUnusedCSSVariables calls removeEmptyParents for parents of removed decls/@property (keyframes kept, named layers kept). 7/11 new tests fail on main. Adds no new conflict to #1495.",
-      "follow_up": "Rollup plugin cross-file fontFace/keyframes/variables fix needs design (transform per module). jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design."
+      "checked_at": "2026-11-22",
+      "result": "2026-11-22: Task 5 sweep of bin.ts, ExtractorResultSets, attribute/pseudo helpers, vue-cli/wordpress: only a duplicate CSS_SAFELIST.includes in shouldKeepSelector (not worth a PR). 11-21: #1615 variables empty rules.",
+      "follow_up": "Rollup cross-file fontFace/keyframes/variables needs design. jsx/tsx ExtractorResultDetailed only if maintainer wants. CLI sourceMap+--output needs design."
     },
     {
       "area": "dependencies",
@@ -121,14 +121,14 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-21",
-      "result": "11-21 2nd run: main ee99627 (#1543,#1577,#1612,#1613,#1614 merged). Open RA PRs #1594,#1600,#1604 merge clean + 2 new drafts (variables empty rules, rollup docs) = 5.",
+      "checked_at": "2026-11-22",
+      "result": "11-22: main 4e3cc03 (#1617 docs). Open RA PRs #1594,#1600,#1604,#1615,#1616 merge clean, no reviews; + new perf draft (branch repo-assist/perf-skip-where-is-pass) = 6. #1495 still conflicts.",
       "follow_up": "push_to_pull_request_branch: repo FullHuman/purgecss + exact head ref (-<hash> suffix). Never merge main into PR branches. 8 open RA PRs = maintenance-only."
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-21",
-      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin; NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep env + PATH for every pnpm call. git user github-actions[bot]. main tests: 747. Run rollup __tests__/{rolldown,vite}/build.js from package dir.",
+      "checked_at": "2026-11-22",
+      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm; keep env+PATH for pnpm and git commit (husky runs pnpm). git user github-actions[bot]. main tests: 747. Run jest from package dir.",
       "follow_up": "Reuse this setup next run."
     },
     {
@@ -226,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-21 (2nd run). #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-22. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
     }
   ]
 }
