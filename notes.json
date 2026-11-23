@@ -62,8 +62,8 @@
     {
       "number": 1593,
       "state": "commented",
-      "updated_at": "2026-11-22",
-      "note": "Cases 2+3 in #1594; case 1 in #1600. Linked both on issue. Close once both merged. No new activity 11-22."
+      "updated_at": "2026-11-23",
+      "note": "Cases 2+3 in #1594; case 1 in #1600. Linked both on issue. Close once both merged. No new activity 11-23."
     }
   ],
   "fixes": [
@@ -121,14 +121,14 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-22",
-      "result": "11-22 PM: main 4e3cc03. Open RA PRs #1594,#1600,#1604,#1615,#1616,#1618 + 2 new drafts (nested at-rules fix, CLI docs) = 8, all merge clean together. #1495 still conflicts.",
+      "checked_at": "2026-11-23",
+      "result": "11-23 AM: main 4e3cc03. 8 RA PRs #1594,#1600,#1604,#1615,#1616,#1618,#1619,#1620; no reviews. All 8 merged together on scratch: no conflicts, build+lint ok, 804 tests pass. Labelled #1618 performance. #1495 still conflicts.",
       "follow_up": "8 open RA PRs -> next scheduled run maintenance-only (Tasks 6,1,2). push_to_pull_request_branch: repo + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-22",
-      "result": "Corepack: NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm (first download may fail EAI_AGAIN; retry). Keep env+PATH for pnpm and git commit (husky). git user github-actions[bot]. Run jest from package dir.",
+      "result": "Corepack: mkdir -p /tmp/gh-aw/agent/bin first, then NODE_USE_ENV_PROXY=1 corepack enable --install-directory /tmp/gh-aw/agent/bin pnpm. Keep env+PATH for pnpm and git commit (husky). git user github-actions[bot]. Run jest from package dir.",
       "follow_up": "Scratch worktrees need every packages/*/node_modules symlinked."
     },
     {
@@ -226,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-22 20:00 UTC. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-23 08:00 UTC. #170 unlabelled by design. #803 clarification pending since 10-27. #1339 = #1495."
     }
   ]
 }
