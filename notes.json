@@ -122,7 +122,7 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-26",
-      "result": "11-26: main still 4e3cc03 (since 11-22); 8 RA PRs (#1594,#1600,#1604,#1615,#1616,#1618,#1619,#1620) heads unchanged since 11-23 combined merge check (804 tests pass), no reviews/comments, monthly #1544 no boxes ticked. #1495/#1502 still conflict. 11-25 AM+PM and 11-26 runs noop (maintenance-only).",
+      "result": "11-26 PM: main 4e3cc03; 8 RA PR heads unchanged since 11-23 combined check (804 pass), CI green, no reviews. #1495/#1502 conflict. 11-24 runs failed (engine 401, infra; #1622 closed). 11-25, 11-26 runs noop.",
       "follow_up": "8 open RA PRs -> next scheduled run maintenance-only (Tasks 6,1,2). push_to_pull_request_branch: repo + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
@@ -226,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-26. #170 unlabelled by design. #803 clarification pending since 10-27 (no self follow-up). #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-26 PM. #170 unlabelled by design. #803 clarification pending since 10-27 (no self follow-up). #1339 = #1495."
     }
   ]
 }
