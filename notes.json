@@ -121,8 +121,8 @@
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-27",
-      "result": "11-27: main 4e3cc03; 8 RA PR heads unchanged since 11-23 combined check (804 pass), CI green (CodeQL/Vercel), no reviews/comments. #1495/#1502 conflict. 11-24 runs failed (infra). 11-25..11-27 runs noop.",
+      "checked_at": "2026-11-28",
+      "result": "11-28: main 4e3cc03; 8 RA PR heads unchanged since 11-23 combined check (804 pass), CI green, no reviews/comments, no monthly checkboxes ticked. #1495/#1502 conflict. 11-24 runs failed (infra; #1621/#1622 auto-closed). 11-25..11-28 runs noop.",
       "follow_up": "8 open RA PRs -> next scheduled run maintenance-only (Tasks 6,1,2). push_to_pull_request_branch: repo + exact head ref (-<hash> suffix). Never merge main into PR branches."
     },
     {
@@ -226,7 +226,7 @@
     {
       "task": 2,
       "item": "untouched-older-issues",
-      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-27. #170 unlabelled by design. #803 clarification pending since 10-27 (no self follow-up). #1339 = #1495."
+      "note": "All open issues addressed or deferred; no new human activity as of 2026-11-28. #170 unlabelled by design. #803 clarification pending since 10-27 (no self follow-up). #1339 = #1495."
     }
   ]
 }
